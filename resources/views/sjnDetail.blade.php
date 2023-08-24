@@ -17,40 +17,18 @@
         <div class="card">
             <div class="card-header">
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-product" onclick="addProduct()"><i class="fas fa-plus"></i> Kembali</button>
-                <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#import-product" onclick="importProduct()"><i class="fas fa-file-excel"></i> Import Product (Excel)</button> -->
                 <button type="button" class="btn btn-primary" onclick="download('xls')"><i class="fas fa-file-excel"></i> Export Product (XLS)</button>
-                {{-- <div class="card-tools">
-                    <form>
-                        <div class="input-group input-group">
-                            <input type="text" class="form-control" name="q" placeholder="Search">
-                            <input type="hidden" name="category" value="{{ Request::get('category') }}">
-                            <input type="hidden" name="sort" value="{{ Request::get('sort') }}">
-                            <div class="input-group-append">
-                                <button class="btn btn-primary" type="submit">
-                                    <i class="fas fa-search"></i>
-                                </button>
-                            </div>
-                        </div>
-                    </form>
-                </div> --}}
             </div>
             <div class="card-body">
-                {{-- <div class="form-group row col-sm-3">
-                    <label for="sort" class="col-sm-3 col-form-label">Sort</label>
-                    <div class="col-sm-9">
-                        <form id="sorting" action="" method="get">
-                            <input type="hidden" name="q" value="{{ Request::get('q') }}">
-                            <input type="hidden" name="category" value="{{ Request::get('category') }}">
-                            <select class="form-control select2" style="width: 100%;" id="sort" name="sort">
-                                <option value="" {{ Request::get('sort') == null? 'selected':'' }}>-</option>
-                                <option value="name_az" {{ Request::get('sort') == 'name_az'? 'selected':'' }}>Nama Produk (A-Z)</option>
-                                <option value="name_za" {{ Request::get('sort') == 'name_za'? 'selected':'' }}>Nama Produk (Z-A)</option>
-                                <option value="category_az" {{ Request::get('sort') == 'category_az'? 'selected':'' }}>Kategori (A-Z)</option>
-                                <option value="category_za" {{ Request::get('sort') == 'category_za'? 'selected':'' }}>Kategori (Z-A)</option>
-                            </select>
-                        </form>
-                    </div>
-                </div> --}}
+                <div class="mb-3">
+                    <table class="align-top">
+                        <tr>
+                            <td style="width: 40%;"><b>No Surat Jalan</b></td>
+                            <td style="width:5%">:</td>
+                            <td style="width: 55%">12323</td>
+                        </tr>
+                    </table>
+                </div>
                 <div class="table-responsive">
                     <table id="table" class="table table-sm table-bordered table-hover table-striped">
                         <thead>

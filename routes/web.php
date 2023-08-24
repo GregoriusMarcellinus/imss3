@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\DetailsjnController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -40,12 +41,17 @@ Route::prefix('products')->group(function () {
     Route::post('import', [App\Http\Controllers\ProductController::class, 'product_import'])->name('products.import');
     Route::post('wipImport', [App\Http\Controllers\ProductController::class, 'product_wip_import'])->name('products.wip.import');
     Route::get('sjn', [App\Http\Controllers\ProductController::class, 'sjn'])->name('sjn');
+    Route::post('sjn', [App\Http\Controllers\SjnController::class, 'store'])->name('products.sjn.store');
+    Route::delete('sjn', [App\Http\Controllers\SjnController::class, 'destroy'])->name('sjn.delete');
     Route::get('sjn_print', [App\Http\Controllers\ProductController::class, 'sjn_print'])->name('sjn.print');
 
     //keproyekan
     Route::resource('keproyekan', App\Http\Controllers\KeproyekanController::class)->except(['destroy']);
     Route::delete('keproyekan', [App\Http\Controllers\KeproyekanController::class, 'destroy'])->name('keproyekan.destroy');
     Route::delete('/stockHistory', [App\Http\Controllers\ProductController::class, 'product_stock_history_delete'])->name('products.stock.history.delete');
+
+    //detail sjn
+    Route::resource('detail_sjn', DetailsjnController::class);
 });
 
 Route::prefix('users')->group(function () {
