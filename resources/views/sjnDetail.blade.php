@@ -16,10 +16,10 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-product" onclick="addProduct()"><i class="fas fa-plus"></i> Add New Product</button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-product" onclick="addProduct()"><i class="fas fa-plus"></i> Kembali</button>
                 <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#import-product" onclick="importProduct()"><i class="fas fa-file-excel"></i> Import Product (Excel)</button> -->
                 <button type="button" class="btn btn-primary" onclick="download('xls')"><i class="fas fa-file-excel"></i> Export Product (XLS)</button>
-                <div class="card-tools">
+                {{-- <div class="card-tools">
                     <form>
                         <div class="input-group input-group">
                             <input type="text" class="form-control" name="q" placeholder="Search">
@@ -32,10 +32,10 @@
                             </div>
                         </div>
                     </form>
-                </div>
+                </div> --}}
             </div>
             <div class="card-body">
-                <div class="form-group row col-sm-3">
+                {{-- <div class="form-group row col-sm-3">
                     <label for="sort" class="col-sm-3 col-form-label">Sort</label>
                     <div class="col-sm-9">
                         <form id="sorting" action="" method="get">
@@ -50,7 +50,7 @@
                             </select>
                         </form>
                     </div>
-                </div>
+                </div> --}}
                 <div class="table-responsive">
                     <table id="table" class="table table-sm table-bordered table-hover table-striped">
                         <thead>

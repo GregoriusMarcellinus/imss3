@@ -52,14 +52,14 @@
                     </div>
                 </div>
                 <div class="table-responsive">
-                    <table id="table" class="table table-sm table-bordered table-hover table-striped">
+                    <table id="table" class="table table-sm table-hover table-striped">
                         <thead>
                             <tr class="text-center">
                                 <th>No.</th>
                                 <th>{{ __('Kode Barang') }}</th>
                                 <th>{{ __('Nama Barang') }}</th>
                                 <th>{{ __('Spesifikasi') }}</th>
-                                <th>{{ __('Stok Awal') }}</th>
+                                {{-- <th>{{ __('Stok Awal') }}</th> --}}
                                 <th>{{ __('Stok Barang') }}</th>
                                 <th>{{ __('Satuan') }}</th>                                  
                                 <th>{{ __('Lokasi') }}</th>
@@ -94,7 +94,7 @@
                                 <td class="text-center">{{ $data['pcode'] }}</td>
                                 <td>{{ $data['pname'] }}</td>
                                 <td>{{ $data['spesifikasi'] }}</td>
-                                <td>{{ $data['stokAwal'] }}</td>
+                                {{-- <td>{{ $data['stokAwal'] }}</td> --}}
                                 
                                 <td class="text-center"><span class="{{ ($data['pamount'] <= 10)? 'badge bg-warning':'' }}">{{ $data['pamount'] }}</span></td>
                                 <td>{{ $data['satuan'] }}</td>
@@ -154,9 +154,9 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="stock_awal" class="col-sm-4 col-form-label">{{ __('Stok Awal') }} </label>
+                            {{-- <label for="stock_awal" class="col-sm-4 col-form-label">{{ __('Stok Awal') }} </label> --}}
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="stock_awal" name="stock_awal">
+                                <input type="hidden" class="form-control" id="stock_awal" name="stock_awal">
                             </div>
                         </div>
                         <div class="form-group row">
