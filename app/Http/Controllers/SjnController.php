@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
@@ -57,6 +58,7 @@ class SjnController extends Controller
             DB::table('sjn')->insert([
                 'no_sjn' => $request->no_sjn,
                 'warehouse_id' => $warehouse_id,
+                "user_id"  => Auth::user()->id,
             ]);
 
             return redirect()->route('sjn')->with('success', 'Data SJN berhasil ditambahkan');
@@ -64,6 +66,7 @@ class SjnController extends Controller
             DB::table('sjn')->where('sjn_id', $sjn_id)->update([
                 'no_sjn' => $request->no_sjn,
                 'warehouse_id' => $warehouse_id,
+                "user_id" => Auth::user()->id,
             ]);
 
             return redirect()->route('sjn')->with('success', 'Data SJN berhasil diubah');
