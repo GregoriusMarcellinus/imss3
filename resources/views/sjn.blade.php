@@ -16,9 +16,9 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-product" onclick="addProduct()"><i class="fas fa-plus"></i> Add New Product</button>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-product" onclick="addProduct()"><i class="fas fa-plus"></i> Add New SJN</button>
                 <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#import-product" onclick="importProduct()"><i class="fas fa-file-excel"></i> Import Product (Excel)</button> -->
-                <button type="button" class="btn btn-primary" onclick="download('xls')"><i class="fas fa-file-excel"></i> Export Product (XLS)</button>
+                <!-- <button type="button" class="btn btn-primary" onclick="download('xls')"><i class="fas fa-file-excel"></i> Export Product (XLS)</button> -->
                 <div class="card-tools">
                     <form>
                         <div class="input-group input-group">
@@ -35,7 +35,7 @@
                 </div>
             </div>
             <div class="card-body">
-                <div class="form-group row col-sm-3">
+                <!-- <div class="form-group row col-sm-3">
                     <label for="sort" class="col-sm-3 col-form-label">Sort</label>
                     <div class="col-sm-9">
                         <form id="sorting" action="" method="get">
@@ -50,18 +50,12 @@
                             </select>
                         </form>
                     </div>
-                </div>
+                </div> -->
                 <div class="table-responsive">
                     <table id="table" class="table table-sm table-bordered table-hover table-striped">
                         <thead>
                             <tr class="text-center">
-                                <th>No.</th>
-                                <th>{{ __('Kode Material') }}</th>
-                                <th>{{ __('Nama Barang') }}</th>
-                                <th>{{ __('Spesifikasi') }}</th>
-                                <th>{{ __('Stok Barang') }}</th>
-                                <th>{{ __('Satuan') }}</th>
-                                <th>{{ __('Proyek') }}</th>                                  
+                                <th>No.</th>                                  
                                 <th>{{ __('Nomor SJN') }}</th>
                                 <th></th>
                             </tr>
@@ -72,33 +66,16 @@
                             @php
                                 $data = [
                                             "no"        => $sjn->firstItem() + $key,
-                                            "pid"       => $d->product_id,
                                             "no_sjn"       => $d->no_sjn,
-                                            "komat"     => $d->kode_material,
-                                            "nabar"     => $d->nama_barang,
-                                            "cname"     => $d->category_name,
-                                            "cval"      => $d->category_id,
-                                            "pamount"   => $d->product_amount,
-                                            "spesifikasi"    => $d->spesifikasi,
-                                            "satuan"    => $d->satuan,
-                                            "proyek"    => $d->proyek,
-                                            
                                         ];
                             @endphp
                             
                             <tr>
                                 <td class="text-center">{{ $data['no'] }}</td>
-                                <td class="text-center">{{ $data['komat'] }}</td>
-                                <td>{{ $data['nabar'] }}</td>
-                                <td>{{ $data['spesifikasi'] }}</td>                                
-                                <td class="text-center"><span class="{{ ($data['pamount'] <= 10)? 'badge bg-warning':'' }}">{{ $data['pamount'] }}</span></td>
-                                <td>{{ $data['satuan'] }}</td>
-                                <td>{{ $data['proyek'] }}</td>
                                 <td class="text-center">{{ $data['no_sjn'] }}</td>
-                                
                                 <td class="text-center">
                                     <button title="Edit Produk" type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#add-product" onclick="editProduct({{ json_encode($data) }})"><i class="fas fa-edit"></i></button> 
-                                    <button title="Lihat Barcode" type="button" code="{{ $d->kode_material }}" class="btn-lihat btn btn-info btn-xs" data-toggle="modal" data-target="#lihat-barcode" onclick="barcode({{ $d->kode_material }})"><i class="fas fa-barcode"></i></button> @if(Auth::user()->role == 0)
+                                    <button title="Lihat Detail" type="button" code="{{ $d->sjn_id }}" class="btn-lihat btn btn-info btn-xs"><i class="fas fa-barcode"></i></button> @if(Auth::user()->role == 0)
                                     <button title="Hapus Produk" type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-product" onclick="deleteProduct({{ json_encode($data) }})"><i class="fas fa-trash"></i></button>@endif
                                 </td>
                             </tr>
