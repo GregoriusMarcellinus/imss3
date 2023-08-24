@@ -21,8 +21,8 @@ class ProductsExport implements FromCollection, WithHeadings, ShouldAutoSize, Wi
     }
 
     /**
-    * @return \Illuminate\Support\Collection
-    */
+     * @return \Illuminate\Support\Collection
+     */
     public function collection()
     {
         return collect($this->data);
@@ -36,14 +36,15 @@ class ProductsExport implements FromCollection, WithHeadings, ShouldAutoSize, Wi
             'SPESIFIKASI',
             'STOK BARANG',
             'SATUAN',
-            'LOKASI'
+            'LOKASI',
+            'PROYEK'
         ];
     }
 
     public function styles(Worksheet $sheet)
     {
-        $sheet->getStyle('A1:F1')->getFont()->setBold(true);
-        $sheet->getStyle('A1:F1')->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
-        $sheet->getStyle('A1:F1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A1:G1')->getFont()->setBold(true);
+        $sheet->getStyle('A1:G1')->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+        $sheet->getStyle('A1:G1')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
     }
 }
