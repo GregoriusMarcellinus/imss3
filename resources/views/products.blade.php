@@ -59,9 +59,11 @@
                                 <th>{{ __('Kode Barang') }}</th>
                                 <th>{{ __('Nama Barang') }}</th>
                                 <th>{{ __('Spesifikasi') }}</th>
+                                <th>{{ __('Stok Awal') }}</th>
                                 <th>{{ __('Stok Barang') }}</th>
                                 <th>{{ __('Satuan') }}</th>                                  
                                 <th>{{ __('Lokasi') }}</th>
+                                <th>{{ __('Keproyekan') }}</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -75,9 +77,12 @@
                                             "pcode"     => $d->product_code,
                                             "pname"     => $d->product_name,
                                             "cname"     => $d->category_name,
+                                            "stokAwal" => $d->stock_awal,
                                             "cval"      => $d->category_id,
                                             "pamount"   => $d->product_amount,
                                             "spesifikasi"    => $d->spesifikasi,
+                                            "nama_proyek"   => $d->nama_proyek,
+                                            "id_keproyekan" => $d->id_proyek,
                                             "satuan"    => $d->satuan,
                                             
                                             
@@ -89,10 +94,12 @@
                                 <td class="text-center">{{ $data['pcode'] }}</td>
                                 <td>{{ $data['pname'] }}</td>
                                 <td>{{ $data['spesifikasi'] }}</td>
+                                <td>{{ $data['stokAwal'] }}</td>
                                 
                                 <td class="text-center"><span class="{{ ($data['pamount'] <= 10)? 'badge bg-warning':'' }}">{{ $data['pamount'] }}</span></td>
                                 <td>{{ $data['satuan'] }}</td>
                                 <td>{{ $data['cname'] }}</td>
+                                <td>{{ $data['nama_proyek'] }}</td>
                                 
                                 <td class="text-center">
                                     <button title="Edit Produk" type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#add-product" onclick="editProduct({{ json_encode($data) }})"><i class="fas fa-edit"></i></button> 
@@ -147,6 +154,12 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                            <label for="stock_awal" class="col-sm-4 col-form-label">{{ __('Stok Awal') }} </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="stock_awal" name="stock_awal">
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label for="satuan" class="col-sm-4 col-form-label">{{ __('Satuan') }} </label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="satuan" name="satuan">
@@ -158,6 +171,13 @@
                                 <input type="text" class="form-control" id="product_amount" name="product_amount" disabled>
                             </div>
                         </div> -->
+                        <div class="form-group row">
+                            <label for="keproyekan" class="col-sm-4 col-form-label">Keproyekan</label>
+                            <div class="col-sm-8">
+                                <select class="form-control select2" style="width: 100%;" id="keproyekan" name="keproyekan">
+                                </select>
+                            </div>
+                        </div>
                         <div class="form-group row">
                             <label for="category" class="col-sm-4 col-form-label">Lokasi</label>
                             <div class="col-sm-8">
@@ -309,6 +329,26 @@
                 }
             });
         }
+        function getProyek(val){
+            $.ajax({
+                url: '/products/keproyekan',
+                type: "GET",
+                data: {"format": "json"},
+                dataType: "json",
+                success:function(data) {                    
+                    $('#keproyekan').empty();
+                    $('#keproyekan').append('<option value="">.:: Select Proyek::.</option>');
+                    $.each(data, function(key, value) {
+                        if(value.id == val){
+                            $('#keproyekan').append('<option value="'+ value.id +'" selected>'+ value.nama_proyek +'</option>');
+                        } else {
+                            
+                            $('#keproyekan').append('<option value="'+ value.id +'">'+ value.nama_proyek +'</option>');
+                        }
+                    });
+                }
+            });
+        }
 
         function resetForm(){
             $('#save').trigger("reset");
@@ -320,6 +360,7 @@
             $('#button-save').text("Tambahkan");
             resetForm();
             getCategory();
+            getProyek();
         }
 
         function editProduct(data){
@@ -332,7 +373,9 @@
             $('#spesifikasi').val(data.spesifikasi);
             $('#satuan').val(data.satuan);
             $('#product_amount').val(data.pamount);
+            $('#stock_awal').val(data.stokAwal);
             getCategory(data.cval);
+            getProyek(data.id_keproyekan);
             $('#product_code').change();
         }
 

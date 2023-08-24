@@ -42,7 +42,8 @@ class ProductController extends Controller
 
         $products = DB::table('products')
                     ->leftJoin("categories", "products.category_id", "=", "categories.category_id")
-                    ->select("products.*", "categories.*");
+                    ->leftJoin('keproyekan', 'products.keproyekan_id', '=', 'keproyekan.id')
+                    ->select("products.*", "categories.*", "keproyekan.nama_proyek", "keproyekan.id as id_proyek");
         
         $productsExport = $products;
         
@@ -420,6 +421,8 @@ class ProductController extends Controller
             "product_code"      => $req->product_code,
             "product_name"      => $req->product_name,
             "spesifikasi"    => $req->spesifikasi,
+            "stock_awal"        => $req->stock_awal,
+            "keproyekan_id"     => $req->keproyekan,
             "satuan"        => $req->satuan,
             "category_id"       => $req->category,
         ];
