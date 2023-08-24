@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Session;
 
 class SjnController extends Controller
 {
@@ -38,6 +39,11 @@ class SjnController extends Controller
     public function store(Request $request)
     {
         $sjn_id = $request->id;
+        if (Session::has('selected_warehouse_id')) {
+            $warehouse_id = Session::get('selected_warehouse_id');
+        } else {
+            $warehouse_id = DB::table('warehouse')->first()->warehouse_id;
+        }
         $request->validate(
             [
                 'no_sjn' => 'required',
@@ -50,12 +56,14 @@ class SjnController extends Controller
         if (empty($sjn_id)) {
             DB::table('sjn')->insert([
                 'no_sjn' => $request->no_sjn,
+                'warehouse_id' => $warehouse_id,
             ]);
 
             return redirect()->route('sjn')->with('success', 'Data SJN berhasil ditambahkan');
         } else {
             DB::table('sjn')->where('sjn_id', $sjn_id)->update([
                 'no_sjn' => $request->no_sjn,
+                'warehouse_id' => $warehouse_id,
             ]);
 
             return redirect()->route('sjn')->with('success', 'Data SJN berhasil diubah');
