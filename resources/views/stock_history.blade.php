@@ -53,6 +53,7 @@
                                 <th>{{ __('Retur') }}</th>
                                 <th>{{ __('Stok') }}</th>
                                 <th>{{ __('Satuan') }}</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -87,6 +88,8 @@
                                     <td class="text-center">{{ $retur }}</td>
                                     <td class="text-center">{{ $d->ending_amount }}</td>
                                     <td class="text-center">{{ $d->satuan }}</td>
+                                    <td class="text-center">
+                                    <button title="Hapus Riwayat" type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-history" onclick="deleteHistory({{ json_encode($d) }})"><i class="fas fa-trash"></i></button></td>
                                 </tr>
                             @endforeach
                         @else
@@ -102,6 +105,32 @@
         <div>
         {{ $history->links("pagination::bootstrap-4") }}
         </div>
+        <div class="modal fade" id="delete-history">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 id="modal-title" class="modal-title">{{ __('Delete History') }}</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form role="form" id="delete" action="{{ route('products.stock.history.delete') }}" method="post">
+                        @csrf
+                        @method('delete')
+                        <input type="hidden" id="delete_id" name="id">
+                    </form>
+                    <div>
+                        <p>Anda yakin ingin menghapus riwayat ini<span id="pcode" class="font-weight-bold"></span>?</p>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ __('Batal') }}</button>
+                    <button id="button-save" type="button" class="btn btn-danger" onclick="document.getElementById('delete').submit();">{{ __('Ya, hapus') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
 </section>
 @endsection
@@ -121,6 +150,9 @@
 
         function download(type){
             window.location.href="{{ route('products.stock.history') }}?search={{ Request::get('search') }}&dl="+type;
+        }
+        function deleteHistory(data){
+            $('#delete_id').val(data.stock_id);
         }
     </script>
 @endsection

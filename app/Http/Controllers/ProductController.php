@@ -1329,4 +1329,22 @@ class ProductController extends Controller
 
         return redirect()->back();
     }
+    public function product_stock_history_delete(Request $req)
+    {
+        if (Session::has('selected_warehouse_id')) {
+            $warehouse_id = Session::get('selected_warehouse_id');
+        } else {
+            $warehouse_id = DB::table('warehouse')->first()->warehouse_id;
+        }
+
+        $del = DB::table('stock')->where([["stock_id", $req->id], ["warehouse_id", $warehouse_id]])->delete();
+
+        if ($del) {
+            $req->session()->flash('success', "Stock berhasil dihapus.");
+        } else {
+            $req->session()->flash('error', "Stock gagal dihapus!");
+        }
+
+        return redirect()->back();
+    }
 }
