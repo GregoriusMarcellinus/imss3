@@ -93,7 +93,7 @@
                             <li class="nav-item">
                                 <a class="nav-link {{ Route::current()->getName() == 'sjn' ? 'active' : '' }}"
                                     href="{{ route('sjn') }}">
-                                    <i class="nav-icon fas fa-boxes"></i>
+                                    <i class="nav-icon fas fa-envelope"></i>
                                     <p class="text">{{ __('Surat Jalan') }}</p>
                                 </a>
                             </li>
@@ -106,7 +106,7 @@
                             </li>
                             @if (Auth::user()->role == 0)
                                 <li class="nav-item">
-                                    <a class="nav-link {{ Route::current()->getName() == 'keproyekan.shelf' ? 'active' : '' }}"
+                                    <a class="nav-link {{ Route::current()->getName() == 'keproyekan.index' ? 'active' : '' }}"
                                         href="{{ route('keproyekan.index') }}">
                                         <i class="nav-icon fas fa-hard-hat"></i>
                                         <p class="text">{{ __('Keproyekan') }}</p>
