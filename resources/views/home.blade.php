@@ -45,7 +45,7 @@
                 </div>
 
                 <div class="col-lg-3 col-6">
-                    <a href="#" data-toggle="modal" data-target="#stock-form" onclick="stockForm(0)">
+                    <a href="{{route('sjn')}}">
                         <div class="small-box bg-warning">
                             <div class="inner" style="background-color: rgb(186, 226, 43);">
                                 <p>Surat</p>

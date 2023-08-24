@@ -123,7 +123,6 @@ class ProductController extends Controller
     {
         $sort           = $req->sort;
         $search         = $req->q;
-        $cat            = $req->category;
         $dl             = $req->dl;
 
         if (Session::has('selected_warehouse_id')) {
@@ -133,14 +132,11 @@ class ProductController extends Controller
         }
 
         $sjn = DB::table('sjn')
-            ->leftJoin("categories", "sjn.category_id", "=", "categories.category_id")
-            ->select("sjn.*", "categories.*");
+            ->select("sjn.*");
 
         $sjnExport = $sjn;
 
-        if (!empty($cat)) {
-            $products = $products->orWhere([["categories.category_id", $cat], ["sjn.warehouse_id", $warehouse_id]]);
-        }
+        
 
         if (!empty($search)) {
             $products = $products->orWhere([["sjn.nama_barang", "LIKE", "%" . $search . "%"], ["sjn.warehouse_id", $warehouse_id]])
@@ -164,45 +160,31 @@ class ProductController extends Controller
         $sjn = $sjn->paginate(50);
 
         $warehouse = $this->getWarehouse();
-
-        if (!empty($dl)) {
-            $tmp            = $productsExport->orderBy("sjn.product_id", "asc")->get();
+        
+            $tmp            = $sjnExport->orderBy("sjn.sjn_id", "asc")->get();
             $fn             = 'sjn_' . time();
 
-            foreach ($tmp as $p) {
-                $totalStockIn   = DB::table('stock')->where([["product_id", $p->product_id], ["type", 1]])->sum("product_amount");
-                $totalStockOut  = DB::table('stock')->where([["product_id", $p->product_id], ["type", 0]])->sum("product_amount");
-                $availableStock = $totalStockIn - $totalStockOut;
-                $p->product_amount = $availableStock;
-            }
+            
 
             $productExport  = [];
 
-            foreach ($tmp as $t) {
-                $productExport[] = [
-                    "KODE BARANG"         => $t->product_code,
-                    "NAMA BARANG"         => $t->product_name,
-                    "SPESIFIKASI"         => $t->spesifikasi,
-                    "STOK"                => $t->product_amount,
-                    "satuan"              => $t->satuan,
-                    "LOKASI"              => $t->category_name,
+            // foreach ($tmp as $t) {
+            //     $productExport[] = [
+            //         "KODE BARANG"         => $t->product_code,
+            //         "NAMA BARANG"         => $t->product_name,
+            //         "SPESIFIKASI"         => $t->spesifikasi,
+            //         "STOK"                => $t->product_amount,
+            //         "satuan"              => $t->satuan,
+            //         "LOKASI"              => $t->category_name,
 
-                ];
-            }
+            //     ];
+            // }
 
             if ($dl == "xls") {
                 return (new ProductsExport($productExport))->download($fn . '.xls', \Maatwebsite\Excel\Excel::XLS);
             } else if ($dl == "pdf") {
                 return (new ProductsExport($productExport))->download($fn . '.pdf');
             }
-        } else {
-            foreach ($sjn as $p) {
-                $totalStockIn   = DB::table('stock')->where([["product_id", $p->product_id], ["type", 1]])->sum("product_amount");
-                $totalStockOut  = DB::table('stock')->where([["product_id", $p->product_id], ["type", 0]])->sum("product_amount");
-                $availableStock = $totalStockIn - $totalStockOut;
-                $p->product_amount = $availableStock;
-            }
-        }
 
         return View::make("sjn")->with(compact("sjn", "warehouse"));
     }
