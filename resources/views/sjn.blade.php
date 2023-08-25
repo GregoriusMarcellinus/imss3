@@ -382,6 +382,10 @@
                         "format": "json"
                     },
                     dataType: "json",
+                    beforeSend: function() {
+                        $('#loader').show();
+                        $('#form').hide();
+                    },
                     success: function(data) {
                         loader(0);
                         if (data.status == 1) {
