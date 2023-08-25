@@ -44,6 +44,9 @@ Route::prefix('products')->group(function () {
     Route::post('sjn', [App\Http\Controllers\SjnController::class, 'store'])->name('products.sjn.store');
     Route::delete('sjn', [App\Http\Controllers\SjnController::class, 'destroy'])->name('sjn.delete');
     Route::get('sjn_print', [App\Http\Controllers\ProductController::class, 'sjn_print'])->name('sjn.print');
+    Route::get('purchase_order', [App\Http\Controllers\PurchaseOrderController::class, 'purchase_order'])->name('purchase_order');
+    // Route::get('purchase_order', [App\Http\Controllers\PurchaseOrderController::class, 'purchase_order'])->name('purchase_order.store');
+    // Route::get('purchase_order', [App\Http\Controllers\PurchaseOrderController::class, 'purchase_order'])->name('purchase_order.delete');
 
     //keproyekan
     Route::resource('keproyekan', App\Http\Controllers\KeproyekanController::class)->except(['destroy']);
