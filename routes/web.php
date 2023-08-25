@@ -52,6 +52,7 @@ Route::prefix('products')->group(function () {
 
     //detail sjn
     Route::get('detail_sjn/{id}', [App\Http\Controllers\SjnController::class, 'getDetailSjn'])->name('detail_sjn');
+    Route::post('update_detail_sjn', [App\Http\Controllers\SjnController::class, 'updateDetailSjn'])->name('detail_sjn.update');
 
     //vendor
     Route::resource('vendor', App\Http\Controllers\VendorController::class)->except(['destroy']);

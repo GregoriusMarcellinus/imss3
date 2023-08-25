@@ -130,7 +130,7 @@
 
         {{-- modal lihat detail --}}
         <div class="modal fade" id="detail-sjn">
-            <div class="modal-dialog modal-xl">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 id="modal-title" class="modal-title">{{ __('Detail Surat Jalan') }}</h4>
@@ -140,54 +140,109 @@
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <button id="button-cetak-sjn" type="button" class="btn btn-primary"
-                                onclick="document.getElementById('cetak-sjn').submit();">{{ __('Cetak') }}</button>
-                            <table class="align-top w-100">
-                                <tr>
-                                    <td style="width: 3%;"><b>No Surat</b></td>
-                                    <td style="width:2%">:</td>
-                                    <td style="width: 55%"><span id="no_surat"></span></td>
-                                </tr>
-                                <tr>
-                                    <td><b>Tangaal</b></td>
-                                    <td>:</td>
-                                    <td><span id="tgl_surat"></span></td>
-                                </tr>
-                                <tr>
-                                    <td><b>Produk</b></td>
-                                </tr>
-                            </table>
-                            <div class="table-responsive">
-                                <table class="table table-bordered">
-                                    <thead>
-                                        <th>NO</th>
-                                        <th>Nama Barang</th>
-                                        <th>Spesifikasi</th>
-                                        <th>Kode Material</th>
-                                        <th>QTY</th>
-                                        <th>SAT</th>
-                                        <th>Keterangan</th>
-                                    </thead>
+                            <div class="row">
+                                <div class="col-12" id="container-form">
+                                    <button id="button-cetak-sjn" type="button" class="btn btn-primary"
+                                        onclick="document.getElementById('cetak-sjn').submit();">{{ __('Cetak') }}</button>
+                                    <table class="align-top w-100">
+                                        <tr>
+                                            <td style="width: 3%;"><b>No Surat</b></td>
+                                            <td style="width:2%">:</td>
+                                            <td style="width: 55%"><span id="no_surat"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Tangaal</b></td>
+                                            <td>:</td>
+                                            <td><span id="tgl_surat"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Produk</b></td>
+                                            <input type="hidden" name="sjn_id" id="sjn_id">
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">
+                                                <button id="button-tambah-produk" type="button" class="btn btn-info"
+                                                    onclick="showAddProduct()">{{ __('Tambah Produk') }}</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <th>NO</th>
+                                                <th>Nama Barang</th>
+                                                <th>Spesifikasi</th>
+                                                <th>Kode Material</th>
+                                                <th>QTY</th>
+                                                <th>SAT</th>
+                                                <th>Keterangan</th>
+                                            </thead>
 
-                                    <tbody>
-                                        {{-- @foreach ($sjn->products as $index => $product)
-                                            <tr>
-                                                <td>{{ $index + 1 }}</td>
-                                                <td>{{ $product->product_name }}</td>
-                                                <td>{{ $product->satuan }}</td>
-                                                <td>{{ $product->product_code }}</td>
-                                                <td>{{ $product->spesifikasi }}</td>
-                                                <td>{{ $product->nama_proyek }}</td>
-                                            </tr>
-                                        @endforeach --}}
-                                    </tbody>
-                                </table>
+                                            <tbody id="table-products">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col-0 d-none" id="container-product">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="input-group input-group-lg">
+                                                <input type="text" class="form-control" id="pcode" name="pcode"
+                                                    min="0" placeholder="Product Code">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-primary" id="button-check"
+                                                        onclick="productCheck()">
+                                                        <i class="fas fa-search"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="loader" class="card">
+                                        <div class="card-body text-center">
+                                            <div class="spinner-border text-danger" style="width: 3rem; height: 3rem;"
+                                                role="status">
+                                                <span class="sr-only">Loading...</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="form" class="card">
+                                        <div class="card-body">
+                                            <form role="form" id="stock-update" method="post">
+                                                @csrf
+                                                <input type="hidden" id="pid" name="pid">
+                                                <input type="hidden" id="type" name="type">
+                                                <div class="form-group row">
+                                                    <label for="pname"
+                                                        class="col-sm-4 col-form-label">{{ __('Nama Barang') }}</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="pname"
+                                                            disabled>
+                                                        <input type="hidden" class="form-control" id="product_id"
+                                                            disabled>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="no_nota"
+                                                        class="col-sm-4 col-form-label">{{ __('QTY') }}</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="stock"
+                                                            name="stock">
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            <button id="button-update-sjn" type="button" class="btn btn-primary w-100"
+                                                onclick="sjnProductUpdate()">{{ __('Tambahkan') }}</button>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
+
 
 
         {{-- modal delete sjn --}}
@@ -235,6 +290,8 @@
                 theme: 'bootstrap4'
             });
 
+            $('#loader').hide();
+
             $(".btn-lihat").on('click', function() {
                 const code = $(this).attr('code');
                 $("#pcode_print").val(code);
@@ -254,31 +311,6 @@
             $("#sorting").submit();
         });
 
-        function getCategory(val) {
-            $.ajax({
-                url: '/products/categories',
-                type: "GET",
-                data: {
-                    "format": "json"
-                },
-                dataType: "json",
-                success: function(data) {
-                    $('#category').empty();
-                    $('#category').append('<option value="">.:: Select Category ::.</option>');
-                    $.each(data, function(key, value) {
-                        if (value.category_id == val) {
-                            $('#category').append('<option value="' + value.category_id +
-                                '" selected>' + value.category_name + '</option>');
-                        } else {
-
-                            $('#category').append('<option value="' + value.category_id + '">' + value
-                                .category_name + '</option>');
-                        }
-                    });
-                }
-            });
-        }
-
         function resetForm() {
             $('#save').trigger("reset");
             $('#barcode_preview_container').hide();
@@ -288,6 +320,29 @@
             $('#modal-title').text("Add New SJN");
             $('#button-save').text("Tambahkan");
             resetForm();
+        }
+
+        function showAddProduct() {
+            //if .modal-dialog in #detail-sjn has class modal-lg, change to modal-xl, otherwise change to modal-lg
+            if ($('#detail-sjn').find('.modal-dialog').hasClass('modal-lg')) {
+                $('#detail-sjn').find('.modal-dialog').removeClass('modal-lg');
+                $('#detail-sjn').find('.modal-dialog').addClass('modal-xl');
+                $('#button-tambah-produk').text('Kembali');
+                $('#container-form').removeClass('col-12');
+                $('#container-form').addClass('col-8');
+                $('#container-product').removeClass('col-0');
+                $('#container-product').addClass('col-4');
+                $('#container-product').removeClass('d-none');
+            } else {
+                $('#detail-sjn').find('.modal-dialog').removeClass('modal-xl');
+                $('#detail-sjn').find('.modal-dialog').addClass('modal-lg');
+                $('#button-tambah-produk').text('Tambah Produk');
+                $('#container-form').removeClass('col-8');
+                $('#container-form').addClass('col-12');
+                $('#container-product').removeClass('col-4');
+                $('#container-product').addClass('col-0');
+                $('#container-product').addClass('d-none');
+            }
         }
 
         function editSjn(data) {
@@ -302,6 +357,101 @@
             $('#table-products').empty();
             $('#no_surat').text("");
             $('#tgl_surat').text("");
+        }
+
+        function loader(status = 1) {
+            if (status == 1) {
+                $('#loader').show();
+            } else {
+                $('#loader').hide();
+            }
+        }
+
+        $('#form').hide();
+
+        function productCheck() {
+            var pcode = $('#pcode').val();
+            if (pcode.length > 0) {
+                loader();
+                $('#pcode').prop("disabled", true);
+                $('#button-check').prop("disabled", true);
+                $.ajax({
+                    url: '/products/check/' + pcode,
+                    type: "GET",
+                    data: {
+                        "format": "json"
+                    },
+                    dataType: "json",
+                    success: function(data) {
+                        loader(0);
+                        if (data.status == 1) {
+                            $('#form').show();
+                            $('#pid').val(data.data.product_id);
+                            $('#product_id').val(data.data.product_id);
+                            $('#pname').val(data.data.product_name);
+                        } else {
+                            toastr.error("Product Code tidak dikenal!");
+                        }
+                        $('#pcode').prop("disabled", false);
+                        $('#button-check').prop("disabled", false);
+                    },
+                    error: function() {
+                        $('#pcode').prop("disabled", false);
+                        $('#button-check').prop("disabled", false);
+                    }
+                });
+            } else {
+                toastr.error("Product Code belum diisi!");
+            }
+        }
+
+        function clearForm() {
+            $('#product_id').val("");
+            $('#pname').val("");
+            $('#stock').val("");
+            $('#pcode').val("");
+            $('#form').hide();
+        }
+
+        function sjnProductUpdate() {
+            const id = $('#product_id').val();
+            $.ajax({
+                url: '/products/update_detail_sjn/',
+                type: "POST",
+                dataType: "json",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "product_id": id,
+                    "stock": $('#stock').val(),
+                    "sjn_id": $('#sjn_id').val(),
+                },
+                beforeSend: function() {
+                    $('#button-update-sjn').html('<i class="fas fa-spinner fa-spin"></i> Loading...');
+                    $('#button-update-sjn').attr('disabled', true);
+                },
+                success: function(data) {
+                    $('#no_surat').text(data.sjn.no_sjn);
+                    $('#tgl_surat').text(data.sjn.datetime);
+                    $('#sjn_id').val(data.sjn.sjn_id);
+                    $('#button-update-sjn').html('Tambahkan');
+                    $('#button-update-sjn').attr('disabled', false);
+                    clearForm();
+                    if (data.sjn.products.length == 0) {
+                        $('#table-products').append(
+                            '<tr><td colspan="7" class="text-center">Tidak ada produk</td></tr>');
+                    } else {
+                        $('#table-products').empty();
+                        $.each(data.sjn.products, function(key, value) {
+                            $('#table-products').append('<tr><td>' + (key + 1) + '</td><td>' + value
+                                .product_name + '</td><td>' + value.spesifikasi + '</td><td>' +
+                                value
+                                .product_code + '</td><td>' + value.stock + '</td><td>' + value
+                                .satuan +
+                                '</td><td>' + value.nama_proyek + '</td></tr>');
+                        });
+                    }
+                }
+            });
         }
 
         // on modal #detail-sjn open
@@ -333,6 +483,7 @@
                 success: function(data) {
                     $('#no_surat').text(data.sjn.no_sjn);
                     $('#tgl_surat').text(data.sjn.datetime);
+                    $('#sjn_id').val(data.sjn.sjn_id);
                     $('#button-cetak-sjn').html('<i class="fas fa-print"></i> Cetak');
                     $('#button-cetak-sjn').attr('disabled', false);
                     if (data.sjn.products.length == 0) {

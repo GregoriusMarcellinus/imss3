@@ -8,11 +8,11 @@ use Illuminate\Database\Eloquent\Model;
 class Detail_sjn extends Model
 {
     use HasFactory;
-    protected $table = 'detail_sjn';
+    protected $table = 'sjn_details';
     protected $fillable = [
-        'sjn_id', 
-        'product_id', 
-        'stock', 
-        
+        'sjn_id',
+        'product_id',
+        'stock',
+
     ];
 }
