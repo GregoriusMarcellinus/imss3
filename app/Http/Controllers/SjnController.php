@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -59,6 +60,7 @@ class SjnController extends Controller
                 'no_sjn' => $request->no_sjn,
                 'warehouse_id' => $warehouse_id,
                 "user_id"  => Auth::user()->id,
+                "datetime" => Carbon::now()->setTimezone('Asia/Jakarta')
             ]);
 
             return redirect()->route('sjn')->with('success', 'Data SJN berhasil ditambahkan');
