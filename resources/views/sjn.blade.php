@@ -64,7 +64,7 @@
                                 <td class="text-center">
                                     <button title="Edit SJN" type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#add-sjn" onclick="editSjn({{ json_encode($data) }})"><i class="fas fa-edit"></i></button> 
 
-                                    <button title="Lihat Detail" type="button" code="{{ $d->sjn_id }}" class="btn-lihat btn btn-info btn-xs"><i class="fas fa-barcode"></i></button> @if(Auth::user()->role == 0)
+                                    <button title="Lihat Detail" type="button" data-toggle="modal" data-target="#detail-sjn" class="btn-lihat btn btn-info btn-xs"><i class="fas fa-barcode"></i></button> @if(Auth::user()->role == 0)
 
                                     <button title="Hapus Produk" type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-sjn" onclick="deleteSjn({{ json_encode($data) }})"><i class="fas fa-trash"></i></button>@endif
                                 </td>
@@ -114,6 +114,74 @@
             </div>
         </div>
     </div>
+    
+    {{-- modal lihat detail --}}
+    <div class="modal fade" id="detail-sjn">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 id="modal-title" class="modal-title">{{ __('Detail Surat Jalan') }}</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <button id="button-save" type="button" class="btn btn-primary" onclick="document.getElementById('save').submit();">{{ __('Cetak') }}</button>
+                        <table class="align-top">
+                            <tr>
+                                <td style="width: 40%;"><b>No Surat</b></td>
+                                <td style="width:5%">:</td>
+                                <td style="width: 55%">{{$data['no_sjn']}}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Tangaal</b></td>
+                                <td>:</td>
+                                <td>{{$data['datetime']}}</td>
+                            </tr>
+                            <tr>
+                                <td><b>Produk</b></td>
+                            </tr>
+                        </table>
+                        <div class="table-responsive"> 
+                        <table class="table table-bordered">
+                            <thead>
+                                <th>NO</th>
+                                <th>Nama Barang</th>
+                                <th>Spesifikasi</th>
+                                <th>Kode Material</th>
+                                <th>QTY</th>
+                                <th>SAT</th>
+                                <th>Keterangan</th>
+                            </thead>
+
+                            <tbody>
+                                {{-- @foreach ($details as $item) --}}
+                                <tr>
+                                    {{-- <td>{{$loop->iteration}}</td>
+                                    <td>{{$item->product_name}}</td>
+                                    <td>{{$item->product_spec}}</td>
+                                    <td>{{$item->product_code}}</td>
+                                    <td>{{$item->product_amount}}</td>
+                                    <td>{{$item->satuan}}</td>
+                                    <td>{{$item->keterangan}}</td> --}}
+                                </tr>
+                                {{-- @endforeach --}}
+                            </tbody>
+                        </table>
+                        </div>
+                    </div>
+                </div>
+                {{-- <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ __('Cancel') }}</button>
+                    <button id="button-save" type="button" class="btn btn-primary" onclick="document.getElementById('save').submit();">{{ __('Tambahkan') }}</button>
+                </div> --}}
+            </div>
+        </div>
+    </div>
+
+
+    {{-- modal delete sjn --}}
     <div class="modal fade" id="delete-sjn">
         <div class="modal-dialog">
             <div class="modal-content">
