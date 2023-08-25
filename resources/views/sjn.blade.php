@@ -53,7 +53,7 @@
                                             "no"        => $sjn->firstItem() + $key,
                                             'sjn_id'        => $d->sjn_id,
                                             "no_sjn"       => $d->no_sjn,
-                                            "datetime"       => $d->datetime
+                                            "datetime"       => date('d/m/Y', strtotime($d->datetime))
                                         ];
                             @endphp
                             
