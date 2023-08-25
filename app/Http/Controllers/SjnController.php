@@ -123,4 +123,14 @@ class SjnController extends Controller
 
         return redirect()->route('sjn')->with('success', 'Data SJN berhasil dihapus');
     }
+
+    public function getDetailSjn(Request $request)
+    {
+        $id = $request->id;
+        $sjn = DB::table('sjn')->where('sjn_id', $id)->first();
+        $sjn->products = DB::table('sjn_details')->where('sjn_id', $id)->leftJoin('products', 'products.product_id', '=', 'sjn_details.product_id')->leftJoin('keproyekan', 'keproyekan.id', '=', 'products.keproyekan_id')->select('sjn_details.*', 'products.product_name', 'products.satuan', 'products.product_code', 'products.spesifikasi', 'keproyekan.nama_proyek')->get();
+        return response()->json([
+            'sjn' => $sjn,
+        ]);
+    }
 }
