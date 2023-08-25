@@ -104,6 +104,13 @@
                                     <p class="text">{{ __('Kategori') }}</p>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ Route::current()->getName() == 'vendor.index' ? 'active' : '' }}"
+                                    href="{{ route('vendor.index') }}">
+                                    <i class="nav-icon fas fa-user-cog"></i>
+                                    <p class="text">{{ __('Vendor') }}</p>
+                                </a>
+                            </li>
                             @if (Auth::user()->role == 0)
                                 <li class="nav-item">
                                     <a class="nav-link {{ Route::current()->getName() == 'keproyekan.index' ? 'active' : '' }}"

@@ -169,7 +169,7 @@
                                     </thead>
 
                                     <tbody>
-                                        @foreach ($sjn->products as $index => $product)
+                                        {{-- @foreach ($sjn->products as $index => $product)
                                             <tr>
                                                 <td>{{ $index + 1 }}</td>
                                                 <td>{{ $product->product_name }}</td>
@@ -178,7 +178,7 @@
                                                 <td>{{ $product->spesifikasi }}</td>
                                                 <td>{{ $product->nama_proyek }}</td>
                                             </tr>
-                                        @endforeach
+                                        @endforeach --}}
                                     </tbody>
                                 </table>
                             </div>

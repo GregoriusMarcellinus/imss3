@@ -52,6 +52,11 @@ Route::prefix('products')->group(function () {
 
     //detail sjn
     Route::get('detail_sjn/{id}', [App\Http\Controllers\SjnController::class, 'getDetailSjn'])->name('detail_sjn');
+
+    //vendor
+    Route::resource('vendor', App\Http\Controllers\VendorController::class)->except(['destroy']);
+    Route::delete('vendor', [App\Http\Controllers\VendorController::class, 'destroy'])->name('vendor.destroy');
+
 });
 
 Route::prefix('users')->group(function () {
