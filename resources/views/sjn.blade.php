@@ -383,9 +383,9 @@
                     },
                     dataType: "json",
                     success: function(data) {
-                        $('#form').show();
                         loader(0);
                         if (data.status == 1) {
+                            $('#form').show();
                             $('#pid').val(data.data.product_id);
                             $('#product_id').val(data.data.product_id);
                             $('#pname').val(data.data.product_name);
