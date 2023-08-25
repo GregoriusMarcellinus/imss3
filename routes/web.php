@@ -51,7 +51,7 @@ Route::prefix('products')->group(function () {
     Route::delete('/stockHistory', [App\Http\Controllers\ProductController::class, 'product_stock_history_delete'])->name('products.stock.history.delete');
 
     //detail sjn
-    Route::resource('detail_sjn', DetailsjnController::class);
+    Route::get('detail_sjn/{id}', [App\Http\Controllers\SjnController::class, 'getDetailSjn'])->name('detail_sjn');
 });
 
 Route::prefix('users')->group(function () {
