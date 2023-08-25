@@ -69,7 +69,8 @@
                                                         class="fas fa-edit"></i></button>
 
                                                 <button title="Lihat Detail" type="button" data-toggle="modal"
-                                                    data-target="#detail-sjn" class="btn-lihat btn btn-info btn-xs"><i
+                                                    data-target="#detail-sjn" class="btn-lihat btn btn-info btn-xs"
+                                                    data-detail="{{ json_encode($data) }}"><i
                                                         class="fas fa-barcode"></i></button>
                                                 @if (Auth::user()->role == 0)
                                                     <button title="Hapus Produk" type="button"
@@ -139,18 +140,18 @@
                     </div>
                     <div class="modal-body">
                         <div class="mb-3">
-                            <button id="button-save" type="button" class="btn btn-primary"
-                                onclick="document.getElementById('save').submit();">{{ __('Cetak') }}</button>
-                            <table class="align-top">
+                            <button id="button-cetak-sjn" type="button" class="btn btn-primary"
+                                onclick="document.getElementById('cetak-sjn').submit();">{{ __('Cetak') }}</button>
+                            <table class="align-top w-100">
                                 <tr>
-                                    <td style="width: 40%;"><b>No Surat</b></td>
-                                    <td style="width:5%">:</td>
-                                    <td style="width: 55%">{{ $data['no_sjn'] }}</td>
+                                    <td style="width: 3%;"><b>No Surat</b></td>
+                                    <td style="width:2%">:</td>
+                                    <td style="width: 55%"><span id="no_surat"></span></td>
                                 </tr>
                                 <tr>
                                     <td><b>Tangaal</b></td>
                                     <td>:</td>
-                                    <td>{{ $data['datetime'] }}</td>
+                                    <td><span id="tgl_surat"></span></td>
                                 </tr>
                                 <tr>
                                     <td><b>Produk</b></td>
@@ -168,17 +169,15 @@
                                         <th>Keterangan</th>
                                     </thead>
 
-                                    <tbody>
-                                        @foreach ($sjn->products as $index => $product)
-                                            <tr>
+                                    <tbody id="table-products">
+                                        {{-- <tr>
                                                 <td>{{ $index + 1 }}</td>
                                                 <td>{{ $product->product_name }}</td>
                                                 <td>{{ $product->satuan }}</td>
                                                 <td>{{ $product->product_code }}</td>
                                                 <td>{{ $product->spesifikasi }}</td>
                                                 <td>{{ $product->nama_proyek }}</td>
-                                            </tr>
-                                        @endforeach
+                                            </tr> --}}
                                     </tbody>
                                 </table>
                             </div>
@@ -295,6 +294,63 @@
             resetForm();
             $('#save_id').val(data.sjn_id);
             $('#no_sjn').val(data.no_sjn);
+        }
+
+        function emptyTableProducts() {
+            $('#table-products').empty();
+            $('#no_surat').text("");
+            $('#tgl_surat').text("");
+        }
+
+        // on modal #detail-sjn open
+        $('#detail-sjn').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget);
+            var data = button.data('detail');
+            // console.log(data);
+            lihatSjn(data);
+        });
+
+        function lihatSjn(data) {
+            emptyTableProducts();
+            $('#modal-title').text("Detail SJN");
+            $('#button-save').text("Cetak");
+            resetForm();
+            $('#save_id').val(data.sjn_id);
+            $('#no_sjn').val(data.no_sjn);
+            $('#datetime').val(data.datetime);
+            $('#table-products').empty();
+            $.ajax({
+                url: '/products/detail_sjn/' + data.sjn_id,
+                type: "GET",
+                dataType: "json",
+                beforeSend: function() {
+                    $('#table-products').append('<tr><td colspan="7" class="text-center">Loading...</td></tr>');
+                    $('#button-cetak-sjn').html('<i class="fas fa-spinner fa-spin"></i> Loading...');
+                    $('#button-cetak-sjn').attr('disabled', true);
+                },
+                success: function(data) {
+                    $('#no_surat').text(data.sjn.no_sjn);
+                    $('#tgl_surat').text(data.sjn.datetime);
+                    $('#button-cetak-sjn').html('<i class="fas fa-print"></i> Cetak');
+                    $('#button-cetak-sjn').attr('disabled', false);
+                    if (data.sjn.products.length == 0) {
+                        $('#table-products').append(
+                            '<tr><td colspan="7" class="text-center">Tidak ada produk</td></tr>');
+                    } else {
+                        $.each(data.sjn.products, function(key, value) {
+                            $('#table-products').append('<tr><td>' + (key + 1) + '</td><td>' + value
+                                .product_name + '</td><td>' + value.spesifikasi + '</td><td>' +
+                                value
+                                .product_code + '</td><td>' + value.stock + '</td><td>' + value
+                                .satuan +
+                                '</td><td>' + value.nama_proyek + '</td></tr>');
+                        });
+                    }
+
+                    //remove loading
+                    $('#table-products').find('tr:first').remove();
+                }
+            });
         }
 
         function detailSjn(data) {
