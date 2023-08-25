@@ -84,8 +84,23 @@
                         </div>
                     </a>
                 </div>
+                <div class="col-lg-3 col-6">
+                    <a href="#">
+                        <div class="small-box bg-primary">
+                            <div class="inner">
+                                <p>Purchase</p>
+                                <h3>Order</h3>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-hand-holding-usd"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
             </div>
         </div>
+
+        {{-- modal --}}
         <div class="modal fade" id="stock-form">
             <div class="modal-dialog">
                 <div class="modal-content">
