@@ -85,7 +85,7 @@
                     </a>
                 </div>
                 <div class="col-lg-3 col-6">
-                    <a href="#">
+                    <a href="{{ route('purchase_order.index') }}">
                         <div class="small-box bg-primary">
                             <div class="inner">
                                 <p>Purchase</p>
