@@ -141,6 +141,9 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <div class="row">
+                                <form id="cetak-sjn" method="GET" action="{{ route('cetak_sjn') }}" target="_blank">
+                                    <input type="hidden" name="sjn_id" id="sjn_id">
+                                </form>
                                 <div class="col-12" id="container-form">
                                     <button id="button-cetak-sjn" type="button" class="btn btn-primary"
                                         onclick="document.getElementById('cetak-sjn').submit();">{{ __('Cetak') }}</button>
@@ -157,7 +160,6 @@
                                         </tr>
                                         <tr>
                                             <td><b>Produk</b></td>
-                                            <input type="hidden" name="sjn_id" id="sjn_id">
                                         </tr>
                                         <tr>
                                             <td colspan="3">
