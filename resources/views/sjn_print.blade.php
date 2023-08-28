@@ -183,7 +183,8 @@
                     <td style="height: 50px"></td>
                 </tr>
                 <tr>
-                    <td class="text-center"><b style="text-decoration: underline">RUDI HARIYANTO</b></td>
+                    <td class="text-center"><b style="text-decoration: underline">{{ __($sjn->nama_pengirim) }}</b>
+                    </td>
                 </tr>
             </table>
         </div>

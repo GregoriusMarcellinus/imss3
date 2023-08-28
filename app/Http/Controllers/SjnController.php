@@ -62,7 +62,8 @@ class SjnController extends Controller
                 'no_sjn' => $request->no_sjn,
                 'warehouse_id' => $warehouse_id,
                 "user_id"  => Auth::user()->id,
-                "datetime" => Carbon::now()->setTimezone('Asia/Jakarta')
+                "datetime" => Carbon::now()->setTimezone('Asia/Jakarta'),
+                'nama_pengirim' => $request->nama_pengirim,
             ]);
 
             return redirect()->route('sjn')->with('success', 'Data SJN berhasil ditambahkan');
@@ -71,6 +72,7 @@ class SjnController extends Controller
                 'no_sjn' => $request->no_sjn,
                 'warehouse_id' => $warehouse_id,
                 "user_id" => Auth::user()->id,
+                'nama_pengirim' => $request->nama_pengirim,
             ]);
 
             return redirect()->route('sjn')->with('success', 'Data SJN berhasil diubah');

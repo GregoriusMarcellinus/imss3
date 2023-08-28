@@ -42,6 +42,7 @@
                                 <tr class="text-center">
                                     <th>No.</th>
                                     <th>{{ __('Nomor SJN') }}</th>
+                                    <th>{{ __('Nama Pengirim') }}</th>
                                     <th>{{ __('Tanggal') }}</th>
                                     <th></th>
                                 </tr>
@@ -55,12 +56,14 @@
                                                 'sjn_id' => $d->sjn_id,
                                                 'no_sjn' => $d->no_sjn,
                                                 'datetime' => date('d/m/Y', strtotime($d->datetime)),
+                                                'nama_pengirim' => $d->nama_pengirim,
                                             ];
                                         @endphp
 
                                         <tr>
                                             <td class="text-center">{{ $data['no'] }}</td>
                                             <td class="text-center">{{ $data['no_sjn'] }}</td>
+                                            <td class="text-center">{{ $data['nama_pengirim'] }}</td>
                                             <td class="text-center">{{ $data['datetime'] }}</td>
                                             <td class="text-center">
                                                 <button title="Edit SJN" type="button" class="btn btn-success btn-xs"
@@ -115,6 +118,13 @@
                                 <label for="no_sjn" class="col-sm-4 col-form-label">{{ __('Nomor SJN') }} </label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="no_sjn" name="no_sjn">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="nama_pengirim" class="col-sm-4 col-form-label">{{ __('Nama Pengirim') }}
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="nama_pengirim" name="nama_pengirim">
                                 </div>
                             </div>
                         </form>
@@ -351,6 +361,7 @@
             resetForm();
             $('#save_id').val(data.sjn_id);
             $('#no_sjn').val(data.no_sjn);
+            $('#nama_pengirim').val(data.nama_pengirim);
         }
 
         function emptyTableProducts() {
