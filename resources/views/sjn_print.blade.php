@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <head>
-    <title>Surat Jalan</title>
+    <title>Surat Jalan {{ __($sjn->no_sjn) }}</title>
     <style>
         table {
             border-collapse: collapse;
@@ -197,7 +197,9 @@
                     <td style="height: 50px"></td>
                 </tr>
                 <tr>
-                    <td class="text-center"><b style="text-decoration: underline"> &#8287;</b></td>
+                    <td class="text-center"><b style="text-decoration: underline">
+                            &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&emsp;&emsp;&emsp;&emsp;</b>
+                    </td>
                 </tr>
             </table>
         </div>

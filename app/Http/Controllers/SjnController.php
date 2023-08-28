@@ -173,6 +173,8 @@ class SjnController extends Controller
 
         // return view('sjn_print', compact('sjn'));
         $pdf = PDF::loadview('sjn_print', compact('sjn'));
-        return $pdf->stream();
+        $no_sjn = $sjn->no_sjn;
+        //stream with no_sjn title
+        return $pdf->stream('SJN-' . $no_sjn . '.pdf');
     }
 }
