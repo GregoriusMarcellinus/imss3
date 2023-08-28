@@ -93,7 +93,7 @@
         <div style="margin-left: 45%; width: 55%">
             <table class="table2">
                 <tr>
-                    <td>No. Surat Jalan</td>
+                    <td>Nomor</td>
                     <td>:</td>
                     <td colspan="2">
                         {{ $sjn->no_sjn }}
@@ -172,6 +172,49 @@
                 </tr>
             @endforeach
         </tbody>
+    </table>
+    <div style="margin-top: 1rem">
+        <div style="float: left; width: 50%">
+            <table class="w-100">
+                <tr>
+                    <td class="text-center">Pengirim</td>
+                </tr>
+                <tr>
+                    <td style="height: 50px"></td>
+                </tr>
+                <tr>
+                    <td class="text-center"><b style="text-decoration: underline">RUDI HARIYANTO</b></td>
+                </tr>
+            </table>
+        </div>
+        <div style="margin-left: 50%; width: 50%">
+            <table class="w-100">
+                <tr>
+                    <td class="text-center">Penerima</td>
+                </tr>
+                <tr>
+                    <td style="height: 50px"></td>
+                </tr>
+                <tr>
+                    <td class="text-center"><b style="text-decoration: underline"> &#8287;</b></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <table style="margin-top:2rem">
+        <tr>
+            <td colspan="3">Note</td>
+        </tr>
+        <tr>
+            <td colspan="3">1. Sesuai BPM No.019/BPM/PPO/I/2023</td>
+        </tr>
+        <tr>
+            <td colspan="3">2. <b>Lembar Warna PUTIH & KUNING di kembalikan di PT IMSS, Madiun</b></td>
+        </tr>
+        <tr>
+            <td colspan="3"><b>Kantor Pusat : Jl. Salak No 99 Madiun, Telp (08351)454094, email:
+                    imsservice14@gmail.com</b></td>
+        </tr>
     </table>
 
 </body>
