@@ -17,11 +17,12 @@ class Purchase_Order extends Model
         'pr_no',
         'ref_sph',
         'no_just',
-        'no_just',
+        'no_nego',
         'batas_po',
         'ref_po',
         'term_pay',
         'garansi',
-        'proyek_id'
+        'proyek_id',
+        // 'catatan_vendor'
     ];
 }

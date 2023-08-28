@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class SjnController extends Controller
 {
@@ -61,7 +62,8 @@ class SjnController extends Controller
                 'no_sjn' => $request->no_sjn,
                 'warehouse_id' => $warehouse_id,
                 "user_id"  => Auth::user()->id,
-                "datetime" => Carbon::now()->setTimezone('Asia/Jakarta')
+                "datetime" => Carbon::now()->setTimezone('Asia/Jakarta'),
+                'nama_pengirim' => $request->nama_pengirim,
             ]);
 
             return redirect()->route('sjn')->with('success', 'Data SJN berhasil ditambahkan');
@@ -70,6 +72,7 @@ class SjnController extends Controller
                 'no_sjn' => $request->no_sjn,
                 'warehouse_id' => $warehouse_id,
                 "user_id" => Auth::user()->id,
+                'nama_pengirim' => $request->nama_pengirim,
             ]);
 
             return redirect()->route('sjn')->with('success', 'Data SJN berhasil diubah');
@@ -130,6 +133,7 @@ class SjnController extends Controller
         $id = $request->id;
         $sjn = DB::table('sjn')->where('sjn_id', $id)->first();
         $sjn->products = DB::table('sjn_details')->where('sjn_id', $id)->leftJoin('products', 'products.product_id', '=', 'sjn_details.product_id')->leftJoin('keproyekan', 'keproyekan.id', '=', 'products.keproyekan_id')->select('sjn_details.*', 'products.product_name', 'products.satuan', 'products.product_code', 'products.spesifikasi', 'keproyekan.nama_proyek')->get();
+        $sjn->datetime = Carbon::parse($sjn->datetime)->isoFormat('D MMMM Y');
 
         return response()->json([
             'sjn' => $sjn,
@@ -138,6 +142,13 @@ class SjnController extends Controller
 
     public function updateDetailSjn(Request $request)
     {
+        if (!$request->stock) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Qty tidak boleh kosong',
+            ]);
+        }
+
         //retrieve json data
         $insert = Detail_sjn::create([
             'sjn_id' => $request->sjn_id,
@@ -154,10 +165,25 @@ class SjnController extends Controller
 
         $sjn = DB::table('sjn')->where('sjn_id', $request->sjn_id)->first();
         $sjn->products = DB::table('sjn_details')->where('sjn_id', $request->sjn_id)->leftJoin('products', 'products.product_id', '=', 'sjn_details.product_id')->leftJoin('keproyekan', 'keproyekan.id', '=', 'products.keproyekan_id')->select('sjn_details.*', 'products.product_name', 'products.satuan', 'products.product_code', 'products.spesifikasi', 'keproyekan.nama_proyek')->get();
+        $sjn->datetime = Carbon::parse($sjn->datetime)->isoFormat('D MMMM Y');
 
         return response()->json([
             'success' => true,
             'sjn' => $sjn,
         ]);
+    }
+
+    public function cetakSjn(Request $request)
+    {
+        $id = $request->sjn_id;
+        $sjn = DB::table('sjn')->where('sjn_id', $id)->first();
+        $sjn->products = DB::table('sjn_details')->where('sjn_id', $id)->leftJoin('products', 'products.product_id', '=', 'sjn_details.product_id')->leftJoin('keproyekan', 'keproyekan.id', '=', 'products.keproyekan_id')->select('sjn_details.*', 'products.product_name', 'products.satuan', 'products.product_code', 'products.spesifikasi', 'keproyekan.nama_proyek')->get();
+        $sjn->datetime = Carbon::parse($sjn->datetime)->isoFormat('D MMMM Y');
+
+        // return view('sjn_print', compact('sjn'));
+        $pdf = PDF::loadview('sjn_print', compact('sjn'));
+        $no_sjn = $sjn->no_sjn;
+        //stream with no_sjn title
+        return $pdf->stream('SJN-' . $no_sjn . '.pdf');
     }
 }

@@ -42,6 +42,7 @@
                                 <tr class="text-center">
                                     <th>No.</th>
                                     <th>{{ __('Nomor SJN') }}</th>
+                                    <th>{{ __('Nama Pengirim') }}</th>
                                     <th>{{ __('Tanggal') }}</th>
                                     <th></th>
                                 </tr>
@@ -55,12 +56,14 @@
                                                 'sjn_id' => $d->sjn_id,
                                                 'no_sjn' => $d->no_sjn,
                                                 'datetime' => date('d/m/Y', strtotime($d->datetime)),
+                                                'nama_pengirim' => $d->nama_pengirim,
                                             ];
                                         @endphp
 
                                         <tr>
                                             <td class="text-center">{{ $data['no'] }}</td>
                                             <td class="text-center">{{ $data['no_sjn'] }}</td>
+                                            <td class="text-center">{{ $data['nama_pengirim'] }}</td>
                                             <td class="text-center">{{ $data['datetime'] }}</td>
                                             <td class="text-center">
                                                 <button title="Edit SJN" type="button" class="btn btn-success btn-xs"
@@ -71,7 +74,7 @@
                                                 <button title="Lihat Detail" type="button" data-toggle="modal"
                                                     data-target="#detail-sjn" class="btn-lihat btn btn-info btn-xs"
                                                     data-detail="{{ json_encode($data) }}"><i
-                                                        class="fas fa-barcode"></i></button>
+                                                        class="fas fa-list"></i></button>
                                                 @if (Auth::user()->role == 0)
                                                     <button title="Hapus Produk" type="button"
                                                         class="btn btn-danger btn-xs" data-toggle="modal"
@@ -117,6 +120,13 @@
                                     <input type="text" class="form-control" id="no_sjn" name="no_sjn">
                                 </div>
                             </div>
+                            <div class="form-group row">
+                                <label for="nama_pengirim" class="col-sm-4 col-form-label">{{ __('Nama Pengirim') }}
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="nama_pengirim" name="nama_pengirim">
+                                </div>
+                            </div>
                         </form>
                     </div>
                     <div class="modal-footer justify-content-between">
@@ -141,6 +151,9 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <div class="row">
+                                <form id="cetak-sjn" method="GET" action="{{ route('cetak_sjn') }}" target="_blank">
+                                    <input type="hidden" name="sjn_id" id="sjn_id">
+                                </form>
                                 <div class="col-12" id="container-form">
                                     <button id="button-cetak-sjn" type="button" class="btn btn-primary"
                                         onclick="document.getElementById('cetak-sjn').submit();">{{ __('Cetak') }}</button>
@@ -151,13 +164,12 @@
                                             <td style="width: 55%"><span id="no_surat"></span></td>
                                         </tr>
                                         <tr>
-                                            <td><b>Tangaal</b></td>
+                                            <td><b>Tanggal</b></td>
                                             <td>:</td>
                                             <td><span id="tgl_surat"></span></td>
                                         </tr>
                                         <tr>
                                             <td><b>Produk</b></td>
-                                            <input type="hidden" name="sjn_id" id="sjn_id">
                                         </tr>
                                         <tr>
                                             <td colspan="3">
@@ -242,8 +254,6 @@
                 </div>
             </div>
         </div>
-
-
 
         {{-- modal delete sjn --}}
         <div class="modal fade" id="delete-sjn">
@@ -351,6 +361,7 @@
             resetForm();
             $('#save_id').val(data.sjn_id);
             $('#no_sjn').val(data.no_sjn);
+            $('#nama_pengirim').val(data.nama_pengirim);
         }
 
         function emptyTableProducts() {
@@ -434,6 +445,12 @@
                     $('#button-update-sjn').attr('disabled', true);
                 },
                 success: function(data) {
+                    if (!data.success) {
+                        toastr.error(data.message);
+                        $('#button-update-sjn').html('Tambahkan');
+                        $('#button-update-sjn').attr('disabled', false);
+                        return
+                    }
                     $('#no_surat').text(data.sjn.no_sjn);
                     $('#tgl_surat').text(data.sjn.datetime);
                     $('#sjn_id').val(data.sjn.sjn_id);
