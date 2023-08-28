@@ -58,8 +58,8 @@
                                         @endphp
                                         <tr>
                                             <td class="text-center">{{ $data['no'] }}</td>
+                                            <td class="text-center">{{ $data['nopo'] }}</td>
                                             <td class="text-center">{{ $data['vid'] }}</td>
-                                            <td>{{ $data['nopo'] }}</td>
                                             <td class="text-center">{{ $data['tgpo'] }}</td>
                                             <td class="text-center">{{ $data['btpo'] }}</td>
                                             <td class="text-center">

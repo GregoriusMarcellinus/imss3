@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DetailsjnController;
+use App\Http\Controllers\HistoryController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
@@ -60,6 +61,10 @@ Route::prefix('products')->group(function () {
 
     //purchase
     Route::resource('purchase_order', App\Http\Controllers\PurchaseOrderController::class)->except(['destroy']);
+    
+    //history
+    Route::get('/history',[HistoryController::class,'index']);
+    Route::delete('/history',[HistoryController::class,'deleteAll'])->name('history.delete');
 });
 
 Route::prefix('users')->group(function () {
