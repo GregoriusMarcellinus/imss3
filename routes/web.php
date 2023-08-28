@@ -61,6 +61,7 @@ Route::prefix('products')->group(function () {
 
     //purchase
     Route::resource('purchase_order', App\Http\Controllers\PurchaseOrderController::class)->except(['destroy']);
+    Route::delete('purchase_order', [App\Http\Controllers\PurchaseOrderController::class, 'destroy'])->name('purchase_order.destroy');
 });
 
 Route::prefix('users')->group(function () {

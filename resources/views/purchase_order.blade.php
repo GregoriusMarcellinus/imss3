@@ -49,33 +49,35 @@
                                     @foreach ($purchases as $key => $d)
                                         @php
                                             $data = [
+                                                'id' => $d->id,
                                                 'no' => $purchases->firstItem() + $key,
                                                 'vid' => $d->vendor_id,
-                                                'nopo' => $d->no_po,
-                                                'tgpo' => date('d/m/Y H:i:s', strtotime($d->tanggal_po)),
-                                                'btpo' => date('d/m/Y H:i:s', strtotime($d->batas_po)),
+                                                'nama_vendor' => $d->vendor_name,
+                                                'no_po' => $d->no_po,
+                                                'tgpo' => date('d/m/Y', strtotime($d->tanggal_po)),
+                                                'btpo' => date('d/m/Y', strtotime($d->batas_po)),
                                             ];
                                         @endphp
                                         <tr>
                                             <td class="text-center">{{ $data['no'] }}</td>
-                                            <td class="text-center">{{ $data['vid'] }}</td>
-                                            <td>{{ $data['nopo'] }}</td>
+                                            <td>{{ $data['no_po'] }}</td>
+                                            <td class="text-center">{{ $data['nama_vendor'] }}</td>
                                             <td class="text-center">{{ $data['tgpo'] }}</td>
                                             <td class="text-center">{{ $data['btpo'] }}</td>
                                             <td class="text-center">
                                                 <button title="Edit PO" type="button" class="btn btn-success btn-xs"
                                                     data-toggle="modal" data-target="#add-po"
-                                                    onclick="editSjn({{ json_encode($data) }})"><i
+                                                    onclick="editPo({{ json_encode($data) }})"><i
                                                         class="fas fa-edit"></i></button>
 
                                                 <button title="Lihat Detail" type="button" data-toggle="modal"
                                                     data-target="#detail-po" class="btn-lihat btn btn-info btn-xs"
                                                     data-detail="{{ json_encode($data) }}"><i
-                                                        class="fas fa-barcode"></i></button>
+                                                        class="fas fa-list"></i></button>
+                                                        
                                                 @if (Auth::user()->role == 0)
-                                                    <button title="Hapus PO" type="button"
-                                                        class="btn btn-danger btn-xs" data-toggle="modal"
-                                                        data-target="#delete-po"
+                                                    <button title="Hapus PO" type="button" class="btn btn-danger btn-xs"
+                                                        data-toggle="modal" data-target="#delete-po"
                                                         onclick="deletePo({{ json_encode($data) }})"><i
                                                             class="fas fa-trash"></i></button>
                                                 @endif
@@ -97,6 +99,8 @@
             </div>
         </div>
     </section>
+
+    {{-- modal tambah --}}
     <div class="modal fade" id="add-po">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -119,7 +123,13 @@
                         <div class="form-group row">
                             <label for="vendor_id" class="col-sm-4 col-form-label">{{ __('Vendor') }} </label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="vendor_id" name="vendor_id">
+                                {{-- <input type="text" class="form-control" id="vendor_id" name="vendor_id"> --}}
+                                <select class="form-control" id="vendor_id" name="vendor_id">
+                                    <option value="">-- Pilih Vendor --</option>
+                                    @foreach ($vendors as $vendor)
+                                        <option value="{{ $vendor->id }}">{{ $vendor->nama }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -144,6 +154,161 @@
             </div>
         </div>
     </div>
+
+    {{-- modal detail --}}
+    <div class="modal fade" id="detail-po">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 id="modal-title" class="modal-title">{{ __('Detail Purchase Order') }}</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <div class="row">
+                            <div class="col-12" id="container-form">
+                                <button id="button-cetak-sjn" type="button" class="btn btn-primary"
+                                    onclick="document.getElementById('cetak-po').submit();">{{ __('Cetak') }}</button>
+                                <table class="align-top w-100">
+                                    <tr>
+                                        <td style="width: 8%;"><b>No Surat</b></td>
+                                        <td style="width:2%">:</td>
+                                        <td style="width: 55%"><span id="no_po"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Vendor</b></td>
+                                        <td>:</td>
+                                        <td><span id="vendor_id"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Tanggal PO</b></td>
+                                        <td>:</td>
+                                        <td><span id="tanggal_po"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Batas PO</b></td>
+                                        <td>:</td>
+                                        <td><span id="batas_po"></span></td>
+                                    </tr>
+                                    <tr>
+                                        <td><b>Detail</b></td>
+                                        <input type="hidden" name="sjn_id" id="sjn_id">
+                                    </tr>
+                                    <tr>
+                                        <td colspan="3">
+                                            <button id="button-tambah-produk" type="button" class="btn btn-info"
+                                                onclick="showAddProduct()">{{ __('Tambah Detail') }}</button>
+                                        </td>
+                                    </tr>
+                                </table>
+                                <div class="table-responsive">
+                                    <table class="table table-bordered">
+                                        <thead>
+                                            <th>NO PR</th>
+                                            <th>Referensi SPH</th>
+                                            <th>Termin Pembayaran</th>
+                                            <th>Garansi</th>
+                                            <th>Proyek</th>
+                                            <th>Keterangan</th>
+                                        </thead>
+
+                                        <tbody id="table-products">
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="col-0 d-none" id="container-product">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="input-group input-group-lg">
+                                            <input type="text" class="form-control" id="pcode" name="pcode"
+                                                min="0" placeholder="Product Code">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary" id="button-check"
+                                                    onclick="productCheck()">
+                                                    <i class="fas fa-search"></i>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="loader" class="card">
+                                    <div class="card-body text-center">
+                                        <div class="spinner-border text-danger" style="width: 3rem; height: 3rem;"
+                                            role="status">
+                                            <span class="sr-only">Loading...</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div id="form" class="card">
+                                    <div class="card-body">
+                                        <form role="form" id="stock-update" method="post">
+                                            @csrf
+                                            <input type="hidden" id="pid" name="pid">
+                                            <input type="hidden" id="type" name="type">
+                                            <div class="form-group row">
+                                                <label for="pname"
+                                                    class="col-sm-4 col-form-label">{{ __('Nama Barang') }}</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" class="form-control" id="pname"
+                                                        disabled>
+                                                    <input type="hidden" class="form-control" id="product_id"
+                                                        disabled>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="no_nota"
+                                                    class="col-sm-4 col-form-label">{{ __('QTY') }}</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" class="form-control" id="stock"
+                                                        name="stock">
+                                                </div>
+                                            </div>
+                                        </form>
+                                        <button id="button-update-sjn" type="button" class="btn btn-primary w-100"
+                                            onclick="sjnProductUpdate()">{{ __('Tambahkan') }}</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- modal delete --}}
+    <div class="modal fade" id="delete-po">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 id="modal-title" class="modal-title">{{ __('Delete PO') }}</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form role="form" id="delete" action="{{ route('purchase_order.destroy') }}" method="post">
+                        @csrf
+                        @method('delete')
+                        <input type="hidden" id="delete_id" name="id">
+                    </form>
+                    <div>
+                        <p>Anda yakin ingin menghapus purchase order <span id="pcode" class="font-weight-bold"></span>?
+                        </p>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">{{ __('Batal') }}</button>
+                    <button id="button-save" type="button" class="btn btn-danger"
+                        onclick="document.getElementById('delete').submit();">{{ __('Ya, hapus') }}</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 @endsection
 @section('custom-js')
     <script src="/plugins/toastr/toastr.min.js"></script>
@@ -155,6 +320,51 @@
                 theme: 'bootstrap4'
             });
         });
+
+        function resetForm() {
+            $('#save').trigger("reset");
+            $('#barcode_preview_container').hide();
+        }
+
+        function addPo() {
+            $('#modal-title').text("Add New SJN");
+            $('#button-save').text("Tambahkan");
+            resetForm();
+        }
+
+        function editPo(data) {
+            $('#modal-title').text("Edit PO");
+            $('#button-save').text("Simpan");
+            resetForm();
+            $('#save_id').val(data.id);
+            $('#no_po').val(data.no_po);
+            $('#vendor_id').val(data.vendor_id);
+            // $('#tanggal_po').val(data.tanggal_po);
+            // $('#batas_po').val(data.batas_po);
+
+            //find vendor_id in select option then compare with vid
+            $('#vendor_id').find('option').each(function() {
+                if ($(this).val() == data.vid) {
+                    console.log($(this).val());
+                    $(this).attr('selected',true);
+                }
+            });
+
+            //view tanggal_po value in edit modal
+            var date = data.tgpo.split('/');
+            var newDate = date[2] + '-' + date[1] + '-' + date[0];
+            $('#tanggal_po').val(newDate);
+
+            //view batas_po value in edit modal
+            var date = data.btpo.split('/');
+            var newDate = date[2] + '-' + date[1] + '-' + date[0];
+            $('#batas_po').val(newDate);
+
+        }
+
+        function deletePo(data) {
+            $('#delete_id').val(data.id);
+        }
 
         function download(type) {
             window.location.href = "{{ route('products.wip.history') }}?search={{ Request::get('search') }}&dl=" + type;
