@@ -18,7 +18,7 @@
                 <div class="card-header">
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-po"
                         onclick="addPo()"><i class="fas fa-plus"></i> Add New PO</button>
-                    <div class="card-tools">
+                    {{-- <div class="card-tools">
                         <form>
                             <div class="input-group input-group">
                                 <input type="text" class="form-control" name="q" placeholder="Search">
@@ -29,7 +29,7 @@
                                 </div>
                             </div>
                         </form>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -38,6 +38,7 @@
                                 <tr class="text-center">
                                     <th>No.</th>
                                     <th>{{ __('No PO') }}</th>
+                                    <th>{{ __('Proyek') }}</th>
                                     <th>{{ __('Vendor') }}</th>
                                     <th>{{ __('Tanggal PO') }}</th>
                                     <th>{{ __('Batas Akhir PO') }}</th>
@@ -53,6 +54,7 @@
                                                 'no' => $purchases->firstItem() + $key,
                                                 'vid' => $d->vendor_id,
                                                 'nama_vendor' => $d->vendor_name,
+                                                'nama_proyek' => $d->proyek_name,
                                                 'no_po' => $d->no_po,
                                                 'tgpo' => date('d/m/Y', strtotime($d->tanggal_po)),
                                                 'btpo' => date('d/m/Y', strtotime($d->batas_po)),
@@ -61,6 +63,7 @@
                                         <tr>
                                             <td class="text-center">{{ $data['no'] }}</td>
                                             <td>{{ $data['no_po'] }}</td>
+                                            <td class="text-center">{{ $data['nama_proyek'] }}</td>
                                             <td class="text-center">{{ $data['nama_vendor'] }}</td>
                                             <td class="text-center">{{ $data['tgpo'] }}</td>
                                             <td class="text-center">{{ $data['btpo'] }}</td>
@@ -102,7 +105,7 @@
 
     {{-- modal tambah --}}
     <div class="modal fade" id="add-po">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 id="modal-title" class="modal-title">{{ __('Add New PO') }}</h4>
@@ -125,7 +128,7 @@
                             <div class="col-sm-8">
                                 {{-- <input type="text" class="form-control" id="vendor_id" name="vendor_id"> --}}
                                 <select class="form-control" id="vendor_id" name="vendor_id">
-                                    <option value="">-- Pilih Vendor --</option>
+                                    <option value="">Pilih Vendor</option>
                                     @foreach ($vendors as $vendor)
                                         <option value="{{ $vendor->id }}">{{ $vendor->nama }}</option>
                                     @endforeach
@@ -133,15 +136,87 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="tanggal_po" class="col-sm-4 col-form-label">{{ __('Tanggal PO') }} </label>
+                            <label for="tanggal_po" class="col-sm-4 col-form-label w-50">{{ __('Tanggal PO') }} </label>
                             <div class="col-sm-8">
-                                <input type="date" class="form-control" id="tanggal_po" name="tanggal_po">
+                                <input type="date" class="form-control w-50" id="tanggal_po" name="tanggal_po">
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="batas_po" class="col-sm-4 col-form-label">{{ __('Batas Akhir PO') }} </label>
                             <div class="col-sm-8">
-                                <input type="date" class="form-control" id="batas_po" name="batas_po">
+                                <input type="date" class="form-control w-50" id="batas_po" name="batas_po">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="incoterm" class="col-sm-4 col-form-label">{{ __('Incoterm') }} </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="incoterm" name="incoterm">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="pr_no" class="col-sm-4 col-form-label">{{ __('No PR') }} </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="pr_no" name="pr_no">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="ref_sph" class="col-sm-4 col-form-label">{{ __('Referensi SPH') }} </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="ref_sph" name="ref_sph">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="no_just" class="col-sm-4 col-form-label">{{ __('No Justifikasi') }} </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="no_just" name="no_just">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="no_nego" class="col-sm-4 col-form-label">{{ __('No Nego') }} </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="no_nego" name="no_nego">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="ref_po" class="col-sm-4 col-form-label">{{ __('Refernsi Po') }} </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="ref_po" name="ref_po">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="term_pay" class="col-sm-4 col-form-label">{{ __('Termin Pembayaran') }} </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="term_pay" name="term_pay">
+                                {{-- <select class="form-control" id="term_pay" name="term_pay">
+                                    <option value="">Pilih Termin Pembayaran</option>
+                                    <option value="0">Cash</option>
+                                    <option value="1">Credit</option>
+                                </select> --}}
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="garansi" class="col-sm-4 col-form-label">{{ __('Garansi') }} </label>
+                            <div class="col-sm-8">
+                                <input type="text" class="form-control" id="garansi" name="garansi">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="proyek_id" class="col-sm-4 col-form-label">{{ __('Proyek') }} </label>
+                            <div class="col-sm-8">
+                                {{-- <input type="date" class="form-control" id="proyek_id" name="proyek_id"> --}}
+                                <select class="form-control" name="proyek_id" id="proyek_id">
+                                    <option value="">Pilih Proyek</option>
+                                    @foreach ($proyeks as $proyek)
+                                        <option value="{{ $proyek->id }}">{{ $proyek->nama_proyek }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="catatan_vendor" class="col-sm-4 col-form-label">{{ __('Catatan Vendor') }} </label>
+                            <div class="col-sm-8">
+                                {{-- <input type="textarea" class="form-control" id="catatan_vendor" name="catatan_vendor"> --}}
+                                <textarea class="form-control" name="catatan_vendor" id="catatn_vendor" rows="3"></textarea>
                             </div>
                         </div>
                     </form>
@@ -178,6 +253,11 @@
                                         <td style="width: 55%"><span id="no_po"></span></td>
                                     </tr>
                                     <tr>
+                                        <td><b>Proyek</b></td>
+                                        <td>:</td>
+                                        <td><span id="proyek_id"></span></td>
+                                    </tr>
+                                    <tr>
                                         <td><b>Vendor</b></td>
                                         <td>:</td>
                                         <td><span id="vendor_id"></span></td>
@@ -199,19 +279,22 @@
                                     <tr>
                                         <td colspan="3">
                                             <button id="button-tambah-produk" type="button" class="btn btn-info"
-                                                onclick="showAddProduct()">{{ __('Tambah Detail') }}</button>
+                                                onclick="showAddProduct()">{{ __('Tambah Item Detail') }}</button>
                                         </td>
                                     </tr>
                                 </table>
                                 <div class="table-responsive">
                                     <table class="table table-bordered">
                                         <thead>
-                                            <th>NO PR</th>
-                                            <th>Referensi SPH</th>
-                                            <th>Termin Pembayaran</th>
-                                            <th>Garansi</th>
-                                            <th>Proyek</th>
-                                            <th>Keterangan</th>
+                                            <th>Item</th>
+                                            <th>Kode Material</th>
+                                            <th>Batas Akhir Diterima</th>
+                                            <th>Kuantitas</th>
+                                            <th>Unit</th>
+                                            <th>Harga Per Unit</th>
+                                            <th>Mata Uang</th>
+                                            <th>Vat</th>
+                                            <th>Total</th>
                                         </thead>
 
                                         <tbody id="table-products">
@@ -327,7 +410,7 @@
         }
 
         function addPo() {
-            $('#modal-title').text("Add New SJN");
+            $('#modal-title').text("Add Purchase Order");
             $('#button-save').text("Tambahkan");
             resetForm();
         }
@@ -339,27 +422,33 @@
             $('#save_id').val(data.id);
             $('#no_po').val(data.no_po);
             $('#vendor_id').val(data.vendor_id);
-            // $('#tanggal_po').val(data.tanggal_po);
-            // $('#batas_po').val(data.batas_po);
-
-            //find vendor_id in select option then compare with vid
             $('#vendor_id').find('option').each(function() {
                 if ($(this).val() == data.vid) {
                     console.log($(this).val());
                     $(this).attr('selected',true);
                 }
             });
-
-            //view tanggal_po value in edit modal
             var date = data.tgpo.split('/');
             var newDate = date[2] + '-' + date[1] + '-' + date[0];
             $('#tanggal_po').val(newDate);
-
-            //view batas_po value in edit modal
             var date = data.btpo.split('/');
             var newDate = date[2] + '-' + date[1] + '-' + date[0];
             $('#batas_po').val(newDate);
-
+            $('#incoterm').val(data.incoterm);
+            $('#pr_no').val(data.pr_no);
+            $('#ref_sph').val(data.ref_sph);
+            $('#no_just').val(data.no_just);
+            $('#no_nego').val(data.no_nego);
+            $('#ref_po').val(data.ref_po);
+            $('#term_pay').val(data.term_pay);
+            $('#garansi').val(data.garansi);
+            $('#proyek_id').find('option').each(function() {
+                if ($(this).val() == data.proyek_id) {
+                    console.log($(this).val());
+                    $(this).attr('selected',true);
+                }
+            });
+            $('#catatan_vendor').val(data.catatan_vendor);
         }
 
         function deletePo(data) {

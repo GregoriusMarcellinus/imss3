@@ -24,10 +24,12 @@ class PurchaseOrderController extends Controller
             $warehouse_id = DB::table('warehouse')->first()->warehouse_id;
         }
 
-        $purchases = Purchase_Order::select('purchase_order.*', 'vendor.nama as vendor_name')
+        $purchases = Purchase_Order::select('purchase_order.*', 'vendor.nama as vendor_name', 'keproyekan.nama_proyek as proyek_name')
             ->join('vendor', 'vendor.id', '=', 'purchase_order.vendor_id')
+            ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_order.proyek_id')
             ->paginate(50);
         $vendors = DB::table('vendor')->get();
+        $proyeks = DB::table('keproyekan')->get();
 
         if ($search) {
             $purchases = Purchase_Order::where('no_po', 'LIKE', "%$search%")->paginate(50);
@@ -38,7 +40,7 @@ class PurchaseOrderController extends Controller
 
             return response()->json($purchases);
         } else {
-            return view('purchase_order', compact('purchases', 'vendors'));
+            return view('purchase_order', compact('purchases', 'vendors', 'proyeks'));
         }
     }
 
@@ -63,13 +65,22 @@ class PurchaseOrderController extends Controller
                 'no_po' => 'required',
                 'vendor_id' => 'required',
                 'tanggal_po' => 'required',
-                'batas_po' => 'required'
+                'batas_po' => 'required',
+                'incoterm' => 'required',
+                'pr_no' => 'required',
+                'term_pay' => 'required',
+                'proyek_id' => 'required',
+
             ],
             [
                 'no_po.required' => 'No. PO harus diisi',
                 'vendor_id.required' => 'Vendor harus diisi',
                 'tanggal_po.required' => 'Tanggal PO harus diisi',
-                'batas_po.required' => 'Batas Akhir PO harus diisi'
+                'batas_po.required' => 'Batas Akhir PO harus diisi',
+                'incoterm.required' => 'Incoterm harus diisi',
+                'pr_no.required' => 'PR No. harus diisi',
+                'term_pay.required' => 'Termin Pembayaran harus diisi',
+                'proyek_id.required' => 'Proyek harus diisi',
             ]
         );
 
@@ -79,8 +90,19 @@ class PurchaseOrderController extends Controller
                 'vendor_id' => $request->vendor_id,
                 // "tanggal_po"  => Carbon::now()->setTimezone('Asia/Jakarta'),
                 // "batas_po" => Carbon::now()->setTimezone('Asia/Jakarta')
-                "tanggal_po" => $request->tanggal_po,
-                "batas_po" => $request->batas_po
+                'tanggal_po' => $request->tanggal_po,
+                'batas_po' => $request->batas_po,
+                'incoterm' => $request->incoterm,
+                'pr_no' => $request->pr_no,
+                'ref_sph' => $request->ref_sph,
+                'no_just' => $request->no_just,
+                'no_nego' => $request->no_nego,
+                'ref_po' => $request->ref_po,
+                'term_pay' => $request->term_pay,
+                'garansi' => $request->garansi,
+                'proyek_id' => $request->proyek_id,
+                // 'catatan_vendor' => $request->catatan_vendor
+
             ]);
 
             return redirect()->route('purchase_order.index')->with('success', 'Data PO berhasil ditambahkan');
@@ -90,8 +112,19 @@ class PurchaseOrderController extends Controller
                 'vendor_id' => $request->vendor_id,
                 // "tanggal_po"  => Carbon::now()->setTimezone('Asia/Jakarta'),
                 // "batas_po" => Carbon::now()->setTimezone('Asia/Jakarta')
-                "tanggal_po" => $request->tanggal_po,
-                "batas_po" => $request->batas_po
+                'tanggal_po' => $request->tanggal_po,
+                'batas_po' => $request->batas_po,
+                'incoterm' => $request->incoterm,
+                'pr_no' => $request->pr_no,
+                'ref_sph' => $request->ref_sph,
+                'no_just' => $request->no_just,
+                'no_nego' => $request->no_nego,
+                'ref_po' => $request->ref_po,
+                'term_pay' => $request->term_pay,
+                'garansi' => $request->garansi,
+                'proyek_id' => $request->proyek_id,
+                // 'catatan_vendor' => $request->catatan_vendor
+
             ]);
             return redirect()->route('purchase_order.index')->with('success', 'Data PO berhasil diubah');
         }

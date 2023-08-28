@@ -28,6 +28,7 @@ class CreatePurchaseOrderTable extends Migration
             $table->string('term_pay');
             $table->string('garansi')->nullable();
             $table->integer('proyek_id');
+            // $table->string('catatan_vendor')->nullable();
             $table->timestamps();
         });
     }
