@@ -142,6 +142,13 @@ class SjnController extends Controller
 
     public function updateDetailSjn(Request $request)
     {
+        if (!$request->stock) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Qty tidak boleh kosong',
+            ]);
+        }
+
         //retrieve json data
         $insert = Detail_sjn::create([
             'sjn_id' => $request->sjn_id,

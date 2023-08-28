@@ -445,6 +445,12 @@
                     $('#button-update-sjn').attr('disabled', true);
                 },
                 success: function(data) {
+                    if (!data.success) {
+                        toastr.error(data.message);
+                        $('#button-update-sjn').html('Tambahkan');
+                        $('#button-update-sjn').attr('disabled', false);
+                        return
+                    }
                     $('#no_surat').text(data.sjn.no_sjn);
                     $('#tgl_surat').text(data.sjn.datetime);
                     $('#sjn_id').val(data.sjn.sjn_id);
