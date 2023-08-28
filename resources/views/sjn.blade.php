@@ -151,7 +151,7 @@
                                             <td style="width: 55%"><span id="no_surat"></span></td>
                                         </tr>
                                         <tr>
-                                            <td><b>Tangaal</b></td>
+                                            <td><b>Tanggal</b></td>
                                             <td>:</td>
                                             <td><span id="tgl_surat"></span></td>
                                         </tr>
@@ -242,8 +242,6 @@
                 </div>
             </div>
         </div>
-
-
 
         {{-- modal delete sjn --}}
         <div class="modal fade" id="delete-sjn">
