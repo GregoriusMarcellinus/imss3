@@ -74,7 +74,7 @@
                                                 <button title="Lihat Detail" type="button" data-toggle="modal"
                                                     data-target="#detail-sjn" class="btn-lihat btn btn-info btn-xs"
                                                     data-detail="{{ json_encode($data) }}"><i
-                                                        class="fas fa-barcode"></i></button>
+                                                        class="fas fa-list"></i></button>
                                                 @if (Auth::user()->role == 0)
                                                     <button title="Hapus Produk" type="button"
                                                         class="btn btn-danger btn-xs" data-toggle="modal"
