@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\KodeMaterial;
 use GuzzleHttp\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class SheetController extends Controller
 {
-    public function getDataSheet(Request $request)
+    public static function getDataSheet(Request $request)
     {
         $type = $request->type;
         if (!$type) return response()->json(['message' => 'Type harus diisi (inka/imss)']);
@@ -62,8 +64,32 @@ class SheetController extends Controller
         return response()->json($arr);
     }
 
-    public function sync()
+    public function sync(Request $request)
     {
-        $sheets = self::getDataSheet();
+        $sheets = self::getDataSheet($request);
+
+        foreach ($sheets->original as $key => $sheet) {
+            $product = DB::table('kode_material')->where('kode_material', $sheet['kode_material'])->where('type', $request->type == 'inka' ? 0 : 1)->first();
+            if (!$product) {
+                $product = new KodeMaterial();
+                $product->kode_material = $sheet['kode_material'];
+                $product->nama_material = $sheet['nama_barang'];
+                $product->spesifikasi = $sheet['spesifikasi'];
+                $product->satuan = $sheet['satuan'];
+                $product->type = $request->type == 'inka' ? 0 : 1;
+                $product->save();
+            } else {
+                DB::table('products')->where('product_code', $sheet['kode_material'])->update(['product_name' => $sheet['nama_barang'], 'spesifikasi' => $sheet['spesifikasi'], 'satuan' => $sheet['satuan']]);
+            }
+        }
+
+        return response()->json(['message' => 'Data berhasil disinkronisasi']);
+    }
+
+    public function test_komat()
+    {
+        $komats = KodeMaterial::where('type', 0)->get();
+
+        return response()->json($komats);
     }
 }

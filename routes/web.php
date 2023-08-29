@@ -97,4 +97,6 @@ Route::prefix('account')->group(function () {
 
 
 Route::get('test_sheet', [App\Http\Controllers\SheetController::class, 'getDataSheet'])->name('test_sheet');
-Route::get('get_sheets', [App\Http\Controllers\SheetController::class, 'getDataSheet'])->name('test_sheet');
+Route::get('get_sheets', [App\Http\Controllers\SheetController::class, 'getDataSheet'])->name('get_sheets');
+Route::get('sync_sheets', [App\Http\Controllers\SheetController::class, 'sync'])->name('sync_sheets');
+Route::get('test_komat', [App\Http\Controllers\SheetController::class, 'test_komat'])->name('test_komat');
