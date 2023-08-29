@@ -2,53 +2,20 @@
 
 <head>
     <title>Purchase Order</title>
-    <style>
-        /**
-                Set the margins of the page to 0, so the footer and the header
-                can be of the full height and width !
-             **/
-        @page {
-            margin: 0cm 0cm;
+    <style>    
+    @page {
+            margin: 0px;
         }
-
-        /** Define now the real margins of every page in the PDF **/
         body {
-            margin-top: 5.5cm;
-            margin-left: 2cm;
-            margin-right: 2cm;
-            margin-bottom: 2cm;
+            margin: 0px;
         }
-
-        /** Define the header rules **/
-        header {
-            position: fixed;
-            top: 2cm;
-            left: 2cm;
-            right: 2cm;
-            height: 5.5cm;
-
-            /** Extra personal styles **/
-            /* background-color: #03a9f4; */
-            /* color: white; */
-            text-align: center;
-            /* line-height: 1.5cm; */
+        * {
+            font-family: Verdana, Arial, sans-serif;
         }
-
-        /** Define the footer rules **/
-        footer {
-            position: fixed;
-            bottom: 0cm;
-            left: 0cm;
-            right: 0cm;
-            height: 2cm;
-
-            /** Extra personal styles **/
-            background-color: #03a9f4;
-            color: white;
-            text-align: center;
-            line-height: 1.5cm;
+        a {
+            color: #fff;
+            text-decoration: none;
         }
-
         table {
             border-collapse: collapse;
         }
@@ -69,7 +36,7 @@
         }
 
         th {
-            padding: 15px 15px 15px 15px;
+            padding: 15px 15px 15px 25px;
         }
 
         .page_break {
@@ -92,130 +59,69 @@
         .pagenum:before {
             content: counter(page);
         }
+        }
+        .invoice table {
+            margin: 15px;
+        }
+        .invoice h3 {
+            margin-left: 15px;
+        }
+        .information {
+            color: #000000;
+        }
+        .information .logo {
+            margin: 5px;
+        }
+        .information table {
+            padding: 10px;
+        }
     </style>
+
 </head>
-
 <body>
-    @php
-        $path = public_path('img/imss-remove.png');
-    @endphp
 
-    <header>
-        <table style="width: 100%;">
-            <tr>
-                <td style="text-align: center;" rowspan="4">
-                    <h3 style="margin:0px;">Rencana Pembelajaran Semester</h3>
-                    <h3 style="margin:0px;">Program Studi: FFF</h3>
-                    <h3 style="margin:0px;">MataKuliah DDD</h3>
-                    <h3 style="margin:0px;">AAAA</h3>
-                </td>
-                <td style="text-align: center;" rowspan="4">
-                    <img src="{{ 'data:image/png;base64,' . base64_encode(file_get_contents($path)) }}" alt="image"
-                        width="150px">
-                </td>
-                <td style="text-align: right;">
-                    Nomor
-                </td>
-                <td style="text-align: left;">
-                    <i>: 123123</i>
-                </td>
-            </tr>
-        </table>
-    </header>
+<div class="information">
+    <table width="100%">
+        <tr>
+            <td align="left" style="width: 25%;">
+                <h3>Company :</h3>
+                <pre>Nama Vendor:
+Alamat:
+Contact:
+<br><br>
+Telepon:
+Fax:
+Email:
+</pre>
 
 
+            </td>
+            <td align="center">
+                <img src="https://inkamultisolusi.co.id/api_cms/public/uploads/editor/20220511071342_LSnL6WiOy67Xd9mKGDaG.png" alt="Logo" width="200" class="logo"/><br>
+                <br><br>
+                <strong>PT INKA MULTI SOLUSI SERVICE</strong><br>
+                Salak No. 99 Madiun<br>
+                Telepon +62 812 3456789<br>
+                <br><strong style="font-size: 25">Purchase Order</strong><br>
+            </td>
+            <td align="left" style="width: 25%;">
+                <pre>NO PO:
+Tanggal PO:
+Incoterm:
+PR NO.:
+Referensi SPH:
+No. Justifikasi:
+No. Negosiasi:
+Batas Akhir Po:
 
-    {{-- <body> --}}
-    <div class="row" style="margin-top: 1rem">
-        <table>
-            {{-- <div class="row">
-                <div class="col"> --}}
-            <tr>
-                <td>Company</td>
-            </tr>
-            <tr>
-                <td>Nama Vendor</td>
-            </tr>
-            <tr>
-                <td>Alamat</td>
-            </tr>
-            <tr>
-                <td>Contact</td>
-            </tr>
-            <tr>
-                <td>Telepon</td>
-                <td>:</td>
-            </tr>
-            <tr>
-                <td>Fax</td>
-                <td>:</td>
-            </tr>
-            <tr>
-                <td>Email</td>
-                <td>:</td>
-            </tr>
-            {{-- </div>
-                <div class="col"> --}}
-            <tr>
-                <img src="{{ 'data:image/png;base64,' . base64_encode(file_get_contents($path)) }}" alt="image"
-                    width="150px">
-            </tr>
-            <tr>
-                <td>PT INKA MULTI SOLUSI SERVICE</td>
-            </tr>
-            <tr>
-                <td> Salak No. 99 Madiun</td>
-            </tr>
-            <tr>
-                <td>Telepon +62 812 3456789</td>
-            </tr>
-            <tr>
-                <h2>Purcahse Order</h2>
-            </tr>
-            {{-- </div>
-                <div class="col"> --}}
-            <tr>
-                <td>NO PO</td>
-                <td>:</td>
-            </tr>
-            <tr>
-                <td>Tanggal PO</td>
-                <td>:</td>
-            </tr>
-            <tr>
-                <td>Incoterm</td>
-                <td>:</td>
-            </tr>
-            <tr>
-                <td>PR NO.</td>
-                <td>:</td>
-            </tr>
-            <tr>
-                <td>Referensi SPH</td>
-                <td>:</td>
-            </tr>
-            <tr>
-                <td>No. Justifikasi</td>
-                <td>:</td>
-            </tr>
-            <tr>
-                <td>No. Negosiasi</td>
-                <td>:</td>
-            </tr>
-            <tr>
-                <td>Batas Akhir Po</td>
-                <td>:</td>
-            </tr>
-            <tr>
-                <td>Alamat Penagihan</td>
-                <td>:</td>
-            </tr>
-            {{-- </div> --}}
-            {{-- </div> --}}
-        </table>
-    </div>
+Alamat Penagihan:
+                </pre>
+            </td>
+        </tr>
 
-
+    </table>
+</div>
+    
     {{--
     <div class="w-100 text-center">
         <b style="text-decoration: underline"></i>PURCHASE ORDER</b><br />
