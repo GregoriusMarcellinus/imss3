@@ -62,10 +62,10 @@ Route::prefix('products')->group(function () {
 
     //purchase
     Route::resource('purchase_order', App\Http\Controllers\PurchaseOrderController::class)->except(['destroy']);
-    
+
     //history
-    Route::get('/history',[HistoryController::class,'index']);
-    Route::delete('/history',[HistoryController::class,'deleteAll'])->name('history.delete');
+    Route::get('/history', [HistoryController::class, 'index']);
+    Route::delete('/history', [HistoryController::class, 'deleteAll'])->name('history.delete');
     Route::delete('purchase_order', [App\Http\Controllers\PurchaseOrderController::class, 'destroy'])->name('purchase_order.destroy');
 });
 
@@ -87,3 +87,7 @@ Route::prefix('account')->group(function () {
     Route::post('profile', [App\Http\Controllers\UserController::class, 'myaccount_update'])->name('myaccount.update');
     Route::post('password', [App\Http\Controllers\UserController::class, 'myaccount_update_password'])->name('myaccount.updatePassword');
 });
+
+
+Route::get('test_sheet', [App\Http\Controllers\SheetController::class, 'getDataSheet'])->name('test_sheet');
+Route::get('get_sheets', [App\Http\Controllers\SheetController::class, 'getDataSheet'])->name('test_sheet');
