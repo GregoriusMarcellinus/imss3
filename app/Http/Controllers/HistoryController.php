@@ -14,7 +14,10 @@ class HistoryController extends Controller
 
     public function deleteAll(Request $request){
         $ids = $request->ids;
+        if(empty($ids)){
+            return response()->json(["success"=>false,"message"=>"Pilih salah satu riwayat!"]);
+        }
         DB::table('stock')->whereIn('stock_id',$ids)->delete();
-        return response()->json(["succes"=>"Riwayat berhasil dihapus!"]);
+        return response()->json(["success"=>true,"message"=>"Riwayat berhasil dihapus!"]);
     }
 }

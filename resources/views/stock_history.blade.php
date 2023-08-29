@@ -181,6 +181,9 @@
                         _token:'{{ csrf_token() }}'
                     },
                     success:function(response){
+                        if(!response.success){
+                            return toastr.error(response.message)
+                        }
                         $.each(all_ids,function(key,val){
                             $('#stock_ids'+val).remove();
                         })
