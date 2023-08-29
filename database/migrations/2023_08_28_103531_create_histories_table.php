@@ -15,7 +15,7 @@ class CreateHistoriesTable extends Migration
     {
         Schema::create('histories', function (Blueprint $table) {
             $table->id();
-            $table->timestamps('tanggal');
+            $table->timestamps();
             $table->string('name');
             $table->string('shelf_name');
             $table->string('product_name');

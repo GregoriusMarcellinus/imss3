@@ -112,8 +112,8 @@
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link {{ Route::current()->getName() == 'vendor.index' ? 'active' : '' }}"
-                                    href="{{ route('vendor.index') }}">
+                                <a class="nav-link {{ Route::current()->getName() == 'kode_material.index' ? 'active' : '' }}"
+                                    href="{{ route('kode_material.index') }}">
                                     <i class="nav-icon fas fa-user-cog"></i>
                                     <p class="text">{{ __('Kode Material') }}</p>
                                 </a>
