@@ -44,7 +44,7 @@
                                     <th>{{ __('Nama') }}</th>
                                     <th>{{ __('Speksifikasi') }}</th>
                                     <th>{{ __('Satuan') }}</th>
-                                    <th></th>
+                                    {{-- <th></th> --}}
                                 </tr>
                             </thead>
                             <tbody>
@@ -66,7 +66,7 @@
                                             <td class="text-center">{{ $data['spek'] }}</td>
                                             <td class="text-center">{{ $data['satuan'] }}</td>
 
-                                            <td class="text-center">
+                                            {{-- <td class="text-center">
                                                 <button title="Edit Vendor" type="button" class="btn btn-success btn-xs"
                                                     data-toggle="modal" data-target="#add-vendor"
                                                     onclick="editVendor({{ json_encode($data) }})"><i
@@ -78,7 +78,7 @@
                                                         onclick="deleteVendor({{ json_encode($data) }})"><i
                                                             class="fas fa-trash"></i></button>
                                                 @endif
-                                            </td>
+                                            </td> --}}
                                         </tr>
                                     @endforeach
                                 @else
