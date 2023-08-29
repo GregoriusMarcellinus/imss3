@@ -45,6 +45,7 @@ Route::prefix('products')->group(function () {
     Route::post('sjn', [App\Http\Controllers\SjnController::class, 'store'])->name('products.sjn.store');
     Route::delete('sjn', [App\Http\Controllers\SjnController::class, 'destroy'])->name('sjn.delete');
     Route::get('sjn_print', [App\Http\Controllers\ProductController::class, 'sjn_print'])->name('sjn.print');
+    Route::get('po_print', [App\Http\Controllers\ProductController::class, 'po_print'])->name('po.print');
 
     //keproyekan
     Route::resource('keproyekan', App\Http\Controllers\KeproyekanController::class)->except(['destroy']);
@@ -67,6 +68,12 @@ Route::prefix('products')->group(function () {
     Route::get('/history', [HistoryController::class, 'index']);
     Route::delete('/history', [HistoryController::class, 'deleteAll'])->name('history.delete');
     Route::delete('purchase_order', [App\Http\Controllers\PurchaseOrderController::class, 'destroy'])->name('purchase_order.destroy');
+    Route::get('purchase_order_detail/{id}', [App\Http\Controllers\PurchaseOrderController::class, 'getDetailPo'])->name('purchase_order_detail');
+    Route::post('update_purchase_order_detail', [App\Http\Controllers\PurchaseOrderController::class, 'updateDetailPo'])->name('purchase_order_detail.update');
+
+    //kode material
+    Route::resource('kode_material', App\Http\Controllers\KodeMaterialController::class)->except(['destroy']);
+    Route::delete('kode_material', [App\Http\Controllers\KodeMaterialController::class, 'destroy'])->name('kode_material.destroy');
 });
 
 Route::prefix('users')->group(function () {

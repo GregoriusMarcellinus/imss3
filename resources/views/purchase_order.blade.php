@@ -77,7 +77,7 @@
                                                     data-target="#detail-po" class="btn-lihat btn btn-info btn-xs"
                                                     data-detail="{{ json_encode($data) }}"><i
                                                         class="fas fa-list"></i></button>
-                                                        
+
                                                 @if (Auth::user()->role == 0)
                                                     <button title="Hapus PO" type="button" class="btn btn-danger btn-xs"
                                                         data-toggle="modal" data-target="#delete-po"
@@ -213,7 +213,8 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="catatan_vendor" class="col-sm-4 col-form-label">{{ __('Catatan Vendor') }} </label>
+                            <label for="catatan_vendor" class="col-sm-4 col-form-label">{{ __('Catatan Vendor') }}
+                            </label>
                             <div class="col-sm-8">
                                 {{-- <input type="textarea" class="form-control" id="catatan_vendor" name="catatan_vendor"> --}}
                                 <textarea class="form-control" name="catatan_vendor" id="catatn_vendor" rows="3"></textarea>
@@ -232,7 +233,7 @@
 
     {{-- modal detail --}}
     <div class="modal fade" id="detail-po">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 id="modal-title" class="modal-title">{{ __('Detail Purchase Order') }}</h4>
@@ -244,42 +245,43 @@
                     <div class="mb-3">
                         <div class="row">
                             <div class="col-12" id="container-form">
-                                <button id="button-cetak-sjn" type="button" class="btn btn-primary"
-                                    onclick="document.getElementById('cetak-po').submit();">{{ __('Cetak') }}</button>
+                                <button id="button-cetak-po" type="button" class="btn btn-primary"
+                                    onclick="document.getElementById(
+                                        'cetak-po').submit();">{{ __('Cetak') }}</button>
                                 <table class="align-top w-100">
                                     <tr>
                                         <td style="width: 8%;"><b>No Surat</b></td>
                                         <td style="width:2%">:</td>
-                                        <td style="width: 55%"><span id="no_po"></span></td>
+                                        <td style="width: 55%"><span id="po_no"></span></td>
                                     </tr>
                                     <tr>
                                         <td><b>Proyek</b></td>
                                         <td>:</td>
-                                        <td><span id="proyek_id"></span></td>
+                                        <td><span id="id_proyek"></span></td>
                                     </tr>
                                     <tr>
                                         <td><b>Vendor</b></td>
                                         <td>:</td>
-                                        <td><span id="vendor_id"></span></td>
+                                        <td><span id="id_vendor"></span></td>
                                     </tr>
                                     <tr>
                                         <td><b>Tanggal PO</b></td>
                                         <td>:</td>
-                                        <td><span id="tanggal_po"></span></td>
+                                        <td><span id="po_tanggal"></span></td>
                                     </tr>
                                     <tr>
                                         <td><b>Batas PO</b></td>
                                         <td>:</td>
-                                        <td><span id="batas_po"></span></td>
+                                        <td><span id="po_batas"></span></td>
                                     </tr>
                                     <tr>
                                         <td><b>Detail</b></td>
-                                        <input type="hidden" name="sjn_id" id="sjn_id">
+                                        <input type="hidden" name="id" id="id">
                                     </tr>
                                     <tr>
                                         <td colspan="3">
-                                            <button id="button-tambah-produk" type="button" class="btn btn-info"
-                                                onclick="showAddProduct()">{{ __('Tambah Item Detail') }}</button>
+                                            <button id="button-tambah-detail" type="button" class="btn btn-info"
+                                                onclick="showAddItem()">{{ __('Tambah Item Detail') }}</button>
                                         </td>
                                     </tr>
                                 </table>
@@ -288,6 +290,7 @@
                                         <thead>
                                             <th>Item</th>
                                             <th>Kode Material</th>
+                                            <th>Deskripsi</th>
                                             <th>Batas Akhir Diterima</th>
                                             <th>Kuantitas</th>
                                             <th>Unit</th>
@@ -297,13 +300,13 @@
                                             <th>Total</th>
                                         </thead>
 
-                                        <tbody id="table-products">
+                                        <tbody id="table-po">
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                             <div class="col-0 d-none" id="container-product">
-                                <div class="card">
+                                {{-- <div class="card">
                                     <div class="card-body">
                                         <div class="input-group input-group-lg">
                                             <input type="text" class="form-control" id="pcode" name="pcode"
@@ -311,12 +314,12 @@
                                             <div class="input-group-append">
                                                 <button class="btn btn-primary" id="button-check"
                                                     onclick="productCheck()">
-                                                    <i class="fas fa-search"></i>
+                                                    <i class="fas fa-add"></i>
                                                 </button>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div id="loader" class="card">
                                     <div class="card-body text-center">
                                         <div class="spinner-border text-danger" style="width: 3rem; height: 3rem;"
@@ -332,26 +335,40 @@
                                             <input type="hidden" id="pid" name="pid">
                                             <input type="hidden" id="type" name="type">
                                             <div class="form-group row">
-                                                <label for="pname"
-                                                    class="col-sm-4 col-form-label">{{ __('Nama Barang') }}</label>
+                                                <label for="deskripsi"
+                                                    class="col-sm-4 col-form-label">{{ __('Deskripsi Barang') }}</label>
                                                 <div class="col-sm-8">
                                                     <input type="text" class="form-control" id="pname"
-                                                        disabled>
-                                                    <input type="hidden" class="form-control" id="product_id"
-                                                        disabled>
+                                                        name="deskripsi">
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label for="no_nota"
-                                                    class="col-sm-4 col-form-label">{{ __('QTY') }}</label>
+                                                <label for="batas"
+                                                    class="col-sm-4 col-form-label">{{ __('Batas Akhir Diterima') }}</label>
                                                 <div class="col-sm-8">
-                                                    <input type="text" class="form-control" id="stock"
-                                                        name="stock">
+                                                    <input type="date" class="form-control" id="batas"
+                                                        name="batas">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="qty"
+                                                    class="col-sm-4 col-form-label">{{ __('Kuantitas') }}</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" class="form-control" id="qty"
+                                                        name="qty">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="unit"
+                                                    class="col-sm-4 col-form-label">{{ __('Unit') }}</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" class="form-control" id="unit"
+                                                        name="unit">
                                                 </div>
                                             </div>
                                         </form>
                                         <button id="button-update-sjn" type="button" class="btn btn-primary w-100"
-                                            onclick="sjnProductUpdate()">{{ __('Tambahkan') }}</button>
+                                            onclick="PoUpdate()">{{ __('Tambahkan') }}</button>
                                     </div>
                                 </div>
                             </div>
@@ -379,7 +396,8 @@
                         <input type="hidden" id="delete_id" name="id">
                     </form>
                     <div>
-                        <p>Anda yakin ingin menghapus purchase order <span id="pcode" class="font-weight-bold"></span>?
+                        <p>Anda yakin ingin menghapus purchase order <span id="pcode"
+                                class="font-weight-bold"></span>?
                         </p>
                     </div>
                 </div>
@@ -402,6 +420,8 @@
             $('.select2').select2({
                 theme: 'bootstrap4'
             });
+
+            $('#loader').hide();
         });
 
         function resetForm() {
@@ -415,6 +435,25 @@
             resetForm();
         }
 
+
+        function loader(status = 1) {
+            if (status == 1) {
+                $('#loader').show();
+            } else {
+                $('#loader').hide();
+            }
+        }
+
+        function emptyTablePo() {
+            $('#table-po').empty();
+            $('#po_tanggal').text("");
+            $('#po_batas').text("");
+            $('#po_no').text("");
+            $('#id_proyek').text("");
+            $('#id_vendor').text("");
+
+        }
+
         function editPo(data) {
             $('#modal-title').text("Edit PO");
             $('#button-save').text("Simpan");
@@ -425,7 +464,7 @@
             $('#vendor_id').find('option').each(function() {
                 if ($(this).val() == data.vid) {
                     console.log($(this).val());
-                    $(this).attr('selected',true);
+                    $(this).attr('selected', true);
                 }
             });
             var date = data.tgpo.split('/');
@@ -445,10 +484,135 @@
             $('#proyek_id').find('option').each(function() {
                 if ($(this).val() == data.proyek_id) {
                     console.log($(this).val());
-                    $(this).attr('selected',true);
+                    $(this).attr('selected', true);
                 }
             });
             $('#catatan_vendor').val(data.catatan_vendor);
+        }
+        $('#detail-po').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget);
+            var data = button.data('detail');
+            console.log(data);
+            lihatPo(data);
+        });
+
+        function lihatPo(data) {
+            emptyTablePo();
+            $('modal-title').text("Detail PO");
+            $('#button-save').text("Simpan");
+            resetForm();
+            $('#po_no').text(data.no_po);
+            $('#id_proyek').text(data.proyek_name);
+            $('#id_vendor').text(data.vendor_name);
+            $('#po_tanggal').text(data.tgpo);
+            $('#po_batas').text(data.btpo);
+            $('table-po').empty();
+
+            $.ajax({
+                url: '/products/purchase_order_detail/' + data.id,
+                type: "GET",
+                data: {
+                    id: data.id
+                },
+                dataType: "json",
+                // beforeSend: function() {
+                //     $('#button-cetak-po').html('<i class="fas fa-spinner fa-spin">Loading....</i>');
+                //     $('#button-cetak-po').attr('disabled', true);
+                // },
+
+                success: function(data) {
+                    console.log(data);
+                    $('#no_po').text(data.po.no_po);
+                    $('#id_proyek').text(data.po.nama_proyek);
+                    $('#id_vendor').text(data.po.nama_vendor);
+                    $('#po_tanggal').text(data.po.tgpo);
+                    $('#po_batas').text(data.po.btpo);
+
+                    var no = 1;
+                    $.each(data.detail, function(index, value) {
+                        var kode_material = value.kode_material;
+                        var deskripsi = value.deskripsi;
+                        var batas = value.batas;
+                        var date = value.batas_po.split('/');
+                        var newDate = date[2] + '/' + date[1] + '/' + date[0];
+                        var qty = value.qty;
+                        var total = value.qty * value.harga_per_unit;
+                        var vat = value.vat * total / 100;
+                        var total_vat = total + vat;
+                        var html = '<tr>' +
+                            '<td>' + no + '</td>' +
+                            '<td>' + kode_material + '</td>' +
+                            '<td>' + deskripsi + '</td>' +
+                            '<td>' + newDate + '</td>' +
+                            '<td>' + qty + '</td>' +
+                            '<td>' + value.unit + '</td>' +
+                            '<td>' + value.harga_per_unit + '</td>' +
+                            '<td>' + value.mata_uang + '</td>' +
+                            '<td>' + value.vat + '</td>' +
+                            '<td>' + total_vat + '</td>' +
+                            '</tr>';
+                        $('#table-po').append(html);
+                        no++;
+                    });
+                    // });
+                }
+            })
+        }
+
+        function showAddItem() {
+            if ($('#container-product').hasClass('d-none')) {
+                $('#container-product').removeClass('d-none');
+                $('#container-product').addClass('col-4');
+                $('#container-form').removeClass('col-12');
+                $('#container-form').addClass('col-8');
+                $('#button-tambah-detail').addClass('d-none');
+
+
+            } else {
+                $('#container-product').addClass('d-none');
+                $('#container-product').removeClass('col-4');
+                $('#container-form').addClass('col-12');
+                $('#container-form').removeClass('col-8');
+                $('#button-tambah-detail').removeClass('d-none');
+            }
+        }
+
+        function PoUpdate(){
+            var id = $('#id').val();
+            var pid = $('#pid').val();
+            var type = $('#type').val();
+            var deskripsi = $('#pname').val();
+            var batas = $('#batas').val();
+            var qty = $('#qty').val();
+            var unit = $('#unit').val();
+            var token = $('input[name=_token]').val();
+            var url = '/products/purchase_order_detail/update';
+            $.ajax({
+                url: url,
+                type: "POST",
+                data: {
+                    id: id,
+                    pid: pid,
+                    type: type,
+                    deskripsi: deskripsi,
+                    batas: batas,
+                    qty: qty,
+                    unit: unit,
+                    _token: token
+                },
+                dataType: "json",
+
+                success: function(data) {
+                    console.log(data);
+                    if (data.status == 1) {
+                        toastr.success(data.message);
+                        $('#detail-po').modal('hide');
+                        location.reload();
+                    } else {
+                        toastr.error(data.message);
+                    }
+                }
+            })
         }
 
         function deletePo(data) {
