@@ -16,6 +16,7 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
+                <button typo="button" class="btn btn-danger" id="deleteAllselected"></i>Delete All Selected</button>
                 <button type="button" class="btn btn-primary" onclick="download('xls')"><i class="fas fa-file-excel"></i> Export XLS</button>
                 <button type="button" class="btn btn-primary" onclick="download('pdf')"><i class="fas fa-file-pdf"></i> Export PDF</button>
                 <div class="card-tools">
@@ -41,6 +42,7 @@
                     <table id="table" class="table table-sm table-bordered table-hover table-striped">
                         <thead>
                             <tr class="text-center">
+                                <th><input type="checkbox" name="" id="sellect_all_ids"></th>
                                 <th>{{ __('Tanggal') }}</th>
                                 <th>{{ __('User') }}</th>
                                 <th>{{ __('Lokasi') }}</th>
@@ -75,14 +77,15 @@
                                     }
 
                                 @endphp
-                                <tr>
+                                <tr id="stock_ids{{$d->stock_id}}">
+                                    <td><input type="checkbox" name="ids" class="checkbox_ids" id="" value="{{ $d->stock_id}}"></td>
                                     <td class="text-center">{{ date('d/m/Y', strtotime($d->datetime)) }}</td>
                                     <td class="text-center">{{ $d->name }}</td>
                                     <td class="text-center">{{ $d->shelf_name }}</td>
                                     <td class="text-center">{{ $d->product_code }}</td>
                                     <td>{{ $d->product_name }}</td>
                                     <td class="text-center">{{ $d->no_nota }}</td>
-                                    <td class="text-center">{{ $d->stock_name }}</td>
+                                    <td class="text-center">{{ $d->name }}</td>
                                     <td class="text-center">{{ $in }}</td>
                                     <td class="text-center">{{ $out }}</td>
                                     <td class="text-center">{{ $retur }}</td>
@@ -155,4 +158,36 @@
             $('#delete_id').val(data.stock_id);
         }
     </script>
+
+    <script>
+        $(function(e){
+            $("#sellect_all_ids").click(function(){
+                $('.checkbox_ids').prop('checked',$(this).prop('checked'));
+            });
+
+            $('#deleteAllselected').click(function(e){
+                e.preventDefault();
+                var all_ids = [];
+                $('input:checkbox[name=ids]:checked').each(function(){
+                    all_ids.push($(this).val());
+                });
+                console.log(all_ids)
+                
+                $.ajax({
+                    url:"{{ route('history.delete') }}",
+                    type:"DELETE",
+                    data:{
+                        ids:all_ids,
+                        _token:'{{ csrf_token() }}'
+                    },
+                    success:function(response){
+                        $.each(all_ids,function(key,val){
+                            $('#stock_ids'+val).remove();
+                        })
+                        //window.location.reload()
+                }
+                })
+        })
+        });
+        </script>
 @endsection
