@@ -126,7 +126,7 @@ Alamat Penagihan:
     <div class="w-100 text-center">
         <b style="text-decoration: underline"></i>PURCHASE ORDER</b><br />
     </div> --}}
-    <table class="table" style="margin-top: 1rem">
+    <table class="table" style="margin-top: 200px">
         <thead>
             <tr>
                 <th>Item</th>
