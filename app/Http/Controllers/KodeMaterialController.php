@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\KodeMaterial;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 
@@ -16,29 +17,31 @@ class KodeMaterialController extends Controller
      */
     public function index(Request  $request)
     {
-        $search = $request->q;
-        if (Session::has('selected_warehouse_id')) {
-            $warehouse_id = Session::get('selected_warehouse_id');
-        } else {
-            $warehouse_id = DB::table('warehouse')->first()->warehouse_id;
+        $type = $request->type;
+        $query = $request->q;
+
+        $materials = SheetController::getDataSheet($request)->original;
+
+        // Create a collection
+        $materialsCollection = collect($materials);
+
+        if ($query) {
+            $materialsCollection = $materialsCollection->filter(function ($item) use ($query) {
+                //search by kode_material or nama_barang
+                return false !== stristr($item['kode_material'], $query) || false !== stristr($item['nama_barang'], $query);
+            });
         }
 
-        $materials = KodeMaterial::paginate(50);
+        // Define the number of items per page
+        $perPage = 20;
 
-        if ($search) {
-            $materials = KodeMaterial::where('nama', 'LIKE', "%$search%")->paginate(50);
-        }
-        
-        // dd($materials);
-        if ($request->format == "json") {
-            $categories = KodeMaterial::where("warehouse_id", $warehouse_id)->get();
-
-            return response()->json($categories);
-        } else {
-            return view('kode_material', compact('materials'));
-        }
+        // Create a LengthAwarePaginator instance
+        $currentPage = $request->page ?: 1;
+        $pagedMaterials = $materialsCollection->slice(($currentPage - 1) * $perPage, $perPage);
+        $materials = new LengthAwarePaginator($pagedMaterials, $materialsCollection->count(), $perPage, $currentPage, ['path' => $request->url(), 'query' => $request->query()]);
 
 
+        return view('kode_material', compact('materials'));
     }
 
     /**

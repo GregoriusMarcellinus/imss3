@@ -113,8 +113,8 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {{ Route::current()->getName() == 'kode_material.index' ? 'active' : '' }}"
-                                    href="{{ route('kode_material.index') }}">
-                                    <i class="nav-icon fas fa-user-cog"></i>
+                                    href="{{ url('products/kode_material?type=inka') }}">
+                                    <i class="nav-icon fas fa-pallet"></i>
                                     <p class="text">{{ __('Kode Material') }}</p>
                                 </a>
                             </li>

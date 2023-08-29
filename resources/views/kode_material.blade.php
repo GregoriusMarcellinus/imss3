@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title', __('Kode Material'))  
+@section('title', __('Kode Material'))
 @section('custom-css')
     <link rel="stylesheet" href="/plugins/toastr/toastr.min.css">
     <link rel="stylesheet" href="/plugins/select2/css/select2.min.css">
@@ -16,13 +16,13 @@
         <div class="container-fluid">
             <div class="card">
                 <div class="card-header">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-vendor"
-                        onclick="addvendor()"><i class="fas fa-plus"></i> Add New Material</button>
-                    <button type="button" class="btn btn-primary" onclick="download('xls')"><i class="fas fa-file-excel"></i> Import Product (XLS)</button>
+                    <a class="btn btn-primary" href="{{ url('products/kode_material?type=inka') }}">INKA</a>
+                    <a class="btn btn-primary" href="{{ url('products/kode_material?type=imss') }}">IMSS</a>
                     <div class="card-tools">
                         <form>
                             <div class="input-group input-group">
                                 <input type="text" class="form-control" name="q" placeholder="Search">
+                                <input type="hidden" name="type" value="{{ request()->type }}">
                                 <div class="input-group-append">
                                     <button class="btn btn-primary" type="submit">
                                         <i class="fas fa-search"></i>
@@ -42,7 +42,7 @@
                                     <th>{{ __('Nama') }}</th>
                                     <th>{{ __('Speksifikasi') }}</th>
                                     <th>{{ __('Satuan') }}</th>
-                                    <th></th>
+                                    {{-- <th></th> --}}
                                 </tr>
                             </thead>
                             <tbody>
@@ -50,12 +50,11 @@
                                     @foreach ($materials as $key => $d)
                                         @php
                                             $data = [
-                                                'no' => $materials->firstItem() + $key,
-                                                'id' => $d->id,
-                                                'kode' => $d->kode_material,
-                                                'nama' => $d->nama_material,
-                                                'spek' => $d->spesifikasi,
-                                                'satuan' => $d->satuan
+                                                'no' => $key + 1,
+                                                'kode' => $d['kode_material'],
+                                                'nama' => $d['nama_barang'],
+                                                'spek' => $d['spesifikasi'],
+                                                'satuan' => $d['satuan'],
                                             ];
                                         @endphp
                                         <tr>
@@ -65,7 +64,7 @@
                                             <td class="text-center">{{ $data['spek'] }}</td>
                                             <td class="text-center">{{ $data['satuan'] }}</td>
 
-                                            <td class="text-center">
+                                            {{-- <td class="text-center">
                                                 <button title="Edit Vendor" type="button" class="btn btn-success btn-xs"
                                                     data-toggle="modal" data-target="#add-vendor"
                                                     onclick="editVendor({{ json_encode($data) }})"><i
@@ -77,7 +76,7 @@
                                                         onclick="deleteVendor({{ json_encode($data) }})"><i
                                                             class="fas fa-trash"></i></button>
                                                 @endif
-                                            </td>
+                                            </td> --}}
                                         </tr>
                                     @endforeach
                                 @else
@@ -221,7 +220,7 @@
             $('#telp').val(data.telp);
             $('#fax').val(data.fax);
             $('#email').val(data.email);
-            
+
         }
 
         function deleteVendor(data) {

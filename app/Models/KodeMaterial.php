@@ -14,5 +14,6 @@ class KodeMaterial extends Model
         'nama_material',
         'spesifikasi',
         'satuan',
+        'type'
     ];
 }
