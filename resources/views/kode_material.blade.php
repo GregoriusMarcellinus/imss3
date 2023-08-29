@@ -16,10 +16,8 @@
         <div class="container-fluid">
             <div class="card">
                 <div class="card-header">
-                    {{-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-vendor"
-                        onclick="addvendor()"><i class="fas fa-plus"></i> Add New Material</button>
-                    <button type="button" class="btn btn-primary" onclick="download('xls')"><i
-                            class="fas fa-file-excel"></i> Import Product (XLS)</button> --}}
+                    <a class="btn btn-primary" href="{{ url('products/kode_material?type=inka') }}">INKA</a>
+                    <a class="btn btn-primary" href="{{ url('products/kode_material?type=imss') }}">IMSS</a>
                     <div class="card-tools">
                         <form>
                             <div class="input-group input-group">
