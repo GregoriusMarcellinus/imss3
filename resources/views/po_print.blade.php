@@ -3,179 +3,220 @@
 <head>
     <title>Purchase Order</title>
     <style>
+        /**
+                Set the margins of the page to 0, so the footer and the header
+                can be of the full height and width !
+             **/
+        @page {
+            margin: 0cm 0cm;
+        }
+
+        /** Define now the real margins of every page in the PDF **/
+        body {
+            margin-top: 5.5cm;
+            margin-left: 2cm;
+            margin-right: 2cm;
+            margin-bottom: 2cm;
+        }
+
+        /** Define the header rules **/
+        header {
+            position: fixed;
+            top: 2cm;
+            left: 2cm;
+            right: 2cm;
+            height: 5.5cm;
+
+            /** Extra personal styles **/
+            /* background-color: #03a9f4; */
+            /* color: white; */
+            text-align: center;
+            /* line-height: 1.5cm; */
+        }
+
+        /** Define the footer rules **/
+        footer {
+            position: fixed;
+            bottom: 0cm;
+            left: 0cm;
+            right: 0cm;
+            height: 2cm;
+
+            /** Extra personal styles **/
+            background-color: #03a9f4;
+            color: white;
+            text-align: center;
+            line-height: 1.5cm;
+        }
+
         table {
             border-collapse: collapse;
-            /* border: 2px solid rgb(200, 200, 200); */
-            /* letter-spacing: 1px; */
-            font-size: 0.8rem;
         }
 
-        .table {
-            border-collapse: collapse;
-            border: 1px solid black;
-            letter-spacing: 1px;
-            font-size: 0.8rem;
-            width: 100%;
+        table,
+        td,
+        th {
+            /* border: 1px solid black; */
         }
 
-        .table2 {
-            border-collapse: collapse;
-            border: 1px solid black;
-            letter-spacing: 1px;
-            font-size: 0.8rem;
-            width: 100%;
+        td {
+            padding-left: 15px;
+            padding-right: 15px;
         }
 
-        .table td,
-        .table th {
-            border: 1px solid black;
-            padding: 10px 20px;
+        thead {
+            background-color: #f2f2f2;
         }
 
-        .table2 tr,
-        .table2 td {
-            padding: 2px 5px;
+        th {
+            padding: 15px 15px 15px 15px;
         }
 
-        .table th {
-            background-color: white;
+        .page_break {
+            page-break-before: always;
         }
 
-
-        .td-border {
-            border: 1px solid black;
+        .td-no-top-border {
+            border-top: 1px solid transparent !important;
         }
 
-        .w-100 {
-            width: 100%;
+        .td-no-left-right-border {
+            border-left: 1px solid transparent !important;
+            border-right: 1px solid transparent !important;
         }
 
-        .text-center {
-            text-align: center;
+        .td-no-left-border {
+            border-left: 1px solid transparent !important;
         }
 
-        
-        .d-flex {
-            display: flex;
+        .pagenum:before {
+            content: counter(page);
         }
-
-        .justify-content-between {
-            justify-content: space-between;
-        }
-
-        /* buat css untuk membagi tabel tr jadi tiga kolom */
-        .col {
-            width: 33.33%;
-            float: left;
-        }
-
-        /* buat css untuk mengatur margin dan padding */
-        .row {
-            margin-left: 5px;
-            margin-right: 5px;
-        }
-
-        
     </style>
 </head>
 
-<body onload="window.print()">
+<body>
     @php
         $path = public_path('img/imss-remove.png');
     @endphp
+
+    <header>
+        <table style="width: 100%;">
+            <tr>
+                <td style="text-align: center;" rowspan="4">
+                    <h3 style="margin:0px;">Rencana Pembelajaran Semester</h3>
+                    <h3 style="margin:0px;">Program Studi: FFF</h3>
+                    <h3 style="margin:0px;">MataKuliah DDD</h3>
+                    <h3 style="margin:0px;">AAAA</h3>
+                </td>
+                <td style="text-align: center;" rowspan="4">
+                    <img src="{{ 'data:image/png;base64,' . base64_encode(file_get_contents($path)) }}" alt="image"
+                        width="150px">
+                </td>
+                <td style="text-align: right;">
+                    Nomor
+                </td>
+                <td style="text-align: left;">
+                    <i>: 123123</i>
+                </td>
+            </tr>
+        </table>
+    </header>
+
+
 
     {{-- <body> --}}
     <div class="row" style="margin-top: 1rem">
         <table>
             {{-- <div class="row">
                 <div class="col"> --}}
-                    <tr>
-                        <td>Company</td>
-                    </tr>
-                    <tr>
-                        <td>Nama Vendor</td>
-                    </tr>
-                    <tr>
-                        <td>Alamat</td>
-                    </tr>
-                    <tr>
-                        <td>Contact</td>
-                    </tr>
-                    <tr>
-                        <td>Telepon</td>
-                        <td>:</td>
-                    </tr>
-                    <tr>
-                        <td>Fax</td>
-                        <td>:</td>
-                    </tr>
-                    <tr>
-                        <td>Email</td>
-                        <td>:</td>
-                    </tr>
-                {{-- </div>
+            <tr>
+                <td>Company</td>
+            </tr>
+            <tr>
+                <td>Nama Vendor</td>
+            </tr>
+            <tr>
+                <td>Alamat</td>
+            </tr>
+            <tr>
+                <td>Contact</td>
+            </tr>
+            <tr>
+                <td>Telepon</td>
+                <td>:</td>
+            </tr>
+            <tr>
+                <td>Fax</td>
+                <td>:</td>
+            </tr>
+            <tr>
+                <td>Email</td>
+                <td>:</td>
+            </tr>
+            {{-- </div>
                 <div class="col"> --}}
-                    <tr>
-                        <img src="{{ 'data:image/png;base64,' . base64_encode(file_get_contents($path)) }}" alt="image"
-                            width="150px">
-                    </tr>
-                    <tr>
-                        <td>PT INKA MULTI SOLUSI SERVICE</td>
-                    </tr>
-                    <tr>
-                        <td> Salak No. 99 Madiun</td>
-                    </tr>
-                    <tr>
-                        <td>Telepon +62 812 3456789</td>
-                    </tr>
-                    <tr>
-                        <h2>Purcahse Order</h2>
-                    </tr>
-                {{-- </div>
+            <tr>
+                <img src="{{ 'data:image/png;base64,' . base64_encode(file_get_contents($path)) }}" alt="image"
+                    width="150px">
+            </tr>
+            <tr>
+                <td>PT INKA MULTI SOLUSI SERVICE</td>
+            </tr>
+            <tr>
+                <td> Salak No. 99 Madiun</td>
+            </tr>
+            <tr>
+                <td>Telepon +62 812 3456789</td>
+            </tr>
+            <tr>
+                <h2>Purcahse Order</h2>
+            </tr>
+            {{-- </div>
                 <div class="col"> --}}
-                    <tr>
-                        <td>NO PO</td>
-                        <td>:</td>
-                    </tr>
-                    <tr>
-                        <td>Tanggal PO</td>
-                        <td>:</td>
-                    </tr>
-                    <tr>
-                        <td>Incoterm</td>
-                        <td>:</td>
-                    </tr>
-                    <tr>
-                        <td>PR NO.</td>
-                        <td>:</td>
-                    </tr>
-                    <tr>
-                        <td>Referensi SPH</td>
-                        <td>:</td>
-                    </tr>
-                    <tr>
-                        <td>No. Justifikasi</td>
-                        <td>:</td>
-                    </tr>
-                    <tr>
-                        <td>No. Negosiasi</td>
-                        <td>:</td>
-                    </tr>
-                    <tr>
-                        <td>Batas Akhir Po</td>
-                        <td>:</td>
-                    </tr>
-                    <tr>
-                        <td>Alamat Penagihan</td>
-                        <td>:</td>
-                    </tr>
-                {{-- </div> --}}
+            <tr>
+                <td>NO PO</td>
+                <td>:</td>
+            </tr>
+            <tr>
+                <td>Tanggal PO</td>
+                <td>:</td>
+            </tr>
+            <tr>
+                <td>Incoterm</td>
+                <td>:</td>
+            </tr>
+            <tr>
+                <td>PR NO.</td>
+                <td>:</td>
+            </tr>
+            <tr>
+                <td>Referensi SPH</td>
+                <td>:</td>
+            </tr>
+            <tr>
+                <td>No. Justifikasi</td>
+                <td>:</td>
+            </tr>
+            <tr>
+                <td>No. Negosiasi</td>
+                <td>:</td>
+            </tr>
+            <tr>
+                <td>Batas Akhir Po</td>
+                <td>:</td>
+            </tr>
+            <tr>
+                <td>Alamat Penagihan</td>
+                <td>:</td>
+            </tr>
+            {{-- </div> --}}
             {{-- </div> --}}
         </table>
     </div>
 
 
-    {{-- 
+    {{--
     <div class="w-100 text-center">
         <b style="text-decoration: underline"></i>PURCHASE ORDER</b><br />
     </div> --}}
@@ -227,9 +268,9 @@
         </div>
     </div>
 
-    
+
     <table class="table2" style="margin-top:2rem">
-        <tr >
+        <tr>
             <td>Referensi PO</td>
             <td>:</td>
             <td><span>axx</span></td>
