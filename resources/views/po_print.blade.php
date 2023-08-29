@@ -32,8 +32,8 @@
             padding: 10px 20px;
         }
 
-        .table2 td,
-        .table2 th {
+        .table2 tr,
+        .table2 td {
             padding: 2px 5px;
         }
 
@@ -208,52 +208,53 @@
             @endforeach --}}
         </tbody>
     </table>
-    {{-- <div style="margin-top: 1rem">
-        <div style="float: left; width: 50%">
-            <table class="w-100">
-                <tr>
-                    <td class="text-center">Pengirim</td>
-                </tr>
-                <tr>
-                    <td style="height: 50px"></td>
-                </tr>
-                <tr>
-                    <td class="text-center"><b style="text-decoration: underline">{{ __($sjn->nama_pengirim) }}</b>
-                    </td>
-                </tr>
-            </table>
-        </div>
+    <div style="margin-top: 1rem">
         <div style="margin-left: 50%; width: 50%">
             <table class="w-100">
                 <tr>
-                    <td class="text-center">Penerima</td>
+                    <td>Sub Total</td>
                 </tr>
                 <tr>
-                    <td style="height: 50px"></td>
+                    <td>Ongkos Kirim</td>
                 </tr>
                 <tr>
-                    <td class="text-center"><b style="text-decoration: underline">
-                            &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&emsp;&emsp;&emsp;&emsp;</b>
-                    </td>
+                    <td>Asuransi</td>
+                </tr>
+                <tr>
+                    <td>Total</td>
                 </tr>
             </table>
         </div>
     </div>
-    <table style="margin-top:2rem">
-        <tr>
-            <td colspan="3">Note</td>
+
+    
+    <table class="table2" style="margin-top:2rem">
+        <tr >
+            <td>Referensi PO</td>
+            <td>:</td>
+            <td><span>axx</span></td>
         </tr>
         <tr>
-            <td colspan="3">1. Sesuai BPM No.019/BPM/PPO/I/2023</td>
+            <td>Termin Pembayaran</td>
+            <td>:</td>
+            <td><span>axx</span></td>
         </tr>
         <tr>
-            <td colspan="3">2. <b>Lembar Warna PUTIH & KUNING di kembalikan di PT IMSS, Madiun</b></td>
+            <td>Garansi</td>
+            <td>:</td>
+            <td><span>axx</span></td>
         </tr>
         <tr>
-            <td colspan="3"><b>Kantor Pusat : Jl. Salak No 99 Madiun, Telp (08351)454094, email:
-                    imsservice14@gmail.com</b></td>
+            <td>Proyek</td>
+            <td>:</td>
+            <td><span>axx</span></td>
         </tr>
-    </table> --}}
+        <tr>
+            <td>Catatan Untuk Vendor</td>
+            <td>:</td>
+            <td><span>axx</span></td>
+        </tr>
+    </table>
 
 </body>
 
