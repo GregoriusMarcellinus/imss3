@@ -330,7 +330,7 @@
                                 </div>
                                 <div id="form" class="card">
                                     <div class="card-body">
-                                        <form role="form" id="stock-update" method="post">
+                                        <form role="form" id="material-update" method="post">
                                             @csrf
                                             <input type="hidden" id="pid" name="pid">
                                             <input type="hidden" id="type" name="type">
@@ -507,6 +507,7 @@
             $('#po_tanggal').text(data.tgpo);
             $('#po_batas').text(data.btpo);
             $('table-po').empty();
+            // $('#butto')
 
             $.ajax({
                 url: '/products/purchase_order_detail/' + data.id,
@@ -515,10 +516,10 @@
                     id: data.id
                 },
                 dataType: "json",
-                // beforeSend: function() {
-                //     $('#button-cetak-po').html('<i class="fas fa-spinner fa-spin">Loading....</i>');
-                //     $('#button-cetak-po').attr('disabled', true);
-                // },
+                beforeSend: function() {
+                    $('#button-cetak-po').html('<i class="fas fa-spinner fa-spin">Loading....</i>');
+                    $('#button-cetak-po').attr('disabled', true);
+                },
 
                 success: function(data) {
                     console.log(data);
@@ -554,7 +555,14 @@
                         $('#table-po').append(html);
                         no++;
                     });
-                    // });
+                    
+                    $('#detail-po').on('hidden.bs.modal', function() {
+                        $('#container-product').addClass('d-none');
+                        $('#container-product').removeClass('col-4');
+                        $('#container-form').addClass('col-12');
+                        $('#container-form').removeClass('col-8');
+                    });
+
                 }
             })
         }
@@ -565,8 +573,6 @@
                 $('#container-product').addClass('col-4');
                 $('#container-form').removeClass('col-12');
                 $('#container-form').addClass('col-8');
-                $('#button-tambah-detail').addClass('d-none');
-
 
             } else {
                 $('#container-product').addClass('d-none');
