@@ -33,7 +33,7 @@ class KodeMaterialController extends Controller
         }
 
         // Define the number of items per page
-        $perPage = 10;
+        $perPage = 20;
 
         // Create a LengthAwarePaginator instance
         $currentPage = $request->page ?: 1;
