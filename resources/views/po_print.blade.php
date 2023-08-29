@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <head>
-    <title>Purchase Order {{ __($sjn->no_sjn) }}</title>
+    <title>Purchase Order</title>
     <style>
         table {
             border-collapse: collapse;
@@ -54,6 +54,7 @@
             text-align: center;
         }
 
+        
         .d-flex {
             display: flex;
         }
@@ -61,6 +62,20 @@
         .justify-content-between {
             justify-content: space-between;
         }
+
+        /* buat css untuk membagi tabel tr jadi tiga kolom */
+        .col {
+            width: 33.33%;
+            float: left;
+        }
+
+        /* buat css untuk mengatur margin dan padding */
+        .row {
+            margin-left: 5px;
+            margin-right: 5px;
+        }
+
+        
     </style>
 </head>
 
@@ -72,75 +87,115 @@
     {{-- <body> --}}
     <div class="row" style="margin-top: 1rem">
         <table>
-            <thead>
-                <tr>
-                    <td>
-                        <tr>Company</tr>
-                        <tr>Nama Vendor</tr>
-                        <tr>Alamat</tr>
-                        <tr>Contact</tr>
-                        <tr>
-                            <td>Telepon</td>
-                            <td>:</td>
-                        </tr>
-                        <tr>
-                            <td>Fax</td>
-                            <td>:</td>
-                        </tr>
-                        <tr>
-                            <td>Email</td>
-                            <td>:</td>
-                        </tr>
-                    </td>
-                    <td>
-                        <tr>
-                            <img src="{{ 'data:image/png;base64,' . base64_encode(file_get_contents($path)) }}" alt="image"
-                                width="150px">
-                        </tr>
-                        <tr>
-                            PT INKA MULTI SOLUSI SERVICE
-                        </tr>
-                        <tr>
-                            Jl. Salak No. 99 Madiun
-                        </tr>
-                        <tr>
-                            Telepon +62 812 3456789
-                        </tr>
-                        <tr>
-                            <h3>Purcahse Order</h3>
-                        </tr>
-                    </td>
-                    <td>
-                        <tr></tr>
-                    </td>
-                </tr>
-            </thead>
-            <tbody>
-
-            </tbody>
+            {{-- <div class="row">
+                <div class="col"> --}}
+                    <tr>
+                        <td>Company</td>
+                    </tr>
+                    <tr>
+                        <td>Nama Vendor</td>
+                    </tr>
+                    <tr>
+                        <td>Alamat</td>
+                    </tr>
+                    <tr>
+                        <td>Contact</td>
+                    </tr>
+                    <tr>
+                        <td>Telepon</td>
+                        <td>:</td>
+                    </tr>
+                    <tr>
+                        <td>Fax</td>
+                        <td>:</td>
+                    </tr>
+                    <tr>
+                        <td>Email</td>
+                        <td>:</td>
+                    </tr>
+                {{-- </div>
+                <div class="col"> --}}
+                    <tr>
+                        <img src="{{ 'data:image/png;base64,' . base64_encode(file_get_contents($path)) }}" alt="image"
+                            width="150px">
+                    </tr>
+                    <tr>
+                        <td>PT INKA MULTI SOLUSI SERVICE</td>
+                    </tr>
+                    <tr>
+                        <td> Salak No. 99 Madiun</td>
+                    </tr>
+                    <tr>
+                        <td>Telepon +62 812 3456789</td>
+                    </tr>
+                    <tr>
+                        <h2>Purcahse Order</h2>
+                    </tr>
+                {{-- </div>
+                <div class="col"> --}}
+                    <tr>
+                        <td>NO PO</td>
+                        <td>:</td>
+                    </tr>
+                    <tr>
+                        <td>Tanggal PO</td>
+                        <td>:</td>
+                    </tr>
+                    <tr>
+                        <td>Incoterm</td>
+                        <td>:</td>
+                    </tr>
+                    <tr>
+                        <td>PR NO.</td>
+                        <td>:</td>
+                    </tr>
+                    <tr>
+                        <td>Referensi SPH</td>
+                        <td>:</td>
+                    </tr>
+                    <tr>
+                        <td>No. Justifikasi</td>
+                        <td>:</td>
+                    </tr>
+                    <tr>
+                        <td>No. Negosiasi</td>
+                        <td>:</td>
+                    </tr>
+                    <tr>
+                        <td>Batas Akhir Po</td>
+                        <td>:</td>
+                    </tr>
+                    <tr>
+                        <td>Alamat Penagihan</td>
+                        <td>:</td>
+                    </tr>
+                {{-- </div> --}}
+            {{-- </div> --}}
         </table>
     </div>
 
 
-
+    {{-- 
     <div class="w-100 text-center">
-        <b style="text-decoration: underline"></i>SURAT JALAN</b><br />
-        <b>SJN</b>
-    </div>
+        <b style="text-decoration: underline"></i>PURCHASE ORDER</b><br />
+    </div> --}}
     <table class="table" style="margin-top: 1rem">
         <thead>
             <tr>
-                <th>No</th>
-                <th>Nama Barang</th>
-                <th>Spesifikasi</th>
+                <th>Item</th>
                 <th>Kode Material</th>
-                <th>Qty</th>
-                <th>Sat</th>
-                <th>Keterangan</th>
+                <th>Deskripsi</th>
+                <th>Batas Akhir Diterima</th>
+                <th>Kuantitas</th>
+                <th>Unit</th>
+                <th>Harga Per Unit</th>
+                <th>Mata Uang</th>
+                <th>Vat</th>
+                <th>Total</th>
             </tr>
         </thead>
         <tbody>
-            @foreach ($sjn->products as $item)
+            {{-- @foreach ($sjn->products as $item)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $item->product_name }}</td>
@@ -150,10 +205,10 @@
                     <td>{{ $item->satuan }}</td>
                     <td>{{ $item->nama_proyek }}</td>
                 </tr>
-            @endforeach
+            @endforeach --}}
         </tbody>
     </table>
-    <div style="margin-top: 1rem">
+    {{-- <div style="margin-top: 1rem">
         <div style="float: left; width: 50%">
             <table class="w-100">
                 <tr>
@@ -198,7 +253,7 @@
             <td colspan="3"><b>Kantor Pusat : Jl. Salak No 99 Madiun, Telp (08351)454094, email:
                     imsservice14@gmail.com</b></td>
         </tr>
-    </table>
+    </table> --}}
 
 </body>
 

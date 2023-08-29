@@ -63,6 +63,7 @@ Route::prefix('products')->group(function () {
 
     //purchase
     Route::resource('purchase_order', App\Http\Controllers\PurchaseOrderController::class)->except(['destroy']);
+    Route::get('cetak_po', [App\Http\Controllers\PurchaseOrderController::class, 'cetakPo'])->name('cetak_po');
 
     //history
     Route::get('/history', [HistoryController::class, 'index']);

@@ -245,6 +245,9 @@
                     <div class="mb-3">
                         <div class="row">
                             <div class="col-12" id="container-form">
+                                <form id="cetak-po" method="GET" action="{{ route('cetak_po') }}" target="_blank">
+                                    <input type="hidden" name="id_po" id="id_po">
+                                </form>
                                 <button id="button-cetak-po" type="button" class="btn btn-primary"
                                     onclick="document.getElementById(
                                         'cetak-po').submit();">{{ __('Cetak') }}</button>
@@ -338,7 +341,7 @@
                                                 <label for="deskripsi"
                                                     class="col-sm-4 col-form-label">{{ __('Deskripsi Barang') }}</label>
                                                 <div class="col-sm-8">
-                                                    <input type="text" class="form-control" id="pname"
+                                                    <input type="text" class="form-control" id="deskripsi"
                                                         name="deskripsi">
                                                 </div>
                                             </div>
@@ -507,7 +510,6 @@
             $('#po_tanggal').text(data.tgpo);
             $('#po_batas').text(data.btpo);
             $('table-po').empty();
-            // $('#butto')
 
             $.ajax({
                 url: '/products/purchase_order_detail/' + data.id,
@@ -516,10 +518,10 @@
                     id: data.id
                 },
                 dataType: "json",
-                beforeSend: function() {
-                    $('#button-cetak-po').html('<i class="fas fa-spinner fa-spin">Loading....</i>');
-                    $('#button-cetak-po').attr('disabled', true);
-                },
+                // beforeSend: function() {
+                //     $('#button-cetak-po').html('<i class="fas fa-spinner fa-spin">Loading....</i>');
+                //     $('#button-cetak-po').attr('disabled', true);
+                // },
 
                 success: function(data) {
                     console.log(data);

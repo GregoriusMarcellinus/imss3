@@ -7,6 +7,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class PurchaseOrderController extends Controller
 {
@@ -164,6 +165,22 @@ class PurchaseOrderController extends Controller
             ]);
             return redirect()->route('purchase_order.index')->with('success', 'Data PO berhasil diubah');
         }
+    }
+
+    public function cetakPo(Request $request){
+        $id = $request->id;
+        $po = Purchase_Order::select('purchase_order.*', 'vendor.nama as nama_vendor', 'keproyekan.nama_proyek as nama_proyek')
+            ->join('vendor', 'vendor.id', '=', 'purchase_order.vendor_id')
+            ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_order.proyek_id')
+            ->where('purchase_order.id', $id)
+            ->first(); 
+        // return response()->json([
+        //     'po' => $po
+        // ]); 
+        $pdf = PDF::loadview('po_print', compact('po'));
+        //set landscape paper
+        $pdf->setPaper('A4', 'landscape');
+        return $pdf->stream('PO-'.'.pdf');
     }
 
     /**
