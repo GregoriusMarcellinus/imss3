@@ -44,6 +44,42 @@ class PurchaseOrderController extends Controller
         }
     }
 
+    public function getDetailPo(Request $request)
+    {
+        $id = $request->id;
+        $po = Purchase_Order::select('purchase_order.*', 'vendor.nama as nama_vendor', 'keproyekan.nama_proyek as nama_proyek')
+            ->join('vendor', 'vendor.id', '=', 'purchase_order.vendor_id')
+            ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_order.proyek_id')
+            ->where('purchase_order.id', $id)
+            ->first(); 
+        return response()->json([
+            'po' => $po
+        ]); 
+    
+    }
+
+    public function updateDetailPo(Request $request){
+        $id = $request->id;
+        $po = Purchase_Order::where('id', $id)->update([
+            'no_po' => $request->no_po,
+            'vendor_id' => $request->vendor_id,
+            'tanggal_po' => $request->tanggal_po,
+            'batas_po' => $request->batas_po,
+            'incoterm' => $request->incoterm,
+            'pr_no' => $request->pr_no,
+            'ref_sph' => $request->ref_sph,
+            'no_just' => $request->no_just,
+            'no_nego' => $request->no_nego,
+            'ref_po' => $request->ref_po,
+            'term_pay' => $request->term_pay,
+            'garansi' => $request->garansi,
+            'proyek_id' => $request->proyek_id,
+        ]);
+        return response()->json([
+            'po' => $po
+        ]); 
+    }
+
     /**
      * Store a newly created resource in storage.
      *
