@@ -103,124 +103,74 @@
     <header>
         <table style="width: 100%;">
             <tr>
-                <td style="text-align: center;" rowspan="4">
-                    <h3 style="margin:0px;">Rencana Pembelajaran Semester</h3>
-                    <h3 style="margin:0px;">Program Studi: FFF</h3>
-                    <h3 style="margin:0px;">MataKuliah DDD</h3>
-                    <h3 style="margin:0px;">AAAA</h3>
+                <td style="text-align: left;width:33%" rowspan="10">
+                        <span>Company</span><br>
+                        <span>Aneka Filter</span><br>
+                        <span>Alamat</span><br>
+                        <span>Contact</span><br>
+                        <span>Telepon :</span><br>
+                        <span>Fax : </span><br>
+                        <span>Email : </span><br>
                 </td>
-                <td style="text-align: center;" rowspan="4">
+                <td style="text-align: center;width:33%" rowspan="10">
                     <img src="{{ 'data:image/png;base64,' . base64_encode(file_get_contents($path)) }}" alt="image"
                         width="150px">
-                </td>
-                <td style="text-align: right;">
-                    Nomor
-                </td>
-                <td style="text-align: left;">
-                    <i>: 123123</i>
+
+                    <p>PT INKA MULTI SOLUSI SERVICE</p>
+                    <p> Salak No. 99 Madiun</p>
+                    <p>Telepon +62 812 3456789</p>
+                    <h2>Purcahse Order</h2>
                 </td>
             </tr>
+            <tr>
+                <td style="text-align: left;">NO PO</td>
+                <td style="text-align: left;">: <span>asddadsad</span></td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">Tanggal PO</td>
+                <td style="text-align: left;">: <span>asdasdad</span></td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">Incoterm</td>
+                <td style="text-align: left;">: <span>assadasds</span></td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">PR NO.</td>
+                <td style="text-align: left;">: <span>assadasds</span></td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">Referensi SPH</td>
+                <td style="text-align: left;">: <span>assadasds</span></td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">No. Justifikasi</td>
+                <td style="text-align: left;">: <span>assadasds</span></td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">No. Negosiasi</td>
+                <td style="text-align: left;">: <span>assadasds</span></td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">Batas Akhir Po</td>
+                <td style="text-align: left;">: <span>assadasds</span></td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">Alamat Penagihan</td>
+                <td style="text-align: left;">: <span>assadasds</span></td>
+            </tr>
+
         </table>
     </header>
 
 
 
-    {{-- <body> --}}
-    <div class="row" style="margin-top: 1rem">
-        <table>
-            {{-- <div class="row">
-                <div class="col"> --}}
-            <tr>
-                <td>Company</td>
-            </tr>
-            <tr>
-                <td>Nama Vendor</td>
-            </tr>
-            <tr>
-                <td>Alamat</td>
-            </tr>
-            <tr>
-                <td>Contact</td>
-            </tr>
-            <tr>
-                <td>Telepon</td>
-                <td>:</td>
-            </tr>
-            <tr>
-                <td>Fax</td>
-                <td>:</td>
-            </tr>
-            <tr>
-                <td>Email</td>
-                <td>:</td>
-            </tr>
-            {{-- </div>
-                <div class="col"> --}}
-            <tr>
-                <img src="{{ 'data:image/png;base64,' . base64_encode(file_get_contents($path)) }}" alt="image"
-                    width="150px">
-            </tr>
-            <tr>
-                <td>PT INKA MULTI SOLUSI SERVICE</td>
-            </tr>
-            <tr>
-                <td> Salak No. 99 Madiun</td>
-            </tr>
-            <tr>
-                <td>Telepon +62 812 3456789</td>
-            </tr>
-            <tr>
-                <h2>Purcahse Order</h2>
-            </tr>
-            {{-- </div>
-                <div class="col"> --}}
-            <tr>
-                <td>NO PO</td>
-                <td>:</td>
-            </tr>
-            <tr>
-                <td>Tanggal PO</td>
-                <td>:</td>
-            </tr>
-            <tr>
-                <td>Incoterm</td>
-                <td>:</td>
-            </tr>
-            <tr>
-                <td>PR NO.</td>
-                <td>:</td>
-            </tr>
-            <tr>
-                <td>Referensi SPH</td>
-                <td>:</td>
-            </tr>
-            <tr>
-                <td>No. Justifikasi</td>
-                <td>:</td>
-            </tr>
-            <tr>
-                <td>No. Negosiasi</td>
-                <td>:</td>
-            </tr>
-            <tr>
-                <td>Batas Akhir Po</td>
-                <td>:</td>
-            </tr>
-            <tr>
-                <td>Alamat Penagihan</td>
-                <td>:</td>
-            </tr>
-            {{-- </div> --}}
-            {{-- </div> --}}
-        </table>
-    </div>
 
 
     {{--
     <div class="w-100 text-center">
         <b style="text-decoration: underline"></i>PURCHASE ORDER</b><br />
     </div> --}}
-    <table class="table" style="margin-top: 1rem">
+    <table class="table" style="margin-top: 200px">
         <thead>
             <tr>
                 <th>Item</th>
