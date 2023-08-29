@@ -320,14 +320,14 @@
                                         </div>
                                     </div>
                                 </div> --}}
-                                {{-- <div id="loader" class="card">
+                                <div id="loader" class="card">
                                     <div class="card-body text-center">
                                         <div class="spinner-border text-danger" style="width: 3rem; height: 3rem;"
                                             role="status">
                                             <span class="sr-only">Loading...</span>
                                         </div>
                                     </div>
-                                </div> --}}
+                                </div>
                                 <div id="form" class="card">
                                     <div class="card-body">
                                         <form role="form" id="stock-update" method="post">
@@ -420,6 +420,8 @@
             $('.select2').select2({
                 theme: 'bootstrap4'
             });
+
+            $('#loader').hide();
         });
 
         function resetForm() {
@@ -431,6 +433,15 @@
             $('#modal-title').text("Add Purchase Order");
             $('#button-save').text("Tambahkan");
             resetForm();
+        }
+
+
+        function loader(status = 1) {
+            if (status == 1) {
+                $('#loader').show();
+            } else {
+                $('#loader').hide();
+            }
         }
 
         function emptyTablePo() {
@@ -504,6 +515,10 @@
                     id: data.id
                 },
                 dataType: "json",
+                // beforeSend: function() {
+                //     $('#button-cetak-po').html('<i class="fas fa-spinner fa-spin">Loading....</i>');
+                //     $('#button-cetak-po').attr('disabled', true);
+                // },
 
                 success: function(data) {
                     console.log(data);
