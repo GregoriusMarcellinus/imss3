@@ -46,8 +46,8 @@
         }
 
         td {
-            padding-left: 15px;
-            padding-right: 15px;
+            padding-left: 10px;
+            padding-right: 10px;
         }
 
         th {
@@ -203,22 +203,47 @@
             </tr>
         </thead>
         <tbody>
-            {{-- @foreach ($sjn->products as $item)
+            {{-- @foreach ($po as $item)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ $item->product_name }}</td>
-                    <td>{{ $item->spesifikasi }}</td>
-                    <td>{{ $item->product_code }}</td>
-                    <td>{{ $item->stock }}</td>
-                    <td>{{ $item->satuan }}</td>
-                    <td>{{ $item->nama_proyek }}</td>
+                    <td>{{ $item->kode_material }}</td>
+                    <td>{{ $item->deskripsi }}</td>
+                    <td>{{ $item->batas_akhir_diterima }}</td>
+                    <td>{{ $item->qty }}</td>
+                    <td>{{ $item->unit }}</td>
+                    <td>{{ $item->harga_per_unit }}</td>
+                    <td>{{ $item->mata_uang }}</td>
+                    <td>{{ $item->vat }}</td>
+                    <td>{{ $item->total }}</td>
                 </tr>
             @endforeach --}}
             
-
+            <tr>
+                <td style="text-align: left;">NO PO</td>
+                <td style="text-align: left;"><span>asddadsad</span></td>
+                <td style="text-align: left;">Tanggal PO</td>
+                <td style="text-align: left;"><span>asdasdad</span></td>
+                <td style="text-align: left;">Incoterm</td>
+                <td style="text-align: left;"><span>assadasds</span></td>
+                <td style="text-align: left;"><span>assadasds</span></td>
+                <td style="text-align: left;"><span>assadasds</span></td>
+                <td style="text-align: left;"><span>assadasds</span></td>
+                <td style="text-align: left;"><span>assadasds</span></td>
+            </tr>
+            <tr>
+                <td style="text-align: left;">NO PO</td>
+                <td style="text-align: left;"><span>asddadsad</span></td>
+                <td style="text-align: left;">Tanggal PO</td>
+                <td style="text-align: left;"><span>asdasdad</span></td>
+                <td style="text-align: left;">Incoterm</td>
+                <td style="text-align: left;"><span>assadasds</span></td>
+                <td style="text-align: left;"><span>assadasds</span></td>
+                <td style="text-align: left;"><span>assadasds</span></td>
+                <td style="text-align: left;"><span>assadasds</span></td>
+                <td style="text-align: left;"><span>assadasds</span></td>
+            </tr>
         </tbody>
     </table>
-
 
     <div style="margin-top:400x">
         <div style="margin-top: 1rem">

@@ -178,7 +178,6 @@ class PurchaseOrderController extends Controller
         //     'po' => $po
         // ]); 
         $pdf = PDF::loadview('po_print', compact('po'));
-        //set landscape paper
         $pdf->setPaper('A4', 'landscape');
         return $pdf->stream('PO-'.'.pdf');
     }
