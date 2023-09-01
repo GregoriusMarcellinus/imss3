@@ -303,7 +303,7 @@
                                             <th>Total</th>
                                         </thead>
 
-                                        <tbody id="table-po">
+                                        <tbody id="tabel-po">
                                         </tbody>
                                     </table>
                                 </div>
@@ -448,7 +448,7 @@
         }
 
         function emptyTablePo() {
-            $('#table-po').empty();
+            $('#tabel-po').empty();
             $('#po_tanggal').text("");
             $('#po_batas').text("");
             $('#po_no').text("");
@@ -509,7 +509,7 @@
             $('#id_vendor').text(data.vendor_name);
             $('#po_tanggal').text(data.tgpo);
             $('#po_batas').text(data.btpo);
-            $('table-po').empty();
+            $('#table-po').empty();
 
             $.ajax({
                 url: '/products/purchase_order_detail/' + data.id,
@@ -518,10 +518,11 @@
                     id: data.id
                 },
                 dataType: "json",
-                // beforeSend: function() {
-                //     $('#button-cetak-po').html('<i class="fas fa-spinner fa-spin">Loading....</i>');
-                //     $('#button-cetak-po').attr('disabled', true);
-                // },
+                beforeSend: function() {
+                    $('#tabel-po').append('<tr><td colspan="10" class="text-center">Loading...</td></tr>');
+                    $('#button-cetak-po').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
+                    $('#button-cetak-po').attr('disabled', true);
+                },
 
                 success: function(data) {
                     console.log(data);
@@ -530,45 +531,55 @@
                     $('#id_vendor').text(data.po.nama_vendor);
                     $('#po_tanggal').text(data.po.tgpo);
                     $('#po_batas').text(data.po.btpo);
-
+                    $('#id_po').val(data.po.id);
+                    $('#button-cetak-po').html('<i class="fas fa-print"></i> Cetak');
+                    $('#button-cetak-po').attr('disabled', false);
                     var no = 1;
-                    $.each(data.detail, function(index, value) {
-                        var kode_material = value.kode_material;
-                        var deskripsi = value.deskripsi;
-                        var batas = value.batas;
-                        var date = value.batas_po.split('/');
-                        var newDate = date[2] + '/' + date[1] + '/' + date[0];
-                        var qty = value.qty;
-                        var total = value.qty * value.harga_per_unit;
-                        var vat = value.vat * total / 100;
-                        var total_vat = total + vat;
-                        var html = '<tr>' +
-                            '<td>' + no + '</td>' +
-                            '<td>' + kode_material + '</td>' +
-                            '<td>' + deskripsi + '</td>' +
-                            '<td>' + newDate + '</td>' +
-                            '<td>' + qty + '</td>' +
-                            '<td>' + value.unit + '</td>' +
-                            '<td>' + value.harga_per_unit + '</td>' +
-                            '<td>' + value.mata_uang + '</td>' +
-                            '<td>' + value.vat + '</td>' +
-                            '<td>' + total_vat + '</td>' +
-                            '</tr>';
-                        $('#table-po').append(html);
-                        no++;
-                    });
                     
-                    $('#detail-po').on('hidden.bs.modal', function() {
-                        $('#container-product').addClass('d-none');
-                        $('#container-product').removeClass('col-4');
-                        $('#container-form').addClass('col-12');
-                        $('#container-form').removeClass('col-8');
-                    });
-
+                    if (data?.po.details?.length == 0) {
+                        $('#tabel-po').append(
+                            '<tr><td colspan="10" class="text-center">Tidak ada data</td></tr>');
+                    } else {
+                        $.each(data.po.detail, function(index, value) {
+                            var kode_material = value.kode_material;
+                            var deskripsi = value.deskripsi;
+                            var batas = value.batas;
+                            var date = value.batas_po.split('/');
+                            var newDate = date[2] + '/' + date[1] + '/' + date[0];
+                            var qty = value.qty;
+                            var total = value.qty * value.harga_per_unit;
+                            var vat = value.vat * total / 100;
+                            var total_vat = total + vat;
+                            var html = '<tr>' +
+                                '<td>' + no + '</td>' +
+                                '<td>' + kode_material + '</td>' +
+                                '<td>' + deskripsi + '</td>' +
+                                '<td>' + newDate + '</td>' +
+                                '<td>' + qty + '</td>' +
+                                '<td>' + value.unit + '</td>' +
+                                '<td>' + value.harga_per_unit + '</td>' +
+                                '<td>' + value.mata_uang + '</td>' +
+                                '<td>' + value.vat + '</td>' +
+                                '<td>' + total_vat + '</td>' +
+                                '</tr>';
+                            $('#table-po').append(html);
+                            no++;
+                        });
+                    }
+                    //remove loading
+                    $('#tabel-po').find('tr:first').remove();
                 }
             })
+        
         }
 
+        $('#detail-po').on('hidden.bs.modal', function() {
+            $('#container-product').addClass('d-none');
+            $('#container-product').removeClass('col-4');
+            $('#container-form').addClass('col-12');
+            $('#container-form').removeClass('col-8');
+        });
+        
         function showAddItem() {
             if ($('#container-product').hasClass('d-none')) {
                 $('#container-product').removeClass('d-none');
@@ -585,7 +596,7 @@
             }
         }
 
-        function PoUpdate(){
+        function PoUpdate() {
             var id = $('#id').val();
             var pid = $('#pid').val();
             var type = $('#type').val();

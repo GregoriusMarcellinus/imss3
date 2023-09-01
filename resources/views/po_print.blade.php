@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <head>
-    <title>Purchase Order</title>
+    <title>Purchase Order {{$po->nama_proyek ?? "-"}}</title>
     <style>
         @page {
             margin: 0px;
@@ -97,7 +97,7 @@
 
         header {
             position: fixed;
-            top: 0.5cm;
+            top: 0.1cm;
             left: 0.5cm;
             right: 0.5cm;
             /* height: 5.5cm; */
@@ -122,69 +122,68 @@
         <div class="information">
             <table width="100%">
                 <tr>
-                    <td style="text-align: left;width:33%" rowspan="11">
+                    <td style="text-align: left;width:33%" rowspan="12">
                         <strong>Company</strong><br>
-                        <span>Aneka Filter</span><br>
-                        <p class="alamat">Alamat hskdjhfkjsdfjsbfbsdbvsdhjfgruierjbsmndv nbvhg hjchdsdjfkhgirthirtuhierhtier veru</p>
+                        <span>{{$po->nama_vendor}}</span><br>
+                        <p class="alamat">{{$po->alamat_vendor ?? "-"}}</p>
                         <span>Contact</span><br>
-                        <span>Telepon:</span><br>
-                        <span>Fax : </span><br>
-                        <span>Email : </span><br>
+                        <span>Telepon&nbsp;&nbsp;&nbsp;&nbsp;: {{$po->telp_vendor ?? "-"}}</span><br>
+                        <span>Fax&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{$po->fax_vendor ?? "-"}}</span><br>
+                        <span>Email&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{$po->email_vendor ?? "-"}}</span><br>
                     </td>
-                    <td align="center" rowspan="11" style="width: 33%">
+                </tr>
+                <tr>
+                    <td align="center" rowspan="12" style="width: 33%">
                         <img src="https://inkamultisolusi.co.id/api_cms/public/uploads/editor/20220511071342_LSnL6WiOy67Xd9mKGDaG.png"
                             alt="Logo" width="250" class="logo" /><br>
                         <br><br>
                         <strong>PT INKA MULTI SOLUSI SERVICE</strong><br>
-                        Salak No. 99 Madiun<br>
+                        Jl Salak No. 99 Madiun 63131-Indonesia<br>
                         Telepon +62 812 3456789<br>
                         <br><strong style="font-size: 25">Purchase Order</strong><br>
                     </td>
                 </tr>
                 <tr>
                     <td style="text-align: left;">NO PO</td>
-                    <td style="text-align: left;">: <span>asddadsad</span></td>
+                    <td style="text-align: left;">: <span>{{$po->no_po}}</span></td>
                 </tr>
                 <tr>
                     <td style="text-align: left;">Tanggal PO</td>
-                    <td style="text-align: left;">: <span>asdasdad</span></td>
+                    <td style="text-align: left;">: <span>{{$po->tanggal_po}}</span></td>
                 </tr>
                 <tr>
                     <td style="text-align: left;">Incoterm</td>
-                    <td style="text-align: left;">: <span>assadasds</span></td>
+                    <td style="text-align: left;">: <span>{{$po->incoterm}}</span></td>
                 </tr>
                 <tr>
                     <td style="text-align: left;">PR NO.</td>
-                    <td style="text-align: left;">: <span>assadasds</span></td>
+                    <td style="text-align: left;">: <span>{{$po->pr_no ?? "-"}}</span></td>
                 </tr>
                 <tr>
                     <td style="text-align: left;">Referensi SPH</td>
-                    <td style="text-align: left;">: <span>assadasds</span></td>
+                    <td style="text-align: left;">: <span>{{$po->ref_sph ?? "-"}}</span></td>
                 </tr>
                 <tr>
                     <td style="text-align: left;">No. Justifikasi</td>
-                    <td style="text-align: left;">: <span>assadasds</span></td>
+                    <td style="text-align: left;">: <span>{{$po->no_just ?? "-"}}</span></td>
                 </tr>
                 <tr>
                     <td style="text-align: left;">No. Negosiasi</td>
-                    <td style="text-align: left;">: <span>assadasds</span></td>
+                    <td style="text-align: left;">: <span>{{$po->no_nego ?? "-"}}</span></td>
                 </tr>
                 <tr>
                     <td style="text-align: left;">Batas Akhir Po</td>
-                    <td style="text-align: left;">: <span>assadasds</span></td>
+                    <td style="text-align: left;">: <span>{{$po->batas_po}}</span></td>
                 </tr>
                 <tr>
-                    <td style="text-align: left;">Alamat Penagihan</td>
-                    <td style="text-align: left;">: <span>assadasds</span></td>
-                </tr>
-                <tr>
-                    {{-- <p style="padding: 10px" class="alamat">Alamat hskdjhfkjsdfjsbfbsdbvsdhjfgruierjbsmndv nbvhg hjchdsdjfkhgirthirtuhierhtier veru</p> --}}
+                    <td style="text-align: left;vertical-align: top;">Alamat Penagihan</td>
+                    <td style="text-align: left;">: <span>  Direktur Keuangan, SDM, dan Manris PT INKA Multi Solusi Servis Jl Salak No. 59 Madiun <br> N.P.W.P : 70.9607.6574.576.5</span></td>
                 </tr>
 
             </table>
         </div>
     </header>
-    {{-- <div style="margin-top: 400px      "></div> --}}
+    {{-- <div style="margin-top: 400px"></div> --}}
 
 
     <table class="table" style="margin-top: 00px">
@@ -219,28 +218,28 @@
             @endforeach --}}
             
             <tr>
-                <td style="text-align: left;">NO PO</td>
-                <td style="text-align: left;"><span>asddadsad</span></td>
-                <td style="text-align: left;">Tanggal PO</td>
-                <td style="text-align: left;"><span>asdasdad</span></td>
-                <td style="text-align: left;">Incoterm</td>
-                <td style="text-align: left;"><span>assadasds</span></td>
-                <td style="text-align: left;"><span>assadasds</span></td>
-                <td style="text-align: left;"><span>assadasds</span></td>
-                <td style="text-align: left;"><span>assadasds</span></td>
-                <td style="text-align: left;"><span>assadasds</span></td>
+                <td style="text-align: center;">1</td>
+                <td style="text-align: center;"><span>asddadsad</span></td>
+                <td style="text-align: center;">Tanggal PO</td>
+                <td style="text-align: center;"><span>asdasdad</span></td>
+                <td style="text-align: center;">Incoterm</td>
+                <td style="text-align: center;"><span>assadasds</span></td>
+                <td style="text-align: center;"><span>assadasds</span></td>
+                <td style="text-align: center;"><span>assadasds</span></td>
+                <td style="text-align: center;"><span>assadasds</span></td>
+                <td style="text-align: center;"><span>assadasds</span></td>
             </tr>
             <tr>
-                <td style="text-align: left;">NO PO</td>
-                <td style="text-align: left;"><span>asddadsad</span></td>
-                <td style="text-align: left;">Tanggal PO</td>
-                <td style="text-align: left;"><span>asdasdad</span></td>
-                <td style="text-align: left;">Incoterm</td>
-                <td style="text-align: left;"><span>assadasds</span></td>
-                <td style="text-align: left;"><span>assadasds</span></td>
-                <td style="text-align: left;"><span>assadasds</span></td>
-                <td style="text-align: left;"><span>assadasds</span></td>
-                <td style="text-align: left;"><span>assadasds</span></td>
+                <td style="text-align: center;">2</td>
+                <td style="text-align: center;"><span>asddadsad</span></td>
+                <td style="text-align: center;">Tanggal PO</td>
+                <td style="text-align: center;"><span>asdasdad</span></td>
+                <td style="text-align: center;">Incoterm</td>
+                <td style="text-align: center;"><span>assadasds</span></td>
+                <td style="text-align: center;"><span>assadasds</span></td>
+                <td style="text-align: center;"><span>assadasds</span></td>
+                <td style="text-align: center;"><span>assadasds</span></td>
+                <td style="text-align: center;"><span>assadasds</span></td>
             </tr>
         </tbody>
     </table>
@@ -251,15 +250,23 @@
                 <table class="w-100">
                     <tr>
                         <td>Sub Total</td>
+                        <td>:</td>
+                        <td></td>
                     </tr>
                     <tr>
                         <td>Ongkos Kirim</td>
+                        <td>:</td>
+                        <td></td>
                     </tr>
                     <tr>
                         <td>Asuransi</td>
+                        <td>:</td>
+                        <td></td>
                     </tr>
                     <tr>
                         <td>Total</td>
+                        <td>:</td>
+                        <td></td>
                     </tr>
                 </table>
             </div>
@@ -272,19 +279,22 @@
                     <span>Garansi</span><br>
                     <span>Proyek</span><br>
                 </td>
-                <td style="width: 5%">
+                <td style="width: 1%">
                     <span>:</span><br>
                     <span>:</span><br>
                     <span>:</span><br>
                     <span>:</span><br>
                 </td>
                 <td>
-
+                    <span>{{$po->ref_po}}</span><br>
+                    <span>{{$po->term_pay}}</span><br>
+                    <span>{{$po->garansi}}</span><br>
+                    <span>{{$po->nama_proyek}}</span><br>
                 </td>
             </tr>
             <tr>
-                <td style="height: 50px">Catatan Untuk Vendor</td>
-                <td>:</td>
+                <td style="height: 50px;vertical-align: top;">Catatan Untuk Vendor</td>
+                <td style="vertical-align: top;">:</td>
                 <td></td>
             </tr>
         </table>
@@ -299,7 +309,6 @@
                 <tr>
                     <td style="height: 50px"></td>
                 </tr>
-                
             </table>
         </div>
         <div style="margin-left: 50%; width: 50%; margin-top: 5%">
@@ -308,7 +317,7 @@
                     <td class="text-center">PT INKA MULTI SOLUSI SERVIS</td>
                 </tr>
                 <tr>
-                    <td style="height: 50px"></td>
+                    <td style="height: 100px"></td>
                 </tr>
                 <tr>
                     {{-- <td class="text-center"><b style="text-decoration: underline">
