@@ -16,8 +16,8 @@
         <div class="container-fluid">
             <div class="card">
                 <div class="card-header">
-                    <a class="btn btn-primary" href="{{ url('products/kode_material?type=inka') }}">INKA</a>
-                    <a class="btn btn-primary" href="{{ url('products/kode_material?type=imss') }}">IMSS</a>
+                    <button id="btn-inka" class="btn btn-outline-primary" onclick="getData('inka')">INKA</button>
+                    <button id="btn-imss" class="btn btn-outline-primary" onclick="getData('imss')">IMSS</button>
                     <div class="card-tools">
                         <form>
                             <div class="input-group input-group">
@@ -34,63 +34,21 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table id="table" class="table table-sm table-bordered table-hover table-striped">
+                        <table id="datatable2" class="table table-sm table-bordered table-hover table-striped">
                             <thead>
                                 <tr class="text-center">
-                                    <th>No.</th>
+                                    <th>#</th>
                                     <th>{{ __('Kode Material') }}</th>
                                     <th>{{ __('Nama') }}</th>
                                     <th>{{ __('Speksifikasi') }}</th>
                                     <th>{{ __('Satuan') }}</th>
-                                    {{-- <th></th> --}}
                                 </tr>
                             </thead>
-                            <tbody>
-                                @if (count($materials) > 0)
-                                    @foreach ($materials as $key => $d)
-                                        @php
-                                            $data = [
-                                                'no' => $key + 1,
-                                                'kode' => $d['kode_material'],
-                                                'nama' => $d['nama_barang'],
-                                                'spek' => $d['spesifikasi'],
-                                                'satuan' => $d['satuan'],
-                                            ];
-                                        @endphp
-                                        <tr>
-                                            <td class="text-center">{{ $data['no'] }}</td>
-                                            <td class="text-center">{{ $data['kode'] }}</td>
-                                            <td class="text-center">{{ $data['nama'] }}</td>
-                                            <td class="text-center">{{ $data['spek'] }}</td>
-                                            <td class="text-center">{{ $data['satuan'] }}</td>
-
-                                            {{-- <td class="text-center">
-                                                <button title="Edit Vendor" type="button" class="btn btn-success btn-xs"
-                                                    data-toggle="modal" data-target="#add-vendor"
-                                                    onclick="editVendor({{ json_encode($data) }})"><i
-                                                        class="fas fa-edit"></i></button>
-                                                @if (Auth::user()->role == 0)
-                                                    <button title="Hapus Produk" type="button"
-                                                        class="btn btn-danger btn-xs" data-toggle="modal"
-                                                        data-target="#delete-product"
-                                                        onclick="deleteVendor({{ json_encode($data) }})"><i
-                                                            class="fas fa-trash"></i></button>
-                                                @endif
-                                            </td> --}}
-                                        </tr>
-                                    @endforeach
-                                @else
-                                    <tr class="text-center">
-                                        <td colspan="8">{{ __('No data.') }}</td>
-                                    </tr>
-                                @endif
+                            <tbody id="content-table">
                             </tbody>
                         </table>
                     </div>
                 </div>
-            </div>
-            <div>
-                {{ $materials->appends(request()->except('page'))->links('pagination::bootstrap-4') }}
             </div>
         </div>
 
@@ -227,6 +185,104 @@
             $('#delete_id').val(data.id);
             $('#nama').text(data.nama);
         }
+
+        var dataTableInitialized = false;
+        var dataTable;
+
+        function initializeDataTable(data) {
+            dataTable = $('#datatable2').DataTable({
+                data: data,
+                responsive: true,
+                columns: [{
+                        data: 'no',
+                        title: '#',
+                        render: function(data, type, row, meta) {
+                            return meta.row + meta.settings._iDisplayStart + 1;
+                        }
+                    },
+                    {
+                        data: 'kode_material',
+                        title: 'Kode Material'
+                    },
+                    {
+                        data: 'nama_barang',
+                        title: 'Nama'
+                    },
+                    {
+                        data: 'spesifikasi',
+                        title: 'Spesifikasi'
+                    },
+                    {
+                        data: 'satuan',
+                        title: 'Satuan'
+                    },
+                ]
+            });
+            dataTableInitialized = true;
+        }
+
+        function getData(type) {
+            //jika type=inka, maka #btn-inka menjadi class btn btn-primary, dan #btn-imss menjadi class btn btn-outline-primary
+            if (type == 'inka') {
+                $('#btn-inka').removeClass('btn-outline-primary').addClass('btn-primary');
+                $('#btn-imss').removeClass('btn-primary').addClass('btn-outline-primary');
+                //disable both button
+                $('#btn-inka').attr('disabled', true);
+                $('#btn-imss').attr('disabled', true);
+            } else {
+                $('#btn-imss').removeClass('btn-outline-primary').addClass('btn-primary');
+                $('#btn-inka').removeClass('btn-primary').addClass('btn-outline-primary');
+                //disable both button
+                $('#btn-inka').attr('disabled', true);
+                $('#btn-imss').attr('disabled', true);
+            }
+
+            const table = $('#content-table');
+            table.empty();
+            //fetch api
+            $.ajax({
+                url: "{{ url('materials') }}?type=" + type,
+                type: "GET",
+                dataType: "json",
+                beforeSend: function() {
+                    table.append(`
+                        <tr class="text-center">
+                            <td colspan="8">{{ __('Loading...') }}</td>
+                        </tr>
+                    `);
+                },
+                success: function(d) {
+                    $('#btn-inka').attr('disabled', false);
+                    $('#btn-imss').attr('disabled', false);
+                    const data = d.materials
+                    console.log(data);
+                    if (data.length > 0) {
+                        if (dataTableInitialized) {
+                            // Hapus dan reinisialisasi DataTables
+                            dataTable.clear().rows.add(data).draw();
+                        } else {
+                            // Inisialisasi DataTables
+                            initializeDataTable(data);
+                        }
+                    } else {
+                        table.append(`
+                            <tr class="text-center">
+                                <td colspan="8">{{ __('No data.') }}</td>
+                            </tr>
+                        `);
+                    }
+
+
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+        }
+
+        $(document).ready(function() {
+            getData('inka');
+        });
     </script>
     @if (Session::has('success'))
         <script>

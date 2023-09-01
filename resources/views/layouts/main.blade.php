@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
     <link rel="stylesheet" href="/css/adminlte.min.css">
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
+
     @hasSection('custom-css')
         @yield('custom-css')
     @endif
@@ -113,7 +115,7 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {{ Route::current()->getName() == 'kode_material.index' ? 'active' : '' }}"
-                                    href="{{ url('products/kode_material?type=inka') }}">
+                                    href="{{ url('products/kode_material') }}">
                                     <i class="nav-icon fas fa-pallet"></i>
                                     <p class="text">{{ __('Kode Material') }}</p>
                                 </a>
@@ -195,10 +197,16 @@
     <script src="/plugins/jquery/jquery.min.js"></script>
     <script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
     <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
     <script src="/js/adminlte.js"></script>
     @hasSection('custom-js')
         @yield('custom-js')
     @endif
+    <script>
+        let table = new DataTable('#datatable', {
+            responsive: true
+        });
+    </script>
 </body>
 
 </html>
