@@ -18,7 +18,7 @@
                 <div class="card-header">
                     <button id="btn-inka" class="btn btn-outline-primary" onclick="getData('inka')">INKA</button>
                     <button id="btn-imss" class="btn btn-outline-primary" onclick="getData('imss')">IMSS</button>
-                    <div class="card-tools">
+                    {{-- <div class="card-tools">
                         <form>
                             <div class="input-group input-group">
                                 <input type="text" class="form-control" name="q" placeholder="Search">
@@ -30,7 +30,7 @@
                                 </div>
                             </div>
                         </form>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
