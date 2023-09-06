@@ -53,6 +53,7 @@ class PurchaseOrderController extends Controller
             ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_order.proyek_id')
             ->where('purchase_order.id', $id)
             ->first(); 
+        $po->details = [];
         return response()->json([
             'po' => $po
         ]); 
@@ -168,8 +169,8 @@ class PurchaseOrderController extends Controller
     }
 
     public function cetakPo(Request $request){
-        $id = $request->id;
-        $po = Purchase_Order::select('purchase_order.*', 'vendor.nama as nama_vendor', 'keproyekan.nama_proyek as nama_proyek')
+        $id = $request->id_po;
+        $po = Purchase_Order::select('purchase_order.*', 'vendor.nama as nama_vendor', 'vendor.alamat as alamat_vendor', 'vendor.telp as telp_vendor', 'vendor.email as email_vendor', 'vendor.fax as fax_vendor',  'keproyekan.nama_proyek as nama_proyek')
             ->join('vendor', 'vendor.id', '=', 'purchase_order.vendor_id')
             ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_order.proyek_id')
             ->where('purchase_order.id', $id)
@@ -177,10 +178,13 @@ class PurchaseOrderController extends Controller
         // return response()->json([
         //     'po' => $po
         // ]); 
+        // dd($po);
+        $po->batas_po = Carbon::parse($po->batas_po)->isoFormat('D MMMM Y');
+        $po->tanggal_po = Carbon::parse($po->tanggal_po)->isoFormat('D MMMM Y');
         $pdf = PDF::loadview('po_print', compact('po'));
-        //set landscape paper
-        $pdf->setPaper('F4', 'landscape');
-        return $pdf->stream('PO-'.'.pdf');
+        $pdf->setPaper('A4', 'landscape');
+        $nama = $po->nama_proyek;
+        return $pdf->stream('PO-'.$nama.'.pdf');
     }
 
     /**

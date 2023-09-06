@@ -17,31 +17,32 @@ class KodeMaterialController extends Controller
      */
     public function index(Request  $request)
     {
-        $type = $request->type;
-        $query = $request->q;
+        // $type = $request->type;
+        // $query = $request->q;
 
-        $materials = SheetController::getDataSheet($request)->original;
+        // $materials = SheetController::getDataSheet($request)->original;
 
-        // Create a collection
-        $materialsCollection = collect($materials);
+        // // Create a collection
+        // $materialsCollection = collect($materials);
 
-        if ($query) {
-            $materialsCollection = $materialsCollection->filter(function ($item) use ($query) {
-                //search by kode_material or nama_barang
-                return false !== stristr($item['kode_material'], $query) || false !== stristr($item['nama_barang'], $query);
-            });
-        }
+        // if ($query) {
+        //     $materialsCollection = $materialsCollection->filter(function ($item) use ($query) {
+        //         //search by kode_material or nama_barang
+        //         return false !== stristr($item['kode_material'], $query) || false !== stristr($item['nama_barang'], $query);
+        //     });
+        // }
 
-        // Define the number of items per page
-        $perPage = 20;
+        // // Define the number of items per page
+        // $perPage = 20;
 
-        // Create a LengthAwarePaginator instance
-        $currentPage = $request->page ?: 1;
-        $pagedMaterials = $materialsCollection->slice(($currentPage - 1) * $perPage, $perPage);
-        $materials = new LengthAwarePaginator($pagedMaterials, $materialsCollection->count(), $perPage, $currentPage, ['path' => $request->url(), 'query' => $request->query()]);
+        // // Create a LengthAwarePaginator instance
+        // $currentPage = $request->page ?: 1;
+        // $pagedMaterials = $materialsCollection->slice(($currentPage - 1) * $perPage, $perPage);
+        // $materials = new LengthAwarePaginator($pagedMaterials, $materialsCollection->count(), $perPage, $currentPage, ['path' => $request->url(), 'query' => $request->query()]);
 
 
-        return view('kode_material', compact('materials'));
+        // return view('kode_material', compact('materials'));
+        return view('kode_material');
     }
 
     /**
@@ -108,5 +109,20 @@ class KodeMaterialController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function apiKodeMaterial(Request $request)
+    {
+        $type = $request->type; //inka or imss
+
+        $materials = SheetController::getDataSheet($request)->original;
+
+        $data = [
+            'success' => true,
+            'message' => 'Data berhasil diambil',
+            'materials' => $materials,
+        ];
+
+        return response()->json($data);
     }
 }

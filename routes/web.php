@@ -47,6 +47,9 @@ Route::prefix('products')->group(function () {
     Route::get('sjn_print', [App\Http\Controllers\ProductController::class, 'sjn_print'])->name('sjn.print');
     Route::get('po_print', [App\Http\Controllers\ProductController::class, 'po_print'])->name('po.print');
     Route::get('pr_print', [App\Http\Controllers\ProductController::class, 'pr_print'])->name('pr.print');
+    Route::get('pr', [App\Http\Controllers\ProductController::class, 'pr'])->name('pr');
+    Route::post('pr', [App\Http\Controllers\PurchaseRequestController::class, 'store'])->name('products.pr.store');
+
     //keproyekan
     Route::resource('keproyekan', App\Http\Controllers\KeproyekanController::class)->except(['destroy']);
     Route::delete('keproyekan', [App\Http\Controllers\KeproyekanController::class, 'destroy'])->name('keproyekan.destroy');
@@ -61,9 +64,13 @@ Route::prefix('products')->group(function () {
     Route::resource('vendor', App\Http\Controllers\VendorController::class)->except(['destroy']);
     Route::delete('vendor', [App\Http\Controllers\VendorController::class, 'destroy'])->name('vendor.destroy');
 
-    //purchase
+    //purchase order
     Route::resource('purchase_order', App\Http\Controllers\PurchaseOrderController::class)->except(['destroy']);
     Route::get('cetak_po', [App\Http\Controllers\PurchaseOrderController::class, 'cetakPo'])->name('cetak_po');
+
+    //purchase request
+    Route::resource('purchase_request', App\Http\Controllers\PurchaseRequestController::class)->except(['destroy']);
+    Route::get('cetak_pr', [App\Http\Controllers\PurchaseRequestController::class, 'cetakPr'])->name('cetak_pr');
 
     //history
     Route::get('/history', [HistoryController::class, 'index']);
@@ -101,3 +108,4 @@ Route::get('test_sheet', [App\Http\Controllers\SheetController::class, 'getDataS
 Route::get('get_sheets', [App\Http\Controllers\SheetController::class, 'getDataSheet'])->name('get_sheets');
 Route::get('sync_sheets', [App\Http\Controllers\SheetController::class, 'sync'])->name('sync_sheets');
 Route::get('test_komat', [App\Http\Controllers\SheetController::class, 'test_komat'])->name('test_komat');
+Route::get('materials', [App\Http\Controllers\KodeMaterialController::class, 'apiKodeMaterial'])->name('test_komat');

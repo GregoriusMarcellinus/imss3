@@ -18,7 +18,7 @@
                 <div class="card-header">
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-po"
                         onclick="addPo()"><i class="fas fa-plus"></i> Add New PO</button>
-                    {{-- <div class="card-tools">
+                    <div class="card-tools">
                         <form>
                             <div class="input-group input-group">
                                 <input type="text" class="form-control" name="q" placeholder="Search">
@@ -29,7 +29,7 @@
                                 </div>
                             </div>
                         </form>
-                    </div> --}}
+                    </div>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -58,6 +58,19 @@
                                                 'no_po' => $d->no_po,
                                                 'tgpo' => date('d/m/Y', strtotime($d->tanggal_po)),
                                                 'btpo' => date('d/m/Y', strtotime($d->batas_po)),
+                                                'incoterm' => $d->incoterm,
+                                                'pr_no' => $d->pr_no,
+                                                'ref_sph' => $d->ref_sph,
+                                                'no_just' => $d->no_just,
+                                                'no_nego' => $d->no_nego,
+                                                'ref_po' => $d->ref_po,
+                                                'term_pay' => $d->term_pay,
+                                                'garansi' => $d->garansi,
+                                                'catatan_vendor' => $d->catatan_vendor,
+                                                'proyek_id' => $d->proyek_id,
+                                                'vendor_id' => $d->vendor_id,
+                                                'detail' => $d->detail,
+                                                
                                             ];
                                         @endphp
                                         <tr>
@@ -217,7 +230,7 @@
                             </label>
                             <div class="col-sm-8">
                                 {{-- <input type="textarea" class="form-control" id="catatan_vendor" name="catatan_vendor"> --}}
-                                <textarea class="form-control" name="catatan_vendor" id="catatn_vendor" rows="3"></textarea>
+                                <textarea class="form-control" name="catatan_vendor" id="catatan_vendor" rows="3"></textarea>
                             </div>
                         </div>
                     </form>
@@ -288,7 +301,7 @@
                                         </td>
                                     </tr>
                                 </table>
-                                <div class="table-responsive">
+                                <div class="table-responsive mt-2">
                                     <table class="table table-bordered">
                                         <thead>
                                             <th>Item</th>
@@ -303,7 +316,7 @@
                                             <th>Total</th>
                                         </thead>
 
-                                        <tbody id="table-po">
+                                        <tbody id="tabel-po">
                                         </tbody>
                                     </table>
                                 </div>
@@ -448,7 +461,7 @@
         }
 
         function emptyTablePo() {
-            $('#table-po').empty();
+            $('#tabel-po').empty();
             $('#po_tanggal').text("");
             $('#po_batas').text("");
             $('#po_no').text("");
@@ -458,6 +471,7 @@
         }
 
         function editPo(data) {
+            console.log(data);
             $('#modal-title').text("Edit PO");
             $('#button-save').text("Simpan");
             resetForm();
@@ -509,7 +523,7 @@
             $('#id_vendor').text(data.vendor_name);
             $('#po_tanggal').text(data.tgpo);
             $('#po_batas').text(data.btpo);
-            $('table-po').empty();
+            $('#table-po').empty();
 
             $.ajax({
                 url: '/products/purchase_order_detail/' + data.id,
@@ -518,10 +532,11 @@
                     id: data.id
                 },
                 dataType: "json",
-                // beforeSend: function() {
-                //     $('#button-cetak-po').html('<i class="fas fa-spinner fa-spin">Loading....</i>');
-                //     $('#button-cetak-po').attr('disabled', true);
-                // },
+                beforeSend: function() {
+                    $('#tabel-po').append('<tr><td colspan="10" class="text-center">Loading...</td></tr>');
+                    $('#button-cetak-po').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...');
+                    $('#button-cetak-po').attr('disabled', true);
+                },
 
                 success: function(data) {
                     console.log(data);
@@ -530,45 +545,55 @@
                     $('#id_vendor').text(data.po.nama_vendor);
                     $('#po_tanggal').text(data.po.tgpo);
                     $('#po_batas').text(data.po.btpo);
-
+                    $('#id_po').val(data.po.id);
+                    $('#button-cetak-po').html('<i class="fas fa-print"></i> Cetak');
+                    $('#button-cetak-po').attr('disabled', false);
                     var no = 1;
-                    $.each(data.detail, function(index, value) {
-                        var kode_material = value.kode_material;
-                        var deskripsi = value.deskripsi;
-                        var batas = value.batas;
-                        var date = value.batas_po.split('/');
-                        var newDate = date[2] + '/' + date[1] + '/' + date[0];
-                        var qty = value.qty;
-                        var total = value.qty * value.harga_per_unit;
-                        var vat = value.vat * total / 100;
-                        var total_vat = total + vat;
-                        var html = '<tr>' +
-                            '<td>' + no + '</td>' +
-                            '<td>' + kode_material + '</td>' +
-                            '<td>' + deskripsi + '</td>' +
-                            '<td>' + newDate + '</td>' +
-                            '<td>' + qty + '</td>' +
-                            '<td>' + value.unit + '</td>' +
-                            '<td>' + value.harga_per_unit + '</td>' +
-                            '<td>' + value.mata_uang + '</td>' +
-                            '<td>' + value.vat + '</td>' +
-                            '<td>' + total_vat + '</td>' +
-                            '</tr>';
-                        $('#table-po').append(html);
-                        no++;
-                    });
                     
-                    $('#detail-po').on('hidden.bs.modal', function() {
-                        $('#container-product').addClass('d-none');
-                        $('#container-product').removeClass('col-4');
-                        $('#container-form').addClass('col-12');
-                        $('#container-form').removeClass('col-8');
-                    });
-
+                    if (data?.po.details?.length == 0) {
+                        $('#tabel-po').append(
+                            '<tr><td colspan="10" class="text-center">Tidak ada data</td></tr>');
+                    } else {
+                        $.each(data.po.detail, function(index, value) {
+                            var kode_material = value.kode_material;
+                            var deskripsi = value.deskripsi;
+                            var batas = value.batas;
+                            var date = value.batas_po.split('/');
+                            var newDate = date[2] + '/' + date[1] + '/' + date[0];
+                            var qty = value.qty;
+                            var total = value.qty * value.harga_per_unit;
+                            var vat = value.vat * total / 100;
+                            var total_vat = total + vat;
+                            var html = '<tr>' +
+                                '<td>' + no + '</td>' +
+                                '<td>' + kode_material + '</td>' +
+                                '<td>' + deskripsi + '</td>' +
+                                '<td>' + newDate + '</td>' +
+                                '<td>' + qty + '</td>' +
+                                '<td>' + value.unit + '</td>' +
+                                '<td>' + value.harga_per_unit + '</td>' +
+                                '<td>' + value.mata_uang + '</td>' +
+                                '<td>' + value.vat + '</td>' +
+                                '<td>' + total_vat + '</td>' +
+                                '</tr>';
+                            $('#table-po').append(html);
+                            no++;
+                        });
+                    }
+                    //remove loading
+                    $('#tabel-po').find('tr:first').remove();
                 }
             })
+        
         }
 
+        $('#detail-po').on('hidden.bs.modal', function() {
+            $('#container-product').addClass('d-none');
+            $('#container-product').removeClass('col-4');
+            $('#container-form').addClass('col-12');
+            $('#container-form').removeClass('col-8');
+        });
+        
         function showAddItem() {
             if ($('#container-product').hasClass('d-none')) {
                 $('#container-product').removeClass('d-none');
@@ -585,7 +610,7 @@
             }
         }
 
-        function PoUpdate(){
+        function PoUpdate() {
             var id = $('#id').val();
             var pid = $('#pid').val();
             var type = $('#type').val();
