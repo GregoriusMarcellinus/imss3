@@ -122,7 +122,7 @@
         <div class="information">
             <table width="100%">
                 <tr>
-                    <td style="text-align: left;width:33%" rowspan="12">
+                    <td style="text-align: left;width:33%;" rowspan="12">
                         <strong>Company</strong><br>
                         <span>{{$po->nama_vendor}}</span><br>
                         <p class="alamat">{{$po->alamat_vendor ?? "-"}}</p>
@@ -185,8 +185,7 @@
     </header>
     {{-- <div style="margin-top: 400px"></div> --}}
 
-
-    <table class="table" style="margin-top: 00px">
+    <table class="table" style="max-width: 90%">
         <thead>
             <tr>
                 <th>Item</th>
@@ -219,7 +218,7 @@
             
             <tr>
                 <td style="text-align: center;">1</td>
-                <td style="text-align: center;"><span> </span></td>
+                <td style="text-align: center;"><span></span></td>
                 <td style="text-align: center;"> </td>
                 <td style="text-align: center;"><span> </span></td>
                 <td style="text-align: center;"> </td>
@@ -227,7 +226,7 @@
                 <td style="text-align: center;"><span> </span></td>
                 <td style="text-align: center;"><span> </span></td>
                 <td style="text-align: center;"><span> </span></td>
-                <td style="text-align: center;"><span> </span></td>
+                <td style="text-align: center;"><span></span></td>
             </tr>
             <tr>
                 <td style="text-align: center;">2</td>
@@ -246,27 +245,27 @@
 
     <div style="margin-top:400x">
         <div style="margin-top: 1rem">
-            <div style="margin-left: 50%; width: 50%">
+            <div style="margin-left: 70%; width: 50%">
                 <table class="w-100">
                     <tr>
                         <td>Sub Total</td>
                         <td>:</td>
-                        <td></td>
+                        <td>0</td>
                     </tr>
                     <tr>
                         <td>Ongkos Kirim</td>
                         <td>:</td>
-                        <td></td>
+                        <td>0</td>
                     </tr>
                     <tr>
                         <td>Asuransi</td>
                         <td>:</td>
-                        <td></td>
+                        <td>0</td>
                     </tr>
                     <tr>
                         <td>Total</td>
                         <td>:</td>
-                        <td></td>
+                        <td>0</td>
                     </tr>
                 </table>
             </div>
@@ -304,7 +303,7 @@
         <div style="float: left; width: 50%">
             <table class="w-100">
                 <tr>
-                    <td class="text-center">Disetujui Oleh</td>
+                    <td class="text-center">Disetujui Oleh,</td>
                 </tr>
                 <tr>
                     <td style="height: 50px"></td>

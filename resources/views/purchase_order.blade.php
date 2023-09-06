@@ -58,6 +58,19 @@
                                                 'no_po' => $d->no_po,
                                                 'tgpo' => date('d/m/Y', strtotime($d->tanggal_po)),
                                                 'btpo' => date('d/m/Y', strtotime($d->batas_po)),
+                                                'incoterm' => $d->incoterm,
+                                                'pr_no' => $d->pr_no,
+                                                'ref_sph' => $d->ref_sph,
+                                                'no_just' => $d->no_just,
+                                                'no_nego' => $d->no_nego,
+                                                'ref_po' => $d->ref_po,
+                                                'term_pay' => $d->term_pay,
+                                                'garansi' => $d->garansi,
+                                                'catatan_vendor' => $d->catatan_vendor,
+                                                'proyek_id' => $d->proyek_id,
+                                                'vendor_id' => $d->vendor_id,
+                                                'detail' => $d->detail,
+                                                
                                             ];
                                         @endphp
                                         <tr>
@@ -217,7 +230,7 @@
                             </label>
                             <div class="col-sm-8">
                                 {{-- <input type="textarea" class="form-control" id="catatan_vendor" name="catatan_vendor"> --}}
-                                <textarea class="form-control" name="catatan_vendor" id="catatn_vendor" rows="3"></textarea>
+                                <textarea class="form-control" name="catatan_vendor" id="catatan_vendor" rows="3"></textarea>
                             </div>
                         </div>
                     </form>
@@ -288,7 +301,7 @@
                                         </td>
                                     </tr>
                                 </table>
-                                <div class="table-responsive">
+                                <div class="table-responsive mt-2">
                                     <table class="table table-bordered">
                                         <thead>
                                             <th>Item</th>
@@ -458,6 +471,7 @@
         }
 
         function editPo(data) {
+            console.log(data);
             $('#modal-title').text("Edit PO");
             $('#button-save').text("Simpan");
             resetForm();
