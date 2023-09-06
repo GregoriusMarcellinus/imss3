@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\PurchaseRequest;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -92,6 +93,25 @@ class PurchaseRequestController extends Controller
 
         return redirect()->route('purchase_request.index')->with('success', 'Purchase Request berhasil disimpan');
 
+        }
+
+        public function cetakPr(Request $request){
+            $id = $request->id_po;
+            $pr = PurchaseRequest::all();
+                // ->join()
+                // ->leftjoin()
+                // ->where()
+                // ->first(); 
+            // return response()->json([
+            //     'po' => $po
+            // ]); 
+            // dd($po);
+            // $po->batas_po = Carbon::parse($po->batas_po)->isoFormat('D MMMM Y');
+            // $po->tanggal_po = Carbon::parse($po->tanggal_po)->isoFormat('D MMMM Y');
+            $pdf = Pdf::loadview('pr_print', compact('pr'));
+            $pdf->setPaper('A4', 'landscape');
+            // $nama = $po->nama_proyek;
+            return $pdf->stream('PR-'.'.pdf');
         }
 
     /**

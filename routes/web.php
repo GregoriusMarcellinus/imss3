@@ -46,7 +46,7 @@ Route::prefix('products')->group(function () {
     Route::delete('sjn', [App\Http\Controllers\SjnController::class, 'destroy'])->name('sjn.delete');
     Route::get('sjn_print', [App\Http\Controllers\ProductController::class, 'sjn_print'])->name('sjn.print');
     Route::get('po_print', [App\Http\Controllers\ProductController::class, 'po_print'])->name('po.print');
-    Route::get('pr_print', [App\Http\Controllers\ProductController::class, 'pr_print'])->name('pr.print');
+    // Route::get('pr_print', [App\Http\Controllers\PurchaseRequestController::class, 'pr_print'])->name('pr.print');
     Route::get('pr', [App\Http\Controllers\ProductController::class, 'pr'])->name('pr');
     Route::post('pr', [App\Http\Controllers\PurchaseRequestController::class, 'store'])->name('products.pr.store');
 
