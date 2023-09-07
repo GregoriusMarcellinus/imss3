@@ -1,21 +1,29 @@
 <!DOCTYPE html>
 
 <head>
-    <title>Purchase Order</title>
-    <style>    
-    @page {
+    <title>Purchase Request-{{$pr->no_pr}}</title>
+    <style>
+        @page {
             margin: 0px;
         }
+
         body {
-            margin: 0px;
+            margin-top: 6cm;
+            margin-left: 1cm;
+            margin-right: 1cm;
+            margin-bottom: 0.5cm;
         }
+
         * {
             font-family: Verdana, Arial, sans-serif;
+            font-size: 0.9rem;
         }
+
         a {
             color: #fff;
             text-decoration: none;
         }
+
         table {
             border-collapse: collapse;
         }
@@ -31,9 +39,9 @@
             padding-right: 15px;
         }
 
-        thead {
+        /* thead {
             background-color: #f2f2f2;
-        }
+        } */
 
         th {
             padding: 15px 15px 15px 25px;
@@ -59,121 +67,123 @@
         .pagenum:before {
             content: counter(page);
         }
-        }
+
         .invoice table {
             margin: 15px;
         }
+
         .invoice h3 {
             margin-left: 15px;
         }
+
         .information {
             color: #000000;
         }
+
         .information .logo {
             margin: 5px;
         }
+
         .information table {
             padding: 10px;
         }
 
-        .table2 tr  {
+        header {
+            position: fixed;
+            top: 0.1cm;
+            left: 0.5cm;
+            right: 0.5cm;
+            /* height: 5.5cm; */
+            /* margin-bottom: 400px; */
+        }
+        .table {
+            width: 100%;
             border: 1px solid black;
-            padding: 5px;
+            text-align: center;
+        }
+        .table tr, .table td, .table th {
+            border: 1px solid black;
+            /* padding: 5px; */
+        }
+
+        .table2 tr {
+            border: 1px solid black;
+            /* padding: 5px; */
         }
     </style>
 
 </head>
+
 <body>
+    <header>
+        <div class="information">
+            <table width="100%">
+                <tr width="100%">
+                    <td align="left" style="width: 25%;">
+                        <img src="https://inkamultisolusi.co.id/api_cms/public/uploads/editor/20220511071342_LSnL6WiOy67Xd9mKGDaG.png"
+                            alt="Logo" width="150" class="logo" /><br>
+                    </td>
 
-<div class="information">
-    <table width="100%">
-        <tr width="100%">
-            <td align="left" style="width: 25%;">
-                <img src="https://inkamultisolusi.co.id/api_cms/public/uploads/editor/20220511071342_LSnL6WiOy67Xd9mKGDaG.png" alt="Logo" width="150" class="logo"/><br>
-            </td>
+                    <td align="center" style="width: 75%;">
+                        <br><strong style="font-size: 25">PURCHASE REQUEST</strong><br>
+                        <strong style="font-size: 25">(PR)</strong><br>
+                    </td>
+                </tr>
+                <tr>
+                    <td align="left" style="width: 25%;">
+                        <br><br>
+                        <strong>Kepada Yth.</strong><br>
+                        <strong>Dept. Logistik</strong><br>
+                    </td>
 
-            <td align="center" style="width: 75%;">
-                <br><strong style="font-size: 25">PURCHASE REQUEST</strong><br>
-                <strong style="font-size: 25">(PR)</strong><br>
-            </td>
-        </tr>
-        <tr>
-            <td align="left" style="width: 25%;">
-                <br><br>
-                <strong>Kepada Yth.</strong><br>
-                <strong>Dept. Logistik</strong><br>
-            </td>
-            </td>
+                    <td align="center">
+                        <br><br>
+                        <strong>Nomor* : <span>{{$pr->no_pr}}</span></strong><br>
+                        <strong>Tanggal* : <span>{{$pr->tgl_pr}}</span></strong><br>
+                    </td>
 
-            <td align="left">
-                <br><br>
-                <strong>Nomor*    :</strong><br>
-                <strong>Tanggal* :</strong><br>
-            </td>
-            </td>
-            <td align="left" style="width: 25%;">
-                <br><br>
-                <strong>Proyek   :</strong><br>
-            </td>
-            </td>
-        </tr>
-    </table>
-</div>
-    
+                    <td align="left" style="width: 25%;">
+                        <br><br>
+                        <strong>Proyek : <span>{{$pr->nama_proyek}}</span></strong><br>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </header>
+
     {{--
     <div class="w-100 text-center">
         <b style="text-decoration: underline"></i>PURCHASE ORDER</b><br />
     </div> --}}
-    <table class="table" style="margin-top: 50px; width: 100%">
-        <thead style="border: 1px solid black">
-            <tr style="border: 1px solid black">
+    <table class="table" style="width: 100%">
+        <thead>
+            <tr>
                 <th>No</th>
                 <th>Kode Material</th>
                 <th>Uraian Barang/Jasa</th>
                 <th>Spesifikasi</th>
-                <th>Kuantitas</th>
                 <th>Qty</th>
                 <th>Sat</th>
                 <th>Waktu <br> Penyelesaiaan</th>
                 <th>Keterangan</th>
             </tr>
         </thead>
-        <tbody style="border: 1px solid black">
-            {{-- @foreach ($sjn->products as $item)
+        <tbody>
+            @foreach ($pr->purchases as $item)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
-                    <td>{{ $item->product_name }}</td>
-                    <td>{{ $item->spesifikasi }}</td>
-                    <td>{{ $item->product_code }}</td>
-                    <td>{{ $item->stock }}</td>
+                    <td>{{ $item->kode_material }}</td>
+                    <td>{{ $item->uraian }}</td>
+                    <td>{{ $item->spek }}</td>
+                    <td>{{ $item->qty }}</td>
                     <td>{{ $item->satuan }}</td>
-                    <td>{{ $item->nama_proyek }}</td>
+                    <td>{{ $item->waktu }}</td>
+                    <td>{{ $item->keterangan }}</td>
                 </tr>
-            @endforeach --}}
-            <tr style="border: 1px solid black">
-                <td style="text-align: center;">1</td>
-                <td style="text-align: center;"><span></span></td>
-                <td style="text-align: center;"> </td>
-                <td style="text-align: center;"><span> </span></td>
-                <td style="text-align: center;"> </td>
-                <td style="text-align: center;"><span> </span></td>
-                <td style="text-align: center;"><span> </span></td>
-                <td style="text-align: center;"><span> </span></td>
-                <td style="text-align: center;"><span> </span></td>
-            </tr>
-            <tr style="border: 1px solid black">
-                <td style="text-align: center;">2</td>
-                <td style="text-align: center;"><span> </span></td>
-                <td style="text-align: center;"> </td>
-                <td style="text-align: center;"><span> </span></td>
-                <td style="text-align: center;"> </td>
-                <td style="text-align: center;"><span> </span></td>
-                <td style="text-align: center;"><span> </span></td>
-                <td style="text-align: center;"><span> </span></td>
-                <td style="text-align: center;"><span> </span></td>
-            </tr>
+            @endforeach
         </tbody>
     </table>
+
     <div style="margin-top: 1rem">
         <div>
             <table style="width: 100%">
@@ -185,7 +195,7 @@
                         <strong>HARTONO</strong><br>
                     </td>
                     </td>
-        
+
                     <td align="center" style="width: 25%;">
                         Diperiksa Oleh<br>
                         Kadep. Rendal Wil II
@@ -205,15 +215,14 @@
     </div>
 
 
-    <table class="table2" style="width:100%;padding:20px; margin-top:2rem">
+    <table class="table2" style="width:100%; margin-top:2rem">
         <tr>
-            <td><strong>DASAR PR :</strong></td>
+            <td>
+                <strong><u>DASAR PR :</u></strong><br>
+                <span>{!!  nl2br($pr->dasar_pr) !!}</span>
+
+            </td>
         </tr>
-        <tr>
-            <td>1. mahasiswa magang diberikan tugas dan proyek sebagai beriku</td>
-        </tr>
-        <tr>
-            <td>2. mahasiswa magang diberikan tugas dan proyek sebagai beriku</td>
     </table>
 
 </body>

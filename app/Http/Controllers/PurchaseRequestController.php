@@ -55,19 +55,15 @@ class PurchaseRequestController extends Controller
             ->first();
         $pr->details = DetailPR::where('id_pr', $id)->get();
         // $pr->details = DetailPR::where('id_pr', $id)->leftJoin('kode_material', 'kode_material.id', '=', 'detail_pr.kode_material_id')->get();
-        
+        $pr->details = $pr->details->map(function ($item) {
+            $item->spek = $item->spek ? $item->spek : '';
+            $item->keterangan = $item->keterangan ? $item->keterangan : '';
+            $item->kode_material = $item->kode_material ? $item->kode_material : '';
+            return $item;
+        });
         return response()->json([
             'pr' => $pr
         ]);
-    }
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
     }
 
     /**
@@ -80,7 +76,7 @@ class PurchaseRequestController extends Controller
     {
         //
         $purchase_request = $request->id;
-        $validated = $request->validate([
+        $request->validate([
             'proyek_id' => 'required',
             'no_pr' => 'required',
             'dasar_pr' => 'required',
@@ -100,6 +96,9 @@ class PurchaseRequestController extends Controller
                 'dasar_pr' => $request->dasar_pr,
                 'tgl_pr' => $request->tgl_pr,
             ]);
+
+            return redirect()->route('purchase_request.index')->with('success', 'Purchase Request berhasil ditambahkan');
+
         } else {
             DB::table('purchase_request')->where('id', $purchase_request)->update([
                 'proyek_id' => $request->proyek_id,
@@ -107,41 +106,36 @@ class PurchaseRequestController extends Controller
                 'dasar_pr' => $request->dasar_pr,
                 'tgl_pr' => $request->tgl_pr,
             ]);
+
+            return redirect()->route('purchase_request.index')->with('success', 'Purchase Request berhasil diupdate');
         }
 
-        return redirect()->route('purchase_request.index')->with('success', 'Purchase Request berhasil disimpan');
+        // return redirect()->route('purchase_request.index')->with('success', 'Purchase Request berhasil disimpan');
 
-        }
+    }
 
-        public function cetakPr(Request $request){
-            $id = $request->id_po;
-            $pr = PurchaseRequest::all();
-                // ->join()
-                // ->leftjoin()
-                // ->where()
-                // ->first(); 
+    public function cetakPr(Request $request){
+            $id = $request->id;
+            $pr = PurchaseRequest::where('purchase_request.id', $id)
+            ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_request.proyek_id')->first();
+            $pr->purchases = DetailPR::select('detail_pr.*', 'purchase_request.*')
+            ->leftjoin('purchase_request', 'purchase_request.id', '=', 'detail_pr.id_pr')
+            ->where('purchase_request.id', $id)
+            ->get();
+            
             // return response()->json([
-            //     'po' => $po
-            // ]); 
+            //     'pr' => $pr
+            // ]);
             // dd($po);
             // $po->batas_po = Carbon::parse($po->batas_po)->isoFormat('D MMMM Y');
             // $po->tanggal_po = Carbon::parse($po->tanggal_po)->isoFormat('D MMMM Y');
+
             $pdf = Pdf::loadview('pr_print', compact('pr'));
             $pdf->setPaper('A4', 'landscape');
-            // $nama = $po->nama_proyek;
-            return $pdf->stream('PR-'.'.pdf');
+            $no = $pr->no_pr;
+            return $pdf->stream('PR-'.$no.'.pdf');
         }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
 
     /**
      * Show the form for editing the specified resource.
@@ -190,6 +184,12 @@ class PurchaseRequestController extends Controller
 
         $pr = DB::table('purchase_request')->where('id', $request->id_pr)->first();
         $pr->details = DetailPR::where('id_pr', $request->id_pr)->get();
+        $pr->details = $pr->details->map(function ($item) {
+            $item->spek = $item->spek ? $item->spek : '';
+            $item->keterangan = $item->keterangan ? $item->keterangan : '';
+            $item->kode_material = $item->kode_material ? $item->kode_material : '';
+            return $item;
+        });
 
         return response()->json([
             'success' => true,

@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title', __('Purchase Request'))
+@section('title', __('SPPH'))
 @section('custom-css')
     <link rel="stylesheet" href="/plugins/toastr/toastr.min.css">
     <link rel="stylesheet" href="/plugins/select2/css/select2.min.css">
@@ -16,11 +16,11 @@
         <div class="container-fluid">
             <div class="card">
                 <div class="card-header">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-pr"
-                        onclick="addPR()"><i class="fas fa-plus"></i> Add Purchase Request</button>
+                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-SPPH"
+                        onclick="addSPPH()"><i class="fas fa-plus"></i> Add New SPPH</button>
                     <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#import-product" onclick="importProduct()"><i class="fas fa-file-excel"></i> Import Product (Excel)</button> -->
                     <!-- <button type="button" class="btn btn-primary" onclick="download('xls')"><i class="fas fa-file-excel"></i> Export Product (XLS)</button> -->
-                    <div class="card-tools">
+                    {{-- <div class="card-tools">
                         <form>
                             <div class="input-group input-group">
                                 <input type="text" class="form-control" name="q" placeholder="Search">
@@ -33,7 +33,7 @@
                                 </div>
                             </div>
                         </form>
-                    </div>
+                    </div> --}}
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
@@ -41,50 +41,51 @@
                             <thead>
                                 <tr class="text-center">
                                     <th>No.</th>
-                                    <th>{{ __('Nomor PR') }}</th>
-                                    <th>{{ __('Proyek') }}</th>
-                                    <th>{{ __('Tanggal') }}</th>
-                                    <th>{{ __('Dasar PR') }}</th>
+                                    <th>{{ __('Nomor SPPH') }}</th>
+                                    <th>{{ __('Perihal') }}</th>
+                                    <th>{{ __('Tanggal SPPH') }}</th>
+                                    <th>{{ __('Batas SPPH') }}</th>
+                                    <th>{{ __('Penerima') }}</th>
                                     <th></th>
                                 </tr>
                             </thead>
                             <tbody>
-                                @if (count($requests) > 0)
-                                    @foreach ($requests as $key => $d)
+                                @if (count($spphes) > 0)
+                                    @foreach ($spphes as $key => $d)
                                         @php
                                             $data = [
-                                                'no' => $requests->firstItem() + $key,
-                                                'no_pr' => $d->no_pr,
-                                                'proyek' => $d->proyek_name,
-                                                'tanggal' => date('d/m/Y', strtotime($d->tgl_pr)),
-                                                'dasar_pr' => $d->dasar_pr,
-                                                'proyek_id' => $d->proyek_id,
+                                                'no' => $spphes->firstItem() + $key,
+                                                'nomor_spph' => $d->nomor_spph,
+                                                'perihal' => $d->perihal,
+                                                'tanggal' => date('d/m/Y', strtotime($d->tanggal_spph)),
+                                                'batas' => date('d/m/Y', strtotime($d->batas_spph)),
+                                                'penerima' => $d->penerima,
                                                 'id' => $d->id,
                                             ];
                                         @endphp
 
                                         <tr>
                                             <td class="text-center">{{ $data['no'] }}</td>
-                                            <td class="text-center">{{ $data['no_pr'] }}</td>
-                                            <td class="text-center">{{ $data['proyek'] }}</td>
+                                            <td class="text-center">{{ $data['nomor_spph'] }}</td>
+                                            <td class="text-center">{{ $data['perihal'] }}</td>
                                             <td class="text-center">{{ $data['tanggal'] }}</td>
-                                            <td class="text-center">{{ $data['dasar_pr'] }}</td>
+                                            <td class="text-center">{{ $data['batas'] }}</td>
+                                            <td class="text-center">{{ $data['penerima'] }}</td>
                                             <td class="text-center">
-                                                <button title="Edit Request" type="button" class="btn btn-success btn-xs"
-                                                    data-toggle="modal" data-target="#add-pr"
-                                                    onclick="editPR({{ json_encode($data) }})"><i
+                                                <button title="Edit SPPH" type="button" class="btn btn-success btn-xs"
+                                                    data-toggle="modal" data-target="#add-SPPH"
+                                                    onclick="editSPPH({{ json_encode($data) }})"><i
                                                         class="fas fa-edit"></i></button>
 
                                                 <button title="Lihat Detail" type="button" data-toggle="modal"
-                                                    data-target="#detail-pr" class="btn-lihat btn btn-info btn-xs"
+                                                    data-target="#detail-spph" class="btn-lihat btn btn-info btn-xs"
                                                     data-detail="{{ json_encode($data) }}"><i
                                                         class="fas fa-list"></i></button>
-
                                                 @if (Auth::user()->role == 0)
-                                                    <button title="Hapus Request" type="button"
+                                                    <button title="Hapus SPPH" type="button"
                                                         class="btn btn-danger btn-xs" data-toggle="modal"
-                                                        data-target="#delete-pr"
-                                                        onclick="deletePR({{ json_encode($data) }})"><i
+                                                        data-target="#delete-spph"
+                                                        onclick="deletespph({{ json_encode($data) }})"><i
                                                             class="fas fa-trash"></i></button>
                                                 @endif
                                             </td>
@@ -101,56 +102,56 @@
                 </div>
             </div>
             <div>
-                {{ $requests->appends(request()->except('page'))->links('pagination::bootstrap-4') }}
+                {{-- {{ $sjn->appends(request()->except('page'))->links('pagination::bootstrap-4') }} --}}
             </div>
         </div>
 
         {{-- modal --}}
-        <div class="modal fade" id="add-pr">
+        <div class="modal fade" id="add-SPPH">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 id="modal-title" class="modal-title">{{ __('Add Purchase Request') }}</h4>
+                        <h4 id="modal-title" class="modal-title">{{ __('Add New SPPH') }}</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form role="form" id="save" action="{{ route('products.pr.store') }}" method="post">
+                        <form role="form" id="save" action="{{ route('spph.store') }}" method="post">
                             @csrf
                             <input type="hidden" id="save_id" name="id">
                             <div class="form-group row">
-                                <label for="no_pr" class="col-sm-4 col-form-label">{{ __('Nomor PR') }} </label>
+                                <label for="nomor_spph" class="col-sm-4 col-form-label">{{ __('Nomor SPPH') }} </label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="no_pr" name="no_pr">
+                                    <input type="text" class="form-control" id="nomor_spph" name="nomor_spph">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="tgl_pr" class="col-sm-4 col-form-label">{{ __('Tanggal') }}
+                                <label for="penerima" class="col-sm-4 col-form-label">{{ __('Nama Penerima') }}
                                 </label>
                                 <div class="col-sm-8">
-                                    <input type="date" class="form-control" id="tgl_pr" name="tgl_pr">
+                                    <input type="text" class="form-control" id="penerima" name="penerima">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="proyek" class="col-sm-4 col-form-label">{{ __('Proyek') }}
+                                <label for="perihal" class="col-sm-4 col-form-label">{{ __('Perihal') }}
                                 </label>
                                 <div class="col-sm-8">
-                                    {{-- <input type="text" class="form-control" id="proyek" name="proyek"> --}}
-                                    <select class="form-control" name="proyek_id" id="proyek_id">
-                                        <option value="">Pilih Proyek</option>
-                                        @foreach ($proyeks as $proyek)
-                                            <option value="{{ $proyek->id }}">{{ $proyek->nama_proyek }}</option>
-                                        @endforeach
-                                    </select>
+                                    <input type="text" class="form-control" id="perihal" name="perihal">
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="dasar_pr" class="col-sm-4 col-form-label">{{ __('Dasar Proyek') }}
+                                <label for="tanggal_spph" class="col-sm-4 col-form-label">{{ __('Tanggal SPPH') }}
                                 </label>
                                 <div class="col-sm-8">
-                                    {{-- <input type="text" class="form-control" id="dasar" name="dasar"> --}}
-                                    <textarea class="form-control" name="dasar_pr" id="dasar_pr" rows="3"></textarea>
+                                    <input type="date" class="form-control" id="tanggal_spph" name="tanggal_spph">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="batas_spph" class="col-sm-4 col-form-label">{{ __('Batas SPPH') }}
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="date" class="form-control" id="batas_spph" name="batas_spph">
                                 </div>
                             </div>
                         </form>
@@ -165,11 +166,11 @@
         </div>
 
         {{-- modal lihat detail --}}
-        <div class="modal fade" id="detail-pr">
+        <div class="modal fade" id="detail-spph">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 id="modal-title" class="modal-title">{{ __('Detail Purchase Request') }}</h4>
+                        <h4 id="modal-title" class="modal-title">{{ __('Detail SPPH') }}</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -177,27 +178,27 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <div class="row">
-                                <form id="cetak-pr" method="GET" action="{{ route('cetak_pr') }}" target="_blank">
-                                    <input type="hidden" name="id" id="id">
+                                <form id="cetak-sjn" method="GET" action="{{ route('cetak_sjn') }}" target="_blank">
+                                    <input type="hidden" name="sjn_id" id="sjn_id">
                                 </form>
                                 <div class="col-12" id="container-form">
-                                    <button id="button-cetak-pr" type="button" class="btn btn-primary"
-                                        onclick="document.getElementById('cetak-pr').submit();">{{ __('Cetak') }}</button>
+                                    <button id="button-cetak-spph" type="button" class="btn btn-primary"
+                                        onclick="document.getElementById('cetak-sjn').submit();">{{ __('Cetak') }}</button>
                                     <table class="align-top w-100">
                                         <tr>
-                                            <td style="width: 3%;"><b>No PR</b></td>
+                                            <td style="width: 3%;"><b>No SPPH</b></td>
                                             <td style="width:2%">:</td>
                                             <td style="width: 55%"><span id="no_surat"></span></td>
                                         </tr>
                                         <tr>
-                                            <td><b>Tanggal</b></td>
+                                            <td><b>Penerima</b></td>
                                             <td>:</td>
-                                            <td><span id="tgl_surat"></span></td>
+                                            <td><span id="nama_penerima"></span></td>
                                         </tr>
                                         <tr>
-                                            <td><b>Proyek</b></td>
+                                            <td><b>tanggal</b></td>
                                             <td>:</td>
-                                            <td><span id="proyek"></span></td>
+                                            <td><span id="tgl_spph"></span></td>
                                         </tr>
                                         <tr>
                                             <td><b>Produk</b></td>
@@ -212,23 +213,20 @@
                                     <div class="table-responsive">
                                         <table class="table table-bordered">
                                             <thead>
-                                                <th>{{__('NO')}}</th>
-                                                <th>{{__('Kode Material')}}</th>
-                                                <th>{{__('Uraian Barang/Jasa')}}</th>
-                                                <th>{{__('Spesifikasi')}}</th>
-                                                <th>{{__('QTY')}}</th>
-                                                <th>{{__('SAT')}}</th>
-                                                <th>{{__('Waktu Penyelesaian')}}</th>
-                                                <th>{{__('Keterangan')}}</th>
+                                                <th>NO</th>
+                                                <th>Nama Barang</th>
+                                                <th>Spesifikasi</th>
+                                                <th>QTY</th>
+                                                <th>SAT</th>
                                             </thead>
 
-                                            <tbody id="table-pr">
+                                            <tbody id="table-spph">
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                                 <div class="col-0 d-none" id="container-product">
-                                    <div class="card">
+                                    {{-- <div class="card">
                                         <div class="card-body">
                                             <div class="input-group input-group-lg">
                                                 <input type="text" class="form-control" id="pcode" name="pcode"
@@ -241,7 +239,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <div id="loader" class="card">
                                         <div class="card-body text-center">
                                             <div class="spinner-border text-danger" style="width: 3rem; height: 3rem;"
@@ -252,70 +250,19 @@
                                     </div>
                                     <div id="form" class="card">
                                         <div class="card-body">
-                                            <form role="form" id="stock-update" method="post">
-                                                @csrf
-                                                <input type="hidden" id="pid" name="pid">
-                                                <input type="hidden" id="type" name="type">
-                                                <div class="form-group row">
-                                                    <label for="material_kode"
-                                                        class="col-sm-4 col-form-label">{{ __('Kode Material') }}</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control" id="material_kode"
-                                                            >
-                                                        <input type="hidden" class="form-control" id="pr_id"
-                                                        disabled>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label for="pname"
-                                                        class="col-sm-4 col-form-label">{{ __('Nama Barang') }}</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control" id="pname"
-                                                            >
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label for="spek"
-                                                        class="col-sm-4 col-form-label">{{ __('Spesifikasi') }}</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control" id="spek">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label for="no_nota"
-                                                        class="col-sm-4 col-form-label">{{ __('QTY') }}</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control" id="stock"
-                                                            name="stock">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label for="satuan"
-                                                        class="col-sm-4 col-form-label">{{ __('Satuan') }}</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control" id="satuan"
-                                                            name="satuan">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label for="waktu"
-                                                        class="col-sm-4 col-form-label">{{ __('Waktu Penyelesaian') }}</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="date" class="form-control" id="waktu"
-                                                            name="waktu">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label for="keterangan"
-                                                        class="col-sm-4 col-form-label">{{ __('Keterangan') }}</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control" id="keterangan"
-                                                            name="keterangan">
-                                                    </div>
-                                                </div>
-                                            </form>
-                                            <button id="button-update-pr" type="button" class="btn btn-primary w-100"
-                                                onclick="PRupdate()">{{ __('Tambahkan') }}</button>
+                                                <table class="table table-bordered">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>No</th>
+                                                            <th>Deskripsi</th>
+                                                            <th>Spesifikasi</th>
+                                                            <th>QTY</th>
+                                                            <th>Sat</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody id='detail-material'>
+                                                    </tbody>
+                                                </table>
                                         </div>
                                     </div>
                                 </div>
@@ -327,24 +274,23 @@
         </div>
 
         {{-- modal delete sjn --}}
-        <div class="modal fade" id="delete-pr">
+        <div class="modal fade" id="delete-spph">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 id="modal-title" class="modal-title">{{ __('Delete Purchase Request') }}</h4>
+                        <h4 id="modal-title" class="modal-title">{{ __('Delete SPPH') }}</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form role="form" id="delete" action="{{ route('purchase_request.destroy') }}"
-                            method="post">
+                        <form role="form" id="delete" action="{{ route('spph.destroy') }}" method="post">
                             @csrf
                             @method('delete')
                             <input type="hidden" id="delete_id" name="id">
                         </form>
                         <div>
-                            <p>Anda yakin ingin menghapus request ini <span id="pcode"
+                            <p>Anda yakin ingin menghapus SPPH <span id="pcode"
                                     class="font-weight-bold"></span>?</p>
                         </div>
                     </div>
@@ -398,60 +344,61 @@
             $('#barcode_preview_container').hide();
         }
 
-        function addPR() {
-            $('#modal-title').text("Add Purchase Request");
+        function addSPPH() {
+            $('#modal-title').text("Add New SPPH");
             $('#button-save').text("Tambahkan");
             resetForm();
         }
 
         function showAddProduct() {
-            //if .modal-dialog in #detail-pr has class modal-lg, change to modal-xl, otherwise change to modal-lg
-            if ($('#detail-pr').find('.modal-dialog').hasClass('modal-lg')) {
-                $('#detail-pr').find('.modal-dialog').removeClass('modal-lg');
-                $('#detail-pr').find('.modal-dialog').addClass('modal-xl');
+            //if .modal-dialog in #detail-spph has class modal-lg, change to modal-xl, otherwise change to modal-lg
+            if ($('#detail-spph').find('.modal-dialog').hasClass('modal-lg')) {
+                $('#detail-spph').find('.modal-dialog').removeClass('modal-lg');
+                $('#detail-spph').find('.modal-dialog').addClass('modal-xl');
                 $('#button-tambah-produk').text('Kembali');
                 $('#container-form').removeClass('col-12');
-                $('#container-form').addClass('col-8');
+                $('#container-form').addClass('col-6');
                 $('#container-product').removeClass('col-0');
-                $('#container-product').addClass('col-4');
+                $('#container-product').addClass('col-6');
                 $('#container-product').removeClass('d-none');
             } else {
-                $('#detail-pr').find('.modal-dialog').removeClass('modal-xl');
-                $('#detail-pr').find('.modal-dialog').addClass('modal-lg');
+                $('#detail-spph').find('.modal-dialog').removeClass('modal-xl');
+                $('#detail-spph').find('.modal-dialog').addClass('modal-lg');
                 $('#button-tambah-produk').text('Tambah Produk');
-                $('#container-form').removeClass('col-8');
+                $('#container-form').removeClass('col-6');
                 $('#container-form').addClass('col-12');
-                $('#container-product').removeClass('col-4');
+                $('#container-product').removeClass('col-6');
                 $('#container-product').addClass('col-0');
                 $('#container-product').addClass('d-none');
             }
+
+            getSpphDetail();
+
         }
 
-        function editPR(data) {
-            $('#modal-title').text("Edit Request");
+        function editSPPH(data) {
+            $('#modal-title').text("Edit SPPH");
             $('#button-save').text("Simpan");
             resetForm();
             $('#save_id').val(data.id);
-            $('#no_pr').val(data.no_pr);
-            // $('#tgl_pr').val(data.tgl_pr);
-            // $('#proyek_id').val(data.proyek);
-            $('#dasar_pr').val(data.dasar_pr);
+            $('#nomor_spph').val(data.nomor_spph);
+            $('#penerima').val(data.penerima);
+            $('#perihal').val(data.perihal);
+            // $('#tanggal_spph').val(data.tanggal);
             var date = data.tanggal.split('/');
             var newDate = date[2] + '-' + date[1] + '-' + date[0];
-            $('#tgl_pr').val(newDate);
-            $('#proyek_id').find('option').each(function() {
-                if ($(this).val() == data.proyek_id) {
-                    console.log($(this).val());
-                    $(this).attr('selected', true);
-                }
-            });
+            $('#tanggal_spph').val(newDate)
+            // $('#batas_spph').val(data.batas);
+            var date = data.batas.split('/');
+            var newDate = date[2] + '-' + date[1] + '-' + date[0];
+            $('#batas_spph').val(newDate)
         }
 
-        function emptyTableProducts() {
-            $('#table-pr').empty();
+        function emptyTableSpph() {
+            $('#table-spph').empty();
             $('#no_surat').text("");
-            $('#tgl_surat').text("");
-            $('proyek').text("");
+            $('#tanggal_spph').text("");
+            $('#nama_penerima').text("");
         }
 
         function loader(status = 1) {
@@ -462,16 +409,14 @@
             }
         }
 
-        $('#form').hide();
+        // $('#form').hide();
 
-        function productCheck() {
-            var pcode = $('#pcode').val();
-            if (pcode.length > 0) {
+        function getSpphDetail() {
+        
                 loader();
-                $('#pcode').prop("disabled", true);
                 $('#button-check').prop("disabled", true);
                 $.ajax({
-                    url: '/products/check/' + pcode,
+                    url: '/products/products_pr/',
                     type: "GET",
                     data: {
                         "format": "json"
@@ -483,162 +428,138 @@
                     },
                     success: function(data) {
                         loader(0);
-                        if (data.status == 1) {
-                            $('#form').show();
-                            $('#pid').val(data.data.product_id);
-                            $('#product_id').val(data.data.product_id);
-                            $('#pname').val(data.data.product_name);
-                            $('#material_kode').val(data.data.product_code);
-                        } else {
-                            toastr.error("Product Code tidak dikenal!");
-                        }
-                        $('#pcode').prop("disabled", false);
-                        $('#button-check').prop("disabled", false);
+                        $('#form').show();
+                        //append to #detail-material
+                        $('#detail-material').empty();
+                        $.each(data.products, function(key, value) {
+                            $('#detail-material').append(
+                                '<tr><td>' + (key + 1) + '</td><td>' + value.uraian +
+                                '</td><td>' + value.spek + '</td><td>'+value.qty+'</td><td>' + value.satuan 
+                                + '</td><td><button class="btn btn-info">Tambah</button></td></tr>'
+                            );
+                        });
                     },
                     error: function() {
                         $('#pcode').prop("disabled", false);
                         $('#button-check').prop("disabled", false);
                     }
                 });
-            } else {
-                toastr.error("Product Code belum diisi!");
-            }
         }
 
         function clearForm() {
-            $('#pr_id').val("");
+            $('#product_id').val("");
             $('#pname').val("");
             $('#stock').val("");
-            $('#spek').val("");
-            $('#satuan').val("");
-            $('#keterangan').val("");
-            $('#waktu').val("");
+            $('#pcode').val("");
             $('#form').hide();
         }
 
-        function PRupdate() {
-            const id = $('#pr_id').val()
+        function sjnProductUpdate() {
+            const id = $('#product_id').val();
             $.ajax({
-                url: '/products/update_purchase_request_detail/',
+                url: '/products/update_detail_sjn/',
                 type: "POST",
                 dataType: "json",
                 data: {
                     "_token": "{{ csrf_token() }}",
-                    "id_pr": id,
-                    "kode_material": $('#pcode').val(),
-                    "uraian": $('#pname').val(),
+                    "product_id": id,
                     "stock": $('#stock').val(),
-                    "spek": $('#spek').val(),
-                    "satuan": $('#satuan').val(),
-                    "waktu": $('#waktu').val(), 
-                    "keterangan": $('#keterangan').val(),
-
+                    "sjn_id": $('#sjn_id').val(),
                 },
                 beforeSend: function() {
-                    $('#button-update-pr').html('<i class="fas fa-spinner fa-spin"></i> Loading...');
-                    $('#button-update-pr').attr('disabled', true);
+                    $('#button-update-spph').html('<i class="fas fa-spinner fa-spin"></i> Loading...');
+                    $('#button-update-spph').attr('disabled', true);
                 },
                 success: function(data) {
                     if (!data.success) {
                         toastr.error(data.message);
-                        $('#button-update-pr').html('Tambahkan');
-                        $('#button-update-pr').attr('disabled', false);
+                        $('#button-update-spph').html('Tambahkan');
+                        $('#button-update-spph').attr('disabled', false);
                         return
                     }
-                    $('#id').val(data.pr.id);
-                    $('#no_surat').text(data.pr.no_pr);
-                    $('#tgl_surat').text(data.pr.tanggal);
-                    $('#proyek').text(data.pr.proyek);
-                    $('#button-update-pr').html('Tambahkan');
-                    $('#button-update-pr').attr('disabled', false);
+                    $('#no_surat').text(data.sjn.no_sjn);
+                    $('#tgl_surat').text(data.sjn.datetime);
+                    $('#sjn_id').val(data.sjn.sjn_id);
+                    $('#button-update-spph').html('Tambahkan');
+                    $('#button-update-spph').attr('disabled', false);
                     clearForm();
-                    if (data.pr.details.length == 0) {
-                        $('#table-pr').append(
-                            '<tr><td colspan="8" class="text-center">Tidak ada produk</td></tr>');
+                    if (data.sjn.products.length == 0) {
+                        $('#table-spph').append(
+                            '<tr><td colspan="7" class="text-center">Tidak ada produk</td></tr>');
                     } else {
-                        $('#table-pr').empty();
-                        $.each(data.pr.details, function(key, value) {
-                            $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
-                                .kode_material + '</td><td>' + value.uraian + '</td><td>' +
+                        $('#table-spph').empty();
+                        $.each(data.sjn.products, function(key, value) {
+                            $('#table-spph').append('<tr><td>' + (key + 1) + '</td><td>' + value
+                                .product_name + '</td><td>' + value.spesifikasi + '</td><td>' +
                                 value
-                                .spek + '</td><td>' + value.qty + '</td><td>' + value
+                                .product_code + '</td><td>' + value.stock + '</td><td>' + value
                                 .satuan +
-                                '</td><td>' + value.waktu + '</td><td>'+ value.keterangan ?? '' + '</td></tr>');
+                                '</td><td>' + value.nama_proyek + '</td></tr>');
                         });
                     }
                 }
             });
         }
 
-        // on modal #detail-sjn open
-        $('#detail-pr').on('show.bs.modal', function(event) {
+        // on modal #detail-spph open
+        $('#detail-spph').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget);
             var data = button.data('detail');
-            console.log(data);
+            // console.log(data);
             lihatSjn(data);
         });
 
         function lihatSjn(data) {
-            emptyTableProducts();
-            $('#modal-title').text("Detail Request");
+            emptyTableSpph();
+            $('#modal-title').text("Detail SPPH");
             $('#button-save').text("Cetak");
             resetForm();
-            $('#id').val(data.id);
-            $('#no_surat').text(data.no_pr);
-            $('#tgl_surat').text(data.tanggal);
-            $('#proyek').text(data.proyek);
-            $('#pr_id').val(data.id);
-            $('#table-pr').empty();
-
+            $('#save_id').val(data.id);
+            $('#no_surat').text(data.nomor_spph);
+            $('#nama_penerima').text(data.penerima);
+            $('#tgl_spph').text(data.tanggal);
+            $('#table-spph').empty();
             $.ajax({
-                url: '/products/purchase_request_detail/' + data.id,
+                url: '/products/spph_detail/' + data.id,
                 type: "GET",
                 dataType: "json",
                 beforeSend: function() {
-                    $('#table-pr').append('<tr><td colspan="8" class="text-center">Loading...</td></tr>');
-                    $('#button-cetak-pr').html('<i class="fas fa-spinner fa-spin"></i> Loading...');
-                    $('#button-cetak-pr').attr('disabled', true);
+                    $('#table-spph').append('<tr><td colspan="7" class="text-center">Loading...</td></tr>');
+                    $('#button-cetak-spph').html('<i class="fas fa-spinner fa-spin"></i> Loading...');
+                    $('#button-cetak-spph').attr('disabled', true);
                 },
                 success: function(data) {
-                    console.log(data);
-                    $('#id').val(data.pr.id);
-                    $('#no_surat').text(data.pr.no_pr);
-                    $('#tgl_surat').text(data.pr.tanggal);
-                    $('#proyek').text(data.pr.proyek);
-                    $('#button-cetak-pr').html('<i class="fas fa-print"></i> Cetak');
-                    $('#button-cetak-pr').attr('disabled', false);
-                    var no = 1;
-
-                    if (data.pr.details.length == 0) {
-                        $('#table-pr').empty();
-                        $('#table-pr').append(
-                            '<tr><td colspan="8" class="text-center">Tidak ada produk</td></tr>');
+                    $('#no_surat').text(data.spph.no_spph);
+                    $('#nama_penerima').text(data.spph.penerima);
+                    $('#tgl_spph').text(data.spph.tanggal_spph);
+                    $('#sjn_id').val(data.spph.id);
+                    $('#button-cetak-spph').html('<i class="fas fa-print"></i> Cetak');
+                    $('#button-cetak-spph').attr('disabled', false);
+                    if (data.spph.details.length == 0) {
+                        $('#table-spph').append(
+                            '<tr><td colspan="7" class="text-center">Tidak ada produk</td></tr>');
                     } else {
-                        $('#table-pr').empty();
-                        $.each(data.pr.details, function(key, value) {
-                            $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
-                                .kode_material + '</td><td>' + value.uraian + '</td><td>' +
+                        $.each(data.spph.details, function(key, value) {
+                            $('#table-spph').append('<tr><td>' + (key + 1) + '</td><td>' + value
+                                .deskripsi + '</td><td>' + value.spesifikasi + '</td><td>' +
                                 value
                                 .spek + '</td><td>' + value.qty + '</td><td>' + value
-                                .satuan +
-                                '</td><td>' + value.waktu + '</td><td>'+ value.keterangan ?? '' + '</td></tr>');
+                                .satuan +'</td></tr>');
                         });
                     }
+
                     //remove loading
-                    // $('#table-pr').find('tr:first').remove();
+                    $('#table-spph').find('tr:first').remove();
                 }
             });
         }
 
-        function detailPR(data) {
-            $('#modal-title').text("Edit Request");
+        function detailSjn(data) {
+            $('#modal-title').text("Edit SPPH");
             $('#button-save').text("Simpan");
             resetForm();
-            $('#save_id').val(data.id);
-            $('#no_pr').val(data.no_pr);
-            $('#tgl_pr').val(data.tgl_pr);
-            $('#proyek_id').val(data.proyek);
-            $('#dasar_pr').val(data.dasar_pr);
+            $('#save_id').val(data.sjn_id);
+            $('#no_sjn').val(data.no_sjn);
         }
 
         function barcode(code) {
@@ -652,7 +573,7 @@
             window.open(url, 'window_print', 'menubar=0,resizable=0');
         }
 
-        function deletePR(data) {
+        function deletespph(data) {
             $('#delete_id').val(data.id);
         }
 
