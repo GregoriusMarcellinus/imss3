@@ -17,7 +17,7 @@
             <div class="card">
                 <div class="card-header">
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-pr"
-                        onclick="addPR()"><i class="fas fa-plus"></i> Add Purchase Order</button>
+                        onclick="addPR()"><i class="fas fa-plus"></i> Add Purchase Request</button>
                     <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#import-product" onclick="importProduct()"><i class="fas fa-file-excel"></i> Import Product (Excel)</button> -->
                     <!-- <button type="button" class="btn btn-primary" onclick="download('xls')"><i class="fas fa-file-excel"></i> Export Product (XLS)</button> -->
                     <div class="card-tools">
@@ -55,9 +55,11 @@
                                             $data = [
                                                 'no' => $requests->firstItem() + $key,
                                                 'no_pr' => $d->no_pr,
-                                                'proyek' => $d->proyek_id,
+                                                'proyek' => $d->proyek_name,
                                                 'tanggal' => date('d/m/Y', strtotime($d->tgl_pr)),
-                                                'dasar_pr' => $d->dasar_pr
+                                                'dasar_pr' => $d->dasar_pr,
+                                                'proyek_id' => $d->proyek_id,
+                                                'id' => $d->id,
                                             ];
                                         @endphp
 
@@ -68,20 +70,21 @@
                                             <td class="text-center">{{ $data['tanggal'] }}</td>
                                             <td class="text-center">{{ $data['dasar_pr'] }}</td>
                                             <td class="text-center">
-                                                <button title="Edit SJN" type="button" class="btn btn-success btn-xs"
-                                                    data-toggle="modal" data-target="#add-sjn"
-                                                    onclick="editSjn({{ json_encode($data) }})"><i
+                                                <button title="Edit Request" type="button" class="btn btn-success btn-xs"
+                                                    data-toggle="modal" data-target="#add-pr"
+                                                    onclick="editPR({{ json_encode($data) }})"><i
                                                         class="fas fa-edit"></i></button>
 
                                                 <button title="Lihat Detail" type="button" data-toggle="modal"
-                                                    data-target="#detail-sjn" class="btn-lihat btn btn-info btn-xs"
+                                                    data-target="#detail-pr" class="btn-lihat btn btn-info btn-xs"
                                                     data-detail="{{ json_encode($data) }}"><i
                                                         class="fas fa-list"></i></button>
+
                                                 @if (Auth::user()->role == 0)
-                                                    <button title="Hapus Produk" type="button"
+                                                    <button title="Hapus Request" type="button"
                                                         class="btn btn-danger btn-xs" data-toggle="modal"
-                                                        data-target="#delete-sjn"
-                                                        onclick="deleteSjn({{ json_encode($data) }})"><i
+                                                        data-target="#delete-pr"
+                                                        onclick="deletePR({{ json_encode($data) }})"><i
                                                             class="fas fa-trash"></i></button>
                                                 @endif
                                             </td>
@@ -133,15 +136,21 @@
                                 <label for="proyek" class="col-sm-4 col-form-label">{{ __('Proyek') }}
                                 </label>
                                 <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="proyek" name="proyek">
+                                    {{-- <input type="text" class="form-control" id="proyek" name="proyek"> --}}
+                                    <select class="form-control" name="proyek_id" id="proyek_id">
+                                        <option value="">Pilih Proyek</option>
+                                        @foreach ($proyeks as $proyek)
+                                            <option value="{{ $proyek->id }}">{{ $proyek->nama_proyek }}</option>
+                                        @endforeach
+                                    </select>
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label for="dasar" class="col-sm-4 col-form-label">{{ __('Dasar Proyek') }}
+                                <label for="dasar_pr" class="col-sm-4 col-form-label">{{ __('Dasar Proyek') }}
                                 </label>
                                 <div class="col-sm-8">
                                     {{-- <input type="text" class="form-control" id="dasar" name="dasar"> --}}
-                                    <textarea class="form-control" name="dasar" id="dasar" rows="3"></textarea>
+                                    <textarea class="form-control" name="dasar_pr" id="dasar_pr" rows="3"></textarea>
                                 </div>
                             </div>
                         </form>
@@ -156,11 +165,11 @@
         </div>
 
         {{-- modal lihat detail --}}
-        <div class="modal fade" id="detail-sjn">
+        <div class="modal fade" id="detail-pr">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 id="modal-title" class="modal-title">{{ __('Detail Surat Jalan') }}</h4>
+                        <h4 id="modal-title" class="modal-title">{{ __('Detail Purchase Request') }}</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -168,15 +177,15 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <div class="row">
-                                <form id="cetak-sjn" method="GET" action="{{ route('cetak_sjn') }}" target="_blank">
-                                    <input type="hidden" name="sjn_id" id="sjn_id">
+                                <form id="cetak-pr" method="GET" action="{{ route('cetak_pr') }}" target="_blank">
+                                    <input type="hidden" name="id" id="id">
                                 </form>
                                 <div class="col-12" id="container-form">
-                                    <button id="button-cetak-sjn" type="button" class="btn btn-primary"
-                                        onclick="document.getElementById('cetak-sjn').submit();">{{ __('Cetak') }}</button>
+                                    <button id="button-cetak-pr" type="button" class="btn btn-primary"
+                                        onclick="document.getElementById('cetak-pr').submit();">{{ __('Cetak') }}</button>
                                     <table class="align-top w-100">
                                         <tr>
-                                            <td style="width: 3%;"><b>No Surat</b></td>
+                                            <td style="width: 3%;"><b>No PR</b></td>
                                             <td style="width:2%">:</td>
                                             <td style="width: 55%"><span id="no_surat"></span></td>
                                         </tr>
@@ -184,6 +193,11 @@
                                             <td><b>Tanggal</b></td>
                                             <td>:</td>
                                             <td><span id="tgl_surat"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Proyek</b></td>
+                                            <td>:</td>
+                                            <td><span id="proyek"></span></td>
                                         </tr>
                                         <tr>
                                             <td><b>Produk</b></td>
@@ -199,15 +213,16 @@
                                         <table class="table table-bordered">
                                             <thead>
                                                 <th>NO</th>
-                                                <th>Nama Barang</th>
-                                                <th>Spesifikasi</th>
                                                 <th>Kode Material</th>
+                                                <th>Uraian Barang/Jasa</th>
+                                                <th>Spesifikasi</th>
                                                 <th>QTY</th>
                                                 <th>SAT</th>
+                                                <th>Waktu Penyelesaian</th>
                                                 <th>Keterangan</th>
                                             </thead>
 
-                                            <tbody id="table-products">
+                                            <tbody id="table-pr">
                                             </tbody>
                                         </table>
                                     </div>
@@ -242,13 +257,28 @@
                                                 <input type="hidden" id="pid" name="pid">
                                                 <input type="hidden" id="type" name="type">
                                                 <div class="form-group row">
+                                                    <label for="material_kode"
+                                                        class="col-sm-4 col-form-label">{{ __('Kode Material') }}</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="material_kode"
+                                                            >
+                                                        <input type="hidden" class="form-control" id="pr_id"
+                                                        disabled>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
                                                     <label for="pname"
                                                         class="col-sm-4 col-form-label">{{ __('Nama Barang') }}</label>
                                                     <div class="col-sm-8">
                                                         <input type="text" class="form-control" id="pname"
-                                                            disabled>
-                                                        <input type="hidden" class="form-control" id="product_id"
-                                                            disabled>
+                                                            >
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="spek"
+                                                        class="col-sm-4 col-form-label">{{ __('Spesifikasi') }}</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="spek">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -259,9 +289,33 @@
                                                             name="stock">
                                                     </div>
                                                 </div>
+                                                <div class="form-group row">
+                                                    <label for="satuan"
+                                                        class="col-sm-4 col-form-label">{{ __('Satuan') }}</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="satuan"
+                                                            name="satuan">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="waktu"
+                                                        class="col-sm-4 col-form-label">{{ __('Waktu Penyelesaian') }}</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="date" class="form-control" id="waktu"
+                                                            name="waktu">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="keterangan"
+                                                        class="col-sm-4 col-form-label">{{ __('Keterangan') }}</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="keterangan"
+                                                            name="keterangan">
+                                                    </div>
+                                                </div>
                                             </form>
-                                            <button id="button-update-sjn" type="button" class="btn btn-primary w-100"
-                                                onclick="sjnProductUpdate()">{{ __('Tambahkan') }}</button>
+                                            <button id="button-update-pr" type="button" class="btn btn-primary w-100"
+                                                onclick="PRupdate()">{{ __('Tambahkan') }}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -273,23 +327,24 @@
         </div>
 
         {{-- modal delete sjn --}}
-        <div class="modal fade" id="delete-sjn">
+        <div class="modal fade" id="delete-pr">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 id="modal-title" class="modal-title">{{ __('Delete Surat Jalan') }}</h4>
+                        <h4 id="modal-title" class="modal-title">{{ __('Delete Purchase Request') }}</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form role="form" id="delete" action="{{ route('sjn.delete') }}" method="post">
+                        <form role="form" id="delete" action="{{ route('purchase_request.destroy') }}"
+                            method="post">
                             @csrf
                             @method('delete')
                             <input type="hidden" id="delete_id" name="id">
                         </form>
                         <div>
-                            <p>Anda yakin ingin menghapus surat jalan <span id="pcode"
+                            <p>Anda yakin ingin menghapus request ini <span id="pcode"
                                     class="font-weight-bold"></span>?</p>
                         </div>
                     </div>
@@ -343,17 +398,17 @@
             $('#barcode_preview_container').hide();
         }
 
-        function addSjn() {
+        function addPR() {
             $('#modal-title').text("Add Purchase Request");
             $('#button-save').text("Tambahkan");
             resetForm();
         }
 
         function showAddProduct() {
-            //if .modal-dialog in #detail-sjn has class modal-lg, change to modal-xl, otherwise change to modal-lg
-            if ($('#detail-sjn').find('.modal-dialog').hasClass('modal-lg')) {
-                $('#detail-sjn').find('.modal-dialog').removeClass('modal-lg');
-                $('#detail-sjn').find('.modal-dialog').addClass('modal-xl');
+            //if .modal-dialog in #detail-pr has class modal-lg, change to modal-xl, otherwise change to modal-lg
+            if ($('#detail-pr').find('.modal-dialog').hasClass('modal-lg')) {
+                $('#detail-pr').find('.modal-dialog').removeClass('modal-lg');
+                $('#detail-pr').find('.modal-dialog').addClass('modal-xl');
                 $('#button-tambah-produk').text('Kembali');
                 $('#container-form').removeClass('col-12');
                 $('#container-form').addClass('col-8');
@@ -361,8 +416,8 @@
                 $('#container-product').addClass('col-4');
                 $('#container-product').removeClass('d-none');
             } else {
-                $('#detail-sjn').find('.modal-dialog').removeClass('modal-xl');
-                $('#detail-sjn').find('.modal-dialog').addClass('modal-lg');
+                $('#detail-pr').find('.modal-dialog').removeClass('modal-xl');
+                $('#detail-pr').find('.modal-dialog').addClass('modal-lg');
                 $('#button-tambah-produk').text('Tambah Produk');
                 $('#container-form').removeClass('col-8');
                 $('#container-form').addClass('col-12');
@@ -372,19 +427,31 @@
             }
         }
 
-        function editSjn(data) {
-            $('#modal-title').text("Edit SJN");
+        function editPR(data) {
+            $('#modal-title').text("Edit Request");
             $('#button-save').text("Simpan");
             resetForm();
-            $('#save_id').val(data.sjn_id);
-            $('#no_sjn').val(data.no_sjn);
-            $('#nama_pengirim').val(data.nama_pengirim);
+            $('#save_id').val(data.id);
+            $('#no_pr').val(data.no_pr);
+            // $('#tgl_pr').val(data.tgl_pr);
+            // $('#proyek_id').val(data.proyek);
+            $('#dasar_pr').val(data.dasar_pr);
+            var date = data.tanggal.split('/');
+            var newDate = date[2] + '-' + date[1] + '-' + date[0];
+            $('#tgl_pr').val(newDate);
+            $('#proyek_id').find('option').each(function() {
+                if ($(this).val() == data.proyek_id) {
+                    console.log($(this).val());
+                    $(this).attr('selected', true);
+                }
+            });
         }
 
         function emptyTableProducts() {
-            $('#table-products').empty();
+            $('#table-pr').empty();
             $('#no_surat').text("");
             $('#tgl_surat').text("");
+            $('proyek').text("");
         }
 
         function loader(status = 1) {
@@ -421,6 +488,7 @@
                             $('#pid').val(data.data.product_id);
                             $('#product_id').val(data.data.product_id);
                             $('#pname').val(data.data.product_name);
+                            $('#material_kode').val(data.data.product_code);
                         } else {
                             toastr.error("Product Code tidak dikenal!");
                         }
@@ -438,54 +506,64 @@
         }
 
         function clearForm() {
-            $('#product_id').val("");
+            $('#pr_id').val("");
             $('#pname').val("");
             $('#stock').val("");
-            $('#pcode').val("");
+            $('#spek').val("");
+            $('#satuan').val("");
+            $('#keterangan').val("");
+            $('#waktu').val("");
             $('#form').hide();
         }
 
-        function sjnProductUpdate() {
-            const id = $('#product_id').val();
+        function PRupdate() {
+            const id = $('#pr_id').val()
             $.ajax({
-                url: '/products/update_detail_sjn/',
+                url: '/products/update_purchase_request_detail/',
                 type: "POST",
                 dataType: "json",
                 data: {
                     "_token": "{{ csrf_token() }}",
-                    "product_id": id,
+                    "id_pr": id,
+                    "kode_material": $('#pcode').val(),
+                    "uraian": $('#pname').val(),
                     "stock": $('#stock').val(),
-                    "sjn_id": $('#sjn_id').val(),
+                    "spek": $('#spek').val(),
+                    "satuan": $('#satuan').val(),
+                    "waktu": $('#waktu').val(), 
+                    "keterangan": $('#keterangan').val(),
+
                 },
                 beforeSend: function() {
-                    $('#button-update-sjn').html('<i class="fas fa-spinner fa-spin"></i> Loading...');
-                    $('#button-update-sjn').attr('disabled', true);
+                    $('#button-update-pr').html('<i class="fas fa-spinner fa-spin"></i> Loading...');
+                    $('#button-update-pr').attr('disabled', true);
                 },
                 success: function(data) {
                     if (!data.success) {
                         toastr.error(data.message);
-                        $('#button-update-sjn').html('Tambahkan');
-                        $('#button-update-sjn').attr('disabled', false);
+                        $('#button-update-pr').html('Tambahkan');
+                        $('#button-update-pr').attr('disabled', false);
                         return
                     }
-                    $('#no_surat').text(data.sjn.no_sjn);
-                    $('#tgl_surat').text(data.sjn.datetime);
-                    $('#sjn_id').val(data.sjn.sjn_id);
-                    $('#button-update-sjn').html('Tambahkan');
-                    $('#button-update-sjn').attr('disabled', false);
+                    $('#id').val(data.pr.id);
+                    $('#no_surat').text(data.pr.no_pr);
+                    $('#tgl_surat').text(data.pr.tanggal);
+                    $('#proyek').text(data.pr.proyek);
+                    $('#button-update-pr').html('Tambahkan');
+                    $('#button-update-pr').attr('disabled', false);
                     clearForm();
-                    if (data.sjn.products.length == 0) {
-                        $('#table-products').append(
-                            '<tr><td colspan="7" class="text-center">Tidak ada produk</td></tr>');
+                    if (data.pr.details.length == 0) {
+                        $('#table-pr').append(
+                            '<tr><td colspan="8" class="text-center">Tidak ada produk</td></tr>');
                     } else {
-                        $('#table-products').empty();
-                        $.each(data.sjn.products, function(key, value) {
-                            $('#table-products').append('<tr><td>' + (key + 1) + '</td><td>' + value
-                                .product_name + '</td><td>' + value.spesifikasi + '</td><td>' +
+                        $('#table-pr').empty();
+                        $.each(data.pr.details, function(key, value) {
+                            $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
+                                .kode_material + '</td><td>' + value.uraian + '</td><td>' +
                                 value
-                                .product_code + '</td><td>' + value.stock + '</td><td>' + value
+                                .spek + '</td><td>' + value.qty + '</td><td>' + value
                                 .satuan +
-                                '</td><td>' + value.nama_proyek + '</td></tr>');
+                                '</td><td>' + value.waktu + '</td><td>'+ value.keterangan ?? '' + '</td></tr>');
                         });
                     }
                 }
@@ -493,63 +571,74 @@
         }
 
         // on modal #detail-sjn open
-        $('#detail-sjn').on('show.bs.modal', function(event) {
+        $('#detail-pr').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget);
             var data = button.data('detail');
-            // console.log(data);
+            console.log(data);
             lihatSjn(data);
         });
 
         function lihatSjn(data) {
             emptyTableProducts();
-            $('#modal-title').text("Detail SJN");
+            $('#modal-title').text("Detail Request");
             $('#button-save').text("Cetak");
             resetForm();
-            $('#save_id').val(data.sjn_id);
-            $('#no_sjn').val(data.no_sjn);
-            $('#datetime').val(data.datetime);
-            $('#table-products').empty();
+            $('#id').val(data.id);
+            $('#no_surat').text(data.no_pr);
+            $('#tgl_surat').text(data.tanggal);
+            $('#proyek').text(data.proyek);
+            $('#pr_id').val(data.id);
+            $('#table-pr').empty();
+
             $.ajax({
-                url: '/products/detail_sjn/' + data.sjn_id,
+                url: '/products/purchase_request_detail/' + data.id,
                 type: "GET",
                 dataType: "json",
                 beforeSend: function() {
-                    $('#table-products').append('<tr><td colspan="7" class="text-center">Loading...</td></tr>');
-                    $('#button-cetak-sjn').html('<i class="fas fa-spinner fa-spin"></i> Loading...');
-                    $('#button-cetak-sjn').attr('disabled', true);
+                    $('#table-pr').append('<tr><td colspan="8" class="text-center">Loading...</td></tr>');
+                    $('#button-cetak-pr').html('<i class="fas fa-spinner fa-spin"></i> Loading...');
+                    $('#button-cetak-pr').attr('disabled', true);
                 },
                 success: function(data) {
-                    $('#no_surat').text(data.sjn.no_sjn);
-                    $('#tgl_surat').text(data.sjn.datetime);
-                    $('#sjn_id').val(data.sjn.sjn_id);
-                    $('#button-cetak-sjn').html('<i class="fas fa-print"></i> Cetak');
-                    $('#button-cetak-sjn').attr('disabled', false);
-                    if (data.sjn.products.length == 0) {
-                        $('#table-products').append(
-                            '<tr><td colspan="7" class="text-center">Tidak ada produk</td></tr>');
+                    console.log(data);
+                    $('#id').val(data.pr.id);
+                    $('#no_surat').text(data.pr.no_pr);
+                    $('#tgl_surat').text(data.pr.tanggal);
+                    $('#proyek').text(data.pr.proyek);
+                    $('#button-cetak-pr').html('<i class="fas fa-print"></i> Cetak');
+                    $('#button-cetak-pr').attr('disabled', false);
+                    var no = 1;
+
+                    if (data.pr.details.length == 0) {
+                        $('#table-pr').empty();
+                        $('#table-pr').append(
+                            '<tr><td colspan="8" class="text-center">Tidak ada produk</td></tr>');
                     } else {
-                        $.each(data.sjn.products, function(key, value) {
-                            $('#table-products').append('<tr><td>' + (key + 1) + '</td><td>' + value
-                                .product_name + '</td><td>' + value.spesifikasi + '</td><td>' +
+                        $('#table-pr').empty();
+                        $.each(data.pr.details, function(key, value) {
+                            $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
+                                .kode_material + '</td><td>' + value.uraian + '</td><td>' +
                                 value
-                                .product_code + '</td><td>' + value.stock + '</td><td>' + value
+                                .spek + '</td><td>' + value.qty + '</td><td>' + value
                                 .satuan +
-                                '</td><td>' + value.nama_proyek + '</td></tr>');
+                                '</td><td>' + value.waktu + '</td><td>'+ value.keterangan ?? '' + '</td></tr>');
                         });
                     }
-
                     //remove loading
-                    $('#table-products').find('tr:first').remove();
+                    // $('#table-pr').find('tr:first').remove();
                 }
             });
         }
 
-        function detailSjn(data) {
-            $('#modal-title').text("Edit SJN");
+        function detailPR(data) {
+            $('#modal-title').text("Edit Request");
             $('#button-save').text("Simpan");
             resetForm();
-            $('#save_id').val(data.sjn_id);
-            $('#no_sjn').val(data.no_sjn);
+            $('#save_id').val(data.id);
+            $('#no_pr').val(data.no_pr);
+            $('#tgl_pr').val(data.tgl_pr);
+            $('#proyek_id').val(data.proyek);
+            $('#dasar_pr').val(data.dasar_pr);
         }
 
         function barcode(code) {
@@ -563,8 +652,8 @@
             window.open(url, 'window_print', 'menubar=0,resizable=0');
         }
 
-        function deleteSjn(data) {
-            $('#delete_id').val(data.sjn_id);
+        function deletePR(data) {
+            $('#delete_id').val(data.id);
         }
 
         $("#download-template").click(function() {
