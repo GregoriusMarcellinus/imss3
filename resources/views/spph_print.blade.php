@@ -139,29 +139,37 @@
                 non ligula euismod elementum. Fusce feugiat, velit vel dictum dapibus, urna urna cursus ante,
                 ac tristique metus lorem vel orci.
             </p>
-            <table>
+            <table align="center">
                 <thead>
                     <tr>
-                        <th>Nama Barang</th>
-                        <th>Jumlah</th>
-                        <th>Harga</th>
+                        <th>No</th>
+                        <th>Deskripsi</th>
+                        <th>Spesifikasi</th>
+                        <th>Qty</th>
+                        <th>Sat</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Barang 1</td>
-                        <td>10</td>
-                        <td>$100</td>
+                        <td>1</td>
+                        <td>Wrought Steel Wheel</td>
+                        <td>Wrought Steel Wheel <br> Drawing No. 01.1-E11001</td>
+                        <td>48</td>
+                        <td>Pcs</td>
                     </tr>
                     <tr>
-                        <td>Barang 2</td>
-                        <td>5</td>
-                        <td>$50</td>
+                        <td>2</td>
+                        <td>Wrought Steel Wheel</td>
+                        <td>Wrought Steel Wheel <br> Drawing No. 01.1-E11001</td>
+                        <td>48</td>
+                        <td>Pcs</td>
                     </tr>
                     <tr>
-                        <td>Barang 3</td>
                         <td>3</td>
-                        <td>$30</td>
+                        <td>Wrought Steel Wheel</td>
+                        <td>Wrought Steel Wheel <br> Drawing No. 01.1-E11001</td>
+                        <td>48</td>
+                        <td>Pcs</td>
                     </tr>
                 </tbody>
             </table>
