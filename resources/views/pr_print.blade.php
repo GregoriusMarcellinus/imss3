@@ -75,6 +75,11 @@
         .information table {
             padding: 10px;
         }
+
+        .table2 tr  {
+            border: 1px solid black;
+            padding: 5px;
+        }
     </style>
 
 </head>
@@ -102,7 +107,7 @@
 
             <td align="left">
                 <br><br>
-                <strong>Nomor*   :</strong><br>
+                <strong>Nomor*    :</strong><br>
                 <strong>Tanggal* :</strong><br>
             </td>
             </td>
@@ -120,8 +125,8 @@
         <b style="text-decoration: underline"></i>PURCHASE ORDER</b><br />
     </div> --}}
     <table class="table" style="margin-top: 50px; width: 100%">
-        <thead>
-            <tr>
+        <thead style="border: 1px solid black">
+            <tr style="border: 1px solid black">
                 <th>No</th>
                 <th>Kode Material</th>
                 <th>Uraian Barang/Jasa</th>
@@ -133,7 +138,7 @@
                 <th>Keterangan</th>
             </tr>
         </thead>
-        <tbody>
+        <tbody style="border: 1px solid black">
             {{-- @foreach ($sjn->products as $item)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
@@ -145,6 +150,28 @@
                     <td>{{ $item->nama_proyek }}</td>
                 </tr>
             @endforeach --}}
+            <tr style="border: 1px solid black">
+                <td style="text-align: center;">1</td>
+                <td style="text-align: center;"><span></span></td>
+                <td style="text-align: center;"> </td>
+                <td style="text-align: center;"><span> </span></td>
+                <td style="text-align: center;"> </td>
+                <td style="text-align: center;"><span> </span></td>
+                <td style="text-align: center;"><span> </span></td>
+                <td style="text-align: center;"><span> </span></td>
+                <td style="text-align: center;"><span> </span></td>
+            </tr>
+            <tr style="border: 1px solid black">
+                <td style="text-align: center;">2</td>
+                <td style="text-align: center;"><span> </span></td>
+                <td style="text-align: center;"> </td>
+                <td style="text-align: center;"><span> </span></td>
+                <td style="text-align: center;"> </td>
+                <td style="text-align: center;"><span> </span></td>
+                <td style="text-align: center;"><span> </span></td>
+                <td style="text-align: center;"><span> </span></td>
+                <td style="text-align: center;"><span> </span></td>
+            </tr>
         </tbody>
     </table>
     <div style="margin-top: 1rem">
@@ -160,7 +187,7 @@
                     </td>
         
                     <td align="center" style="width: 25%;">
-                        Diperikas Oleh<br>
+                        Diperiksa Oleh<br>
                         Kadep. Rendal Wil II
                         <br><br><br><br><br>
                     </td>
@@ -178,16 +205,15 @@
     </div>
 
 
-    <table class="table2" style="margin-top:2rem">
+    <table class="table2" style="width:100%;padding:20px; margin-top:2rem">
         <tr>
-            <td><strong>DASAR PR</strong></td>
-            <td>:</td>
+            <td><strong>DASAR PR :</strong></td>
         </tr>
         <tr>
-            <td>1. </td>
+            <td>1. mahasiswa magang diberikan tugas dan proyek sebagai beriku</td>
         </tr>
         <tr>
-            <td>2. </td>
+            <td>2. mahasiswa magang diberikan tugas dan proyek sebagai beriku</td>
     </table>
 
 </body>
