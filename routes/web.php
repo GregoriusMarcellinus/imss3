@@ -49,9 +49,10 @@ Route::prefix('products')->group(function () {
     // Route::get('pr_print', [App\Http\Controllers\PurchaseRequestController::class, 'pr_print'])->name('pr.print');
     Route::get('pr', [App\Http\Controllers\ProductController::class, 'pr'])->name('pr');
     Route::post('pr', [App\Http\Controllers\PurchaseRequestController::class, 'store'])->name('products.pr.store');
-    // Route::get('pr_print', [App\Http\Controllers\ProductController::class, 'pr_print'])->name('pr.print');
-    Route::get('spph', [App\Http\Controllers\ProductController::class, 'spph'])->name('spph');
-    Route::post('spph', [App\Http\Controllers\SpphController::class, 'store'])->name('products.spph.store');
+    Route::get('pr_print', [App\Http\Controllers\ProductController::class, 'pr_print'])->name('pr.print');
+    Route::get('spph_print', function(){
+        return view('spph_print');
+    })->name('spph.print');
 
     //keproyekan
     Route::resource('keproyekan', App\Http\Controllers\KeproyekanController::class)->except(['destroy']);
