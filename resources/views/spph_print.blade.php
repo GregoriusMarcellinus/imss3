@@ -129,7 +129,7 @@
     <div class="container">
 
         <div class="date">
-            <p>{{$spph->tanggal_spph}}</p>
+            <p>{{ $spph->tanggal_spph }}</p>
         </div>
         <div class="info-surat">
             <p><span class="label">Nomor Surat &nbsp;&nbsp;: {{ $spph->nomor_spph }}</span></p>
@@ -167,7 +167,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($spph->details as $item)
+                    @forelse ($spph->details as $item)
                         <tr>
                             <td>{{ $loop->iteration }}</td>
                             <td>{{ $item->uraian }}</td>
@@ -175,13 +175,18 @@
                             <td>{{ $item->qty }}</td>
                             <td>{{ $item->satuan }}</td>
                         </tr>
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="5" class="text-center">Tidak ada data</td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
 
             <p style="text-align: justify">
                 Berkaitan dengan hal tersebut diatas mohon bantuannya untuk Penawaran Harga pekerjaan dimaksud.
-                Jawaban atas penawaran referensi harga kami tunggu paling lambat <b>{{$spph->batas_spph}}</b> dengan catatan
+                Jawaban atas penawaran referensi harga kami tunggu paling lambat <b>{{ $spph->batas_spph }}</b> dengan
+                catatan
                 sebagai berikut :
             </p>
 
@@ -202,7 +207,8 @@
                     <td style="vertical-align:top">3.</td>
                     <td style="vertical-align:top">Termin Pembayaran</td>
                     <td style="vertical-align:top">:</td>
-                    <td style="text-align: justify">Pembayaran 30 hari setelah barang diterima baik dan benar, serta dokumen penagihan diterima
+                    <td style="text-align: justify">Pembayaran 30 hari setelah barang diterima baik dan benar, serta
+                        dokumen penagihan diterima
                         dengan benar & lengkap oleh PT IMSS</td>
                 </tr>
             </table>
