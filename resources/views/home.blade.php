@@ -45,7 +45,7 @@
                 </div>
 
                 <div class="col-lg-3 col-6">
-                    <a href="{{route('sjn')}}">
+                    <a href="{{ route('sjn') }}">
                         <div class="small-box bg-warning">
                             <div class="inner" style="background-color: rgb(186, 226, 43);">
                                 <p>Surat</p>
@@ -155,7 +155,8 @@
                         </div>
                         <div id="loader" class="card">
                             <div class="card-body text-center">
-                                <div class="spinner-border text-danger" style="width: 3rem; height: 3rem;" role="status">
+                                <div class="spinner-border text-danger" style="width: 3rem; height: 3rem;"
+                                    role="status">
                                     <span class="sr-only">Loading...</span>
                                 </div>
                             </div>

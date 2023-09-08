@@ -18,8 +18,17 @@ use Illuminate\Support\Facades\Auth;
 
 Auth::routes(['register' => false, 'reset' => false, 'verify' => false]);
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/', [App\Http\Controllers\HomeController::class, 'indexAwal'])->name('homeAwal');
+Route::get('/div/{tipe}', [App\Http\Controllers\HomeController::class, 'appType'])->name('appType');
+Route::get('/dashboard', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/search', [App\Http\Controllers\ProductController::class, 'search'])->name('search');
+
+//rute baru
+Route::prefix('apps')->group(function () {
+    Route::get('purchase_orders', [App\Http\Controllers\PurchaseOrderController::class, 'indexApps'])->name('apps.purchase_orders')->middleware('logistikAuth');
+});
+Route::get('unauthorized', [App\Http\Controllers\HomeController::class, 'unauthorized'])->name('unauthorized');
+
 Route::prefix('products')->group(function () {
     Route::get('', [App\Http\Controllers\ProductController::class, 'products'])->name('products');
     Route::post('', [App\Http\Controllers\ProductController::class, 'product_save'])->name('products.save');
