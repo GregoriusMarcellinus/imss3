@@ -55,9 +55,13 @@ Route::prefix('products')->group(function () {
     Route::delete('sjn', [App\Http\Controllers\SjnController::class, 'destroy'])->name('sjn.delete');
     Route::get('sjn_print', [App\Http\Controllers\ProductController::class, 'sjn_print'])->name('sjn.print');
     Route::get('po_print', [App\Http\Controllers\ProductController::class, 'po_print'])->name('po.print');
-    Route::get('pr_print', [App\Http\Controllers\ProductController::class, 'pr_print'])->name('pr.print');
+    // Route::get('pr_print', [App\Http\Controllers\PurchaseRequestController::class, 'pr_print'])->name('pr.print');
     Route::get('pr', [App\Http\Controllers\ProductController::class, 'pr'])->name('pr');
     Route::post('pr', [App\Http\Controllers\PurchaseRequestController::class, 'store'])->name('products.pr.store');
+    Route::get('pr_print', [App\Http\Controllers\ProductController::class, 'pr_print'])->name('pr.print');
+    Route::get('spph_print', function(){
+        return view('spph_print');
+    })->name('spph.print');
 
     //keproyekan
     Route::resource('keproyekan', App\Http\Controllers\KeproyekanController::class)->except(['destroy']);
@@ -80,6 +84,9 @@ Route::prefix('products')->group(function () {
     //purchase request
     Route::resource('purchase_request', App\Http\Controllers\PurchaseRequestController::class)->except(['destroy']);
     Route::get('cetak_pr', [App\Http\Controllers\PurchaseRequestController::class, 'cetakPr'])->name('cetak_pr');
+    Route::delete('purchase_request', [App\Http\Controllers\PurchaseRequestController::class, 'destroy'])->name('purchase_request.destroy');
+    Route::get('purchase_request_detail/{id}', [App\Http\Controllers\PurchaseRequestController::class, 'getDetailPr'])->name('purchase_request_detail');
+    Route::post('update_purchase_request_detail', [App\Http\Controllers\PurchaseRequestController::class, 'updateDetailPr'])->name('purchase_request_detail.update');
 
     //history
     Route::get('/history', [HistoryController::class, 'index']);
@@ -91,6 +98,13 @@ Route::prefix('products')->group(function () {
     //kode material
     Route::resource('kode_material', App\Http\Controllers\KodeMaterialController::class)->except(['destroy']);
     Route::delete('kode_material', [App\Http\Controllers\KodeMaterialController::class, 'destroy'])->name('kode_material.destroy');
+
+    //SPPH
+    Route::resource('spph', App\Http\Controllers\SpphController::class)->except(['destroy']);
+    Route::delete('spph', [App\Http\Controllers\SpphController::class, 'destroy'])->name('spph.destroy');
+    Route::get('spph_detail/{id}', [App\Http\Controllers\SpphController::class, 'getDetailSpph'])->name('spph_detail');
+    Route::post('update_spph_detail', [App\Http\Controllers\SpphController::class, 'updateDetailSpph'])->name('spph_detail.update');
+    Route::get('products_pr',[App\Http\Controllers\SpphController::class, 'getProductPR'])->name('products_pr');
 });
 
 Route::prefix('users')->group(function () {

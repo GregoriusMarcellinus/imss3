@@ -57,6 +57,19 @@
                         </div>
                     </a>
                 </div>
+                <div class="col-lg-3 col-6">
+                    <a href="{{ route('spph.index') }}">
+                        <div class="small-box bg-warning">
+                            <div class="inner" style="background-color: rgb(186, 226, 43);">
+                                <p>Surat Perminataan Penawaran</p>
+                                <h3>Harga</h3>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
 
                 <div class="col-lg-3 col-6">
                     <a href="#" data-toggle="modal" data-target="#stock-form" onclick="stockForm(2)">
