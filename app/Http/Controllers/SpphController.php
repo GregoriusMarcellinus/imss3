@@ -184,9 +184,14 @@ class SpphController extends Controller
 
         // dd($spph);
 
-        $pdf = PDF::loadview('spph_print', compact('spph'));
-        $pdf->setPaper('A4', 'Potrait');
+        $page_count = 0;
+        $dummy = PDF::loadview('spph_print', compact('spph', 'page_count'));
+        $dummy->setPaper('A4', 'Potrait');
         $no_spph = $spph->nomor_spph;
+        $dummy->render();
+        $page_count = $dummy->get_canvas()->get_page_count();
+        $pdf = PDF::loadview('spph_print', compact('spph', 'page_count'));
+        $pdf->setPaper('A4', 'Potrait');
         return $pdf->stream('SPPH_' . $no_spph . '.pdf');
     }
 
