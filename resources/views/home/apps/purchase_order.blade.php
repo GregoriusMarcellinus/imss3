@@ -1,4 +1,4 @@
-@extends('layouts.main')
+@extends('layouts.home')
 @section('title', __('Purchase Order'))
 @section('custom-css')
     <link rel="stylesheet" href="/plugins/toastr/toastr.min.css">
@@ -7,17 +7,24 @@
 @endsection
 @section('content')
     <div class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
+        <div class="container">
+            <div class="row mb-5">
             </div>
         </div>
     </div>
     <section class="content">
-        <div class="container-fluid">
+        <div class="container">
+            <div class="row my-5">
+                <div class="col-12">
+                    <h2 class="font-weight-bold">Purchase Order</h2>
+                </div>
+            </div>
             <div class="card">
                 <div class="card-header">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-po"
-                        onclick="addPo()"><i class="fas fa-plus"></i> Add New PO</button>
+                    @if (Auth::user())
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-po"
+                            onclick="addPo()"><i class="fas fa-plus"></i> Add New PO</button>
+                    @endif
                     <div class="card-tools">
                         <form>
                             <div class="input-group input-group">
@@ -42,7 +49,9 @@
                                     <th>{{ __('Vendor') }}</th>
                                     <th>{{ __('Tanggal PO') }}</th>
                                     <th>{{ __('Batas Akhir PO') }}</th>
-                                    <th></th>
+                                    @if (Auth::user())
+                                        <th></th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -79,24 +88,27 @@
                                             <td class="text-center">{{ $data['nama_vendor'] }}</td>
                                             <td class="text-center">{{ $data['tgpo'] }}</td>
                                             <td class="text-center">{{ $data['btpo'] }}</td>
-                                            <td class="text-center">
-                                                <button title="Edit PO" type="button" class="btn btn-success btn-xs"
-                                                    data-toggle="modal" data-target="#add-po"
-                                                    onclick="editPo({{ json_encode($data) }})"><i
-                                                        class="fas fa-edit"></i></button>
+                                            @if (Auth::user())
+                                                <td class="text-center">
+                                                    <button title="Edit PO" type="button" class="btn btn-success btn-xs"
+                                                        data-toggle="modal" data-target="#add-po"
+                                                        onclick="editPo({{ json_encode($data) }})"><i
+                                                            class="fas fa-edit"></i></button>
 
-                                                <button title="Lihat Detail" type="button" data-toggle="modal"
-                                                    data-target="#detail-po" class="btn-lihat btn btn-info btn-xs"
-                                                    data-detail="{{ json_encode($data) }}"><i
-                                                        class="fas fa-list"></i></button>
+                                                    <button title="Lihat Detail" type="button" data-toggle="modal"
+                                                        data-target="#detail-po" class="btn-lihat btn btn-info btn-xs"
+                                                        data-detail="{{ json_encode($data) }}"><i
+                                                            class="fas fa-list"></i></button>
 
-                                                @if (Auth::user() && Auth::user()->role == 0)
-                                                    <button title="Hapus PO" type="button" class="btn btn-danger btn-xs"
-                                                        data-toggle="modal" data-target="#delete-po"
-                                                        onclick="deletePo({{ json_encode($data) }})"><i
-                                                            class="fas fa-trash"></i></button>
-                                                @endif
-                                            </td>
+                                                    @if (Auth::user() && Auth::user()->role == 0)
+                                                        <button title="Hapus PO" type="button"
+                                                            class="btn btn-danger btn-xs" data-toggle="modal"
+                                                            data-target="#delete-po"
+                                                            onclick="deletePo({{ json_encode($data) }})"><i
+                                                                class="fas fa-trash"></i></button>
+                                                    @endif
+                                                </td>
+                                            @endif
                                         </tr>
                                     @endforeach
                                 @else
@@ -535,7 +547,7 @@
                     $('#tabel-po').append('<tr><td colspan="10" class="text-center">Loading...</td></tr>');
                     $('#button-cetak-po').html(
                         '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
-                        );
+                    );
                     $('#button-cetak-po').attr('disabled', true);
                 },
 

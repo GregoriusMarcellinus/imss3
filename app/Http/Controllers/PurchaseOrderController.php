@@ -45,6 +45,30 @@ class PurchaseOrderController extends Controller
         }
     }
 
+    public function indexApps(Request $request)
+    {
+        $search = $request->q;
+
+        $purchases = Purchase_Order::select('purchase_order.*', 'vendor.nama as vendor_name', 'keproyekan.nama_proyek as proyek_name')
+            ->join('vendor', 'vendor.id', '=', 'purchase_order.vendor_id')
+            ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_order.proyek_id')
+            ->paginate(50);
+        $vendors = DB::table('vendor')->get();
+        $proyeks = DB::table('keproyekan')->get();
+
+        if ($search) {
+            $purchases = Purchase_Order::where('no_po', 'LIKE', "%$search%")->paginate(50);
+        }
+
+        if ($request->format == "json") {
+            $purchases = Purchase_Order::all();
+
+            return response()->json($purchases);
+        } else {
+            return view('home.apps.purchase_order', compact('purchases', 'vendors', 'proyeks'));
+        }
+    }
+
     public function getDetailPo(Request $request)
     {
         $id = $request->id;
@@ -52,15 +76,15 @@ class PurchaseOrderController extends Controller
             ->join('vendor', 'vendor.id', '=', 'purchase_order.vendor_id')
             ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_order.proyek_id')
             ->where('purchase_order.id', $id)
-            ->first(); 
+            ->first();
         $po->details = [];
         return response()->json([
             'po' => $po
-        ]); 
-    
+        ]);
     }
 
-    public function updateDetailPo(Request $request){
+    public function updateDetailPo(Request $request)
+    {
         $id = $request->id;
         $po = Purchase_Order::where('id', $id)->update([
             'no_po' => $request->no_po,
@@ -79,7 +103,7 @@ class PurchaseOrderController extends Controller
         ]);
         return response()->json([
             'po' => $po
-        ]); 
+        ]);
     }
 
     /**
@@ -168,23 +192,24 @@ class PurchaseOrderController extends Controller
         }
     }
 
-    public function cetakPo(Request $request){
+    public function cetakPo(Request $request)
+    {
         $id = $request->id_po;
         $po = Purchase_Order::select('purchase_order.*', 'vendor.nama as nama_vendor', 'vendor.alamat as alamat_vendor', 'vendor.telp as telp_vendor', 'vendor.email as email_vendor', 'vendor.fax as fax_vendor',  'keproyekan.nama_proyek as nama_proyek')
             ->join('vendor', 'vendor.id', '=', 'purchase_order.vendor_id')
             ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_order.proyek_id')
             ->where('purchase_order.id', $id)
-            ->first(); 
+            ->first();
         // return response()->json([
         //     'po' => $po
-        // ]); 
+        // ]);
         // dd($po);
         $po->batas_po = Carbon::parse($po->batas_po)->isoFormat('D MMMM Y');
         $po->tanggal_po = Carbon::parse($po->tanggal_po)->isoFormat('D MMMM Y');
         $pdf = PDF::loadview('po_print', compact('po'));
         $pdf->setPaper('A4', 'landscape');
         $nama = $po->nama_proyek;
-        return $pdf->stream('PO-'.$nama.'.pdf');
+        return $pdf->stream('PO-' . $nama . '.pdf');
     }
 
     /**
