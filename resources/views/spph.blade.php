@@ -60,6 +60,7 @@
                                                 'tanggal' => date('d/m/Y', strtotime($d->tanggal_spph)),
                                                 'batas' => date('d/m/Y', strtotime($d->batas_spph)),
                                                 'penerima' => $d->penerima,
+                                                'alamat' => $d->alamat,
                                                 'id' => $d->id,
                                             ];
                                         @endphp
@@ -134,6 +135,13 @@
                                 </div>
                             </div>
                             <div class="form-group row">
+                                <label for="alamat" class="col-sm-4 col-form-label">{{ __('Alamat') }}
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="alamat" name="alamat">
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <label for="perihal" class="col-sm-4 col-form-label">{{ __('Perihal') }}
                                 </label>
                                 <div class="col-sm-8">
@@ -178,12 +186,12 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <div class="row">
-                                <form id="cetak-sjn" method="GET" action="{{ route('cetak_sjn') }}" target="_blank">
-                                    <input type="hidden" name="sjn_id" id="sjn_id">
+                                <form id="cetak-spph" method="GET" action="{{ route('spph.print') }}" target="_blank">
+                                    <input type="hidden" name="spph_id" id="spph_id">
                                 </form>
                                 <div class="col-12" id="container-form">
                                     <button id="button-cetak-spph" type="button" class="btn btn-primary"
-                                        onclick="document.getElementById('cetak-sjn').submit();">{{ __('Cetak') }}</button>
+                                        onclick="document.getElementById('cetak-spph').submit();">{{ __('Cetak') }}</button>
                                     <table class="align-top w-100">
                                         <tr>
                                             <td style="width: 3%;"><b>No SPPH</b></td>
@@ -383,6 +391,7 @@
             $('#save_id').val(data.id);
             $('#nomor_spph').val(data.nomor_spph);
             $('#penerima').val(data.penerima);
+            $('#alamat').val(data.alamat);
             $('#perihal').val(data.perihal);
             // $('#tanggal_spph').val(data.tanggal);
             var date = data.tanggal.split('/');
@@ -464,7 +473,7 @@
                     "_token": "{{ csrf_token() }}",
                     "product_id": id,
                     "stock": $('#stock').val(),
-                    "sjn_id": $('#sjn_id').val(),
+                    "spph_id": $('#spph_id').val(),
                 },
                 beforeSend: function() {
                     $('#button-update-spph').html('<i class="fas fa-spinner fa-spin"></i> Loading...');
@@ -479,7 +488,7 @@
                     }
                     $('#no_surat').text(data.sjn.no_sjn);
                     $('#tgl_surat').text(data.sjn.datetime);
-                    $('#sjn_id').val(data.sjn.sjn_id);
+                    $('#spph_id').val(data.sjn.spph_id);
                     $('#button-update-spph').html('Tambahkan');
                     $('#button-update-spph').attr('disabled', false);
                     clearForm();
@@ -532,7 +541,7 @@
                     $('#no_surat').text(data.spph.no_spph);
                     $('#nama_penerima').text(data.spph.penerima);
                     $('#tgl_spph').text(data.spph.tanggal_spph);
-                    $('#sjn_id').val(data.spph.id);
+                    $('#spph_id').val(data.spph.id);
                     $('#button-cetak-spph').html('<i class="fas fa-print"></i> Cetak');
                     $('#button-cetak-spph').attr('disabled', false);
                     if (data.spph.details.length == 0) {
@@ -558,7 +567,7 @@
             $('#modal-title').text("Edit SPPH");
             $('#button-save').text("Simpan");
             resetForm();
-            $('#save_id').val(data.sjn_id);
+            $('#save_id').val(data.spph_id);
             $('#no_sjn').val(data.no_sjn);
         }
 

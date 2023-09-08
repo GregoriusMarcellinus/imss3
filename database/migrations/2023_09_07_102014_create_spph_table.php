@@ -20,6 +20,7 @@ class CreateSpphTable extends Migration
             $table->string('batas_spph');
             $table->string('perihal');
             $table->string('penerima');
+            $table->string('alamat');
             $table->timestamps();
         });
     }

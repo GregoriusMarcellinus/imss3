@@ -15,5 +15,6 @@ class Spph extends Model
         'batas_spph',
         'perihal',
         'penerima',
+        'alamat'
     ];
 }

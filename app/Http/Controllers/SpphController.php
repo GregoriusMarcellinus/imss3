@@ -8,6 +8,7 @@ use App\Models\Spph;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 class SpphController extends Controller
 {
@@ -61,13 +62,15 @@ class SpphController extends Controller
             'tanggal_spph' => 'required',
             'batas_spph' => 'required',
             'perihal' => 'required',
-            'penerima' => 'required'
+            'penerima' => 'required',
+            'alamat' => 'required'
         ], [
             'nomor_spph.required' => 'Nomor SPPH harus diisi',
             'tanggal_spph.required' => 'Tanggal SPPH harus diisi',
             'batas_spph.required' => 'Batas SPPH harus diisi',
             'perihal.required' => 'Perihal harus diisi',
-            'penerima.required' => 'Penerima harus diisi'
+            'penerima.required' => 'Penerima harus diisi',
+            'alamat.required' => 'Alamat harus diisi'
         ]);
 
         $data = [
@@ -77,6 +80,7 @@ class SpphController extends Controller
             'perihal' => $request->perihal,
             'penerima' => $request->penerima,
             // 'warehouse_id' => $warehouse_id
+            'alamat' => $request->alamat
         ];
 
         if (empty($spph)) {
@@ -158,5 +162,22 @@ class SpphController extends Controller
         return response()->json([
             'products' => $products
         ]);
+    }
+
+    public function spphPrint(Request $request)
+    {
+        $id = $request->spph_id;
+        $spph = Spph::where('id', $id)->first();
+
+        $spph->details = DetailSpph::where('spph_id', $id)
+        ->leftjoin('detail_pr', 'detail_pr.id', '=', 'detail_spph.id_detail_pr')
+        ->get();
+
+        // dd($spph);
+
+        $pdf = PDF::loadview('spph_print', compact('spph'));
+        $pdf->setPaper('A4', 'Potrait');
+        $no_spph = $spph->nomor_spph;
+        return $pdf->stream('SPPH_'.$no_spph . '.pdf');
     }
 }
