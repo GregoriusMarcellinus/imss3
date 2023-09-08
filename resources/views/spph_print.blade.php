@@ -12,7 +12,7 @@
             margin-top: 3cm;
             margin-left: 2.54cm;
             margin-right: 2.54cm;
-            margin-bottom: 0.5cm;
+            margin-bottom: 2cm;
         }
 
         * {
@@ -22,7 +22,7 @@
 
         header {
             position: fixed;
-            top: 1cm;
+            top: 0.7cm;
             left: 2.54cm;
             right: 2.54cm;
             height: 6cm;
@@ -71,6 +71,7 @@
         .info-surat p {
             margin: 0;
         }
+
         .judul-konten {
             text-align: center;
             font-size: 16px;
@@ -96,7 +97,7 @@
             text-align: left;
         }
 
-        .table-2{
+        .table-2 {
             width: 100%;
             border: 1px solid #000;
         }
@@ -109,12 +110,12 @@
             <table style="width: 100%">
                 <tr>
                     <td style="width: 10%">
-                    <img src="https://inkamultisolusi.co.id/api_cms/public/uploads/editor/20220511071342_LSnL6WiOy67Xd9mKGDaG.png"
-                        alt="Logo IMSS" class="logo">
+                        <img src="https://inkamultisolusi.co.id/api_cms/public/uploads/editor/20220511071342_LSnL6WiOy67Xd9mKGDaG.png"
+                            alt="Logo IMSS" class="logo">
                     </td>
                     <td style="width: 75%">
                         <h2>PT INKA MULTI SOLUSI SERVICE</h2>
-                        <p style="margin: 0;"> 
+                        <p style="margin: 0;">
                             <b>SERVICE - MAINTENANCE - LOGISTICS - GENERAL CONTRACTOR</b>
                         </p>
                         <p style="margin: 0;">Jl. Salak No. 59 Madiun - 63131</p>
@@ -133,15 +134,16 @@
         <div class="info-surat">
             <p><span class="label">Nomor Surat &nbsp;&nbsp;: {{ $spph->nomor_spph }}</span></p>
             <p><span class="label">Lampiran&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </span></p>
-            <p><span class="label">Perihal &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: </span>{{ $spph->perihal }}</p>
+            <p><span class="label">Perihal &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+                </span>{{ $spph->perihal }}</p>
         </div>
         <div class="address">
             <br>
             <p>Kepada Yth,</p>
             <p>
-                <b>{!!  nl2br($spph->penerima) !!}</b>
+                <b>{!! nl2br($spph->penerima) !!}</b>
             </p>
-            <p>{{$spph->alamat}}</p>
+            <p>{{ $spph->alamat }}</p>
         </div>
         <div style="clear: both;"></div>
         <div class="judul-konten"><u>SURAT PERMINTAAN PENAWARAN HARGA</u><br>(SPPH)</div>
@@ -163,27 +165,15 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>1</td>
-                        <td>Wrought Steel Wheel</td>
-                        <td>Wrought Steel Wheel <br> Drawing No. 01.1-E11001</td>
-                        <td>48</td>
-                        <td>Pcs</td>
-                    </tr>
-                    <tr>
-                        <td>2</td>
-                        <td>Wrought Steel Wheel</td>
-                        <td>Wrought Steel Wheel <br> Drawing No. 01.1-E11001</td>
-                        <td>48</td>
-                        <td>Pcs</td>
-                    </tr>
-                    <tr>
-                        <td>3</td>
-                        <td>Wrought Steel Wheel</td>
-                        <td>Wrought Steel Wheel <br> Drawing No. 01.1-E11001</td>
-                        <td>48</td>
-                        <td>Pcs</td>
-                    </tr>
+                    @foreach ($spph->details as $item)
+                        <tr>
+                            <td>{{ $loop->iteration }}</td>
+                            <td>{{ $item->uraian }}</td>
+                            <td>{{ $item->spek }}</td>
+                            <td>{{ $item->qty }}</td>
+                            <td>{{ $item->satuan }}</td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
 
@@ -230,7 +220,8 @@
                     <td style="height: 70px"></td>
                 </tr>
                 <tr>
-                    <td class="text-center" style="text-align: center"><b style="text-decoration: underline; ">(RUDI HARIYANTO)</b>
+                    <td class="text-center" style="text-align: center"><b style="text-decoration: underline; ">(RUDI
+                            HARIYANTO)</b>
                     </td>
                 </tr>
             </table>
