@@ -129,7 +129,7 @@
     <div class="container">
 
         <div class="date">
-            <p>Tanggal: 01 September 2023</p>
+            <p>{{$spph->tanggal_spph}}</p>
         </div>
         <div class="info-surat">
             <p><span class="label">Nomor Surat &nbsp;&nbsp;: {{ $spph->nomor_spph }}</span></p>
@@ -149,7 +149,7 @@
         <div class="judul-konten"><u>SURAT PERMINTAAN PENAWARAN HARGA</u><br>(SPPH)</div>
         <div class="content">
             <p>Dengan Hormat,</p>
-            <p>
+            <p style="text-align: justify">
                 Memberitahukan bahwa perusahaan kami dalam waktu dekat ini bermaksud untuk melakukan pekerjaan sebagai
                 tersebut :
             </p>
@@ -177,9 +177,9 @@
                 </tbody>
             </table>
 
-            <p>
+            <p style="text-align: justify">
                 Berkaitan dengan hal tersebut diatas mohon bantuannya untuk Penawaran Harga pekerjaan dimaksud.
-                Jawaban atas penawaran referensi harga kami tunggu paling lambat 12 September 2023 dengan catatan
+                Jawaban atas penawaran referensi harga kami tunggu paling lambat <b>{{$spph->batas_spph}}</b> dengan catatan
                 sebagai berikut :
             </p>
 
@@ -200,7 +200,7 @@
                     <td style="vertical-align:top">3.</td>
                     <td style="vertical-align:top">Termin Pembayaran</td>
                     <td style="vertical-align:top">:</td>
-                    <td>Pembayaran 30 hari setelah barang diterima baik dan benar, serta dokumen penagihan diterima
+                    <td style="text-align: justify">Pembayaran 30 hari setelah barang diterima baik dan benar, serta dokumen penagihan diterima
                         dengan benar & lengkap oleh PT IMSS</td>
                 </tr>
             </table>
@@ -211,7 +211,7 @@
         <div style="margin-left: 65%; width: 50%; margin-top: 5%">
             <table class="w-100">
                 <tr>
-                    <td class="text-center"><b>PT INKA MULTI SOLUSI SERVIS</b></td>
+                    <td class="text-center"><b>PT INKA MULTI SOLUSI SERVICE</b></td>
                 </tr>
                 <tr>
                     <td class="text-center" style="text-align: center"><b>KEPALA DEPARTEMEN LOGISTIK</b></td>

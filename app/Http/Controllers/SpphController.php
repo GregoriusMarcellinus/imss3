@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 
 class SpphController extends Controller
 {
@@ -178,6 +179,8 @@ class SpphController extends Controller
         $spph->details = DetailSpph::where('spph_id', $id)
             ->leftjoin('detail_pr', 'detail_pr.id', '=', 'detail_spph.id_detail_pr')
             ->get();
+        $spph->tanggal_spph = Carbon::parse($spph->tanggal_spph)->isoFormat('D MMMM Y');
+        $spph->batas_spph = Carbon::parse($spph->batas_spph)->isoFormat('D MMMM Y');
 
         // dd($spph);
 
