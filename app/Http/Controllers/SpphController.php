@@ -91,9 +91,9 @@ class SpphController extends Controller
             //     'message' => 'SPPH berhasil ditambahkan',
             //     'data' => $add
             // ]);
-            if($add){
+            if ($add) {
                 return redirect()->route('spph.index')->with('success', 'SPPH berhasil ditambahkan');
-            }else{
+            } else {
                 return redirect()->route('spph.index')->with('error', 'SPPH gagal ditambahkan');
             }
         } else {
@@ -105,9 +105,9 @@ class SpphController extends Controller
             //     'data' => $update
             // ]);
 
-            if($update){
+            if ($update) {
                 return redirect()->route('spph.index')->with('success', 'SPPH berhasil diupdate');
-            }else{
+            } else {
                 return redirect()->route('spph.index')->with('error', 'SPPH gagal diupdate');
             }
         }
@@ -140,8 +140,14 @@ class SpphController extends Controller
         $spph = Spph::where('id', $id)->first();
 
         $spph->details = DetailSpph::where('spph_id', $id)
-        ->leftjoin('detail_pr', 'detail_pr.id', '=', 'detail_spph.id_detail_pr')
-        ->get();
+            ->leftjoin('detail_pr', 'detail_pr.id', '=', 'detail_spph.id_detail_pr')
+            ->get();
+        $spph->details = $spph->details->map(function ($item) {
+            $item->spek = $item->spek ? $item->spek : '';
+            $item->keterangan = $item->keterangan ? $item->keterangan : '';
+            $item->kode_material = $item->kode_material ? $item->kode_material : '';
+            return $item;
+        });
 
         return response()->json([
             'spph' => $spph
@@ -150,8 +156,8 @@ class SpphController extends Controller
 
     public function getProductPR()
     {
-        $products = DetailPR::all(); 
-        
+        $products = DetailPR::all();
+
         $products = $products->map(function ($item) {
             $item->spek = $item->spek ? $item->spek : '';
             $item->keterangan = $item->keterangan ? $item->keterangan : '';
@@ -170,14 +176,41 @@ class SpphController extends Controller
         $spph = Spph::where('id', $id)->first();
 
         $spph->details = DetailSpph::where('spph_id', $id)
-        ->leftjoin('detail_pr', 'detail_pr.id', '=', 'detail_spph.id_detail_pr')
-        ->get();
+            ->leftjoin('detail_pr', 'detail_pr.id', '=', 'detail_spph.id_detail_pr')
+            ->get();
 
         // dd($spph);
 
         $pdf = PDF::loadview('spph_print', compact('spph'));
         $pdf->setPaper('A4', 'Potrait');
         $no_spph = $spph->nomor_spph;
-        return $pdf->stream('SPPH_'.$no_spph . '.pdf');
+        return $pdf->stream('SPPH_' . $no_spph . '.pdf');
+    }
+
+    function tambahSpphDetail(Request $request)
+    {
+        $id = $request->spph_id;
+        $id_barang = $request->product_id;
+
+        DetailSpph::create([
+            'spph_id' => $id,
+            'id_detail_pr' => $id_barang
+        ]);
+
+        $spph = Spph::where('id', $id)->first();
+
+        $spph->details = DetailSpph::where('spph_id', $id)
+            ->leftjoin('detail_pr', 'detail_pr.id', '=', 'detail_spph.id_detail_pr')
+            ->get();
+        $spph->details = $spph->details->map(function ($item) {
+            $item->spek = $item->spek ? $item->spek : '';
+            $item->keterangan = $item->keterangan ? $item->keterangan : '';
+            $item->kode_material = $item->kode_material ? $item->kode_material : '';
+            return $item;
+        });
+
+        return response()->json([
+            'spph' => $spph
+        ]);
     }
 }

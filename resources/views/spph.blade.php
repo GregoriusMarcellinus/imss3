@@ -83,9 +83,8 @@
                                                     data-detail="{{ json_encode($data) }}"><i
                                                         class="fas fa-list"></i></button>
                                                 @if (Auth::user()->role == 0)
-                                                    <button title="Hapus SPPH" type="button"
-                                                        class="btn btn-danger btn-xs" data-toggle="modal"
-                                                        data-target="#delete-spph"
+                                                    <button title="Hapus SPPH" type="button" class="btn btn-danger btn-xs"
+                                                        data-toggle="modal" data-target="#delete-spph"
                                                         onclick="deletespph({{ json_encode($data) }})"><i
                                                             class="fas fa-trash"></i></button>
                                                 @endif
@@ -186,7 +185,8 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <div class="row">
-                                <form id="cetak-spph" method="GET" action="{{ route('spph.print') }}" target="_blank">
+                                <form id="cetak-spph" method="GET" action="{{ route('spph.print') }}"
+                                    target="_blank">
                                     <input type="hidden" name="spph_id" id="spph_id">
                                 </form>
                                 <div class="col-12" id="container-form">
@@ -258,19 +258,19 @@
                                     </div>
                                     <div id="form" class="card">
                                         <div class="card-body">
-                                                <table class="table table-bordered">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>No</th>
-                                                            <th>Deskripsi</th>
-                                                            <th>Spesifikasi</th>
-                                                            <th>QTY</th>
-                                                            <th>Sat</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody id='detail-material'>
-                                                    </tbody>
-                                                </table>
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>Deskripsi</th>
+                                                        <th>Spesifikasi</th>
+                                                        <th>QTY</th>
+                                                        <th>Sat</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id='detail-material'>
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
@@ -298,8 +298,7 @@
                             <input type="hidden" id="delete_id" name="id">
                         </form>
                         <div>
-                            <p>Anda yakin ingin menghapus SPPH <span id="pcode"
-                                    class="font-weight-bold"></span>?</p>
+                            <p>Anda yakin ingin menghapus SPPH <span id="pcode" class="font-weight-bold"></span>?</p>
                         </div>
                     </div>
                     <div class="modal-footer justify-content-between">
@@ -421,38 +420,40 @@
         // $('#form').hide();
 
         function getSpphDetail() {
-        
-                loader();
-                $('#button-check').prop("disabled", true);
-                $.ajax({
-                    url: '/products/products_pr/',
-                    type: "GET",
-                    data: {
-                        "format": "json"
-                    },
-                    dataType: "json",
-                    beforeSend: function() {
-                        $('#loader').show();
-                        $('#form').hide();
-                    },
-                    success: function(data) {
-                        loader(0);
-                        $('#form').show();
-                        //append to #detail-material
-                        $('#detail-material').empty();
-                        $.each(data.products, function(key, value) {
-                            $('#detail-material').append(
-                                '<tr><td>' + (key + 1) + '</td><td>' + value.uraian +
-                                '</td><td>' + value.spek + '</td><td>'+value.qty+'</td><td>' + value.satuan 
-                                + '</td><td><button class="btn btn-info">Tambah</button></td></tr>'
-                            );
-                        });
-                    },
-                    error: function() {
-                        $('#pcode').prop("disabled", false);
-                        $('#button-check').prop("disabled", false);
-                    }
-                });
+
+            loader();
+            $('#button-check').prop("disabled", true);
+            $.ajax({
+                url: '/products/products_pr/',
+                type: "GET",
+                data: {
+                    "format": "json"
+                },
+                dataType: "json",
+                beforeSend: function() {
+                    $('#loader').show();
+                    $('#form').hide();
+                },
+                success: function(data) {
+                    loader(0);
+                    $('#form').show();
+                    //append to #detail-material
+                    $('#detail-material').empty();
+                    $.each(data.products, function(key, value) {
+                        $('#detail-material').append(
+                            '<tr><td>' + (key + 1) + '</td><td>' + value.uraian +
+                            '</td><td>' + value.spek + '</td><td>' + value.qty + '</td><td>' + value
+                            .satuan +
+                            '</td><td><button class="btn btn-info" onclick="addToDetails(' + value
+                            .id + ')">Tambah</button></td></tr>'
+                        );
+                    });
+                },
+                error: function() {
+                    $('#pcode').prop("disabled", false);
+                    $('#button-check').prop("disabled", false);
+                }
+            });
         }
 
         function clearForm() {
@@ -461,6 +462,40 @@
             $('#stock').val("");
             $('#pcode').val("");
             $('#form').hide();
+        }
+
+        function addToDetails(id) {
+            $.ajax({
+                url: '/products/tambah_spph_detail',
+                type: "POST",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "product_id": id,
+                    "spph_id": $('#spph_id').val(),
+                },
+                dataType: "json",
+                beforeSend: function() {
+                    $('#loader').show();
+                    $('#form').hide();
+                },
+                success: function(data) {
+                    loader(0);
+                    $('#form').show();
+                    //append to #detail-material
+                    $('#table-spph').empty();
+                    $.each(data.spph.details, function(key, value) {
+                        $('#table-spph').append('<tr><td>' + (key + 1) + '</td><td>' + value
+                            .uraian + '</td><td>' + value.spek + '</td><td>' + value.qty +
+                            '</td><td>' + value
+                            .satuan +
+                            '</td></tr>');
+                    });
+                },
+                error: function() {
+                    $('#pcode').prop("disabled", false);
+                    $('#button-check').prop("disabled", false);
+                }
+            });
         }
 
         function sjnProductUpdate() {
@@ -499,9 +534,8 @@
                         $('#table-spph').empty();
                         $.each(data.sjn.products, function(key, value) {
                             $('#table-spph').append('<tr><td>' + (key + 1) + '</td><td>' + value
-                                .product_name + '</td><td>' + value.spesifikasi + '</td><td>' +
-                                value
-                                .product_code + '</td><td>' + value.stock + '</td><td>' + value
+                                .uraian + '</td><td>' + value.spek + '</td><td>' + value.qty +
+                                '</td><td>' + value
                                 .satuan +
                                 '</td><td>' + value.nama_proyek + '</td></tr>');
                         });
@@ -550,10 +584,10 @@
                     } else {
                         $.each(data.spph.details, function(key, value) {
                             $('#table-spph').append('<tr><td>' + (key + 1) + '</td><td>' + value
-                                .deskripsi + '</td><td>' + value.spesifikasi + '</td><td>' +
-                                value
-                                .spek + '</td><td>' + value.qty + '</td><td>' + value
-                                .satuan +'</td></tr>');
+                                .uraian + '</td><td>' + value.spek + '</td><td>' + value.qty +
+                                '</td><td>' + value
+                                .satuan +
+                                '</td></tr>');
                         });
                     }
 

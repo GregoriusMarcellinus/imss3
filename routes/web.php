@@ -102,7 +102,8 @@ Route::prefix('products')->group(function () {
     Route::delete('spph', [App\Http\Controllers\SpphController::class, 'destroy'])->name('spph.destroy');
     Route::get('spph_detail/{id}', [App\Http\Controllers\SpphController::class, 'getDetailSpph'])->name('spph_detail');
     Route::post('update_spph_detail', [App\Http\Controllers\SpphController::class, 'updateDetailSpph'])->name('spph_detail.update');
-    Route::get('products_pr',[App\Http\Controllers\SpphController::class, 'getProductPR'])->name('products_pr');
+    Route::get('products_pr', [App\Http\Controllers\SpphController::class, 'getProductPR'])->name('products_pr');
+    Route::post('tambah_spph_detail', [App\Http\Controllers\SpphController::class, 'tambahSpphDetail'])->name('tambah_spph_detail');
 });
 
 Route::prefix('users')->group(function () {
