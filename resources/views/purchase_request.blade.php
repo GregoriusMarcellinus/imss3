@@ -492,6 +492,7 @@
                     beforeSend: function() {
                         $('#loader').show();
                         $('#form').hide();
+
                     },
                     success: function(data) {
                         loader(0);
@@ -538,7 +539,7 @@
                 data: {
                     "_token": "{{ csrf_token() }}",
                     "id_pr": id,
-                    "kode_material": $('#pcode').val(),
+                    "kode_material": $('#material_kode').val(),
                     "uraian": $('#pname').val(),
                     "stock": $('#stock').val(),
                     "spek": $('#spek').val(),
