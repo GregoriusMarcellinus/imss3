@@ -32,7 +32,7 @@
                 </div>
                 <div class="col-lg-3 col-6">
                     <a href="#" data-toggle="modal" data-target="#stock-form" onclick="stockForm(0)">
-                        <div class="small-box bg-warning">
+                        <div class="small-box bg-info">
                             <div class="inner" style="background-color: blueviolet;">
                                 <p>Stock</p>
                                 <h3>Out</h3>
@@ -46,7 +46,7 @@
 
                 <div class="col-lg-3 col-6">
                     <a href="{{ route('sjn') }}">
-                        <div class="small-box bg-warning">
+                        <div class="small-box bg-info">
                             <div class="inner" style="background-color: rgb(186, 226, 43);">
                                 <p>Surat</p>
                                 <h3>Jalan</h3>
@@ -59,8 +59,8 @@
                 </div>
                 <div class="col-lg-3 col-6">
                     <a href="{{ route('spph.index') }}">
-                        <div class="small-box bg-warning">
-                            <div class="inner" style="background-color: rgb(186, 226, 43);">
+                        <div class="small-box bg-info">
+                            <div class="inner" style="background-color: rgb(231, 48, 24);">
                                 <p>Surat Perminataan Penawaran</p>
                                 <h3>Harga</h3>
                             </div>
@@ -100,7 +100,7 @@
                 <div class="col-lg-3 col-6">
                     <a href="{{ route('purchase_request.index') }}">
                         <div class="small-box bg-primary">
-                            <div class="inner">
+                            <div class="inner" style="background-color: coral">
                                 <p>Purchase</p>
                                 <h3>Request</h3>
                             </div>
