@@ -38,11 +38,16 @@
                 </li>
                 <div>
                     <li class="nav-item d-none d-sm-inline-block">
+                        @if (Auth::user() && Auth::user()->role == 0)
+                        <a href="{{route('home')}}" class="nav-link">Dashboard</a>
+                        @endif
+                    </li>
+                    <li class="nav-item d-none d-sm-inline-block">
                         <span class="nav-link">
                             @if (Auth::check())
                                 Halo, {{ Auth::user()->name }}!
                             @else
-                                <a href="{{ route('login') }}">Login</a>
+                                <a href="{{ route('login') }}" class="btn btn-info mb-4">Login</a>
                             @endif
                         </span>
                     </li>
@@ -50,7 +55,7 @@
                         <span class="nav-link">
                             @if (Auth::check())
                                 <form id="logout" action="{{ route('logout') }}" method="post">@csrf</form>
-                                <a href="javascript:;" onclick="document.getElementById('logout').submit();">Logout</a>
+                                <a href="javascript:;" onclick="document.getElementById('logout').submit();" class="btn btn-danger">Logout</a>
                             @endif
                         </span>
                     </li>

@@ -76,7 +76,7 @@ class HomeController extends Controller
             $menus = [
                 [
                     'name' => 'SPPH',
-                    'route' => 'apps/logistik',
+                    'route' => 'apps/spph',
                     'bgcolor' => 'orange',
                     'icon' => 'mail-bulk'
                 ],
@@ -89,26 +89,63 @@ class HomeController extends Controller
             ];
             $title = "Logistik";
         } else if ($type == "gudang") {
-            $menus = [];
+            $menus = [
+                [
+                    'name' => 'Purchase Order',
+                    'route' => 'apps/purchase_orders',
+                    'bgcolor' => 'sagegreen',
+                    'icon' => 'hand-holding-usd'
+                ],
+                [
+                    'name' => 'Surat Jalan',
+                    'route' => 'apps/surat_jalan',
+                    'bgcolor' => 'orange',
+                    'icon' => 'mail-bulk'
+                ],
+                [
+                    'name' => 'Stock IN',
+                    'route' => 'apps/stock_in',
+                    'bgcolor' => 'blue',
+                    'icon' => 'warehouse'
+                ],
+                [
+                    'name' => 'Stock OUT',
+                    'route' => 'apps/stock_out',
+                    'bgcolor' => 'red',
+                    'icon' => 'map-marker-alt'
+                ],
+            ];
             $title = "Gudang";
         } else if ($type == "wilayah1") {
             $menus = [
                 [
                     'name' => 'Purchase Request',
-                    'route' => 'apps/logistik',
+                    'route' => 'apps/purchase_request',
                     'bgcolor' => 'sagegreen',
                     'icon' => 'hand-holding-usd'
                 ],
+                [
+                    'name' => 'SPPH',
+                    'route' => 'apps/spph',
+                    'bgcolor' => 'orange',
+                    'icon' => 'mail-bulk'
+                ]
             ];
             $title = "Wilayah 1";
         } else if ($type == "wilayah2") {
             $menus = [
                 [
                     'name' => 'Purchase Request',
-                    'route' => 'apps/logistik',
+                    'route' => 'apps/purchase_request',
                     'bgcolor' => 'sagegreen',
                     'icon' => 'hand-holding-usd'
                 ],
+                [
+                    'name' => 'SPPH',
+                    'route' => 'apps/spph',
+                    'bgcolor' => 'orange',
+                    'icon' => 'mail-bulk'
+                ]
             ];
             $title = "Wilayah 2";
         }

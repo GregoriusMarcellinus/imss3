@@ -65,7 +65,7 @@ class PurchaseOrderController extends Controller
 
             return response()->json($purchases);
         } else {
-            return view('home.apps.purchase_order', compact('purchases', 'vendors', 'proyeks'));
+            return view('home.apps.logistik.purchase_order', compact('purchases', 'vendors', 'proyeks'));
         }
     }
 

@@ -22,6 +22,80 @@ class SjnController extends Controller
         //
     }
 
+   
+        public function indexApps(Request $req)
+        {
+            $sort           = $req->sort;
+            $search         = $req->q;
+            $dl             = $req->dl;
+    
+            // if (Session::has('selected_warehouse_id')) {
+            //     $warehouse_id = Session::get('selected_warehouse_id');
+            // } else {
+            //     $warehouse_id = DB::table('warehouse')->first()->warehouse_id;
+            // }
+    
+            $sjn = DB::table('sjn')
+                ->select("sjn.*");
+    
+            $sjnExport = $sjn;
+    
+            
+    
+            if (!empty($search)) {
+                $products = $products->orWhere([["sjn.nama_barang", "LIKE", "%" . $search . "%"], ["sjn.warehouse_id", $warehouse_id]])
+                    ->orWhere([["sjn.kode_material", "LIKE", "%" . $search . "%"], ["sjn.warehouse_id", $warehouse_id]]);
+            }
+    
+            if (!empty($sort)) {
+                if ($sort == "category_az") {
+                    $sjn = $sjn->orderBy("categories.category_name", "asc");
+                } else if ($sort == "category_za") {
+                    $sjn = $sjn->orderBy("categories.category_name", "desc");
+                } else if ($sort == "name_az") {
+                    $sjn = $sjn->orderBy("sjn.nama_barang", "asc");
+                } else if ($sort == "name_za") {
+                    $sjn = $sjn->orderBy("sjn.nama_barang", "desc");
+                } else {
+                    $sjn = $sjn->orderBy("sjn.product_id", "desc");
+                }
+            }
+    
+            $sjn = $sjn->paginate(50);
+    
+            // $warehouse = $this->getWarehouse();
+            
+            //     $tmp            = $sjnExport->orderBy("sjn.sjn_id", "asc")->get();
+            //     $fn             = 'sjn_' . time();
+    
+                
+    
+                $productExport  = [];
+    
+                // foreach ($tmp as $t) {
+                //     $productExport[] = [
+                //         "KODE BARANG"         => $t->product_code,
+                //         "NAMA BARANG"         => $t->product_name,
+                //         "SPESIFIKASI"         => $t->spesifikasi,
+                //         "STOK"                => $t->product_amount,
+                //         "satuan"              => $t->satuan,
+                //         "LOKASI"              => $t->category_name,
+    
+                //     ];
+                // }
+    
+                if ($dl == "xls") {
+                    return (new ProductsExport($productExport))->download($fn . '.xls', \Maatwebsite\Excel\Excel::XLS);
+                } else if ($dl == "pdf") {
+                    return (new ProductsExport($productExport))->download($fn . '.pdf');
+                }
+    
+            // return View::make("sjn")->with(compact("sjn", "warehouse"));
+        
+            return view('home.apps.gudang.sjn', compact('sjn'));
+        
+    }
+
     /**
      * Show the form for creating a new resource.
      *

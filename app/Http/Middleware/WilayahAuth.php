@@ -16,6 +16,9 @@ class WilayahAuth
      */
     public function handle(Request $request, Closure $next)
     {
+        if ($request->user() && $request->user()->role != 2 && auth()->user()->role != 3 && auth()->user()->role != 0) {
+            return redirect()->route('unauthorized');
+        }
         return $next($request);
     }
 }

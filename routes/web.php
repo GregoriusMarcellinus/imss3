@@ -26,6 +26,9 @@ Route::get('/search', [App\Http\Controllers\ProductController::class, 'search'])
 //rute baru
 Route::prefix('apps')->group(function () {
     Route::get('purchase_orders', [App\Http\Controllers\PurchaseOrderController::class, 'indexApps'])->name('apps.purchase_orders')->middleware('logistikAuth');
+    Route::get('spph', [App\Http\Controllers\SpphController::class, 'indexApps'])->name('apps.spph')->middleware('logistikAuth');
+    Route::get('surat_jalan', [App\Http\Controllers\SjnController::class, 'indexApps'])->name('apps.surat_jalan')->middleware('gudangAuth');
+    Route::get('purchase_request', [App\Http\Controllers\PurchaseRequestController::class, 'indexApps'])->name('apps.purchase_request')->middleware('wilayahAuth');
 });
 Route::get('unauthorized', [App\Http\Controllers\HomeController::class, 'unauthorized'])->name('unauthorized');
 

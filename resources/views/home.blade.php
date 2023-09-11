@@ -65,7 +65,7 @@
                                 <h3>Harga</h3>
                             </div>
                             <div class="icon">
-                                <i class="fas fa-envelope"></i>
+                                <i class="fas fa-mail-bulk"></i>
                             </div>
                         </div>
                     </a>

@@ -43,6 +43,30 @@ class SpphController extends Controller
         }
     }
 
+    public function indexApps(Request $request){
+        $search = $request->q;
+
+        if (Session::has('selected_warehouse_id')) {
+            $warehouse_id = Session::get('selected_warehouse_id');
+        } else {
+            $warehouse_id = DB::table('warehouse')->first()->warehouse_id;
+        }
+
+        $spphes = Spph::paginate(50);
+
+        if ($search) {
+            $spphes = Spph::where('tanggal_spph', 'LIKE', "%$search%")->paginate(50);
+        }
+
+        if ($request->format == "json") {
+            $categories = Spph::where("warehouse_id", $warehouse_id)->get();
+
+            return response()->json($categories);
+        } else {
+            return view('home.apps.logistik.spph', compact('spphes'));
+        }
+    }
+
     /**
      * Store a newly created resource in storage.
      *
