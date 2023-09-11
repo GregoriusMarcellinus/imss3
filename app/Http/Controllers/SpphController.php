@@ -82,9 +82,9 @@ class SpphController extends Controller
             'tanggal_spph' => $request->tanggal_spph,
             'batas_spph' => $request->batas_spph,
             'perihal' => $request->perihal,
-            'penerima' => $request->penerima,
+            'penerima' => json_encode($request->penerima),
             // 'warehouse_id' => $warehouse_id
-            'alamat' => $request->alamat
+            'alamat' => json_encode($request->alamat)
         ];
 
         if (empty($spph)) {

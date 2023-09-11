@@ -139,20 +139,7 @@
                                     <input type="text" class="form-control" id="lampiran" name="lampiran">
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <label for="penerima" class="col-sm-4 col-form-label">{{ __('Nama Penerima') }}
-                                </label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="penerima" name="penerima">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <label for="alamat" class="col-sm-4 col-form-label">{{ __('Alamat') }}
-                                </label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="alamat" name="alamat">
-                                </div>
-                            </div>
+
                             <div class="form-group row">
                                 <label for="perihal" class="col-sm-4 col-form-label">{{ __('Perihal') }}
                                 </label>
@@ -174,6 +161,16 @@
                                     <input type="date" class="form-control" id="batas_spph" name="batas_spph">
                                 </div>
                             </div>
+
+                            <h6>Penerima -- </h6>
+
+                            <div id="penerima-row">
+
+                            </div>
+
+                            <a id="tambah">Tambah Penerima</a>
+
+
                         </form>
                     </div>
                     <div class="modal-footer justify-content-between">
@@ -370,6 +367,34 @@
             $('#save_id').val("");
             resetForm();
         }
+
+        function generateNamaAlamat() {
+            var length = $("#penerima-row").children().length;
+            var counter = length + 1;
+
+            var formGroup =
+                '<div class="group">' +
+                '<div class="form-group row">' +
+                '<label for="penerima' + counter + '" class="col-sm-4 col-form-label">Penerima ' + counter + '</label>' +
+                '<div class="col-sm-8">' +
+                '<input type="text" class="form-control" id="penerima' + counter + '" name="penerima[]">' +
+                '</div>' +
+                '</div>' +
+                '<div class="form-group row">' +
+                '<label for="alamat' + counter + '" class="col-sm-4 col-form-label">Alamat ' + counter + '</label>' +
+                '<div class="col-sm-8">' +
+                '<input type="text" class="form-control" id="alamat' + counter + '" name="alamat[]">' +
+                '</div>' +
+                '</div>' +
+                '</div>';
+            $("#penerima-row").append(formGroup);
+        }
+
+        $(document).ready(function() {
+            $("#tambah").click(function() {
+                generateNamaAlamat();
+            });
+        });
 
         function showAddProduct() {
             //if .modal-dialog in #detail-spph has class modal-lg, change to modal-xl, otherwise change to modal-lg
