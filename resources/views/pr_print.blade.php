@@ -142,7 +142,7 @@
                         <strong>Tanggal* : <span>{{$pr->tgl_pr}}</span></strong><br>
                     </td>
 
-                    <td align="left" style="width: 25%;">
+                    <td align="left" style="width: 35%;">
                         <br><br>
                         <strong>Proyek : <span>{{$pr->nama_proyek}}</span></strong><br>
                     </td>
@@ -169,18 +169,22 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($pr->purchases as $item)
+            @forelse ($pr->purchases as $item)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $item->kode_material }}</td>
                     <td>{{ $item->uraian }}</td>
-                    <td>{{ $item->spek }}</td>
+                    <td style="word-wrap: break-word;">{{ $item->spek }}</td>
                     <td>{{ $item->qty }}</td>
                     <td>{{ $item->satuan }}</td>
                     <td>{{ $item->waktu }}</td>
                     <td>{{ $item->keterangan }}</td>
                 </tr>
-            @endforeach
+            @empty
+            <tr>
+                <td colspan="8" class="text-center" style="text-align: center">Tidak ada data</td>
+            </tr>
+            @endforelse
         </tbody>
     </table>
 

@@ -98,24 +98,24 @@
                     </a>
                 </div>
                 <div class="col-lg-3 col-6">
-                    <a href="{{ route('purchase_order.index') }}">
-                        <div class="small-box bg-primary">
-                            <div class="inner">
-                                <p>Purchase</p>
-                                <h3>Order</h3>
-                            </div>
-                            <div class="icon">
-                                <i class="fas fa-hand-holding-usd"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-6">
                     <a href="{{ route('purchase_request.index') }}">
                         <div class="small-box bg-primary">
                             <div class="inner">
                                 <p>Purchase</p>
                                 <h3>Request</h3>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-cart-arrow-down"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-3 col-6">
+                    <a href="{{ route('purchase_order.index') }}">
+                        <div class="small-box bg-primary">
+                            <div class="inner">
+                                <p>Purchase</p>
+                                <h3>Order</h3>
                             </div>
                             <div class="icon">
                                 <i class="fas fa-hand-holding-usd"></i>

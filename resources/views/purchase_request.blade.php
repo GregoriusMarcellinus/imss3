@@ -462,7 +462,7 @@
             }
         }
 
-        $('#form').hide();
+        // $('#form').hide();
 
         function productCheck() {
             var pcode = $('#pcode').val();
@@ -480,6 +480,7 @@
                     beforeSend: function() {
                         $('#loader').show();
                         $('#form').hide();
+
                     },
                     success: function(data) {
                         loader(0);
@@ -513,7 +514,7 @@
             $('#satuan').val("");
             $('#keterangan').val("");
             $('#waktu').val("");
-            $('#form').hide();
+            // $('#form').hide();
         }
 
         function PRupdate() {
@@ -525,7 +526,7 @@
                 data: {
                     "_token": "{{ csrf_token() }}",
                     "id_pr": id,
-                    "kode_material": $('#pcode').val(),
+                    "kode_material": $('#material_kode').val(),
                     "uraian": $('#pname').val(),
                     "stock": $('#stock').val(),
                     "spek": $('#spek').val(),

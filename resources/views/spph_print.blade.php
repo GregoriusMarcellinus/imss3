@@ -159,25 +159,25 @@
             <table class="table" align="center">
                 <thead>
                     <tr>
-                        <th>No</th>
-                        <th>Deskripsi</th>
-                        <th>Spesifikasi</th>
-                        <th>Qty</th>
-                        <th>Sat</th>
+                        <th style="text-align: center">No</th>
+                        <th style="text-align: center">Deskripsi</th>
+                        <th style="text-align: center">Spesifikasi</th>
+                        <th style="text-align: center">Qty</th>
+                        <th style="text-align: center">Sat</th>
                     </tr>
                 </thead>
                 <tbody>
                     @forelse ($spph->details as $item)
                         <tr>
-                            <td>{{ $loop->iteration }}</td>
-                            <td>{{ $item->uraian }}</td>
-                            <td>{{ $item->spek }}</td>
-                            <td>{{ $item->qty }}</td>
-                            <td>{{ $item->satuan }}</td>
+                            <td style="text-align: center">{{ $loop->iteration }}</td>
+                            <td style="text-align: center">{{ $item->uraian }}</td>
+                            <td style="word-wrap: break-word">{{ $item->spek }}</td>
+                            <td style="text-align: center">{{ $item->qty }}</td>
+                            <td style="text-align: center">{{ $item->satuan }}</td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="text-center">Tidak ada data</td>
+                            <td colspan="5" class="text-center" style="text-align: center">Tidak ada data</td>
                         </tr>
                     @endforelse
                 </tbody>
