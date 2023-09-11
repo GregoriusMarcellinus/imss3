@@ -412,6 +412,7 @@
         function addPR() {
             $('#modal-title').text("Add Purchase Request");
             $('#button-save').text("Tambahkan");
+            $('#save_id').val("");
             resetForm();
         }
 

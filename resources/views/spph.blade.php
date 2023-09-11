@@ -364,6 +364,7 @@
         function addSPPH() {
             $('#modal-title').text("Add New SPPH");
             $('#button-save').text("Tambahkan");
+            $('#save_id').val("");
             resetForm();
         }
 
@@ -399,7 +400,7 @@
             resetForm();
             $('#save_id').val(data.id);
             $('#nomor_spph').val(data.nomor_spph);
-            $('#lampiran').val(data.lampiran);  
+            $('#lampiran').val(data.lampiran);
             $('#penerima').val(data.penerima);
             $('#alamat').val(data.alamat);
             $('#perihal').val(data.perihal);
