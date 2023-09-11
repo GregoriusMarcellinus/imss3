@@ -11,6 +11,7 @@ class Spph extends Model
     protected $table = 'spph';
     protected $fillable = [
         'nomor_spph',
+        'lampiran',
         'tanggal_spph',
         'batas_spph',
         'perihal',

@@ -16,6 +16,7 @@ class CreateSpphTable extends Migration
         Schema::create('spph', function (Blueprint $table) {
             $table->id();
             $table->string('nomor_spph');
+            $table->integer('lampiran');
             $table->date('tanggal_spph');
             $table->string('batas_spph');
             $table->string('perihal');

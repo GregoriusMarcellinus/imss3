@@ -134,7 +134,7 @@
         <div class="info-surat">
             <p><span class="label">Nomor Surat &nbsp;&nbsp;: {{ $spph->nomor_spph }}</span></p>
             <p><span class="label">Lampiran&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
-                    {{ __($page_count) }} Lembar</span>
+                    {{ __($spph->lampiran)}} Lembar</span></p>
             </p>
             <p><span class="label">Perihal &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
                 </span>{{ $spph->perihal }}</p>

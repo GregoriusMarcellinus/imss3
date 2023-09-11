@@ -42,6 +42,7 @@
                                 <tr class="text-center">
                                     <th>No.</th>
                                     <th>{{ __('Nomor SPPH') }}</th>
+                                    <th>{{ __('Lampiran') }}</th>
                                     <th>{{ __('Perihal') }}</th>
                                     <th>{{ __('Tanggal SPPH') }}</th>
                                     <th>{{ __('Batas SPPH') }}</th>
@@ -56,6 +57,7 @@
                                             $data = [
                                                 'no' => $spphes->firstItem() + $key,
                                                 'nomor_spph' => $d->nomor_spph,
+                                                'lampiran' => $d->lampiran,
                                                 'perihal' => $d->perihal,
                                                 'tanggal' => date('d/m/Y', strtotime($d->tanggal_spph)),
                                                 'batas' => date('d/m/Y', strtotime($d->batas_spph)),
@@ -68,6 +70,7 @@
                                         <tr>
                                             <td class="text-center">{{ $data['no'] }}</td>
                                             <td class="text-center">{{ $data['nomor_spph'] }}</td>
+                                            <td class="text-center">{{ $data['lampiran'] }}</td>
                                             <td class="text-center">{{ $data['perihal'] }}</td>
                                             <td class="text-center">{{ $data['tanggal'] }}</td>
                                             <td class="text-center">{{ $data['batas'] }}</td>
@@ -124,6 +127,13 @@
                                 <label for="nomor_spph" class="col-sm-4 col-form-label">{{ __('Nomor SPPH') }} </label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="nomor_spph" name="nomor_spph">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="lampiran" class="col-sm-4 col-form-label">{{ __('Lampiran') }}
+                                </label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="lampiran" name="lampiran">
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -389,6 +399,7 @@
             resetForm();
             $('#save_id').val(data.id);
             $('#nomor_spph').val(data.nomor_spph);
+            $('#lampiran').val(data.lampiran);  
             $('#penerima').val(data.penerima);
             $('#alamat').val(data.alamat);
             $('#perihal').val(data.perihal);

@@ -60,6 +60,7 @@ class SpphController extends Controller
 
         $request->validate([
             'nomor_spph' => 'required',
+            // 'lampiran' => 'required',
             'tanggal_spph' => 'required',
             'batas_spph' => 'required',
             'perihal' => 'required',
@@ -67,6 +68,7 @@ class SpphController extends Controller
             'alamat' => 'required'
         ], [
             'nomor_spph.required' => 'Nomor SPPH harus diisi',
+            // 'lampiran.required' => 'Lampiran harus diisi',
             'tanggal_spph.required' => 'Tanggal SPPH harus diisi',
             'batas_spph.required' => 'Batas SPPH harus diisi',
             'perihal.required' => 'Perihal harus diisi',
@@ -76,6 +78,7 @@ class SpphController extends Controller
 
         $data = [
             'nomor_spph' => $request->nomor_spph,
+            'lampiran' => $request->lampiran,
             'tanggal_spph' => $request->tanggal_spph,
             'batas_spph' => $request->batas_spph,
             'perihal' => $request->perihal,
@@ -184,13 +187,16 @@ class SpphController extends Controller
 
         // dd($spph);
 
-        $page_count = 0;
-        $dummy = PDF::loadview('spph_print', compact('spph', 'page_count'));
-        $dummy->setPaper('A4', 'Potrait');
+        // $page_count = 0;
+        // $dummy = PDF::loadview('spph_print', compact('spph', 'page_count'));
+        // $dummy->setPaper('A4', 'Potrait');
+        // $no_spph = $spph->nomor_spph;
+        // $dummy->render();
+        // $page_count = $dummy->get_canvas()->get_page_count();
+        // $pdf = PDF::loadview('spph_print', compact('spph', 'page_count'));
+
+        $pdf = PDF::loadview('spph_print', compact('spph'));
         $no_spph = $spph->nomor_spph;
-        $dummy->render();
-        $page_count = $dummy->get_canvas()->get_page_count();
-        $pdf = PDF::loadview('spph_print', compact('spph', 'page_count'));
         $pdf->setPaper('A4', 'Potrait');
         return $pdf->stream('SPPH_' . $no_spph . '.pdf');
     }
