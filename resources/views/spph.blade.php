@@ -54,6 +54,9 @@
                                 @if (count($spphes) > 0)
                                     @foreach ($spphes as $key => $d)
                                         @php
+                                            $penerima = $d->penerima;
+                                            $penerima = json_decode($penerima);
+                                            $penerima = implode(', ', $penerima);
                                             $data = [
                                                 'no' => $spphes->firstItem() + $key,
                                                 'nomor_spph' => $d->nomor_spph,
@@ -61,7 +64,7 @@
                                                 'perihal' => $d->perihal,
                                                 'tanggal' => date('d/m/Y', strtotime($d->tanggal_spph)),
                                                 'batas' => date('d/m/Y', strtotime($d->batas_spph)),
-                                                'penerima' => $d->penerima,
+                                                'penerima' => $penerima,
                                                 'alamat' => $d->alamat,
                                                 'id' => $d->id,
                                             ];
