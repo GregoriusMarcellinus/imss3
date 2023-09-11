@@ -212,14 +212,14 @@
                                     <div class="table-responsive">
                                         <table class="table table-bordered">
                                             <thead>
-                                                <th>{{__('NO')}}</th>
-                                                <th>{{__('Kode Material')}}</th>
-                                                <th>{{__('Uraian Barang/Jasa')}}</th>
-                                                <th>{{__('Spesifikasi')}}</th>
-                                                <th>{{__('QTY')}}</th>
-                                                <th>{{__('SAT')}}</th>
-                                                <th>{{__('Waktu Penyelesaian')}}</th>
-                                                <th>{{__('Keterangan')}}</th>
+                                                <th>{{ __('NO') }}</th>
+                                                <th>{{ __('Kode Material') }}</th>
+                                                <th>{{ __('Uraian Barang/Jasa') }}</th>
+                                                <th>{{ __('Spesifikasi') }}</th>
+                                                <th>{{ __('QTY') }}</th>
+                                                <th>{{ __('SAT') }}</th>
+                                                <th>{{ __('Waktu Penyelesaian') }}</th>
+                                                <th>{{ __('Keterangan') }}</th>
                                             </thead>
 
                                             <tbody id="table-pr">
@@ -230,7 +230,20 @@
                                 <div class="col-0 d-none" id="container-product">
                                     <div class="card">
                                         <div class="card-body">
+                                            {{-- //radio button with label INKA or IMSS option --}}
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" id="customRadio1" name="ptype"
+                                                    class="custom-control-input" checked value="inka">
+                                                <label class="custom-control-label" for="customRadio1">INKA</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" id="customRadio2" name="ptype"
+                                                    class="custom-control-input" value="imss">
+                                                <label class="custom-control-label" for="customRadio2">IMSS</label>
+                                            </div>
+
                                             <div class="input-group input-group-lg">
+
                                                 <input type="text" class="form-control" id="pcode" name="pcode"
                                                     min="0" placeholder="Product Code">
                                                 <div class="input-group-append">
@@ -260,18 +273,16 @@
                                                     <label for="material_kode"
                                                         class="col-sm-4 col-form-label">{{ __('Kode Material') }}</label>
                                                     <div class="col-sm-8">
-                                                        <input type="text" class="form-control" id="material_kode"
-                                                            >
+                                                        <input type="text" class="form-control" id="material_kode">
                                                         <input type="hidden" class="form-control" id="pr_id"
-                                                        disabled>
+                                                            disabled>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label for="pname"
                                                         class="col-sm-4 col-form-label">{{ __('Nama Barang') }}</label>
                                                     <div class="col-sm-8">
-                                                        <input type="text" class="form-control" id="pname"
-                                                            >
+                                                        <input type="text" class="form-control" id="pname">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -462,16 +473,17 @@
             }
         }
 
-        $('#form').hide();
+        // $('#form').hide();
 
         function productCheck() {
             var pcode = $('#pcode').val();
+            var ptype = $('input[name="ptype"]:checked').val();
             if (pcode.length > 0) {
                 loader();
                 $('#pcode').prop("disabled", true);
                 $('#button-check').prop("disabled", true);
                 $.ajax({
-                    url: '/products/check/' + pcode,
+                    url: '/materials?type=' + ptype + '&kode=' + pcode,
                     type: "GET",
                     data: {
                         "format": "json"
@@ -483,13 +495,12 @@
                     },
                     success: function(data) {
                         loader(0);
-                        if (data.status == 1) {
+                        if (data.success) {
                             $('#form').show();
-                            $('#pid').val(data.data.product_id);
-                            $('#product_id').val(data.data.product_id);
-                            $('#pname').val(data.data.product_name);
-                            $('#material_kode').val(data.data.product_code);
+                            $('#pname').val(data.materials.nama_barang);
+                            $('#material_kode').val(data.materials.kode_material);
                         } else {
+                            $('#form').show();
                             toastr.error("Product Code tidak dikenal!");
                         }
                         $('#pcode').prop("disabled", false);
@@ -513,7 +524,9 @@
             $('#satuan').val("");
             $('#keterangan').val("");
             $('#waktu').val("");
-            $('#form').hide();
+            $('#pcode').val("");
+            $('#material_kode').val("");
+            // $('#form').hide();
         }
 
         function PRupdate() {
@@ -530,7 +543,7 @@
                     "stock": $('#stock').val(),
                     "spek": $('#spek').val(),
                     "satuan": $('#satuan').val(),
-                    "waktu": $('#waktu').val(), 
+                    "waktu": $('#waktu').val(),
                     "keterangan": $('#keterangan').val(),
 
                 },
@@ -563,7 +576,8 @@
                                 value
                                 .spek + '</td><td>' + value.qty + '</td><td>' + value
                                 .satuan +
-                                '</td><td>' + value.waktu + '</td><td>'+ value.keterangan ?? '' + '</td></tr>');
+                                '</td><td>' + value.waktu + '</td><td>' + value.keterangan ?? '' +
+                                '</td></tr>');
                         });
                     }
                 }
@@ -580,6 +594,7 @@
 
         function lihatSjn(data) {
             emptyTableProducts();
+            clearForm()
             $('#modal-title').text("Detail Request");
             $('#button-save').text("Cetak");
             resetForm();
@@ -621,7 +636,8 @@
                                 value
                                 .spek + '</td><td>' + value.qty + '</td><td>' + value
                                 .satuan +
-                                '</td><td>' + value.waktu + '</td><td>'+ value.keterangan ?? '' + '</td></tr>');
+                                '</td><td>' + value.waktu + '</td><td>' + value.keterangan ?? '' +
+                                '</td></tr>');
                         });
                     }
                     //remove loading

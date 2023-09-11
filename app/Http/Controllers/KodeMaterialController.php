@@ -115,14 +115,43 @@ class KodeMaterialController extends Controller
     {
         $type = $request->type; //inka or imss
 
-        $materials = SheetController::getDataSheet($request)->original;
+        $kode = $request->kode;
 
-        $data = [
-            'success' => true,
-            'message' => 'Data berhasil diambil',
-            'materials' => $materials,
-        ];
+        if (!$kode) {
+            $materials = SheetController::getDataSheet($request)->original;
+            $data = [
+                'success' => true,
+                'message' => 'Data berhasil diambil',
+                'materials' => $materials,
+            ];
 
-        return response()->json($data);
+            return response()->json($data);
+        } else {
+            $materials = SheetController::getDataSheet($request)->original;
+            $materials = collect($materials)->filter(function ($item) use ($kode) {
+                //search by kode_material or nama_barang
+                return false !== stristr($item['kode_material'], $kode) || false !== stristr($item['nama_barang'], $kode);
+            });
+
+            if ($materials->count() == 0) {
+                $data = [
+                    'success' => false,
+                    'message' => 'Data tidak ditemukan',
+                    'materials' => [],
+                ];
+
+                return response()->json($data);
+            } else {
+                $materials = $materials[0];
+                $data = [
+                    'success' => true,
+                    'message' => 'Data ditemukan',
+                    'materials' => $materials,
+                ];
+                //return only 1 item array
+
+                return response()->json($data);
+            }
+        }
     }
 }
