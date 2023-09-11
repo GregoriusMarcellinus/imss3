@@ -142,6 +142,9 @@ class SpphController extends Controller
     {
         $id = $request->id;
         $spph = Spph::where('id', $id)->first();
+        //join spph penerima ['x','y'] to x,y
+        $spph->penerima = json_decode($spph->penerima);
+        $spph->penerima = implode(', ', $spph->penerima);
 
         $spph->details = DetailSpph::where('spph_id', $id)
             ->leftjoin('detail_pr', 'detail_pr.id', '=', 'detail_spph.id_detail_pr')
@@ -195,7 +198,24 @@ class SpphController extends Controller
         // $page_count = $dummy->get_canvas()->get_page_count();
         // $pdf = PDF::loadview('spph_print', compact('spph', 'page_count'));
 
-        $pdf = PDF::loadview('spph_print', compact('spph'));
+        $penerimas = $spph->penerima;
+        $penerimas = json_decode($penerimas);
+
+        $alamats = $spph->alamat;
+        $alamats = json_decode($alamats);
+
+        $newObjects = [];
+        foreach ($penerimas as $key => $penerima) {
+            $newObject = new \stdClass();
+            $newObject->nama = $penerima;
+            $newObject->alamat = $alamats[$key];
+            $newObjects[] = $newObject;
+        }
+
+        $spphs = $newObjects;
+        $count = count($spphs);
+
+        $pdf = PDF::loadview('spph_print', compact('spph', 'spphs', 'count'));
         $no_spph = $spph->nomor_spph;
         $pdf->setPaper('A4', 'Potrait');
         return $pdf->stream('SPPH_' . $no_spph . '.pdf');
@@ -212,6 +232,8 @@ class SpphController extends Controller
         ]);
 
         $spph = Spph::where('id', $id)->first();
+        $spph->penerima = json_decode($spph->penerima);
+        $spph->penerima = implode(', ', $spph->penerima);
 
         $spph->details = DetailSpph::where('spph_id', $id)
             ->leftjoin('detail_pr', 'detail_pr.id', '=', 'detail_spph.id_detail_pr')

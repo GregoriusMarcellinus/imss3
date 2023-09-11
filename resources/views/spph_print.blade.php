@@ -101,6 +101,10 @@
             width: 100%;
             border: 1px solid #000;
         }
+
+        .page-break {
+            page-break-after: always;
+        }
     </style>
 </head>
 
@@ -128,112 +132,122 @@
 
     <div class="container">
 
-        <div class="date">
-            <p>{{ $spph->tanggal_spph }}</p>
-        </div>
-        <div class="info-surat">
-            <p><span class="label">Nomor Surat &nbsp;&nbsp;: {{ $spph->nomor_spph }}</span></p>
-            <p><span class="label">Lampiran&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
-                    {{ __($spph->lampiran) > 0 ? $spph->lampiran . ' Lembar' : '-' }}</span></p>
-            </p>
-            <p><span class="label">Perihal &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
-                </span>{{ $spph->perihal }}</p>
-        </div>
-        <div class="address">
-            <br>
-            <p>Kepada Yth,</p>
-            <p>
-                <b>{!! nl2br($spph->penerima) !!}</b>
-            </p>
-            <p>{{ $spph->alamat }}</p>
-        </div>
-        <div style="clear: both;"></div>
-        <div class="judul-konten"><u>SURAT PERMINTAAN PENAWARAN HARGA</u><br>(SPPH)</div>
-        <div class="content">
-            <p>Dengan Hormat,</p>
-            <p style="text-align: justify">
-                Memberitahukan bahwa perusahaan kami dalam waktu dekat ini bermaksud untuk melakukan pekerjaan sebagai
-                tersebut :
-            </p>
+        @foreach ($spphs as $sp)
+            {{-- {{ $sp->nama }} --}}
+            <div class="date">
+                <p>{{ $spph->tanggal_spph }}</p>
+            </div>
+            <div class="info-surat">
+                <p><span class="label">Nomor Surat &nbsp;&nbsp;: {{ $spph->nomor_spph }}</span></p>
+                <p><span class="label">Lampiran&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+                        {{ __($spph->lampiran) > 0 ? $spph->lampiran . ' Lembar' : '-' }}</span></p>
+                </p>
+                <p><span class="label">Perihal &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+                    </span>{{ $spph->perihal }}</p>
+            </div>
+            <div class="address">
+                <br>
+                <p>Kepada Yth,</p>
+                <p>
+                    <b>{!! nl2br($sp->nama) !!}</b>
+                </p>
+                <p>{{ $sp->alamat }}</p>
+            </div>
+            <div style="clear: both;"></div>
+            <div class="judul-konten"><u>SURAT PERMINTAAN PENAWARAN HARGA</u><br>(SPPH)</div>
+            <div class="content">
+                <p>Dengan Hormat,</p>
+                <p style="text-align: justify">
+                    Memberitahukan bahwa perusahaan kami dalam waktu dekat ini bermaksud untuk melakukan pekerjaan
+                    sebagai
+                    tersebut :
+                </p>
 
-            <table class="table" align="center">
-                <thead>
+                <table class="table" align="center">
+                    <thead>
+                        <tr>
+                            <th style="text-align: center">No</th>
+                            <th style="text-align: center">Deskripsi</th>
+                            <th style="text-align: center">Spesifikasi</th>
+                            <th style="text-align: center">Qty</th>
+                            <th style="text-align: center">Sat</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse ($spph->details as $item)
+                            <tr>
+                                <td style="text-align: center">{{ $loop->iteration }}</td>
+                                <td style="text-align: center">{{ $item->uraian }}</td>
+                                <td style="word-wrap: break-word">{{ $item->spek }}</td>
+                                <td style="text-align: center">{{ $item->qty }}</td>
+                                <td style="text-align: center">{{ $item->satuan }}</td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="text-center" style="text-align: center">Tidak ada data</td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+
+                <p style="text-align: justify">
+                    Berkaitan dengan hal tersebut diatas mohon bantuannya untuk Penawaran Harga pekerjaan dimaksud.
+                    Jawaban atas penawaran referensi harga kami tunggu paling lambat <b>{{ $spph->batas_spph }}</b>
+                    dengan
+                    catatan
+                    sebagai berikut :
+                </p>
+
+                <table class="tabel-2" style="width:100%">
                     <tr>
-                        <th style="text-align: center">No</th>
-                        <th style="text-align: center">Deskripsi</th>
-                        <th style="text-align: center">Spesifikasi</th>
-                        <th style="text-align: center">Qty</th>
-                        <th style="text-align: center">Sat</th>
+                        <td style="width: 1rem;vertical-align:top">1.</td>
+                        <td style="width: 10rem;vertical-align:top">Delivery</td>
+                        <td style="vertical-align:top">:</td>
+                        <td style="vertical-align:top">2 (dua) minggu setelah PO</td>
                     </tr>
-                </thead>
-                <tbody>
-                    @forelse ($spph->details as $item)
-                        <tr>
-                            <td style="text-align: center">{{ $loop->iteration }}</td>
-                            <td style="text-align: center">{{ $item->uraian }}</td>
-                            <td style="word-wrap: break-word">{{ $item->spek }}</td>
-                            <td style="text-align: center">{{ $item->qty }}</td>
-                            <td style="text-align: center">{{ $item->satuan }}</td>
-                        </tr>
-                    @empty
-                        <tr>
-                            <td colspan="5" class="text-center" style="text-align: center">Tidak ada data</td>
-                        </tr>
-                    @endforelse
-                </tbody>
-            </table>
+                    <tr>
+                        <td>2.</td>
+                        <td>Franko</td>
+                        <td>:</td>
+                        <td>PT IMSS </td>
+                    </tr>
+                    <tr>
+                        <td style="vertical-align:top">3.</td>
+                        <td style="vertical-align:top">Termin Pembayaran</td>
+                        <td style="vertical-align:top">:</td>
+                        <td style="text-align: justify">Pembayaran 30 hari setelah barang diterima baik dan benar, serta
+                            dokumen penagihan diterima
+                            dengan benar & lengkap oleh PT IMSS</td>
+                    </tr>
+                </table>
 
-            <p style="text-align: justify">
-                Berkaitan dengan hal tersebut diatas mohon bantuannya untuk Penawaran Harga pekerjaan dimaksud.
-                Jawaban atas penawaran referensi harga kami tunggu paling lambat <b>{{ $spph->batas_spph }}</b> dengan
-                catatan
-                sebagai berikut :
-            </p>
+                <p>Demikian kami sampaikan, atas kerjasamanya diucapkan terima kasih.</p>
+            </div>
 
-            <table class="tabel-2" style="width:100%">
-                <tr>
-                    <td style="width: 1rem;vertical-align:top">1.</td>
-                    <td style="width: 10rem;vertical-align:top">Delivery</td>
-                    <td style="vertical-align:top">:</td>
-                    <td style="vertical-align:top">2 (dua) minggu setelah PO</td>
-                </tr>
-                <tr>
-                    <td>2.</td>
-                    <td>Franko</td>
-                    <td>:</td>
-                    <td>PT IMSS </td>
-                </tr>
-                <tr>
-                    <td style="vertical-align:top">3.</td>
-                    <td style="vertical-align:top">Termin Pembayaran</td>
-                    <td style="vertical-align:top">:</td>
-                    <td style="text-align: justify">Pembayaran 30 hari setelah barang diterima baik dan benar, serta
-                        dokumen penagihan diterima
-                        dengan benar & lengkap oleh PT IMSS</td>
-                </tr>
-            </table>
+            <div style="margin-left: 65%; width: 50%; margin-top: 5%">
+                <table class="w-100">
+                    <tr>
+                        <td class="text-center"><b>PT INKA MULTI SOLUSI SERVICE</b></td>
+                    </tr>
+                    <tr>
+                        <td class="text-center" style="text-align: center"><b>KEPALA DEPARTEMEN LOGISTIK</b></td>
+                    </tr>
+                    <tr>
+                        <td style="height: 70px"></td>
+                    </tr>
+                    <tr>
+                        <td class="text-center" style="text-align: center"><b style="text-decoration: underline; ">(RUDI
+                                HARIYANTO)</b>
+                        </td>
+                    </tr>
+                </table>
+            </div>
 
-            <p>Demikian kami sampaikan, atas kerjasamanya diucapkan terima kasih.</p>
-        </div>
+            @if ($count > 1 && $loop->iteration < $count)
+                <div class="page-break"></div>
+            @endif
+        @endforeach
 
-        <div style="margin-left: 65%; width: 50%; margin-top: 5%">
-            <table class="w-100">
-                <tr>
-                    <td class="text-center"><b>PT INKA MULTI SOLUSI SERVICE</b></td>
-                </tr>
-                <tr>
-                    <td class="text-center" style="text-align: center"><b>KEPALA DEPARTEMEN LOGISTIK</b></td>
-                </tr>
-                <tr>
-                    <td style="height: 70px"></td>
-                </tr>
-                <tr>
-                    <td class="text-center" style="text-align: center"><b style="text-decoration: underline; ">(RUDI
-                            HARIYANTO)</b>
-                    </td>
-                </tr>
-            </table>
-        </div>
     </div>
     {{-- <script type="text/php">
         if ( isset($pdf) ) {
