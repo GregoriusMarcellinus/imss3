@@ -136,7 +136,7 @@ class ProductController extends Controller
 
         $sjnExport = $sjn;
 
-        
+
 
         if (!empty($search)) {
             $products = $products->orWhere([["sjn.nama_barang", "LIKE", "%" . $search . "%"], ["sjn.warehouse_id", $warehouse_id]])
@@ -160,31 +160,31 @@ class ProductController extends Controller
         $sjn = $sjn->paginate(50);
 
         $warehouse = $this->getWarehouse();
-        
-            $tmp            = $sjnExport->orderBy("sjn.sjn_id", "asc")->get();
-            $fn             = 'sjn_' . time();
 
-            
+        $tmp            = $sjnExport->orderBy("sjn.sjn_id", "asc")->get();
+        $fn             = 'sjn_' . time();
 
-            $productExport  = [];
 
-            // foreach ($tmp as $t) {
-            //     $productExport[] = [
-            //         "KODE BARANG"         => $t->product_code,
-            //         "NAMA BARANG"         => $t->product_name,
-            //         "SPESIFIKASI"         => $t->spesifikasi,
-            //         "STOK"                => $t->product_amount,
-            //         "satuan"              => $t->satuan,
-            //         "LOKASI"              => $t->category_name,
 
-            //     ];
-            // }
+        $productExport  = [];
 
-            if ($dl == "xls") {
-                return (new ProductsExport($productExport))->download($fn . '.xls', \Maatwebsite\Excel\Excel::XLS);
-            } else if ($dl == "pdf") {
-                return (new ProductsExport($productExport))->download($fn . '.pdf');
-            }
+        // foreach ($tmp as $t) {
+        //     $productExport[] = [
+        //         "KODE BARANG"         => $t->product_code,
+        //         "NAMA BARANG"         => $t->product_name,
+        //         "SPESIFIKASI"         => $t->spesifikasi,
+        //         "STOK"                => $t->product_amount,
+        //         "satuan"              => $t->satuan,
+        //         "LOKASI"              => $t->category_name,
+
+        //     ];
+        // }
+
+        if ($dl == "xls") {
+            return (new ProductsExport($productExport))->download($fn . '.xls', \Maatwebsite\Excel\Excel::XLS);
+        } else if ($dl == "pdf") {
+            return (new ProductsExport($productExport))->download($fn . '.pdf');
+        }
 
         return View::make("sjn")->with(compact("sjn", "warehouse"));
     }
@@ -413,7 +413,7 @@ class ProductController extends Controller
             "product_code"      => $req->product_code,
             "product_name"      => $req->product_name,
             "spesifikasi"    => $req->spesifikasi,
-            "stock_awal"        => $req->stock_awal,
+            "stock_awal"        => $req->stock_awal ?? 0,
             "keproyekan_id"     => $req->keproyekan,
             "satuan"        => $req->satuan,
             "category_id"       => $req->category,
@@ -429,6 +429,35 @@ class ProductController extends Controller
             }
         } else {
             $update = DB::table('products')->where("product_id", $req->id)->update($data);
+            // dd($update);
+            $stock = $req->stock;
+
+            $totalStockIn   = DB::table('stock')->where([["product_id", $req->id], ["type", 1]])->sum("product_amount");
+            $totalStockOut  = DB::table('stock')->where([["product_id", $req->id], ["type", 0]])->sum("product_amount");
+            $availableStock = $totalStockIn - $totalStockOut;
+            $actual_ammount = $availableStock;
+
+            if ($stock > $actual_ammount) {
+                $amount = $stock - $actual_ammount;
+                $type = 1;
+            } else {
+                $amount = $actual_ammount - $stock;
+                $type = 0;
+            }
+
+            $data = [
+                "user_id"           => Auth::user()->id,
+                "warehouse_id"      => $warehouse_id,
+                "product_id"        => $req->id,
+                "stock_name"        => 'input manual',
+                "no_nota"           => '-',
+                "product_amount"    => $amount,
+                "shelf_id"          => 0,
+                "type"              => $type,
+                'ending_amount'     => $stock
+            ];
+
+            DB::table('stock')->insert($data);
 
             if ($update) {
                 $req->session()->flash('success', "Product berhasil diubah.");
