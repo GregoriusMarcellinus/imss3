@@ -338,7 +338,7 @@
                                 </div>
                             </div>
                             <div class="col-0 d-none" id="container-product">
-                                {{-- <div class="card">
+                                <div class="card">
                                     <div class="card-body">
                                         <div class="input-group input-group-lg">
                                             <input type="text" class="form-control" id="pcode" name="pcode"
@@ -351,7 +351,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div> --}}
+                                </div>
                                 <div id="loader" class="card">
                                     <div class="card-body text-center">
                                         <div class="spinner-border text-danger" style="width: 3rem; height: 3rem;"
@@ -396,6 +396,30 @@
                                                 <div class="col-sm-8">
                                                     <input type="text" class="form-control" id="unit"
                                                         name="unit">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="hunit"
+                                                    class="col-sm-4 col-form-label">{{ __('Harga Per Unit') }}</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" class="form-control" id="hunit"
+                                                        name="hunit">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="mata-uang"
+                                                    class="col-sm-4 col-form-label">{{ __('Mata Uang') }}</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" class="form-control" id="mata-uang"
+                                                        name="mata-uang">
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="vat"
+                                                    class="col-sm-4 col-form-label">{{ __('VAT') }}</label>
+                                                <div class="col-sm-8">
+                                                    <input type="text" class="form-control" id="vat"
+                                                        name="vat">
                                                 </div>
                                             </div>
                                         </form>
@@ -647,6 +671,48 @@
                 $('#container-form').addClass('col-12');
                 $('#container-form').removeClass('col-8');
                 $('#button-tambah-detail').removeClass('d-none');
+            }
+        }
+
+        function productCheck() {
+            var pcode = $('#pcode').val();
+            var ptype = $('input[name="ptype"]:checked').val();
+            if (pcode.length > 0) {
+                loader();
+                $('#pcode').prop("disabled", true);
+                $('#button-check').prop("disabled", true);
+                $.ajax({
+                    url: '/materials?type=' + ptype + '&kode=' + pcode,
+                    type: "GET",
+                    data: {
+                        "format": "json"
+                    },
+                    dataType: "json",
+                    beforeSend: function() {
+                        $('#loader').show();
+                        $('#form').hide();
+
+                    },
+                    success: function(data) {
+                        loader(0);
+                        if (data.success) {
+                            $('#form').show();
+                            $('#pname').val(data.materials.nama_barang);
+                            $('#material_kode').val(data.materials.kode_material);
+                        } else {
+                            $('#form').show();
+                            toastr.error("Product Code tidak dikenal!");
+                        }
+                        $('#pcode').prop("disabled", false);
+                        $('#button-check').prop("disabled", false);
+                    },
+                    error: function() {
+                        $('#pcode').prop("disabled", false);
+                        $('#button-check').prop("disabled", false);
+                    }
+                });
+            } else {
+                toastr.error("Product Code belum diisi!");
             }
         }
 
