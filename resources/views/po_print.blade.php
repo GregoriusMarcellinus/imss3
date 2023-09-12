@@ -27,24 +27,9 @@
         table {
             border-collapse: collapse;
             padding: 20px
+            
         }
-
-        table,
-        td,
-        th {
-            /* border: 1px solid black; */
-        }
-
-        .table {
-            width: 100%;
-            border: 1px solid black;
-        }
-
-        .table tr {
-            border: 1px solid black;
-            /* padding: 5px; */
-        }
-
+        
         td {
             padding-left: 10px;
             padding-right: 10px;
@@ -53,22 +38,18 @@
         th {
             padding: 15px 15px 15px 25px;
         }
+        .table {
+            width: 100%;
+            border: 1px solid black;
+        }
+
+        .table tr, .table th, .table td {
+            border: 1px solid black;
+        }
+
 
         .page_break {
             page-break-before: always;
-        }
-
-        .td-no-top-border {
-            border-top: 1px solid transparent !important;
-        }
-
-        .td-no-left-right-border {
-            border-left: 1px solid transparent !important;
-            border-right: 1px solid transparent !important;
-        }
-
-        .td-no-left-border {
-            border-left: 1px solid transparent !important;
         }
 
         .pagenum:before {
@@ -100,8 +81,7 @@
             top: 0.1cm;
             left: 0.5cm;
             right: 0.5cm;
-            /* height: 5.5cm; */
-            /* margin-bottom: 400px; */
+            height: 5.5cm;
         }
 
         .table2 tr {
@@ -146,7 +126,7 @@
                     </td>
                 </tr>
                 <tr>
-                    <td style="text-align: left;">NO PO</td>
+                    <td style="text-align: left;width: 8rem">NO PO</td>
                     <td style="text-align: left;">: <span>{{ $po->no_po }}</span></td>
                 </tr>
                 <tr>
@@ -206,16 +186,16 @@
         <tbody>
             @forelse ($po->details as $item)
                 <tr>
-                    <td>{{ $loop->iteration }}</td>
+                    <td style="text-align: center;">{{ $loop->iteration }}</td>
                     <td>{{ $item->kode_material }}</td>
                     <td>{{ $item->uraian }}</td>
-                    <td>{{ $item->batas_akhir_diterima ?? '-' }}</td>
-                    <td>{{ $item->qty }}</td>
-                    <td>{{ $item->satuan }}</td>
-                    <td>{{ $item->harga_per_unit ?? '-' }}</td>
-                    <td>{{ $item->mata_uang ?? '-' }}</td>
-                    <td>{{ $item->vat ?? '-' }}</td>
-                    <td>{{ $item->total ?? '-' }}</td>
+                    <td style="text-align: center;">{{ $item->batas_akhir_diterima ?? '-' }}</td>
+                    <td style="text-align: center;">{{ $item->qty }}</td>
+                    <td style="text-align: center;">{{ $item->satuan }}</td>
+                    <td style="text-align: center;">{{ $item->harga_per_unit ?? '-' }}</td>
+                    <td style="text-align: center;">{{ $item->mata_uang ?? '-' }}</td>
+                    <td style="text-align: center;">{{ $item->vat ?? '-' }}</td>
+                    <td style="text-align: center;">{{ $item->total ?? '-' }}</td>
                 </tr>
             @empty
                 <tr>
