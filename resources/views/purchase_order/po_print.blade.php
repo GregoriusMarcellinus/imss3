@@ -11,7 +11,7 @@
             margin-top: 8cm;
             margin-left: 0.5cm;
             margin-right: 0.5cm;
-            margin-bottom: 0.5cm;
+            margin-bottom: 1.5cm;
         }
 
         * {
@@ -199,7 +199,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="10" class="text-center">Tidak ada data</td>
+                    <td colspan="10" style="text-align: center">Tidak ada data</td>
                 </tr>
             @endforelse
         </tbody>

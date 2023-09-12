@@ -44,7 +44,7 @@ class PurchaseOrderController extends Controller
             return response()->json($purchases);
         } else {
             $prs = PurchaseRequest::all();
-            return view('purchase_order', compact('purchases', 'vendors', 'proyeks', 'prs'));
+            return view('purchase_order.purchase_order', compact('purchases', 'vendors', 'proyeks', 'prs'));
         }
     }
 
@@ -196,7 +196,7 @@ class PurchaseOrderController extends Controller
     public function cetakPo(Request $request)
     {
         $id = $request->id_po;
-        $po = Purchase_Order::select('purchase_order.*', 'vendor.nama as nama_vendor', 'vendor.alamat as alamat_vendor', 'vendor.telp as telp_vendor', 'vendor.email as email_vendor', 'vendor.fax as fax_vendor',  'keproyekan.nama_proyek as nama_proyek')
+        $po = Purchase_Order::select('purchase_order.*', 'vendor.nama as nama_vendor', 'vendor.alamat as alamat_vendor', 'vendor.telp as telp_vendor', 'vendor.email as email_vendor', 'vendor.fax as fax_vendor',  'keproyekan.nama_proyek as nama_proyek', 'purchase_request.no_pr as pr_no')
             ->join('vendor', 'vendor.id', '=', 'purchase_order.vendor_id')
             ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_order.proyek_id')
             ->leftjoin('purchase_request', 'purchase_request.id', '=', 'purchase_order.pr_id')
@@ -205,7 +205,7 @@ class PurchaseOrderController extends Controller
         $po->batas_po = Carbon::parse($po->batas_po)->isoFormat('D MMMM Y');
         $po->tanggal_po = Carbon::parse($po->tanggal_po)->isoFormat('D MMMM Y');
         $po->details = DetailPR::where('id_pr', $po->pr_id)->get();
-        $pdf = PDF::loadview('po_print', compact('po'));
+        $pdf = PDF::loadview('purchase_order.po_print', compact('po'));
         $pdf->setPaper('A4', 'landscape');
         $nama = $po->nama_proyek;
         return $pdf->stream('PO-' . $nama . '.pdf');

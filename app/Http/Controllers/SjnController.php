@@ -255,7 +255,7 @@ class SjnController extends Controller
         $sjn->datetime = Carbon::parse($sjn->datetime)->isoFormat('D MMMM Y');
 
         // return view('sjn_print', compact('sjn'));
-        $pdf = PDF::loadview('sjn_print', compact('sjn'));
+        $pdf = PDF::loadview('sjn.sjn_print', compact('sjn'));
         $no_sjn = $sjn->no_sjn;
         //stream with no_sjn title
         return $pdf->stream('SJN-' . $no_sjn . '.pdf');
