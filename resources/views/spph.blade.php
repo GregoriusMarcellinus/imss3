@@ -67,6 +67,8 @@
                                                 'penerima' => $penerima,
                                                 'alamat' => $d->alamat,
                                                 'id' => $d->id,
+                                                'penerima_asli' => $d->penerima,
+                                                'alamat_asli' => $d->alamat,
                                             ];
                                         @endphp
 
@@ -168,7 +170,7 @@
 
                             </div>
 
-                            <a id="tambah">Tambah Penerima</a>
+                            <a id="tambah" style="cursor: pointer">Tambah Penerima</a>
 
 
                         </form>
@@ -368,31 +370,61 @@
             resetForm();
         }
 
-        function generateNamaAlamat() {
-            var length = $("#penerima-row").children().length;
-            var counter = length + 1;
+        function generateNamaAlamat(data) {
+            if (data) {
+                $('#penerima-row').empty();
+                var length = data.length;
 
-            var formGroup =
-                '<div class="group">' +
-                '<div class="form-group row">' +
-                '<label for="penerima' + counter + '" class="col-sm-4 col-form-label">Penerima ' + counter + '</label>' +
-                '<div class="col-sm-8">' +
-                '<input type="text" class="form-control" id="penerima' + counter + '" name="penerima[]">' +
-                '</div>' +
-                '</div>' +
-                '<div class="form-group row">' +
-                '<label for="alamat' + counter + '" class="col-sm-4 col-form-label">Alamat ' + counter + '</label>' +
-                '<div class="col-sm-8">' +
-                '<input type="text" class="form-control" id="alamat' + counter + '" name="alamat[]">' +
-                '</div>' +
-                '</div>' +
-                '</div>';
-            $("#penerima-row").append(formGroup);
+                data.map((item, index) => {
+                    const counter = index + 1
+                    var formGroup =
+                        '<div class="group">' +
+                        '<div class="form-group row">' +
+                        '<label for="penerima' + counter + '" class="col-sm-4 col-form-label">Penerima ' + counter +
+                        '</label>' +
+                        '<div class="col-sm-8">' +
+                        '<input type="text" class="form-control" id="penerima' + counter +
+                        '" name="penerima[]" value="' + item.penerima + '">' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class="form-group row">' +
+                        '<label for="alamat' + counter + '" class="col-sm-4 col-form-label">Alamat ' + counter +
+                        '</label>' +
+                        '<div class="col-sm-8">' +
+                        '<input type="text" class="form-control" id="alamat' + counter +
+                        '" name="alamat[]" value="' + item.alamat + '">' +
+                        '</div>' +
+                        '</div>' +
+                        '</div>';
+                    $("#penerima-row").append(formGroup);
+                })
+            } else {
+                var length = $("#penerima-row").children().length;
+                var counter = length + 1;
+
+                var formGroup =
+                    '<div class="group">' +
+                    '<div class="form-group row">' +
+                    '<label for="penerima' + counter + '" class="col-sm-4 col-form-label">Penerima ' + counter +
+                    '</label>' +
+                    '<div class="col-sm-8">' +
+                    '<input type="text" class="form-control" id="penerima' + counter + '" name="penerima[]">' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="form-group row">' +
+                    '<label for="alamat' + counter + '" class="col-sm-4 col-form-label">Alamat ' + counter + '</label>' +
+                    '<div class="col-sm-8">' +
+                    '<input type="text" class="form-control" id="alamat' + counter + '" name="alamat[]">' +
+                    '</div>' +
+                    '</div>' +
+                    '</div>';
+                $("#penerima-row").append(formGroup);
+            }
         }
 
         $(document).ready(function() {
             $("#tambah").click(function() {
-                generateNamaAlamat();
+                generateNamaAlamat(null);
             });
         });
 
@@ -420,6 +452,7 @@
 
             getSpphDetail();
 
+
         }
 
         function editSPPH(data) {
@@ -440,6 +473,15 @@
             var date = data.batas.split('/');
             var newDate = date[2] + '-' + date[1] + '-' + date[0];
             $('#batas_spph').val(newDate)
+            const penerima = JSON.parse(data.penerima_asli);
+            const alamat = JSON.parse(data.alamat_asli);
+            const dataPenerima = penerima.map((item, index) => {
+                return {
+                    penerima: item,
+                    alamat: alamat[index]
+                }
+            })
+            generateNamaAlamat(dataPenerima);
         }
 
         function emptyTableSpph() {
