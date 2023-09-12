@@ -4,6 +4,17 @@
     <link rel="stylesheet" href="/plugins/toastr/toastr.min.css">
     <link rel="stylesheet" href="/plugins/select2/css/select2.min.css">
     <link rel="stylesheet" href="/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+    <style>
+        /* Important part */
+        .modal-dialog {
+            overflow-y: initial !important
+        }
+
+        .modal-body {
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
+        }
+    </style>
 @endsection
 @section('content')
     <div class="content-header">
@@ -16,12 +27,12 @@
         <div class="container">
             <div class="row my-5">
                 <div class="col-12">
-                    <h2 class="font-weight-bold">Surat Permintaan Penawaran Harga</h2>
+                    <h2 class="font-weight-bold">SPPH</h2>
                 </div>
             </div>
             <div class="card">
                 <div class="card-header">
-                    @if (Auth::user())
+                    @if (Auth::user() )
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-SPPH"
                         onclick="addSPPH()"><i class="fas fa-plus"></i> Add New SPPH</button>
                     @endif
@@ -54,7 +65,7 @@
                                     <th>{{ __('Tanggal SPPH') }}</th>
                                     <th>{{ __('Batas SPPH') }}</th>
                                     <th>{{ __('Penerima') }}</th>
-                                    @if (Auth::user())
+                                    @if (Auth::user() )
                                     <th></th>
                                     @endif
                                 </tr>
@@ -76,6 +87,8 @@
                                                 'penerima' => $penerima,
                                                 'alamat' => $d->alamat,
                                                 'id' => $d->id,
+                                                'penerima_asli' => $d->penerima,
+                                                'alamat_asli' => $d->alamat,
                                             ];
                                         @endphp
 
@@ -87,7 +100,7 @@
                                             <td class="text-center">{{ $data['tanggal'] }}</td>
                                             <td class="text-center">{{ $data['batas'] }}</td>
                                             <td class="text-center">{{ $data['penerima'] }}</td>
-                                            @if (Auth::user())
+                                            @if (Auth::user() )
                                             <td class="text-center">
                                                 <button title="Edit SPPH" type="button" class="btn btn-success btn-xs"
                                                     data-toggle="modal" data-target="#add-SPPH"
@@ -179,7 +192,7 @@
 
                             </div>
 
-                            <a id="tambah">Tambah Penerima</a>
+                            <a id="tambah" style="cursor: pointer">Tambah Penerima</a>
 
 
                         </form>
@@ -379,31 +392,74 @@
             resetForm();
         }
 
-        function generateNamaAlamat() {
-            var length = $("#penerima-row").children().length;
-            var counter = length + 1;
+        function generateNamaAlamat(data) {
+            if (data) {
+                $('#penerima-row').empty();
+                var length = data.length;
 
-            var formGroup =
-                '<div class="group">' +
-                '<div class="form-group row">' +
-                '<label for="penerima' + counter + '" class="col-sm-4 col-form-label">Penerima ' + counter + '</label>' +
-                '<div class="col-sm-8">' +
-                '<input type="text" class="form-control" id="penerima' + counter + '" name="penerima[]">' +
-                '</div>' +
-                '</div>' +
-                '<div class="form-group row">' +
-                '<label for="alamat' + counter + '" class="col-sm-4 col-form-label">Alamat ' + counter + '</label>' +
-                '<div class="col-sm-8">' +
-                '<input type="text" class="form-control" id="alamat' + counter + '" name="alamat[]">' +
-                '</div>' +
-                '</div>' +
-                '</div>';
-            $("#penerima-row").append(formGroup);
+                data.map((item, index) => {
+                    const counter = index + 1
+                    var formGroup =
+                        '<div class="group">' +
+                        '<div class="form-group row">' +
+                        '<label for="penerima' + counter + '" class="col-sm-4 col-form-label">Penerima ' + counter +
+                        '</label>' +
+                        '<div class="col-sm-8 d-flex align-items-center">' +
+                        '<input type="text" class="form-control" id="penerima' + counter +
+                        '" name="penerima[]" value="' + item.penerima + '">' +
+                        //remove button
+                        '<button type="button" class="ml-2 btn btn-danger btn-sm" onclick="removeNamaAlamat(' +
+                        counter +
+                        ')"><i class="fas fa-trash"></i></button>' +
+                        '</div>' +
+                        '</div>' +
+                        '<div class="form-group row">' +
+                        '<label for="alamat' + counter + '" class="col-sm-4 col-form-label">Alamat ' + counter +
+                        '</label>' +
+                        '<div class="col-sm-8">' +
+                        '<textarea class="form-control" id="alamat' + counter +
+                        '" name="alamat[]" rows="3">' + item.alamat + '</textarea>' +
+                        '</div>' +
+                        '</div>' +
+                        '<hr/>' +
+                        '</div>';
+                    $("#penerima-row").append(formGroup);
+                })
+            } else {
+                var length = $("#penerima-row").children().length;
+                var counter = length + 1;
+
+                var formGroup =
+                    '<div class="group">' +
+                    '<div class="form-group row">' +
+                    '<label for="penerima' + counter + '" class="col-sm-4 col-form-label">Penerima ' + counter +
+                    '</label>' +
+                    '<div class="col-sm-8 d-flex align-items-center">' +
+                    '<input type="text" class="form-control" id="penerima' + counter + '" name="penerima[]">' +
+                    //remove button
+                    '<button type="button" class="ml-2 btn btn-danger btn-sm" onclick="removeNamaAlamat(' + counter +
+                    ')"><i class="fas fa-trash"></i></button>' +
+                    '</div>' +
+                    '</div>' +
+                    '<div class="form-group row">' +
+                    '<label for="alamat' + counter + '" class="col-sm-4 col-form-label">Alamat ' + counter + '</label>' +
+                    '<div class="col-sm-8">' +
+                    '<textarea class="form-control" id="alamat' + counter + '" name="alamat[]"></textarea>' +
+                    '</div>' +
+                    '</div>' +
+                    '<hr/>' +
+                    '</div>';
+                $("#penerima-row").append(formGroup);
+            }
+        }
+
+        function removeNamaAlamat(counter) {
+            $('#penerima' + counter).closest('.group').remove();
         }
 
         $(document).ready(function() {
             $("#tambah").click(function() {
-                generateNamaAlamat();
+                generateNamaAlamat(null);
             });
         });
 
@@ -431,6 +487,7 @@
 
             getSpphDetail();
 
+
         }
 
         function editSPPH(data) {
@@ -451,6 +508,15 @@
             var date = data.batas.split('/');
             var newDate = date[2] + '-' + date[1] + '-' + date[0];
             $('#batas_spph').val(newDate)
+            const penerima = JSON.parse(data.penerima_asli);
+            const alamat = JSON.parse(data.alamat_asli);
+            const dataPenerima = penerima.map((item, index) => {
+                return {
+                    penerima: item,
+                    alamat: alamat[index]
+                }
+            })
+            generateNamaAlamat(dataPenerima);
         }
 
         function emptyTableSpph() {
