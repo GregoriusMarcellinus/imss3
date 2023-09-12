@@ -1,8 +1,13 @@
 <!DOCTYPE html>
-
 <head>
     <title>Surat Jalan {{ __($sjn->no_sjn) }}</title>
     <style>
+        body {
+            margin-top: 0.1cm;
+            margin-left: 0.5cm;
+            margin-right: 0.5cm;
+            margin-bottom: 0.5cm;
+        }
         table {
             border-collapse: collapse;
             /* border: 2px solid rgb(200, 200, 200); */
@@ -160,7 +165,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach ($sjn->products as $item)
+            @forelse ($sjn->products as $item)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $item->product_name }}</td>
@@ -170,7 +175,11 @@
                     <td>{{ $item->satuan }}</td>
                     <td>{{ $item->nama_proyek }}</td>
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <td colspan="7" class="text-center" style="text-align: center">Tidak ada data</td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
     <div style="margin-top: 1rem">

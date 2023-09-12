@@ -39,7 +39,7 @@ class SpphController extends Controller
 
             return response()->json($categories);
         } else {
-            return view('spph', compact('spphes'));
+            return view('spph.spph', compact('spphes'));
         }
     }
 

@@ -186,7 +186,7 @@ class ProductController extends Controller
             return (new ProductsExport($productExport))->download($fn . '.pdf');
         }
 
-        return View::make("sjn")->with(compact("sjn", "warehouse"));
+        return View::make("sjn.sjn")->with(compact("sjn", "warehouse"));
     }
     #Coba SJN
 

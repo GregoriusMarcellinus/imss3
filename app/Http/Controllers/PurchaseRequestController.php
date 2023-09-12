@@ -41,7 +41,7 @@ class PurchaseRequestController extends Controller
 
             return response()->json($requests);
         } else {
-            return view('purchase_request', compact('requests', 'proyeks'));
+            return view('purchase_request.purchase_request', compact('requests', 'proyeks'));
         }
     }
 
@@ -158,7 +158,7 @@ class PurchaseRequestController extends Controller
             // $po->batas_po = Carbon::parse($po->batas_po)->isoFormat('D MMMM Y');
             // $po->tanggal_po = Carbon::parse($po->tanggal_po)->isoFormat('D MMMM Y');
 
-            $pdf = Pdf::loadview('pr_print', compact('pr'));
+            $pdf = Pdf::loadview('purchase_request.pr_print', compact('pr'));
             $pdf->setPaper('A4', 'landscape');
             $no = $pr->no_pr;
             return $pdf->stream('PR-'.$no.'.pdf');

@@ -44,7 +44,7 @@ class PurchaseOrderController extends Controller
             return response()->json($purchases);
         } else {
             $prs = PurchaseRequest::all();
-            return view('purchase_order', compact('purchases', 'vendors', 'proyeks', 'prs'));
+            return view('purchase_order.purchase_order', compact('purchases', 'vendors', 'proyeks', 'prs'));
         }
     }
 
@@ -95,7 +95,7 @@ class PurchaseOrderController extends Controller
             'tanggal_po' => $request->tanggal_po,
             'batas_po' => $request->batas_po,
             'incoterm' => $request->incoterm,
-            'pr_no' => $request->pr_no,
+            'pr_id' => $request->pr_id,
             'ref_sph' => $request->ref_sph,
             'no_just' => $request->no_just,
             'no_nego' => $request->no_nego,
@@ -178,7 +178,7 @@ class PurchaseOrderController extends Controller
                 'tanggal_po' => $request->tanggal_po,
                 'batas_po' => $request->batas_po,
                 'incoterm' => $request->incoterm,
-                'pr_no' => $request->pr_no,
+                'pr_id' => $request->pr_id,
                 'ref_sph' => $request->ref_sph,
                 'no_just' => $request->no_just,
                 'no_nego' => $request->no_nego,
@@ -205,7 +205,7 @@ class PurchaseOrderController extends Controller
         $po->batas_po = Carbon::parse($po->batas_po)->isoFormat('D MMMM Y');
         $po->tanggal_po = Carbon::parse($po->tanggal_po)->isoFormat('D MMMM Y');
         $po->details = DetailPR::where('id_pr', $po->pr_id)->get();
-        $pdf = PDF::loadview('po_print', compact('po'));
+        $pdf = PDF::loadview('purchase_order.po_print', compact('po'));
         $pdf->setPaper('A4', 'landscape');
         $nama = $po->nama_proyek;
         return $pdf->stream('PO-' . $nama . '.pdf');

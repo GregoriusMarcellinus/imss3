@@ -114,6 +114,12 @@ class HomeController extends Controller
                     'bgcolor' => 'red',
                     'icon' => 'map-marker-alt'
                 ],
+                [
+                    'name' => 'Retur',
+                    'route' => 'apps/retur',
+                    'bgcolor' => 'goldenrod',
+                    'icon' => 'retweet'
+                    ]
             ];
             $title = "Gudang";
         } else if ($type == "wilayah1") {
