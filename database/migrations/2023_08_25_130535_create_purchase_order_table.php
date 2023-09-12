@@ -16,10 +16,10 @@ class CreatePurchaseOrderTable extends Migration
         Schema::create('purchase_order', function (Blueprint $table) {
             $table->id();
             $table->integer('vendor_id');
+            $table->integer('pr_id');
             $table->string('no_po');
             $table->date('tanggal_po');
             $table->string('incoterm');
-            $table->string('pr_no');
             $table->string('ref_sph')->nullable();
             $table->string('no_just')->nullable();
             $table->string('no_nego')->nullable();
@@ -28,7 +28,7 @@ class CreatePurchaseOrderTable extends Migration
             $table->string('term_pay');
             $table->string('garansi')->nullable();
             $table->integer('proyek_id');
-            // $table->string('catatan_vendor')->nullable();
+            $table->text('catatan_vendor')->nullable();
             $table->timestamps();
         });
     }

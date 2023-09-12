@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DetailPR;
 use App\Models\Purchase_Order;
+use App\Models\PurchaseRequest;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -41,7 +43,8 @@ class PurchaseOrderController extends Controller
 
             return response()->json($purchases);
         } else {
-            return view('purchase_order', compact('purchases', 'vendors', 'proyeks'));
+            $prs = PurchaseRequest::all();
+            return view('purchase_order', compact('purchases', 'vendors', 'proyeks', 'prs'));
         }
     }
 
@@ -129,7 +132,7 @@ class PurchaseOrderController extends Controller
                 'tanggal_po' => 'required',
                 'batas_po' => 'required',
                 'incoterm' => 'required',
-                'pr_no' => 'required',
+                'pr_id' => 'required',
                 'term_pay' => 'required',
                 'proyek_id' => 'required',
 
@@ -140,7 +143,7 @@ class PurchaseOrderController extends Controller
                 'tanggal_po.required' => 'Tanggal PO harus diisi',
                 'batas_po.required' => 'Batas Akhir PO harus diisi',
                 'incoterm.required' => 'Incoterm harus diisi',
-                'pr_no.required' => 'PR No. harus diisi',
+                'pr_id.required' => 'PR harus diisi',
                 'term_pay.required' => 'Termin Pembayaran harus diisi',
                 'proyek_id.required' => 'Proyek harus diisi',
             ]
@@ -150,12 +153,9 @@ class PurchaseOrderController extends Controller
             DB::table('purchase_order')->insert([
                 'no_po' => $request->no_po,
                 'vendor_id' => $request->vendor_id,
-                // "tanggal_po"  => Carbon::now()->setTimezone('Asia/Jakarta'),
-                // "batas_po" => Carbon::now()->setTimezone('Asia/Jakarta')
                 'tanggal_po' => $request->tanggal_po,
                 'batas_po' => $request->batas_po,
                 'incoterm' => $request->incoterm,
-                'pr_no' => $request->pr_no,
                 'ref_sph' => $request->ref_sph,
                 'no_just' => $request->no_just,
                 'no_nego' => $request->no_nego,
@@ -163,7 +163,8 @@ class PurchaseOrderController extends Controller
                 'term_pay' => $request->term_pay,
                 'garansi' => $request->garansi,
                 'proyek_id' => $request->proyek_id,
-                // 'catatan_vendor' => $request->catatan_vendor
+                'pr_id' => $request->pr_id,
+                'catatan_vendor' => $request->catatan_vendor
 
             ]);
 
@@ -195,17 +196,15 @@ class PurchaseOrderController extends Controller
     public function cetakPo(Request $request)
     {
         $id = $request->id_po;
-        $po = Purchase_Order::select('purchase_order.*', 'vendor.nama as nama_vendor', 'vendor.alamat as alamat_vendor', 'vendor.telp as telp_vendor', 'vendor.email as email_vendor', 'vendor.fax as fax_vendor',  'keproyekan.nama_proyek as nama_proyek')
+        $po = Purchase_Order::select('purchase_order.*', 'vendor.nama as nama_vendor', 'vendor.alamat as alamat_vendor', 'vendor.telp as telp_vendor', 'vendor.email as email_vendor', 'vendor.fax as fax_vendor',  'keproyekan.nama_proyek as nama_proyek', 'purchase_request.no_pr as pr_no')
             ->join('vendor', 'vendor.id', '=', 'purchase_order.vendor_id')
             ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_order.proyek_id')
+            ->leftjoin('purchase_request', 'purchase_request.id', '=', 'purchase_order.pr_id')
             ->where('purchase_order.id', $id)
             ->first();
-        // return response()->json([
-        //     'po' => $po
-        // ]);
-        // dd($po);
         $po->batas_po = Carbon::parse($po->batas_po)->isoFormat('D MMMM Y');
         $po->tanggal_po = Carbon::parse($po->tanggal_po)->isoFormat('D MMMM Y');
+        $po->details = DetailPR::where('id_pr', $po->pr_id)->get();
         $pdf = PDF::loadview('po_print', compact('po'));
         $pdf->setPaper('A4', 'landscape');
         $nama = $po->nama_proyek;

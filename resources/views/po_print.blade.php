@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <head>
-    <title>Purchase Order {{$po->nama_proyek ?? "-"}}</title>
+    <title>Purchase Order {{ $po->nama_proyek ?? '-' }}</title>
     <style>
         @page {
             margin: 0px;
@@ -9,9 +9,9 @@
 
         body {
             margin-top: 8cm;
-			margin-left: 0.5cm;
-			margin-right: 0.5cm;
-			margin-bottom: 0.5cm;
+            margin-left: 0.5cm;
+            margin-right: 0.5cm;
+            margin-bottom: 0.5cm;
         }
 
         * {
@@ -104,7 +104,7 @@
             /* margin-bottom: 400px; */
         }
 
-        .table2 tr  {
+        .table2 tr {
             border: 1px solid black;
             padding: 5px;
         }
@@ -124,12 +124,14 @@
                 <tr>
                     <td style="text-align: left;width:33%;" rowspan="12">
                         <strong>Company</strong><br>
-                        <span>{{$po->nama_vendor}}</span><br>
-                        <p class="alamat">{{$po->alamat_vendor ?? "-"}}</p>
+                        <span>{{ $po->nama_vendor }}</span><br>
+                        <p class="alamat">{{ $po->alamat_vendor ?? '-' }}</p>
                         <span>Contact</span><br>
-                        <span>Telepon&nbsp;&nbsp;&nbsp;&nbsp;: {{$po->telp_vendor ?? "-"}}</span><br>
-                        <span>Fax&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{$po->fax_vendor ?? "-"}}</span><br>
-                        <span>Email&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;: {{$po->email_vendor ?? "-"}}</span><br>
+                        <span>Telepon&nbsp;&nbsp;&nbsp;&nbsp;: {{ $po->telp_vendor ?? '-' }}</span><br>
+                        <span>Fax&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+                            {{ $po->fax_vendor ?? '-' }}</span><br>
+                        <span>Email&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
+                            {{ $po->email_vendor ?? '-' }}</span><br>
                     </td>
                 </tr>
                 <tr>
@@ -145,39 +147,40 @@
                 </tr>
                 <tr>
                     <td style="text-align: left;">NO PO</td>
-                    <td style="text-align: left;">: <span>{{$po->no_po}}</span></td>
+                    <td style="text-align: left;">: <span>{{ $po->no_po }}</span></td>
                 </tr>
                 <tr>
                     <td style="text-align: left;">Tanggal PO</td>
-                    <td style="text-align: left;">: <span>{{$po->tanggal_po}}</span></td>
+                    <td style="text-align: left;">: <span>{{ $po->tanggal_po }}</span></td>
                 </tr>
                 <tr>
                     <td style="text-align: left;">Incoterm</td>
-                    <td style="text-align: left;">: <span>{{$po->incoterm}}</span></td>
+                    <td style="text-align: left;">: <span>{{ $po->incoterm }}</span></td>
                 </tr>
                 <tr>
                     <td style="text-align: left;">PR NO.</td>
-                    <td style="text-align: left;">: <span>{{$po->pr_no ?? "-"}}</span></td>
+                    <td style="text-align: left;">: <span>{{ $po->pr_no ?? '-' }}</span></td>
                 </tr>
                 <tr>
                     <td style="text-align: left;">Referensi SPH</td>
-                    <td style="text-align: left;">: <span>{{$po->ref_sph ?? "-"}}</span></td>
+                    <td style="text-align: left;">: <span>{{ $po->ref_sph ?? '-' }}</span></td>
                 </tr>
                 <tr>
                     <td style="text-align: left;">No. Justifikasi</td>
-                    <td style="text-align: left;">: <span>{{$po->no_just ?? "-"}}</span></td>
+                    <td style="text-align: left;">: <span>{{ $po->no_just ?? '-' }}</span></td>
                 </tr>
                 <tr>
                     <td style="text-align: left;">No. Negosiasi</td>
-                    <td style="text-align: left;">: <span>{{$po->no_nego ?? "-"}}</span></td>
+                    <td style="text-align: left;">: <span>{{ $po->no_nego ?? '-' }}</span></td>
                 </tr>
                 <tr>
                     <td style="text-align: left;">Batas Akhir Po</td>
-                    <td style="text-align: left;">: <span>{{$po->batas_po}}</span></td>
+                    <td style="text-align: left;">: <span>{{ $po->batas_po }}</span></td>
                 </tr>
                 <tr>
                     <td style="text-align: left;vertical-align: top;">Alamat Penagihan</td>
-                    <td style="text-align: left;">: <span>  Direktur Keuangan, SDM, dan Manris PT INKA Multi Solusi Servis Jl Salak No. 59 Madiun <br> N.P.W.P : 70.9607.6574.576.5</span></td>
+                    <td style="text-align: left;">: <span> Direktur Keuangan, SDM, dan Manris PT INKA Multi Solusi
+                            Servis Jl Salak No. 59 Madiun <br> N.P.W.P : 70.9607.6574.576.5</span></td>
                 </tr>
 
             </table>
@@ -201,45 +204,24 @@
             </tr>
         </thead>
         <tbody>
-            {{-- @foreach ($po as $item)
+            @forelse ($po->details as $item)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $item->kode_material }}</td>
-                    <td>{{ $item->deskripsi }}</td>
-                    <td>{{ $item->batas_akhir_diterima }}</td>
+                    <td>{{ $item->uraian }}</td>
+                    <td>{{ $item->batas_akhir_diterima ?? '-' }}</td>
                     <td>{{ $item->qty }}</td>
-                    <td>{{ $item->unit }}</td>
-                    <td>{{ $item->harga_per_unit }}</td>
-                    <td>{{ $item->mata_uang }}</td>
-                    <td>{{ $item->vat }}</td>
-                    <td>{{ $item->total }}</td>
+                    <td>{{ $item->satuan }}</td>
+                    <td>{{ $item->harga_per_unit ?? '-' }}</td>
+                    <td>{{ $item->mata_uang ?? '-' }}</td>
+                    <td>{{ $item->vat ?? '-' }}</td>
+                    <td>{{ $item->total ?? '-' }}</td>
                 </tr>
-            @endforeach --}}
-            
-            <tr>
-                <td style="text-align: center;">1</td>
-                <td style="text-align: center;"><span></span></td>
-                <td style="text-align: center;"> </td>
-                <td style="text-align: center;"><span> </span></td>
-                <td style="text-align: center;"> </td>
-                <td style="text-align: center;"><span> </span></td>
-                <td style="text-align: center;"><span> </span></td>
-                <td style="text-align: center;"><span> </span></td>
-                <td style="text-align: center;"><span> </span></td>
-                <td style="text-align: center;"><span></span></td>
-            </tr>
-            <tr>
-                <td style="text-align: center;">2</td>
-                <td style="text-align: center;"><span> </span></td>
-                <td style="text-align: center;"> </td>
-                <td style="text-align: center;"><span> </span></td>
-                <td style="text-align: center;"> </td>
-                <td style="text-align: center;"><span> </span></td>
-                <td style="text-align: center;"><span> </span></td>
-                <td style="text-align: center;"><span> </span></td>
-                <td style="text-align: center;"><span> </span></td>
-                <td style="text-align: center;"><span> </span></td>
-            </tr>
+            @empty
+                <tr>
+                    <td colspan="10" class="text-center">Tidak ada data</td>
+                </tr>
+            @endforelse
         </tbody>
     </table>
 
@@ -272,7 +254,7 @@
         </div>
         <table class="table2" style="width:100%;padding:20px">
             <tr>
-                <td style="width: 16%"> 
+                <td style="width: 16%">
                     <span>Referensi PO</span><br>
                     <span>Termin Pembayaran</span><br>
                     <span>Garansi</span><br>
@@ -285,16 +267,16 @@
                     <span>:</span><br>
                 </td>
                 <td>
-                    <span>{{$po->ref_po}}</span><br>
-                    <span>{{$po->term_pay}}</span><br>
-                    <span>{{$po->garansi}}</span><br>
-                    <span>{{$po->nama_proyek}}</span><br>
+                    <span>{{ $po->ref_po }}</span><br>
+                    <span>{{ $po->term_pay }}</span><br>
+                    <span>{{ $po->garansi }}</span><br>
+                    <span>{{ $po->nama_proyek }}</span><br>
                 </td>
             </tr>
             <tr>
                 <td style="height: 50px;vertical-align: top;">Catatan Untuk Vendor</td>
                 <td style="vertical-align: top;">:</td>
-                <td></td>
+                <td style="vertical-align: top">{{ $po->catatan_vendor }}</td>
             </tr>
         </table>
     </div>
@@ -322,7 +304,8 @@
                     {{-- <td class="text-center"><b style="text-decoration: underline">
                             &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&emsp;&emsp;&emsp;&emsp;</b>
                     </td> --}}
-                    <td class="text-center" style="text-align: center"><b style="text-decoration: underline; ">Budi Harianto</b>
+                    <td class="text-center" style="text-align: center"><b style="text-decoration: underline; ">Budi
+                            Harianto</b>
                     </td>
                 </tr>
                 <tr>
