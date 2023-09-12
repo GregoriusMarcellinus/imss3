@@ -310,12 +310,12 @@
                                         <td><b>Detail</b></td>
                                         <input type="hidden" name="id" id="id">
                                     </tr>
-                                    <tr>
+                                    {{-- <tr>
                                         <td colspan="3">
                                             <button id="button-tambah-detail" type="button" class="btn btn-info"
                                                 onclick="showAddItem()">{{ __('Tambah Item Detail') }}</button>
                                         </td>
-                                    </tr>
+                                    </tr> --}}
                                 </table>
                                 <div class="table-responsive mt-2">
                                     <table class="table table-bordered">
@@ -585,7 +585,7 @@
             $('#id_vendor').text(data.vendor_name);
             $('#po_tanggal').text(data.tgpo);
             $('#po_batas').text(data.btpo);
-            $('#table-po').empty();
+            $('#tabel-po').empty();
 
             $.ajax({
                 url: '/products/purchase_order_detail/' + data.id,
@@ -614,33 +614,55 @@
                     $('#button-cetak-po').attr('disabled', false);
                     var no = 1;
 
-                    if (data?.po.details?.length == 0) {
+                    if (data?.po?.details?.length == 0) {
                         $('#tabel-po').append(
                             '<tr><td colspan="10" class="text-center">Tidak ada data</td></tr>');
                     } else {
-                        $.each(data.po.detail, function(index, value) {
+                        $.each(data?.po?.details, function(index, value) {
                             var kode_material = value.kode_material;
-                            var deskripsi = value.deskripsi;
-                            var batas = value.batas;
-                            var date = value.batas_po.split('/');
-                            var newDate = date[2] + '/' + date[1] + '/' + date[0];
+                            var deskripsi = value.uraian;
+                            var batas = value.batas ?? '-';
+                            var date = value.batas_po?.split('/') ?? '-';
+                            // var newDate = date[2] + '/' + date[1] + '/' + date[0];
+                            var newDate = '-';
                             var qty = value.qty;
-                            var total = value.qty * value.harga_per_unit;
+                            // var total = value.qty * value.harga_per_unit ?? 0;
+                            var total = value.total ?? 0;
                             var vat = value.vat * total / 100;
                             var total_vat = total + vat;
+                            var satuan = value.satuan;
+                            var harga_per_unit = value.harga_per_unit ?? 0;
+                            var mata_uang = value.mata_uang ?? '-';
+                            var vat = value.vat ?? 0;
+                            var total_vat = value.total_vat ?? 0;
+                            console.log({
+                                kode_material,
+                                deskripsi,
+                                batas,
+                                newDate,
+                                qty,
+                                total,
+                                vat,
+                                total_vat,
+                                satuan,
+                                harga_per_unit,
+                                mata_uang,
+                                vat,
+                                total_vat
+                            })
                             var html = '<tr>' +
                                 '<td>' + no + '</td>' +
                                 '<td>' + kode_material + '</td>' +
                                 '<td>' + deskripsi + '</td>' +
                                 '<td>' + newDate + '</td>' +
                                 '<td>' + qty + '</td>' +
-                                '<td>' + value.unit + '</td>' +
-                                '<td>' + value.harga_per_unit + '</td>' +
-                                '<td>' + value.mata_uang + '</td>' +
-                                '<td>' + value.vat + '</td>' +
+                                '<td>' + satuan + '</td>' +
+                                '<td>' + harga_per_unit + '</td>' +
+                                '<td>' + mata_uang + '</td>' +
+                                '<td>' + vat + '</td>' +
                                 '<td>' + total_vat + '</td>' +
                                 '</tr>';
-                            $('#table-po').append(html);
+                            $('#tabel-po').append(html);
                             no++;
                         });
                     }
