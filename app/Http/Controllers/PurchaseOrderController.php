@@ -80,7 +80,7 @@ class PurchaseOrderController extends Controller
             ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_order.proyek_id')
             ->where('purchase_order.id', $id)
             ->first();
-        $po->details = [];
+        $po->details = DetailPR::where('id_pr', $po->pr_id)->get();
         return response()->json([
             'po' => $po
         ]);
