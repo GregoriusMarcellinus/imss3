@@ -4,6 +4,16 @@
     <link rel="stylesheet" href="/plugins/toastr/toastr.min.css">
     <link rel="stylesheet" href="/plugins/select2/css/select2.min.css">
     <link rel="stylesheet" href="/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+    <style>
+        .modal-dialog {
+            overflow-y: initial !important
+        }
+
+        .modal-body {
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
+        }
+    </style>
 @endsection
 @section('content')
     <div class="content-header">
@@ -70,6 +80,7 @@
                                                 'proyek_id' => $d->proyek_id,
                                                 'vendor_id' => $d->vendor_id,
                                                 'detail' => $d->detail,
+                                                'pr_id' => $d->pr_id,
                                             ];
                                         @endphp
                                         <tr>
@@ -166,9 +177,15 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="pr_no" class="col-sm-4 col-form-label">{{ __('No PR') }} </label>
+                            <label for="pr_id" class="col-sm-4 col-form-label">{{ __('PR') }} </label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="pr_no" name="pr_no">
+                                {{-- <input type="date" class="form-control" id="proyek_id" name="proyek_id"> --}}
+                                <select class="form-control" name="pr_id" id="pr_id">
+                                    <option value="">Pilih Purchase Request</option>
+                                    @foreach ($prs as $pr)
+                                        <option value="{{ $pr->id }}">{{ $pr->no_pr }}</option>
+                                    @endforeach
+                                </select>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -465,6 +482,16 @@
 
         function resetForm() {
             $('#save').trigger("reset");
+            //remove the selected select option all
+            $('#vendor_id').find('option').each(function() {
+                $(this).attr('selected', false);
+            });
+            $('#pr_id').find('option').each(function() {
+                $(this).attr('selected', false);
+            });
+            $('#proyek_id').find('option').each(function() {
+                $(this).attr('selected', false);
+            });
             $('#barcode_preview_container').hide();
         }
 
@@ -505,6 +532,8 @@
                 if ($(this).val() == data.vid) {
                     console.log($(this).val());
                     $(this).attr('selected', true);
+                } else {
+                    $(this).attr('selected', false);
                 }
             });
             var date = data.tgpo.split('/');
@@ -514,7 +543,14 @@
             var newDate = date[2] + '-' + date[1] + '-' + date[0];
             $('#batas_po').val(newDate);
             $('#incoterm').val(data.incoterm);
-            $('#pr_no').val(data.pr_no);
+            $('#pr_id').find('option').each(function() {
+                if ($(this).val() == data.pr_id) {
+                    console.log('pr', $(this).val());
+                    $(this).attr('selected', true);
+                } else {
+                    $(this).attr('selected', false);
+                }
+            });
             $('#ref_sph').val(data.ref_sph);
             $('#no_just').val(data.no_just);
             $('#no_nego').val(data.no_nego);
@@ -523,12 +559,15 @@
             $('#garansi').val(data.garansi);
             $('#proyek_id').find('option').each(function() {
                 if ($(this).val() == data.proyek_id) {
-                    console.log($(this).val());
+                    console.log('proyek', $(this).val());
                     $(this).attr('selected', true);
+                } else {
+                    $(this).attr('selected', false);
                 }
             });
             $('#catatan_vendor').val(data.catatan_vendor);
         }
+
         $('#detail-po').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget);
             var data = button.data('detail');
@@ -559,7 +598,7 @@
                     $('#tabel-po').append('<tr><td colspan="10" class="text-center">Loading...</td></tr>');
                     $('#button-cetak-po').html(
                         '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
-                        );
+                    );
                     $('#button-cetak-po').attr('disabled', true);
                 },
 
