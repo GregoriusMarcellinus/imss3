@@ -4,6 +4,17 @@
     <link rel="stylesheet" href="/plugins/toastr/toastr.min.css">
     <link rel="stylesheet" href="/plugins/select2/css/select2.min.css">
     <link rel="stylesheet" href="/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+    <style>
+        /* Important part */
+        .modal-dialog {
+            overflow-y: initial !important
+        }
+
+        .modal-body {
+            max-height: calc(100vh - 200px);
+            overflow-y: auto;
+        }
+    </style>
 @endsection
 @section('content')
     <div class="content-header">
@@ -382,19 +393,24 @@
                         '<div class="form-group row">' +
                         '<label for="penerima' + counter + '" class="col-sm-4 col-form-label">Penerima ' + counter +
                         '</label>' +
-                        '<div class="col-sm-8">' +
+                        '<div class="col-sm-8 d-flex align-items-center">' +
                         '<input type="text" class="form-control" id="penerima' + counter +
                         '" name="penerima[]" value="' + item.penerima + '">' +
+                        //remove button
+                        '<button type="button" class="ml-2 btn btn-danger btn-sm" onclick="removeNamaAlamat(' +
+                        counter +
+                        ')"><i class="fas fa-trash"></i></button>' +
                         '</div>' +
                         '</div>' +
                         '<div class="form-group row">' +
                         '<label for="alamat' + counter + '" class="col-sm-4 col-form-label">Alamat ' + counter +
                         '</label>' +
                         '<div class="col-sm-8">' +
-                        '<input type="text" class="form-control" id="alamat' + counter +
-                        '" name="alamat[]" value="' + item.alamat + '">' +
+                        '<textarea class="form-control" id="alamat' + counter +
+                        '" name="alamat[]" rows="3">' + item.alamat + '</textarea>' +
                         '</div>' +
                         '</div>' +
+                        '<hr/>' +
                         '</div>';
                     $("#penerima-row").append(formGroup);
                 })
@@ -407,19 +423,27 @@
                     '<div class="form-group row">' +
                     '<label for="penerima' + counter + '" class="col-sm-4 col-form-label">Penerima ' + counter +
                     '</label>' +
-                    '<div class="col-sm-8">' +
+                    '<div class="col-sm-8 d-flex align-items-center">' +
                     '<input type="text" class="form-control" id="penerima' + counter + '" name="penerima[]">' +
+                    //remove button
+                    '<button type="button" class="ml-2 btn btn-danger btn-sm" onclick="removeNamaAlamat(' + counter +
+                    ')"><i class="fas fa-trash"></i></button>' +
                     '</div>' +
                     '</div>' +
                     '<div class="form-group row">' +
                     '<label for="alamat' + counter + '" class="col-sm-4 col-form-label">Alamat ' + counter + '</label>' +
                     '<div class="col-sm-8">' +
-                    '<input type="text" class="form-control" id="alamat' + counter + '" name="alamat[]">' +
+                    '<textarea class="form-control" id="alamat' + counter + '" name="alamat[]"></textarea>' +
                     '</div>' +
                     '</div>' +
+                    '<hr/>' +
                     '</div>';
                 $("#penerima-row").append(formGroup);
             }
+        }
+
+        function removeNamaAlamat(counter) {
+            $('#penerima' + counter).closest('.group').remove();
         }
 
         $(document).ready(function() {
