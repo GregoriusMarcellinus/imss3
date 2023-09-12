@@ -95,7 +95,7 @@ class PurchaseOrderController extends Controller
             'tanggal_po' => $request->tanggal_po,
             'batas_po' => $request->batas_po,
             'incoterm' => $request->incoterm,
-            'pr_no' => $request->pr_no,
+            'pr_id' => $request->pr_id,
             'ref_sph' => $request->ref_sph,
             'no_just' => $request->no_just,
             'no_nego' => $request->no_nego,
@@ -178,7 +178,7 @@ class PurchaseOrderController extends Controller
                 'tanggal_po' => $request->tanggal_po,
                 'batas_po' => $request->batas_po,
                 'incoterm' => $request->incoterm,
-                'pr_no' => $request->pr_no,
+                'pr_id' => $request->pr_id,
                 'ref_sph' => $request->ref_sph,
                 'no_just' => $request->no_just,
                 'no_nego' => $request->no_nego,
@@ -196,7 +196,7 @@ class PurchaseOrderController extends Controller
     public function cetakPo(Request $request)
     {
         $id = $request->id_po;
-        $po = Purchase_Order::select('purchase_order.*', 'vendor.nama as nama_vendor', 'vendor.alamat as alamat_vendor', 'vendor.telp as telp_vendor', 'vendor.email as email_vendor', 'vendor.fax as fax_vendor',  'keproyekan.nama_proyek as nama_proyek', 'purchase_request.no_pr as pr_no')
+        $po = Purchase_Order::select('purchase_order.*', 'vendor.nama as nama_vendor', 'vendor.alamat as alamat_vendor', 'vendor.telp as telp_vendor', 'vendor.email as email_vendor', 'vendor.fax as fax_vendor',  'keproyekan.nama_proyek as nama_proyek')
             ->join('vendor', 'vendor.id', '=', 'purchase_order.vendor_id')
             ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_order.proyek_id')
             ->leftjoin('purchase_request', 'purchase_request.id', '=', 'purchase_order.pr_id')
