@@ -107,6 +107,9 @@ Route::prefix('products')->group(function () {
     Route::post('update_spph_detail', [App\Http\Controllers\SpphController::class, 'updateDetailSpph'])->name('spph_detail.update');
     Route::get('products_pr', [App\Http\Controllers\SpphController::class, 'getProductPR'])->name('products_pr');
     Route::post('tambah_spph_detail', [App\Http\Controllers\SpphController::class, 'tambahSpphDetail'])->name('tambah_spph_detail');
+
+    //logistik
+    Route::get('logistik', [App\Http\Controllers\LogistikController::class, 'index'])->name('products.logistik');
 });
 
 Route::prefix('users')->group(function () {

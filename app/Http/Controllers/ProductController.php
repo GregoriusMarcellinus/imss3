@@ -422,6 +422,20 @@ class ProductController extends Controller
         if (empty($req->id)) {
             $add = DB::table('products')->insertGetId($data);
 
+            $data = [
+                "user_id"           => Auth::user()->id,
+                "warehouse_id"      => $warehouse_id,
+                "product_id"        => $add,
+                "stock_name"        => 'input manual',
+                "no_nota"           => '-',
+                "product_amount"    => $req->stock,
+                "shelf_id"          => 0,
+                "type"              => 1,
+                'ending_amount'     => $req->stock
+            ];
+
+            DB::table('stock')->insert($data);
+
             if ($add) {
                 $req->session()->flash('success', "Product berhasil ditambahkan.");
             } else {
@@ -893,6 +907,7 @@ class ProductController extends Controller
         $stockDate  = $req->stock_date;
         $shelf      = $req->shelf;
         $type       = $req->type;
+        $proyek_id  = $req->proyek_id;
         if (Session::has('selected_warehouse_id')) {
             $warehouse_id = Session::get('selected_warehouse_id');
         } else {
@@ -910,6 +925,7 @@ class ProductController extends Controller
                     "product_amount"    => $amount,
                     "shelf_id"          => $shelf,
                     "type"              => $type,
+                    "proyek_id"         => $proyek_id
                 ];
 
                 if (!empty($stockDate)) {

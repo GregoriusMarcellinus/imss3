@@ -135,6 +135,13 @@
                                         <p class="text">{{ __('Lokasi Penyimpanan') }}</p>
                                     </a>
                                 </li>
+                                <li class="nav-item">
+                                    <a class="nav-link {{ Route::current()->getName() == 'products.logistik' ? 'active' : '' }}"
+                                        href="{{ route('products.logistik') }}">
+                                        <i class="nav-icon fas fa-cubes"></i>
+                                        <p class="text">{{ __('Tes Tracking Logistik') }}</p>
+                                    </a>
+                                </li>
                             @endif
                             <li class="nav-header">Settings</li>
                             @if (Auth::user()->role == 0)
