@@ -137,3 +137,5 @@ Route::get('get_sheets', [App\Http\Controllers\SheetController::class, 'getDataS
 Route::get('sync_sheets', [App\Http\Controllers\SheetController::class, 'sync'])->name('sync_sheets');
 Route::get('test_komat', [App\Http\Controllers\SheetController::class, 'test_komat'])->name('test_komat');
 Route::get('materials', [App\Http\Controllers\KodeMaterialController::class, 'apiKodeMaterial'])->name('komat');
+
+Route::get('pdf_lain', [App\Http\Controllers\PdfController::class, 'pdf_lain'])->name('pdf_lain');
