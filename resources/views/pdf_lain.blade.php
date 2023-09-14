@@ -1,16 +1,21 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=1024px, initial-scale=1">
     <title>Slip Gaji</title>
     <style>
         @page {
-            size: landscape;
+            size: portrait;
         }
 
         body {
             margin: 0;
+        }
+
+        * {
+            font-size: 0.8rem;
         }
 
         .salary-slip {
@@ -89,311 +94,342 @@
             text-align: left;
         }
 
-        .border-center th, .border-center td {
+        .border-center th,
+        .border-center td {
             border: 1px solid black;
         }
 
-        th, td {
+        th,
+        td {
             padding-left: 6px;
         }
     </style>
 </head>
+
 <body>
-    <div class="salary-slip" >
+    <div class="salary-slip">
         <table class="empDetail">
-          <tr style="height: 20rem">
-            <td colspan='4'>
-              <img height="50px" src="https://ptrekaindo.co.id/wp-content/uploads/2019/07/Logo-Reka-1000.png"></td>
-            <td colspan='4' class="companyName">SLIP GAJI JUNI 2023</td>
-          </tr>
-          <tr>
-            <th style="text-align: left">
-              Name
-  </th>
-            <td>
-              Example
-  </td>
-            <td></td>
-            <td></td>
-            <th>
-              Bank Code
-  </th>
-            <td>
-              ABC123
-  </td>
-  <td></td>
-  <td></td>
-          </tr>
-          <tr>
-            <th style="text-align: left">
-              Employee Code
-  </th>
-            <td>
-              XXXXXXXXXXX
-  </td>
-            <td></td>
-            <td></td>
-            <th >
-              Bank Name
-  </th>
-            <td >
-              XXXXXXXXXXX
-  </td>
-  <td></td>
-            <td class="table-border-left"></td>
-          <tr class="myBackground">
-            <th colspan="2" style="text-align: left">
-              PENDAPATAN
-  </th>
-            <th >
-  </th>
-            <th class="table-border-right">
-              JUMLAH (Rp.)
-  </th>
-            <th colspan="2" style="text-align: left">
-              POTONGAN
-  </th>
-            <th >
-  </th>
-            <th >
-              JUMLAH (Rp.)
-  </th>
-          </tr>
-          <tr >
-            <th colspan="2" style="text-align: left" >
-              GAJI POKOK
-  </th>
-            <td></td>
-            <td class="myAlign">
-              4935.00
-  </td>
-            <th colspan="2" style="text-align: left" >
-              POT. BPJS KETENAGA KERJAAN JHT
-  </th >
-            <td></td>
+            <tr style="height: 20rem">
+                <td colspan='4'>
+                    <img height="50px" src="https://ptrekaindo.co.id/wp-content/uploads/2019/07/Logo-Reka-1000.png">
+                </td>
+                <td colspan='4' class="companyName">SLIP GAJI JUNI 2023</td>
+            </tr>
+            <tr>
+                <th style="text-align: left">
+                    Name
+                </th>
+                <td>
+                    Example
+                </td>
+                <td></td>
+                <td></td>
+                <th>
+                    Bank Code
+                </th>
+                <td>
+                    ABC123
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <th style="text-align: left">
+                    Employee Code
+                </th>
+                <td>
+                    XXXXXXXXXXX
+                </td>
+                <td></td>
+                <td></td>
+                <th>
+                    Bank Name
+                </th>
+                <td>
+                    XXXXXXXXXXX
+                </td>
+                <td></td>
+                <td class="table-border-left"></td>
+            <tr class="myBackground">
+                <th colspan="2" style="text-align: left">
+                    PENDAPATAN
+                </th>
+                <th>
+                </th>
+                <th class="table-border-right">
+                    JUMLAH (Rp.)
+                </th>
+                <th colspan="2" style="text-align: left">
+                    POTONGAN
+                </th>
+                <th>
+                </th>
+                <th>
+                    JUMLAH (Rp.)
+                </th>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: left">
+                    1. GAJI POKOK
+                </td>
+                <td></td>
+                <td class="myAlign">
+                    4935.00
+                </td>
+                <td colspan="2" style="text-align: left">
+                    1. POT. BPJS KETENAGA KERJAAN JHT
+                </td>
+                <td></td>
 
-            <td class="myAlign">
-              00.00
-  </td>
-          </tr >
-          <tr>
-            <th colspan="2" style="text-align: left">
-              TUNJANGAN TETAP
-  </th>
-            <td></td>
+                <td class="myAlign">
+                    00.00
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: left">
+                    2. TUNJANGAN TETAP
+                </td>
+                <td></td>
 
-            <td class="myAlign">
-              00.00
-  </td>
-            <th colspan="2" style="text-align: left" >
-              POT. BPJS KESEHATAN
-  </th >
-            <td></td>
+                <td class="myAlign">
+                    00.00
+                </td>
+                <td colspan="2" style="text-align: left">
+                    2. POT. BPJS KESEHATAN
+                </td>
+                <td></td>
 
-            <td class="myAlign">
-              00.00
-  </td>
-          </tr >
-          <tr>
-            <th colspan="2" style="text-align: left">
-              TUNJANGAN PROFESIONAL (PKWT)
-  </th>
-            <td></td>
+                <td class="myAlign">
+                    00.00
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: left">
+                    3. TUNJANGAN PROFESIONAL (PKWT)
+                </td>
+                <td></td>
 
-            <td class="myAlign">
-              00.00
-  </td>
-            <th colspan="2" style="text-align: left">
-              POT. PPIP
-  </th >
-            <td></td>
+                <td class="myAlign">
+                    00.00
+                </td>
+                <td colspan="2" style="text-align: left">
+                    3. POT. PPIP
+                </td>
+                <td></td>
 
-            <td class="myAlign">
-              00.00
-  </td>
-          </tr >
-          <tr>
-            <th colspan="2" style="text-align: left">
-               TUNJANGAN TRANSPORTASI
-  </th>
-            <td></td>
-            <td class="myAlign">
-              00.00
-  </td>
-            <th colspan="2" style="text-align: left">
-              POT. KEUANGAN
-  </th >
-            <td></td>
-            <td class="myAlign">
-              00.00
-  </td>
-          </tr >
-          <tr>
-            <th colspan="2" style="text-align: left">
-              TUNJANGAN KARYA
-  </th>
-            <td></td>
+                <td class="myAlign">
+                    00.00
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: left">
+                    4. TUNJANGAN TRANSPORTASI
+                </td>
+                <td></td>
+                <td class="myAlign">
+                    00.00
+                </td>
+                <td colspan="2" style="text-align: left">
+                    4. POT. KEUANGAN
+                </td>
+                <td></td>
+                <td class="myAlign">
+                    00.00
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: left">
+                    5. TUNJANGAN KARYA
+                </td>
+                <td></td>
 
-            <td class="myAlign">
-              00.00
-  </td>
-            <th colspan="2" style="text-align: left">
-              POT. KOPINKA
-  </th >
-            <td></td>
+                <td class="myAlign">
+                    00.00
+                </td>
+                <td colspan="2" style="text-align: left">
+                    5. POT. KOPINKA
+                </td>
+                <td></td>
 
-            <td class="myAlign">
-              00.00
-  </td>
-          </tr >
-          <tr>
-            <th colspan="2" style="text-align: left">
-              TUNJANGAN TRANSISI/RAPEL
-  </th> <td></td>
-            <td class="myAlign">
-              00.00
-  </td>
-            <th colspan="2" style="text-align: left">
-              BENEFIT
-  </th >
-            <td></td>
-            <td class="myAlign">
-              00.00
-  </td>
-          </tr >
-          <tr>
-            <th colspan="2" style="text-align: left">
-              Post Allowance
-  </th>
-            <td></td>
-            <td class="myAlign">
-              00.00
-  </td>
-            <th colspan="2"style="text-align: left">
-              Labour Welfare Fund
-  </th >
-            <td></td>
-            <td class="myAlign">
-              00.00
-  </td>
-          </tr >
-          <tr>
-            <th colspan="2" style="text-align: left">
-              Special Allowance
-  </th>
-            <td></td>
-            <td class="myAlign">
-              00.00
-  </td>
-            <th colspan="2" style="text-align: left">
-              NSC
-  </th >
-            <td></td>
-            <td class="myAlign">
-              00.00
-  </td>
-          </tr >
-          <tr>
-            <td colspan="4" class="table-border-right"></td>
-            <th colspan="2" style="text-align: left">
-              Union Thanco Officer(UTO)
-  </th >
-            <td></td>
-            <td class="myAlign">
-              00.00
-  </td>
-          </tr >
-          <tr>
-            <td colspan="4" class="table-border-right"></td>
-            <th colspan="2" >
-              Advance
-  </th >
-            <td></td>
-            <td class="myAlign">
-              00.00
-  </td>
-          </tr >
-          <tr>
-            <td colspan="4" class="table-border-right"></td>
-            <th colspan="2" >
-              Income Tax
-  </th > <td></td>
-            <td class="myAlign">
-              00.00
-  </td>
-          </tr >
-          <tr class="myBackground">
-            <th colspan="3">
-              JUMLAH PENDAPATAN BRUTO
-  </th>
-            <td class="myAlign">
-              10000
-  </td>
-            <th colspan="3" >
-              JUMLAH POTONGAN
-  </th >
-            <td class="myAlign">
-              1000
-  </td>
-          </tr >
-          <tr height="40px">
-            <th colspan="2" class="table-border-bottom" >
-              PENDAPATAN NETTO
-            </th >
-            <td >
-            </td>
-            <td class="table-border-right">
-              XXXXXXXXXX
-            </td>
-            <th colspan="2">
-              Madiun, 21 September 2023
-            </th>
-            <th>
-            </th>
-            <td class="table-border-right">
-            </td>
-          </tr >
-          <tr>
-            <td colspan="2">
-            </td> <td></td>
-            <td class="myAlign">
-  </td><td colspan="4"></td>
-          </tr >
-          <tr>
-            <td colspan="2">
-              Saldo PPIP (PKWT)
-  </td> <td></td>
-            <td class="myAlign">
-              00.00
-  </td>
-            <th colspan="2" >
-              Presiden Direktur
-  </th >
-  
-            <td colspan="2"></td>
-          </tr >
-          <tr>
-            <td colspan="2">
-              Nilai IKK
-  </td> <td></td>
-            <td class="myAlign">
-              00.00
-  </td>
-        <th colspan="2">
-            <b><u> A. Wishnudartha Pagehgiri </u></b>
-        </th >
-  <td colspan="2"></td>
-          </tr >
-          <tr>
-            <td colspan="2">
-              Nilai Kredit Poin
-  </td> <td></td>
-            <td class="myAlign">
-              00.00
-  </td>
-            <td colspan="4"></td>
-          </tr >
-        </table >
-      </div >
+                <td class="myAlign">
+                    00.00
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: left">
+                    6. TUNJANGAN TRANSISI/RAPEL
+                </td>
+                <td></td>
+                <td class="myAlign">
+                    00.00
+                </td>
+                <td colspan="2" style="text-align: left">
+                    6. JAM HILANG/PENYESUAIAN
+                </td>
+                <td></td>
+                <td class="myAlign">
+                    00.00
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align: left;">
+                    7. BENEFIT
+                    <ul style="list-style: none;">
+                        <li>
+                            BPJS KETENAGAKERJAAN
+                            <ul style="list-style: none">
+                                <li>JKK</li>
+                                <li>JKM</li>
+                                <li>JHT</li>
+                                <li>JP</li>
+                            </ul>
+                        </li>
+                        <li>BPJS KESEHATAN</li>
+                        <li>PPIP</li>
+                        <li>JUMLAH PREMI</li>
+                    </ul>
+                </td>
+                <td></td>
+                <td class="myAlign">
+
+                </td>
+                <td colspan="2"style="text-align: left;vertical-align:top;">
+                    7. BENEFIT
+                </td>
+                <td></td>
+                <td class="myAlign" style="vertical-align:top;">
+                    00.00
+                </td>
+            </tr>
+            {{-- <tr>
+                <th colspan="2" style="text-align: left">
+                    Special Allowance
+                </th>
+                <td></td>
+                <td class="myAlign">
+                    00.00
+                </td>
+                <th colspan="2" style="text-align: left">
+                    NSC
+                </th>
+                <td></td>
+                <td class="myAlign">
+                    00.00
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" class="table-border-right"></td>
+                <th colspan="2" style="text-align: left">
+                    Union Thanco Officer(UTO)
+                </th>
+                <td></td>
+                <td class="myAlign">
+                    00.00
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" class="table-border-right"></td>
+                <th colspan="2">
+                    Advance
+                </th>
+                <td></td>
+                <td class="myAlign">
+                    00.00
+                </td>
+            </tr>
+            <tr>
+                <td colspan="4" class="table-border-right"></td>
+                <th colspan="2">
+                    Income Tax
+                </th>
+                <td></td>
+                <td class="myAlign">
+                    00.00
+                </td>
+            </tr> --}}
+            <tr class="myBackground">
+                <th colspan="3" style="text-align: left">
+                    JUMLAH PENDAPATAN BRUTO
+                </th>
+                <td class="myAlign">
+                    10000
+                </td>
+                <th colspan="3" style="text-align: left">
+                    JUMLAH POTONGAN
+                </th>
+                <td class="myAlign">
+                    1000
+                </td>
+            </tr>
+            <tr height="40px">
+                <td colspan="2" class="table-border-bottom" style="text-align: left">
+                    <b>PENDAPATAN NETTO</b>
+                </td>
+                <td></td>
+                <td class="table-border-right">
+                    XXXXXXX
+                </td>
+                <td colspan="3" style="text-align: right">
+                    Madiun, 21 September 2023
+                </td>
+                <td></td>
+            </tr>
+            {{-- <tr>
+                <td colspan="2">
+                </td>
+                <td></td>
+                <td class="myAlign">
+                </td>
+                <td colspan="4"></td>
+            </tr> --}}
+            <tr>
+                <td colspan="2" style="text-align: left">
+                    Saldo PPIP (PKWT)
+                </td>
+                <td></td>
+                <td class="table-border-right">
+                    00.00
+                </td>
+                <td colspan="3" style="text-align: center;">
+                    Presiden Direktur
+                </td>
+                <td></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="vertical-align: top">
+                    Nilai Kredit Poin
+                </td>
+                <td></td>
+                <td class="myAlign" style="vertical-align: top">
+                    00.00
+                </td>
+                <td colspan="4"></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="vertical-align: top">
+                    Nilai IKK
+                </td>
+                <td></td>
+                <td class="myAlign" style="vertical-align: top">
+                    00.00
+                </td>
+                <td colspan="3" style="text-align: right; height: 100px;">
+                    <b><u> A. Wishnudartha Pagehgiri </u></b>
+                </td>
+                <td></td>
+            </tr>
+            {{-- <tr>
+                <td colspan="2" style="vertical-align: top">
+                    Nilai Kredit Poin
+                </td>
+                <td></td>
+                <td class="myAlign" style="vertical-align: top">
+                    00.00
+                </td>
+                <td colspan="4"></td>
+            </tr> --}}
+        </table>
+    </div>
 </body>
+
 </html>
