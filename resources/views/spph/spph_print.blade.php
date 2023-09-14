@@ -177,7 +177,7 @@
                         @forelse ($spph->details as $item)
                             <tr>
                                 <td style="text-align: center">{{ $loop->iteration }}</td>
-                                <td style="text-align: center">{{ $item->uraian }}</td>
+                                <td>{{ $item->uraian }}</td>
                                 <td style="word-wrap: break-word">{{ $item->spek }}</td>
                                 <td style="text-align: center">{{ $item->qty }}</td>
                                 <td style="text-align: center">{{ $item->satuan }}</td>
