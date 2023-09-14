@@ -1165,7 +1165,7 @@ class ProductController extends Controller
             return response()->json($result);
         } else {
             $shelf = $shelf->where("warehouse_id", $warehouse_id)->paginate(50);
-            if (Auth::user()->role == 0) {
+            if (Auth::user()->role == 0 || Auth::user()->role == 4) {
                 $warehouse = $this->getWarehouse();
                 return View::make("shelf")->with(compact("shelf", "warehouse"));
             } else {

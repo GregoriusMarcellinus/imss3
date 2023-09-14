@@ -70,6 +70,7 @@
                                     <p class="text">{{ __('Dashboard') }}</p>
                                 </a>
                             </li>
+                            @if (Auth::user()->role == 0 || Auth::user()->role == 4)
                             <li class="nav-item">
                                 <a class="nav-link {{ Route::current()->getName() == 'products.wip' ? 'active' : '' }}"
                                     href="{{ route('products.wip') }}">
@@ -84,19 +85,14 @@
                                     <p class="text">{{ __('WIP History') }}</p>
                                 </a>
                             </li>
+                            @endif
+                            @if (Auth::user()->role == 0 || Auth::user()->role == 4)
                             <li class="nav-header">Product</li>
                             <li class="nav-item">
                                 <a class="nav-link {{ Route::current()->getName() == 'products' ? 'active' : '' }}"
                                     href="{{ route('products') }}">
                                     <i class="nav-icon fas fa-boxes"></i>
                                     <p class="text">{{ __('Stok Barang') }}</p>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link {{ Route::current()->getName() == 'sjn' ? 'active' : '' }}"
-                                    href="{{ route('sjn') }}">
-                                    <i class="nav-icon fas fa-envelope"></i>
-                                    <p class="text">{{ __('Surat Jalan') }}</p>
                                 </a>
                             </li>
                             <li class="nav-item">
@@ -114,27 +110,36 @@
                                 </a>
                             </li>
                             <li class="nav-item">
+                                <a class="nav-link {{ Route::current()->getName() == 'keproyekan.index' ? 'active' : '' }}"
+                                    href="{{ route('keproyekan.index') }}">
+                                    <i class="nav-icon fas fa-hard-hat"></i>
+                                    <p class="text">{{ __('Keproyekan') }}</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
                                 <a class="nav-link {{ Route::current()->getName() == 'kode_material.index' ? 'active' : '' }}"
                                     href="{{ url('products/kode_material') }}">
                                     <i class="nav-icon fas fa-pallet"></i>
                                     <p class="text">{{ __('Kode Material') }}</p>
                                 </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ Route::current()->getName() == 'products.shelf' ? 'active' : '' }}"
+                                    href="{{ route('products.shelf') }}">
+                                    <i class="nav-icon fas fa-cubes"></i>
+                                    <p class="text">{{ __('Lokasi Penyimpanan') }}</p>
+                                </a>
+                            </li>
+                            @endif
                             @if (Auth::user()->role == 0)
-                                <li class="nav-item">
-                                    <a class="nav-link {{ Route::current()->getName() == 'keproyekan.index' ? 'active' : '' }}"
-                                        href="{{ route('keproyekan.index') }}">
-                                        <i class="nav-icon fas fa-hard-hat"></i>
-                                        <p class="text">{{ __('Keproyekan') }}</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link {{ Route::current()->getName() == 'products.shelf' ? 'active' : '' }}"
-                                        href="{{ route('products.shelf') }}">
-                                        <i class="nav-icon fas fa-cubes"></i>
-                                        <p class="text">{{ __('Lokasi Penyimpanan') }}</p>
-                                    </a>
-                                </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ Route::current()->getName() == 'sjn' ? 'active' : '' }}"
+                                    href="{{ route('sjn') }}">
+                                    <i class="nav-icon fas fa-envelope"></i>
+                                    <p class="text">{{ __('Surat Jalan') }}</p>
+                                </a>
+                            </li>
+                                
                                 <li class="nav-item">
                                     <a class="nav-link {{ Route::current()->getName() == 'products.logistik' ? 'active' : '' }}"
                                         href="{{ route('products.logistik') }}">

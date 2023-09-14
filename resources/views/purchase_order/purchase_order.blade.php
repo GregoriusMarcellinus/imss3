@@ -30,14 +30,14 @@
                         onclick="addPo()"><i class="fas fa-plus"></i> Add New PO</button>
                     <div class="card-tools">
                         <form>
-                            <div class="input-group input-group">
+                            {{-- <div class="input-group input-group">
                                 <input type="text" class="form-control" name="q" placeholder="Search">
                                 <div class="input-group-append">
                                     <button class="btn btn-primary" type="submit">
                                         <i class="fas fa-search"></i>
                                     </button>
                                 </div>
-                            </div>
+                            </div> --}}
                         </form>
                     </div>
                 </div>

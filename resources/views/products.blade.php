@@ -119,7 +119,7 @@
                                                     data-target="#lihat-barcode"
                                                     onclick="barcode({{ $d->product_code }})"><i
                                                         class="fas fa-barcode"></i></button>
-                                                @if (Auth::user()->role == 0)
+                                                @if (Auth::user()->role == 0 || Auth::user()->role == 4)
                                                     <button title="Hapus Produk" type="button"
                                                         class="btn btn-danger btn-xs" data-toggle="modal"
                                                         data-target="#delete-product"

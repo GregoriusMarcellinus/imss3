@@ -14,7 +14,7 @@
     <div class="container-fluid">
         <div class="card">
             <div class="card-header">
-                @if(Auth::user()->role == 0)
+                @if(Auth::user()->role == 0 || Auth::user()->role == 4)
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-category" onclick="addCategory()"><i class="fas fa-plus"></i> Add New Category</button>
                 @endif
                 <div class="card-tools">
@@ -48,7 +48,13 @@
                     <tr>
                         <td class="text-center">{{ $categories->firstItem() + $key }}</td>
                         <td>{{ $data['category_name'] }}</td>
-                        <td class="text-center"><button title="Lihat Produk Untuk Kategori Ini" type="button" class="btn btn-primary btn-xs" onclick="window.location.href='/products?category={{ $d->category_id }}'"><i class="fas fa-external-link-alt"></i></button> @if(Auth::user()->role == 0)<button title="Edit Shelf" type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#add-category" onclick="editCategory({{ json_encode($data) }})"><i class="fas fa-edit"></i></button> <button title="Hapus Produk" type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-category" onclick="deleteCategory({{ json_encode($data) }})"><i class="fas fa-trash"></i></button>@endif</td>
+                        <td class="text-center">
+                            <button title="Lihat Produk Untuk Kategori Ini" type="button" class="btn btn-primary btn-xs" onclick="window.location.href='/products?category={{ $d->category_id }}'"><i class="fas fa-external-link-alt"></i></button> 
+                            @if(Auth::user()->role == 0 || Auth::user()->role == 4 )
+                            <button title="Edit Shelf" type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#add-category" onclick="editCategory({{ json_encode($data) }})"><i class="fas fa-edit"></i></button> 
+                            <button title="Hapus Produk" type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-category" onclick="deleteCategory({{ json_encode($data) }})"><i class="fas fa-trash"></i></button>
+                            @endif
+                        </td>
                     </tr>
                     @endforeach
                 @else
@@ -64,7 +70,7 @@
         {{ $categories->links("pagination::bootstrap-4") }}
         </div>
     </div>
-    @if(Auth::user()->role == 0)
+    @if(Auth::user()->role == 0 || Auth::user()->role == 4)
     <div class="modal fade" id="add-category">
         <div class="modal-dialog">
             <div class="modal-content">

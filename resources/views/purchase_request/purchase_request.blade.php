@@ -22,7 +22,7 @@
                     <!-- <button type="button" class="btn btn-primary" onclick="download('xls')"><i class="fas fa-file-excel"></i> Export Product (XLS)</button> -->
                     <div class="card-tools">
                         <form>
-                            <div class="input-group input-group">
+                            {{-- <div class="input-group input-group">
                                 <input type="text" class="form-control" name="q" placeholder="Search">
                                 <input type="hidden" name="category" value="{{ Request::get('category') }}">
                                 <input type="hidden" name="sort" value="{{ Request::get('sort') }}">
@@ -31,7 +31,7 @@
                                         <i class="fas fa-search"></i>
                                     </button>
                                 </div>
-                            </div>
+                            </div> --}}
                         </form>
                     </div>
                 </div>
@@ -80,7 +80,7 @@
                                                     data-detail="{{ json_encode($data) }}"><i
                                                         class="fas fa-list"></i></button>
 
-                                                @if (Auth::user()->role == 0)
+                                                @if (Auth::user()->role == 0 || Auth::user()->role == 2 || Auth::user()->role == 3)
                                                     <button title="Hapus Request" type="button"
                                                         class="btn btn-danger btn-xs" data-toggle="modal"
                                                         data-target="#delete-pr"

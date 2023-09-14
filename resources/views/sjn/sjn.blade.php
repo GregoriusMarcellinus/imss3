@@ -22,7 +22,7 @@
                     <!-- <button type="button" class="btn btn-primary" onclick="download('xls')"><i class="fas fa-file-excel"></i> Export Product (XLS)</button> -->
                     <div class="card-tools">
                         <form>
-                            <div class="input-group input-group">
+                            {{-- <div class="input-group input-group">
                                 <input type="text" class="form-control" name="q" placeholder="Search">
                                 <input type="hidden" name="category" value="{{ Request::get('category') }}">
                                 <input type="hidden" name="sort" value="{{ Request::get('sort') }}">
@@ -31,7 +31,7 @@
                                         <i class="fas fa-search"></i>
                                     </button>
                                 </div>
-                            </div>
+                            </div> --}}
                         </form>
                     </div>
                 </div>
