@@ -63,33 +63,4 @@ class SheetController extends Controller
 
         return response()->json($arr);
     }
-
-    public function sync(Request $request)
-    {
-        $sheets = self::getDataSheet($request);
-
-        foreach ($sheets->original as $key => $sheet) {
-            $product = DB::table('kode_material')->where('kode_material', $sheet['kode_material'])->where('type', $request->type == 'inka' ? 0 : 1)->first();
-            if (!$product) {
-                $product = new KodeMaterial();
-                $product->kode_material = $sheet['kode_material'];
-                $product->nama_material = $sheet['nama_barang'];
-                $product->spesifikasi = $sheet['spesifikasi'];
-                $product->satuan = $sheet['satuan'];
-                $product->type = $request->type == 'inka' ? 0 : 1;
-                $product->save();
-            } else {
-                DB::table('products')->where('product_code', $sheet['kode_material'])->update(['product_name' => $sheet['nama_barang'], 'spesifikasi' => $sheet['spesifikasi'], 'satuan' => $sheet['satuan']]);
-            }
-        }
-
-        return response()->json(['message' => 'Data berhasil disinkronisasi']);
-    }
-
-    public function test_komat()
-    {
-        $komats = KodeMaterial::where('type', 0)->get();
-
-        return response()->json($komats);
-    }
 }

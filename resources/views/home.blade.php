@@ -143,8 +143,8 @@
                         <div class="card">
                             <div class="card-body">
                                 <div class="input-group input-group-lg">
-                                    <input type="text" class="form-control" id="pcode" name="pcode" min="0"
-                                        placeholder="Product Code">
+                                    <input type="text" class="form-control" id="pcode" name="pcode"
+                                        min="0" placeholder="Product Code">
                                     <div class="input-group-append">
                                         <button class="btn btn-primary" id="button-check" onclick="productCheck()">
                                             <i class="fas fa-search"></i>
@@ -379,19 +379,56 @@
             $("#form").hide();
             resetForm();
             $("#type").val(type);
+            //remove #proyek_id first
+            $('#form').find('.card-body').find('#proyek_id').parent().parent().remove();
             if (type == 0) {
                 $('#modal-title').text("Stock Out");
                 $('#button-update').text("Stock Out");
                 $("#date").show();
+
+                //find child in #form with class .card-body then append
+                $('#form').find('.card-body').append(
+                    '<div class="form-group row"><label for="proyek_id" class="col-sm-4 col-form-label">Keproyekan</label><div class="col-sm-8"><select class="form-control select2" style="width: 100%;" id="proyek_id" name="proyek_id"></select></div></div>'
+                );
+
             } else if (type == 1) {
                 $('#modal-title').text("Stock In");
                 $('#button-update').text("Stock In");
                 $("#date").show();
+                //remove the proyek_id
+                $('#form').find('.card-body').find('#proyek_id').parent().parent().remove();
             } else {
                 $('#modal-title').text("Retur");
                 $('#button-update').text("Retur");
                 $("#date").hide();
+                //remove the proyek_id
+                $('#form').find('.card-body').find('#proyek_id').parent().parent().remove();
             }
+        }
+
+        function getProyek(val) {
+            $.ajax({
+                url: '/products/keproyekan',
+                type: "GET",
+                data: {
+                    "format": "json"
+                },
+                dataType: "json",
+                success: function(data) {
+                    $('#proyek_id').empty();
+                    $('#proyek_id').append('<option value="">.:: Select Proyek::.</option>');
+                    $.each(data, function(key, value) {
+                        if (value.id == val) {
+                            $('#proyek_id').append('<option value="' + value.id + '" selected>' + value
+                                .nama_proyek + '</option>');
+                        } else {
+
+                            $('#proyek_id').append('<option value="' + value.id + '">' + value
+                                .nama_proyek + '</option>');
+                        }
+                    });
+                }
+            });
         }
 
         function getShelf(pid = null) {
@@ -462,6 +499,7 @@
                             $('#pname').val(data.data.product_name);
                             if ($('#type').val() == 0) {
                                 getShelf($('#pid').val());
+                                getProyek();
                             } else {
                                 getShelf();
                             }
@@ -497,6 +535,7 @@
                 stock_date: $('#stock_date_text').val(),
                 shelf: $('#shelf').val(),
                 type: $('#type').val(),
+                proyek_id: $('#proyek_id').val()
             }
 
             $.ajax({

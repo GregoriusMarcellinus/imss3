@@ -43,7 +43,8 @@ class SpphController extends Controller
         }
     }
 
-    public function indexApps(Request $request){
+    public function indexApps(Request $request)
+    {
         $search = $request->q;
 
         if (Session::has('selected_warehouse_id')) {
@@ -239,7 +240,7 @@ class SpphController extends Controller
         $spphs = $newObjects;
         $count = count($spphs);
 
-        $pdf = PDF::loadview('spph_print', compact('spph', 'spphs', 'count'));
+        $pdf = PDF::loadview('spph.spph_print', compact('spph', 'spphs', 'count'));
         $no_spph = $spph->nomor_spph;
         $pdf->setPaper('A4', 'Potrait');
         return $pdf->stream('SPPH_' . $no_spph . '.pdf');
