@@ -34,7 +34,11 @@
                 <tr>
                     <td class="text-center">{{ $shelf->firstItem() + $key }}</td>
                     <td>{{ $data['shelf_name'] }}</td>
-                    <td class="text-center"><button title="Edit Shelf" type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#add-shelf" onclick="editShelf({{ json_encode($data) }})"><i class="fas fa-edit"></i></button> <button title="Hapus Shelf" type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-shelf" onclick="deleteShelf({{ json_encode($data) }})"><i class="fas fa-trash"></i></button></td>
+                    <td class="text-center">
+                        @if (Auth::user()->role == 0 || Auth::user()->role == 4)
+                        <button title="Edit Shelf" type="button" class="btn btn-success btn-xs" data-toggle="modal" data-target="#add-shelf" onclick="editShelf({{ json_encode($data) }})"><i class="fas fa-edit"></i></button> <button title="Hapus Shelf" type="button" class="btn btn-danger btn-xs" data-toggle="modal" data-target="#delete-shelf" onclick="deleteShelf({{ json_encode($data) }})"><i class="fas fa-trash"></i></button>
+                    @endif
+                    </td>
                 </tr>
                 @endforeach
             @else

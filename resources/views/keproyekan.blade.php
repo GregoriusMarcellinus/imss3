@@ -55,19 +55,21 @@
                                             <td class="text-center">{{ $data['no'] }}</td>
                                             <td class="text-center">{{ $data['nama_proyek'] }}</td>
 
-                                            <td class="text-center">
-                                                <button title="Edit Produk" type="button" class="btn btn-success btn-xs"
-                                                    data-toggle="modal" data-target="#add-proyek"
-                                                    onclick="editProduct({{ json_encode($data) }})"><i
-                                                        class="fas fa-edit"></i></button>
-                                                @if (Auth::user()->role == 0)
+                                            @if (Auth::user()->role == 0 || Auth::user()->role == 4)
+                                                <td class="text-center">
+                                                    <button title="Edit Produk" type="button"
+                                                        class="btn btn-success btn-xs" data-toggle="modal"
+                                                        data-target="#add-proyek"
+                                                        onclick="editProduct({{ json_encode($data) }})"><i
+                                                            class="fas fa-edit"></i></button>
+
                                                     <button title="Hapus Produk" type="button"
                                                         class="btn btn-danger btn-xs" data-toggle="modal"
                                                         data-target="#delete-product"
                                                         onclick="deleteProduct({{ json_encode($data) }})"><i
                                                             class="fas fa-trash"></i></button>
-                                                @endif
-                                            </td>
+                                                </td>
+                                            @endif
                                         </tr>
                                     @endforeach
                                 @else

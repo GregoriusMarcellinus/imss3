@@ -17,6 +17,7 @@
     <section class="content">
         <div class="container-fluid">
             <div class="row">
+                @if (Auth::user()->role == 0 || Auth::user()->role == 4)
                 <div class="col-lg-3 col-6">
                     <a href="#" data-toggle="modal" data-target="#stock-form" onclick="stockForm(1)">
                         <div class="small-box bg-success">
@@ -43,34 +44,6 @@
                         </div>
                     </a>
                 </div>
-
-                <div class="col-lg-3 col-6">
-                    <a href="{{ route('sjn') }}">
-                        <div class="small-box bg-info">
-                            <div class="inner" style="background-color: rgb(186, 226, 43);">
-                                <p>Surat</p>
-                                <h3>Jalan</h3>
-                            </div>
-                            <div class="icon">
-                                <i class="fas fa-envelope"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-6">
-                    <a href="{{ route('spph.index') }}">
-                        <div class="small-box bg-info">
-                            <div class="inner" style="background-color: rgb(231, 48, 24);">
-                                <p>Surat Perminataan Penawaran</p>
-                                <h3>Harga</h3>
-                            </div>
-                            <div class="icon">
-                                <i class="fas fa-mail-bulk"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-
                 <div class="col-lg-3 col-6">
                     <a href="#" data-toggle="modal" data-target="#stock-form" onclick="stockForm(2)">
                         <div class="small-box bg-info">
@@ -97,15 +70,30 @@
                         </div>
                     </a>
                 </div>
+               @endif 
+               @if (Auth::user()->role == 0 || Auth::user()->role == 1)
                 <div class="col-lg-3 col-6">
-                    <a href="{{ route('purchase_request.index') }}">
-                        <div class="small-box bg-primary">
-                            <div class="inner" style="background-color: coral">
-                                <p>Purchase</p>
-                                <h3>Request</h3>
+                    <a href="{{ route('sjn') }}">
+                        <div class="small-box bg-info">
+                            <div class="inner" style="background-color: rgb(186, 226, 43);">
+                                <p>Surat</p>
+                                <h3>Jalan</h3>
                             </div>
                             <div class="icon">
-                                <i class="fas fa-cart-arrow-down"></i>
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-3 col-6">
+                    <a href="{{ route('spph.index') }}">
+                        <div class="small-box bg-info">
+                            <div class="inner" style="background-color: rgb(231, 48, 24);">
+                                <p>Surat Perminataan Penawaran</p>
+                                <h3>Harga</h3>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-mail-bulk"></i>
                             </div>
                         </div>
                     </a>
@@ -123,6 +111,22 @@
                         </div>
                     </a>
                 </div>
+                @endif
+                @if (Auth::user()->role == 0 || Auth::user()->role == 2 || Auth::user()->role == 3)
+                <div class="col-lg-3 col-6">
+                    <a href="{{ route('purchase_request.index') }}">
+                        <div class="small-box bg-primary">
+                            <div class="inner" style="background-color: coral">
+                                <p>Purchase</p>
+                                <h3>Request</h3>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-cart-arrow-down"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                @endif
             </div>
         </div>
 
