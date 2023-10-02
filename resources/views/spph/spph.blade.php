@@ -101,7 +101,7 @@
                                                     data-target="#detail-spph" class="btn-lihat btn btn-info btn-xs"
                                                     data-detail="{{ json_encode($data) }}"><i
                                                         class="fas fa-list"></i></button>
-                                                @if (Auth::user()->role == 0)
+                                                @if (Auth::user()->role == 0 || Auth::user()->role == 1)
                                                     <button title="Hapus SPPH" type="button" class="btn btn-danger btn-xs"
                                                         data-toggle="modal" data-target="#delete-spph"
                                                         onclick="deletespph({{ json_encode($data) }})"><i
@@ -182,7 +182,6 @@
                             </div>
 
                             <a id="tambah" style="cursor: pointer">Tambah Penerima</a>
-
 
                         </form>
                     </div>

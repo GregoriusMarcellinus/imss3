@@ -75,7 +75,7 @@
                                                     data-target="#detail-sjn" class="btn-lihat btn btn-info btn-xs"
                                                     data-detail="{{ json_encode($data) }}"><i
                                                         class="fas fa-list"></i></button>
-                                                @if (Auth::user()->role == 0)
+                                                @if (Auth::user()->role == 0 || Auth::user()->role == 1)
                                                     <button title="Hapus Produk" type="button"
                                                         class="btn btn-danger btn-xs" data-toggle="modal"
                                                         data-target="#delete-sjn"

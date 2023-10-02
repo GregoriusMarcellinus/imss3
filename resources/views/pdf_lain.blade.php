@@ -8,6 +8,7 @@
     <style>
         @page {
             size: portrait;
+            /* size: landscape; */
         }
 
         body {
@@ -274,7 +275,7 @@
             <tr>
                 <td colspan="2" style="text-align: left;">
                     7. BENEFIT
-                    <ul style="list-style: none;">
+                    {{-- <ul style="list-style: none;">
                         <li>
                             BPJS KETENAGAKERJAAN
                             <ul style="list-style: none">
@@ -287,7 +288,7 @@
                         <li>BPJS KESEHATAN</li>
                         <li>PPIP</li>
                         <li>JUMLAH PREMI</li>
-                    </ul>
+                    </ul> --}}
                 </td>
                 <td></td>
                 <td class="myAlign">
@@ -301,52 +302,30 @@
                     00.00
                 </td>
             </tr>
-            {{-- <tr>
-                <th colspan="2" style="text-align: left">
-                    Special Allowance
-                </th>
-                <td></td>
-                <td class="myAlign">
-                    00.00
-                </td>
-                <th colspan="2" style="text-align: left">
-                    NSC
-                </th>
-                <td></td>
-                <td class="myAlign">
-                    00.00
-                </td>
-            </tr>
             <tr>
-                <td colspan="4" class="table-border-right"></td>
-                <th colspan="2" style="text-align: left">
-                    Union Thanco Officer(UTO)
-                </th>
-                <td></td>
-                <td class="myAlign">
-                    00.00
+                <td colspan="2">
+                <ul style="list-style: none;padding-left: 15%;margin: 0%">
+                    <li>
+                        BPJS KETENAGAKERJAAN
+                        <ul style="list-style: none;padding-left: 15%;">
+                            <li>JKK</li>
+                            <li>JKM</li>
+                            <li>JHT</li>
+                            <li>JP</li>
+                        </ul>
+                    </li>
+                    <li>BPJS KESEHATAN</li>
+                    <li>PPIP</li>
+                    <li>JUMLAH PREMI</li>
+                </ul>
                 </td>
+                <td  style="text-align: left;"></td>
+                <td class="table-border-right"></td>
+                <td ></td>
+                <td ></td>
+                <td ></td>
+                <td ></td>
             </tr>
-            <tr>
-                <td colspan="4" class="table-border-right"></td>
-                <th colspan="2">
-                    Advance
-                </th>
-                <td></td>
-                <td class="myAlign">
-                    00.00
-                </td>
-            </tr>
-            <tr>
-                <td colspan="4" class="table-border-right"></td>
-                <th colspan="2">
-                    Income Tax
-                </th>
-                <td></td>
-                <td class="myAlign">
-                    00.00
-                </td>
-            </tr> --}}
             <tr class="myBackground">
                 <th colspan="3" style="text-align: left">
                     JUMLAH PENDAPATAN BRUTO
@@ -369,19 +348,10 @@
                 <td class="table-border-right">
                     XXXXXXX
                 </td>
-                <td colspan="3" style="text-align: right">
+                <td colspan="4" style="text-align: center">
                     Madiun, 21 September 2023
                 </td>
-                <td></td>
             </tr>
-            {{-- <tr>
-                <td colspan="2">
-                </td>
-                <td></td>
-                <td class="myAlign">
-                </td>
-                <td colspan="4"></td>
-            </tr> --}}
             <tr>
                 <td colspan="2" style="text-align: left">
                     Saldo PPIP (PKWT)
@@ -390,10 +360,9 @@
                 <td class="table-border-right">
                     00.00
                 </td>
-                <td colspan="3" style="text-align: center;">
+                <td colspan="4" style="text-align: center;">
                     Presiden Direktur
                 </td>
-                <td></td>
             </tr>
             <tr>
                 <td colspan="2" style="vertical-align: top">
@@ -413,21 +382,10 @@
                 <td class="myAlign" style="vertical-align: top">
                     00.00
                 </td>
-                <td colspan="3" style="text-align: right; height: 100px;">
+                <td colspan="4" style="text-align: center; height: 50px;vertical-align: bottom;">
                     <b><u> A. Wishnudartha Pagehgiri </u></b>
                 </td>
-                <td></td>
             </tr>
-            {{-- <tr>
-                <td colspan="2" style="vertical-align: top">
-                    Nilai Kredit Poin
-                </td>
-                <td></td>
-                <td class="myAlign" style="vertical-align: top">
-                    00.00
-                </td>
-                <td colspan="4"></td>
-            </tr> --}}
         </table>
     </div>
 </body>
