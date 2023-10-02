@@ -19,21 +19,17 @@
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
-    <div class="wrapper">
-        <nav class="main-header navbar navbar-expand navbar-white navbar-light">
-            <ul class="navbar-nav">
+    <div class="wrapper" style="margin-left: 0">
+        <nav class="main-header navbar navbar-expand navbar-white navbar-light" style="margin-left: 0">
+            {{-- <ul class="navbar-nav">
                 <li class="nav-item">
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i
                             class="fas fa-bars"></i></a>
                 </li>
-            </ul>
+            </ul> --}}
             <ul class="navbar-nav d-flex justify-content-between w-100 align-items-center">
-                {{-- <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i
-                            class="fas fa-bars"></i></a>
-                </li> --}}
                 <li class="nav-item d-none d-sm-inline-block">
-                    <span class="nav-link">Home</span>
+                    <span class="nav-link">Selamat Datang di Software IMSS</span>
                 </li>
                 <div>
                     <li class="nav-item d-none d-sm-inline-block">
@@ -62,7 +58,7 @@
                 </div>
             </ul>
         </nav>
-        <aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-color: maroon;">
+        {{-- <aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-color: maroon;">
             <a href="/" class="brand-link text-center" style="background-color: black;">
                 <span class="brand-text font-weight-bold">PT.IMSS</span>
             </a>
@@ -71,7 +67,7 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
-                        {{-- @if (Auth::check())
+                        @if (Auth::check())
                             <li class="nav-item">
                                 <a class="nav-link {{ Route::current()->getName() == 'home' ? 'active' : '' }}"
                                     href="{{ route('home') }}">
@@ -184,17 +180,17 @@
                                     <p class="text">{{ __('Login') }}</p>
                                 </a>
                             </li>
-                        @endif --}}
+                        @endif
                     </ul>
                 </nav>
             </div>
-        </aside>
+        </aside> --}}
 
-        <div class="content-wrapper">
+        <div class="content-wrapper" style="margin-left: 0">
             @yield('content')
         </div>
 
-        <footer class="main-footer">
+        <footer class="main-footer" style="margin-left: 0">
             <b>PT</b> {{ config('app.version') }}
             <img src="/img/garis.jpg" style="width: 100%;" />
         </footer>
