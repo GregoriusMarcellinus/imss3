@@ -18,114 +18,114 @@
         <div class="container-fluid">
             <div class="row">
                 @if (Auth::user()->role == 0 || Auth::user()->role == 4)
-                <div class="col-lg-3 col-6">
-                    <a href="#" data-toggle="modal" data-target="#stock-form" onclick="stockForm(1)">
-                        <div class="small-box bg-success">
-                            <div class="inner" style="background-color: goldenrod;">
-                                <p>Stock</p>
-                                <h3>In</h3>
+                    <div class="col-lg-3 col-6">
+                        <a href="#" data-toggle="modal" data-target="#stock-form" onclick="stockForm(1)">
+                            <div class="small-box bg-success">
+                                <div class="inner" style="background-color: goldenrod;">
+                                    <p>Stock</p>
+                                    <h3>In</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-box"></i>
+                                </div>
                             </div>
-                            <div class="icon">
-                                <i class="fas fa-box"></i>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        <a href="#" data-toggle="modal" data-target="#stock-form" onclick="stockForm(0)">
+                            <div class="small-box bg-info">
+                                <div class="inner" style="background-color: blueviolet;">
+                                    <p>Stock</p>
+                                    <h3>Out</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-box-open"></i>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-6">
-                    <a href="#" data-toggle="modal" data-target="#stock-form" onclick="stockForm(0)">
-                        <div class="small-box bg-info">
-                            <div class="inner" style="background-color: blueviolet;">
-                                <p>Stock</p>
-                                <h3>Out</h3>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        <a href="#" data-toggle="modal" data-target="#stock-form" onclick="stockForm(2)">
+                            <div class="small-box bg-info">
+                                <div class="inner" style="background-color: cadetblue;">
+                                    <p>Product</p>
+                                    <h3>Retur</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-undo"></i>
+                                </div>
                             </div>
-                            <div class="icon">
-                                <i class="fas fa-box-open"></i>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        <a href="{{ route('products.stock.history') }}">
+                            <div class="small-box bg-primary">
+                                <div class="inner">
+                                    <p>Stock</p>
+                                    <h3>History</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-history"></i>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-6">
-                    <a href="#" data-toggle="modal" data-target="#stock-form" onclick="stockForm(2)">
-                        <div class="small-box bg-info">
-                            <div class="inner" style="background-color: cadetblue;">
-                                <p>Product</p>
-                                <h3>Retur</h3>
+                        </a>
+                    </div>
+                @endif
+                @if (Auth::user()->role == 0 || Auth::user()->role == 1)
+                    <div class="col-lg-3 col-6">
+                        <a href="{{ route('sjn') }}">
+                            <div class="small-box bg-info">
+                                <div class="inner" style="background-color: rgb(186, 226, 43);">
+                                    <p>Surat</p>
+                                    <h3>Jalan</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-envelope"></i>
+                                </div>
                             </div>
-                            <div class="icon">
-                                <i class="fas fa-undo"></i>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        <a href="{{ route('spph.index') }}">
+                            <div class="small-box bg-info">
+                                <div class="inner" style="background-color: rgb(231, 48, 24);">
+                                    <p>Surat Perminataan Penawaran</p>
+                                    <h3>Harga</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-mail-bulk"></i>
+                                </div>
                             </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-6">
-                    <a href="{{ route('products.stock.history') }}">
-                        <div class="small-box bg-primary">
-                            <div class="inner">
-                                <p>Stock</p>
-                                <h3>History</h3>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        <a href="{{ route('purchase_order.index') }}">
+                            <div class="small-box bg-primary">
+                                <div class="inner">
+                                    <p>Purchase</p>
+                                    <h3>Order</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-hand-holding-usd"></i>
+                                </div>
                             </div>
-                            <div class="icon">
-                                <i class="fas fa-history"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-               @endif 
-               @if (Auth::user()->role == 0 || Auth::user()->role == 1)
-                <div class="col-lg-3 col-6">
-                    <a href="{{ route('sjn') }}">
-                        <div class="small-box bg-info">
-                            <div class="inner" style="background-color: rgb(186, 226, 43);">
-                                <p>Surat</p>
-                                <h3>Jalan</h3>
-                            </div>
-                            <div class="icon">
-                                <i class="fas fa-envelope"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-6">
-                    <a href="{{ route('spph.index') }}">
-                        <div class="small-box bg-info">
-                            <div class="inner" style="background-color: rgb(231, 48, 24);">
-                                <p>Surat Perminataan Penawaran</p>
-                                <h3>Harga</h3>
-                            </div>
-                            <div class="icon">
-                                <i class="fas fa-mail-bulk"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                <div class="col-lg-3 col-6">
-                    <a href="{{ route('purchase_order.index') }}">
-                        <div class="small-box bg-primary">
-                            <div class="inner">
-                                <p>Purchase</p>
-                                <h3>Order</h3>
-                            </div>
-                            <div class="icon">
-                                <i class="fas fa-hand-holding-usd"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+                        </a>
+                    </div>
                 @endif
                 @if (Auth::user()->role == 0 || Auth::user()->role == 2 || Auth::user()->role == 3)
-                <div class="col-lg-3 col-6">
-                    <a href="{{ route('purchase_request.index') }}">
-                        <div class="small-box bg-primary">
-                            <div class="inner" style="background-color: coral">
-                                <p>Purchase</p>
-                                <h3>Request</h3>
+                    <div class="col-lg-3 col-6">
+                        <a href="{{ route('purchase_request.index') }}">
+                            <div class="small-box bg-primary">
+                                <div class="inner" style="background-color: coral">
+                                    <p>Purchase</p>
+                                    <h3>Request</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-cart-arrow-down"></i>
+                                </div>
                             </div>
-                            <div class="icon">
-                                <i class="fas fa-cart-arrow-down"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+                        </a>
+                    </div>
                 @endif
             </div>
         </div>
@@ -451,7 +451,7 @@
                     $.each(data, function(key, value) {
                         if (type == 0) {
                             $('#shelf').append('<option value="' + value.shelf_id + '">' + value
-                                .shelf_name + ' (Stock: ' + value.product_amount + ')</option>');
+                                .shelf_name + '</option>');
                         } else {
                             $('#shelf').append('<option value="' + value.shelf_id + '">' + value
                                 .shelf_name + '</option>');

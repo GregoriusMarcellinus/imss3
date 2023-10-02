@@ -6,13 +6,6 @@
     <link rel="stylesheet" href="/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
     <link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker.css">
     <link rel="stylesheet" href="/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
-    <style>
-        .main-header,
-        .main-footer,
-        .content-wrapper {
-            margin-left: 0px !important;
-        }
-    </style>
 @endsection
 @section('content')
     <div class="content-header">

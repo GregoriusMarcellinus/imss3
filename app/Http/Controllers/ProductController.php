@@ -1145,23 +1145,23 @@ class ProductController extends Controller
         }
 
         if ($req->format == "json") {
-            if (!empty($product_id)) {
-                $shelf = $shelf->join("stock", "shelf.shelf_id", "stock.shelf_id")
-                    ->where([["stock.product_id", $product_id], ["stock.warehouse_id", $warehouse_id]])->groupBy("shelf_id");
-                $result = [];
-                $shelf = $shelf->select("shelf.*", "stock.product_amount")->get();
-                foreach ($shelf as $s) {
-                    $totalStockIn   = DB::table('stock')->where([["stock.warehouse_id", $warehouse_id], ["product_id", $product_id], ["shelf_id", $s->shelf_id], ["type", 1]])->sum("product_amount");
-                    $totalStockOut  = DB::table('stock')->where([["stock.warehouse_id", $warehouse_id], ["product_id", $product_id], ["shelf_id", $s->shelf_id], ["type", 0]])->sum("product_amount");
-                    $availableStock = $totalStockIn - $totalStockOut;
-                    if ($availableStock > 0) {
-                        $s->product_amount = $availableStock;
-                        $result[] = $s;
-                    }
-                }
-            } else {
-                $result = $shelf->select("shelf.*")->get();
-            }
+            // if (!empty($product_id)) {
+            //     $shelf = $shelf->join("stock", "shelf.shelf_id", "stock.shelf_id")
+            //         ->where([["stock.product_id", $product_id], ["stock.warehouse_id", $warehouse_id]])->groupBy("shelf_id");
+            //     $result = [];
+            //     $shelf = $shelf->select("shelf.*", "stock.product_amount")->get();
+            //     foreach ($shelf as $s) {
+            //         $totalStockIn   = DB::table('stock')->where([["stock.warehouse_id", $warehouse_id], ["product_id", $product_id], ["shelf_id", $s->shelf_id], ["type", 1]])->sum("product_amount");
+            //         $totalStockOut  = DB::table('stock')->where([["stock.warehouse_id", $warehouse_id], ["product_id", $product_id], ["shelf_id", $s->shelf_id], ["type", 0]])->sum("product_amount");
+            //         $availableStock = $totalStockIn - $totalStockOut;
+            //         if ($availableStock > 0) {
+            //             $s->product_amount = $availableStock;
+            //             $result[] = $s;
+            //         }
+            //     }
+            // } else {
+            $result = $shelf->select("shelf.*")->get();
+            // }
             return response()->json($result);
         } else {
             $shelf = $shelf->where("warehouse_id", $warehouse_id)->paginate(50);
