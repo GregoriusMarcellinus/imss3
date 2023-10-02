@@ -16,18 +16,17 @@
     @hasSection('custom-css')
         @yield('custom-css')
     @endif
-    <style>
-        .main-header,
-        .main-footer,
-        .content-wrapper {
-            margin-left: 0px !important;
-        }
-    </style>
 </head>
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper">
         <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i
+                            class="fas fa-bars"></i></a>
+                </li>
+            </ul>
             <ul class="navbar-nav d-flex justify-content-between w-100 align-items-center">
                 {{-- <li class="nav-item">
                     <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i
@@ -39,7 +38,7 @@
                 <div>
                     <li class="nav-item d-none d-sm-inline-block">
                         @if (Auth::user() && Auth::user()->role == 0)
-                        <a href="{{route('home')}}" class="nav-link">Dashboard</a>
+                            <a href="{{ route('home') }}" class="nav-link">Dashboard</a>
                         @endif
                     </li>
                     <li class="nav-item d-none d-sm-inline-block">
@@ -55,14 +54,15 @@
                         <span class="nav-link">
                             @if (Auth::check())
                                 <form id="logout" action="{{ route('logout') }}" method="post">@csrf</form>
-                                <a href="javascript:;" onclick="document.getElementById('logout').submit();" class="btn btn-danger">Logout</a>
+                                <a href="javascript:;" onclick="document.getElementById('logout').submit();"
+                                    class="btn btn-danger">Logout</a>
                             @endif
                         </span>
                     </li>
                 </div>
             </ul>
         </nav>
-        {{-- <aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-color: maroon;">
+        <aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-color: maroon;">
             <a href="/" class="brand-link text-center" style="background-color: black;">
                 <span class="brand-text font-weight-bold">PT.IMSS</span>
             </a>
@@ -188,7 +188,7 @@
                     </ul>
                 </nav>
             </div>
-        </aside> --}}
+        </aside>
 
         <div class="content-wrapper">
             @yield('content')
