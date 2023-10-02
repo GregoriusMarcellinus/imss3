@@ -101,7 +101,7 @@
                                                     data-detail="{{ json_encode($data) }}"><i
                                                         class="fas fa-list"></i></button>
 
-                                                @if (Auth::user() && Auth::user()->role == 0)
+                                                @if (Auth::user() && Auth::user()->role == 0 || Auth::user()->role == 1 )
                                                     <button title="Hapus PO" type="button" class="btn btn-danger btn-xs"
                                                         data-toggle="modal" data-target="#delete-po"
                                                         onclick="deletePo({{ json_encode($data) }})"><i
