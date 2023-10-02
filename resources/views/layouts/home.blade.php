@@ -71,7 +71,7 @@
                 <nav class="mt-2">
                     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu"
                         data-accordion="false">
-                        @if (Auth::check())
+                        {{-- @if (Auth::check())
                             <li class="nav-item">
                                 <a class="nav-link {{ Route::current()->getName() == 'home' ? 'active' : '' }}"
                                     href="{{ route('home') }}">
@@ -184,7 +184,7 @@
                                     <p class="text">{{ __('Login') }}</p>
                                 </a>
                             </li>
-                        @endif
+                        @endif --}}
                     </ul>
                 </nav>
             </div>
