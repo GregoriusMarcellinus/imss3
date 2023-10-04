@@ -117,6 +117,7 @@ class KodeMaterialController extends Controller
 
                 return response()->json($data);
             } else {
+                $materials = $materials->values()->all();
                 $materials = $materials[0];
                 $data = [
                     'success' => true,

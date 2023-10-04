@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\DetailPo;
 use App\Models\DetailPR;
 use App\Models\Purchase_Order;
 use App\Models\PurchaseRequest;
@@ -80,7 +81,9 @@ class PurchaseOrderController extends Controller
             ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_order.proyek_id')
             ->where('purchase_order.id', $id)
             ->first();
-        $po->details = DetailPR::where('id_pr', $po->pr_id)->get();
+        $po->details = DetailPo::where('id_po', $po->id)
+            ->leftJoin('detail_pr', 'detail_pr.id', '=', 'detail_po.id_detail_pr')
+            ->get();
         return response()->json([
             'po' => $po
         ]);
@@ -150,7 +153,7 @@ class PurchaseOrderController extends Controller
         );
 
         if (empty($purchase_order)) {
-            DB::table('purchase_order')->insert([
+            $po = DB::table('purchase_order')->insertGetId([
                 'no_po' => $request->no_po,
                 'vendor_id' => $request->vendor_id,
                 'tanggal_po' => $request->tanggal_po,
@@ -165,8 +168,18 @@ class PurchaseOrderController extends Controller
                 'proyek_id' => $request->proyek_id,
                 'pr_id' => $request->pr_id,
                 'catatan_vendor' => $request->catatan_vendor
-
             ]);
+
+            $prs = DetailPR::where('id_pr', $request->pr_id)->get();
+
+
+            foreach ($prs as $pr) {
+                DetailPo::insert([
+                    'id_po' => $po,
+                    'id_pr' => $request->pr_id,
+                    'id_detail_pr' => $pr->id,
+                ]);
+            }
 
             return redirect()->route('purchase_order.index')->with('success', 'Data PO berhasil ditambahkan');
         } else {
