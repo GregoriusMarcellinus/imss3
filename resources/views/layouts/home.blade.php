@@ -20,20 +20,14 @@
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper" style="margin-left: 0">
-        <nav class="main-header navbar navbar-expand navbar-white navbar-light" style="margin-left: 0">
-            {{-- <ul class="navbar-nav">
-                <li class="nav-item">
-                    <a class="nav-link" data-widget="pushmenu" href="#" role="button"><i
-                            class="fas fa-bars"></i></a>
-                </li>
-            </ul> --}}
+        <nav class="main-header navbar navbar-expand navbar-white navbar-dark" style="margin-left: 0;background-color: firebrick">
             <ul class="navbar-nav d-flex justify-content-between w-100 align-items-center">
                 <li class="nav-item d-none d-sm-inline-block">
                     <span class="nav-link">Selamat Datang di Software IMSS</span>
                 </li>
                 <div>
                     <li class="nav-item d-none d-sm-inline-block">
-                        @if (Auth::user() && Auth::user()->role == 0)
+                        @if (Auth::check())
                             <a href="{{ route('home') }}" class="nav-link">Dashboard</a>
                         @endif
                     </li>
@@ -42,7 +36,7 @@
                             @if (Auth::check())
                                 Halo, {{ Auth::user()->name }}!
                             @else
-                                <a href="{{ route('login') }}" class="btn btn-info mb-4">Login</a>
+                                <a href="{{ route('login') }}" class="btn btn-light mb-4">Login</a>
                             @endif
                         </span>
                     </li>
@@ -51,7 +45,7 @@
                             @if (Auth::check())
                                 <form id="logout" action="{{ route('logout') }}" method="post">@csrf</form>
                                 <a href="javascript:;" onclick="document.getElementById('logout').submit();"
-                                    class="btn btn-danger">Logout</a>
+                                    class="btn btn-light">Logout</a>
                             @endif
                         </span>
                     </li>

@@ -6,6 +6,12 @@
     <link rel="stylesheet" href="/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
     <link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker.css">
     <link rel="stylesheet" href="/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <style>
+        button {
+            background-color: transparent;
+            border: none;
+        }
+    </style>
 @endsection
 @section('content')
     <div class="content-header">
@@ -18,35 +24,46 @@
         </div>
     </div>
     <section class="content">
-        <div class="container">
+        <div class="container-fluid">
             <div class="row">
-                <div class="col-6">
-                    <div class="row">
-                        <div class="col">
-                            <h2 class="text-center">OUR VALUE</h2>
-                            <hr style="width: 20%; border-top: 2px solid #b01919;">
+                <div class="col-7">
+                    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+                        <ol class="carousel-indicators">
+                            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+                            <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+                            <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+                            <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+                        </ol>
+                        <div class="carousel-inner">
+                            <div class="carousel-item active">
+                                <img src="/img/akhlak_main.png" class="d-block w-100" height="400" alt="/img/slide4.png"
+                                    style="object-fit: contain">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="/img/slide2.JPG" class="d-block w-100" height="400" alt="/img/slide4.png"
+                                style="object-fit: cover">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="/img/slide4.png" class="d-block w-100" height="400" alt="/img/slide4.png"
+                                style="object-fit: contain">
+                            </div>
+                            <div class="carousel-item">
+                                <img src="/img/slide1.jpg" class="d-block w-100" height="400" alt="/img/slide4.png"
+                                    style="object-fit: contain">
+                            </div>
                         </div>
+                        <button class="carousel-control-prev" type="button" data-target="#carouselExampleIndicators"
+                            data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-target="#carouselExampleIndicators"
+                            data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>
+                        </button>
                     </div>
-                        <div class="row rounded mb-2" style="border: 1px solid #b01919;">
-                            <div class="col">
-                                <h3 class="font-weight-bold text-center mt-2 mb-0">TANGGAP</h3>
-                                <p class="text-justify p-2">Senantiasa berusaha untuk memberikan pelayanan yang dapat memuaskan kebutuhan pelanggan secara cepat, tepat dan sesuai dengan persyaratan yang ditetapkan.</p>
-                            </div>
-                        </div>
-                        <div class="row rounded mb-2" style="border: 1px solid #b01919;">
-                            <div class="col">
-                                <h3 class="font-weight-bold text-center mt-2 mb-0">TANGKAS</h3>
-                                <p class="text-justify p-2">Mampu bekerja secara sigap / cekatan untuk memenuhi kebutuhan pelanggan tanpa mengurangi kualitas yang dipersyaratkan.</p>
-                            </div>
-                        </div>
-                        <div class="row rounded mb-2" style="border: 1px solid #b01919;">
-                            <div class="col">
-                                <h3 class="font-weight-bold text-center mt-2 mb-0">BERKUALITAS</h3>
-                                <p class="text-justify p-2">Kemampuan meningkatkan mutu pelayanan secara terus - menerus sesuai dengan persyaratan pelanggan</p>
-                            </div>
-                        </div>
                 </div>
-                <div class="col-1"></div>
                 <div class="col-5">
                     <div class="row">
                         <div class="col-12">
@@ -55,33 +72,33 @@
                     </div>
                     <div class="row">
                         <div class="col-12">
-                            <a href="{{ url('/') }}">
-                                <div class="small-box bg-success">
-                                    <div class="inner" style="background-color: darkcyan;">
-                                        <p>Menu</p>
-                                        <h3>Utama</h3>
-                                    </div>
-                                    <div class="icon">
-                                        <i class="fas fa-arrow-left"></i>
-                                    </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <a href="{{ url('/') }}">
+                                        <div class="small-box bg-success" style="border-radius: 0px;box-shadow:0 0 0px transparent;border: 5px solid yellow">
+                                            <div class="inner text-center py-4" style="background-color: darkcyan;">
+                                                <i class="fas fa-arrow-left" style="font-size:2rem"></i>
+                                                <p class="mb-0 mt-2"> Menu Utama</p>
+                                            </div>
+                                        </div>
+                                    </a>
                                 </div>
-                            </a>
-                        </div>
-                        @foreach ($menus as $menu)
-                            <div class="col-12">
-                                <a href="{{ url($menu['route']) }}">
-                                    <div class="small-box bg-success">
-                                        <div class="inner" style="background-color: {{ $menu['bgcolor'] }};">
-                                            <p>Fitur</p>
-                                            <h3>{{ $menu['name'] }}</h3>
-                                        </div>
-                                        <div class="icon">
-                                            <i class="fas fa-{{ $menu['icon'] }}"></i>
-                                        </div>
+                                @foreach ($menus as $menu)
+                                    <div class="col-4">
+                                        <a href="{{ url($menu['route']) }}">
+                                            <div class="small-box bg-success"
+                                                style="border-radius: 0px;box-shadow:0 0 0px transparent;border: 5px solid yellow">
+                                                <div class="inner text-center py-4"
+                                                    style="background-color: {{ $menu['bgcolor'] }};">
+                                                    <i class="fas fa-{{ $menu['icon'] }} " style="font-size:2rem"></i>
+                                                    <p class="mb-0 mt-2">{{ $menu['name'] }}</p>
+                                                </div>
+                                            </div>
+                                        </a>
                                     </div>
-                                </a>
+                                @endforeach
                             </div>
-                        @endforeach
+                        </div>
                     </div>
                 </div>
             </div>
