@@ -83,6 +83,37 @@ class PurchaseOrderController extends Controller
             ->first();
         $po->details = DetailPo::where('id_po', $po->id)
             ->leftJoin('detail_pr', 'detail_pr.id', '=', 'detail_po.id_detail_pr')
+            ->select('detail_pr.*', 'detail_po.id as id_detail_po', 'detail_po.harga as harga_per_unit', 'detail_po.mata_uang as mata_uang', 'detail_po.vat as vat', 'detail_po.batas_akhir as batas')
+            ->get();
+        return response()->json([
+            'po' => $po
+        ]);
+    }
+
+    public function detailPrSave(Request $request)
+    {
+        $id_po = $request->id_po;
+        $id_detail_po = $request->id;
+        $batas = $request->batas;
+        $harga_per_unit = $request->harga_per_unit;
+        $mata_uang = $request->mata_uang;
+        $vat = $request->vat;
+
+        DetailPo::where('id', $id_detail_po)->update([
+            'batas_akhir' => $batas,
+            'harga' => $harga_per_unit,
+            'mata_uang' => $mata_uang,
+            'vat' => $vat,
+        ]);
+
+        $po = Purchase_Order::select('purchase_order.*', 'vendor.nama as nama_vendor', 'keproyekan.nama_proyek as nama_proyek')
+            ->join('vendor', 'vendor.id', '=', 'purchase_order.vendor_id')
+            ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_order.proyek_id')
+            ->where('purchase_order.id', $id_po)
+            ->first();
+        $po->details = DetailPo::where('id_po', $po->id)
+            ->leftJoin('detail_pr', 'detail_pr.id', '=', 'detail_po.id_detail_pr')
+            ->select('detail_pr.*', 'detail_po.id as id_detail_po', 'detail_po.harga as harga_per_unit', 'detail_po.mata_uang as mata_uang', 'detail_po.vat as vat', 'detail_po.batas_akhir as batas')
             ->get();
         return response()->json([
             'po' => $po
@@ -217,7 +248,17 @@ class PurchaseOrderController extends Controller
             ->first();
         $po->batas_po = Carbon::parse($po->batas_po)->isoFormat('D MMMM Y');
         $po->tanggal_po = Carbon::parse($po->tanggal_po)->isoFormat('D MMMM Y');
-        $po->details = DetailPR::where('id_pr', $po->pr_id)->get();
+        $po->details = DetailPo::where('id_po', $po->id)
+            ->leftJoin('detail_pr', 'detail_pr.id', '=', 'detail_po.id_detail_pr')
+            ->select('detail_pr.*', 'detail_po.id as id_detail_po', 'detail_po.harga as harga_per_unit', 'detail_po.mata_uang as mata_uang', 'detail_po.vat as vat', 'detail_po.batas_akhir as batas')
+            ->get();
+        //subtotal = harga per unit * qty
+        $po->subtotal = $po->details->sum(function ($detail) {
+            return $detail->harga_per_unit * $detail->qty;
+        });
+        $po->ongkos = 0;
+        $po->asuransi = 0;
+        $po->total = $po->subtotal + $po->ongkos + $po->asuransi;
         $pdf = PDF::loadview('purchase_order.po_print', compact('po'));
         $pdf->setPaper('A4', 'landscape');
         $nama = $po->nama_proyek;

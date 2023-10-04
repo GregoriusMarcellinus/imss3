@@ -27,9 +27,8 @@
         table {
             border-collapse: collapse;
             padding: 20px
-            
         }
-        
+
         td {
             padding-left: 10px;
             padding-right: 10px;
@@ -38,12 +37,15 @@
         th {
             padding: 15px 15px 15px 25px;
         }
+
         .table {
             width: 100%;
             border: 1px solid black;
         }
 
-        .table tr, .table th, .table td {
+        .table tr,
+        .table th,
+        .table td {
             border: 1px solid black;
         }
 
@@ -185,17 +187,21 @@
         </thead>
         <tbody>
             @forelse ($po->details as $item)
+                @php
+                    $harga_per_unit = $item->harga_per_unit ?? 0;
+                @endphp
                 <tr>
                     <td style="text-align: center;">{{ $loop->iteration }}</td>
                     <td>{{ $item->kode_material }}</td>
                     <td>{{ $item->uraian }}</td>
-                    <td style="text-align: center;">{{ $item->batas_akhir_diterima ?? '-' }}</td>
+                    <td style="text-align: center;">{{ $item->batas ? date('d/m/Y', strtotime($item->batas)) : '-' }}
                     <td style="text-align: center;">{{ $item->qty }}</td>
                     <td style="text-align: center;">{{ $item->satuan }}</td>
-                    <td style="text-align: center;">{{ $item->harga_per_unit ?? '-' }}</td>
+                    <td style="text-align: center;">@rupiah($harga_per_unit)</td>
                     <td style="text-align: center;">{{ $item->mata_uang ?? '-' }}</td>
                     <td style="text-align: center;">{{ $item->vat ?? '-' }}</td>
-                    <td style="text-align: center;">{{ $item->total ?? '-' }}</td>
+                    <td style="text-align: center;">@rupiah($item->qty * $item->harga_per_unit)
+                    </td>
                 </tr>
             @empty
                 <tr>
@@ -212,22 +218,22 @@
                     <tr>
                         <td>Sub Total</td>
                         <td>:</td>
-                        <td>0</td>
+                        <td>@rupiah($po->subtotal)</td>
                     </tr>
                     <tr>
                         <td>Ongkos Kirim</td>
                         <td>:</td>
-                        <td>0</td>
+                        <td>@rupiah($po->ongkos)</td>
                     </tr>
                     <tr>
                         <td>Asuransi</td>
                         <td>:</td>
-                        <td>0</td>
+                        <td>@rupiah($po->asuransi)</td>
                     </tr>
                     <tr>
                         <td>Total</td>
                         <td>:</td>
-                        <td>0</td>
+                        <td>@rupiah($po->total)</td>
                     </tr>
                 </table>
             </div>

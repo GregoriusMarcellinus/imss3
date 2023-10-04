@@ -20,7 +20,7 @@ class CreateDetailPoTable extends Migration
             $table->integer('id_detail_pr');
             $table->date('batas_akhir')->nullable();
             $table->string('harga')->nullable();
-            $table->string('mata uang')->nullable();
+            $table->string('mata_uang')->nullable();
             $table->string('vat')->nullable();
             $table->timestamps();
         });
