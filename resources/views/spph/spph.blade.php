@@ -280,6 +280,7 @@
                                     </div>
                                     <div id="form" class="card">
                                         <div class="card-body">
+                                            <button type="button" class="btn btn-primary mb-3" id="addAllselected"></i>Tambah Pilihan</button>
                                             <table class="table table-bordered">
                                                 <thead>
                                                     <tr>
@@ -288,6 +289,8 @@
                                                         <th>Spesifikasi</th>
                                                         <th>QTY</th>
                                                         <th>Sat</th>
+                                                        <th>No PR</th>
+                                                        <th>Pilih</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id='detail-material'>
@@ -548,9 +551,8 @@
                         $('#detail-material').append(
                             '<tr><td>' + (key + 1) + '</td><td>' + value.uraian +
                             '</td><td>' + value.spek + '</td><td>' + value.qty + '</td><td>' + value
-                            .satuan +
-                            '</td><td><button class="btn btn-info" onclick="addToDetails(' + value
-                            .id + ')">Tambah</button></td></tr>'
+                            .satuan + '</td><td>' + value.no_pr +
+                            '</td><td><input type="checkbox" id="addToDetails"' + '</td></tr>'
                         );
                     });
                 },
@@ -591,9 +593,7 @@
                     $.each(data.spph.details, function(key, value) {
                         $('#table-spph').append('<tr><td>' + (key + 1) + '</td><td>' + value
                             .uraian + '</td><td>' + value.spek + '</td><td>' + value.qty +
-                            '</td><td>' + value
-                            .satuan +
-                            '</td></tr>');
+                            '</td><td>' + value.satuan +'</td></tr>');
                     });
                 },
                 error: function() {
