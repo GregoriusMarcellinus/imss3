@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\DetailPR;
+use App\Models\Purchase_Order;
 use App\Models\PurchaseRequest;
+use App\Models\Spph;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -30,7 +32,7 @@ class PurchaseRequestController extends Controller
             ->join('keproyekan', 'keproyekan.id', '=', 'purchase_request.proyek_id')
             ->paginate(50);
 
-            $proyeks = DB::table('keproyekan')->get();
+        $proyeks = DB::table('keproyekan')->get();
 
         if ($search) {
             $requests = PurchaseRequest::where('nama_proyek', 'LIKE', "%$search%")->paginate(50);
@@ -45,7 +47,8 @@ class PurchaseRequestController extends Controller
         }
     }
 
-    public function indexApps(Request $request){
+    public function indexApps(Request $request)
+    {
         $search = $request->q;
 
         if (Session::has('selected_warehouse_id')) {
@@ -58,7 +61,7 @@ class PurchaseRequestController extends Controller
             ->join('keproyekan', 'keproyekan.id', '=', 'purchase_request.proyek_id')
             ->paginate(50);
 
-            $proyeks = DB::table('keproyekan')->get();
+        $proyeks = DB::table('keproyekan')->get();
 
         if ($search) {
             $requests = PurchaseRequest::where('nama_proyek', 'LIKE', "%$search%")->paginate(50);
@@ -72,7 +75,7 @@ class PurchaseRequestController extends Controller
             return view('home.apps.wilayah.purchase_request', compact('requests', 'proyeks'));
         }
     }
-     
+
 
     public function getDetailPr(Request $request)
     {
@@ -87,6 +90,8 @@ class PurchaseRequestController extends Controller
             $item->spek = $item->spek ? $item->spek : '';
             $item->keterangan = $item->keterangan ? $item->keterangan : '';
             $item->kode_material = $item->kode_material ? $item->kode_material : '';
+            $item->nomor_spph = Spph::where('id', $item->id_spph)->first()->nomor_spph ?? '';
+            $item->no_po = Purchase_Order::where('id', $item->id_po)->first()->no_po ?? '';
             return $item;
         });
         return response()->json([
@@ -104,18 +109,20 @@ class PurchaseRequestController extends Controller
     {
         //
         $purchase_request = $request->id;
-        $request->validate([
-            'proyek_id' => 'required',
-            'no_pr' => 'required',
-            'dasar_pr' => 'required',
-            'tgl_pr' => 'required',
-        ],
-        [
-            'proyek_id.required' => 'Proyek harus diisi',
-            'no_pr.required' => 'No PR harus diisi',
-            'dasar_pr.required' => 'Dasar PR harus diisi',
-            'tgl_pr.required' => 'Tanggal PR harus diisi',
-        ]);
+        $request->validate(
+            [
+                'proyek_id' => 'required',
+                'no_pr' => 'required',
+                'dasar_pr' => 'required',
+                'tgl_pr' => 'required',
+            ],
+            [
+                'proyek_id.required' => 'Proyek harus diisi',
+                'no_pr.required' => 'No PR harus diisi',
+                'dasar_pr.required' => 'Dasar PR harus diisi',
+                'tgl_pr.required' => 'Tanggal PR harus diisi',
+            ]
+        );
 
         if (empty($purchase_request)) {
             DB::table('purchase_request')->insert([
@@ -126,7 +133,6 @@ class PurchaseRequestController extends Controller
             ]);
 
             return redirect()->route('purchase_request.index')->with('success', 'Purchase Request berhasil ditambahkan');
-
         } else {
             DB::table('purchase_request')->where('id', $purchase_request)->update([
                 'proyek_id' => $request->proyek_id,
@@ -142,27 +148,28 @@ class PurchaseRequestController extends Controller
 
     }
 
-    public function cetakPr(Request $request){
-            $id = $request->id;
-            $pr = PurchaseRequest::where('purchase_request.id', $id)
+    public function cetakPr(Request $request)
+    {
+        $id = $request->id;
+        $pr = PurchaseRequest::where('purchase_request.id', $id)
             ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_request.proyek_id')->first();
-            $pr->purchases = DetailPR::select('detail_pr.*', 'purchase_request.*')
+        $pr->purchases = DetailPR::select('detail_pr.*', 'purchase_request.*')
             ->leftjoin('purchase_request', 'purchase_request.id', '=', 'detail_pr.id_pr')
             ->where('purchase_request.id', $id)
             ->get();
-            
-            // return response()->json([
-            //     'pr' => $pr
-            // ]);
-            // dd($po);
-            // $po->batas_po = Carbon::parse($po->batas_po)->isoFormat('D MMMM Y');
-            // $po->tanggal_po = Carbon::parse($po->tanggal_po)->isoFormat('D MMMM Y');
 
-            $pdf = Pdf::loadview('purchase_request.pr_print', compact('pr'));
-            $pdf->setPaper('A4', 'landscape');
-            $no = $pr->no_pr;
-            return $pdf->stream('PR-'.$no.'.pdf');
-        }
+        // return response()->json([
+        //     'pr' => $pr
+        // ]);
+        // dd($po);
+        // $po->batas_po = Carbon::parse($po->batas_po)->isoFormat('D MMMM Y');
+        // $po->tanggal_po = Carbon::parse($po->tanggal_po)->isoFormat('D MMMM Y');
+
+        $pdf = Pdf::loadview('purchase_request.pr_print', compact('pr'));
+        $pdf->setPaper('A4', 'landscape');
+        $no = $pr->no_pr;
+        return $pdf->stream('PR-' . $no . '.pdf');
+    }
 
 
     /**
@@ -185,7 +192,7 @@ class PurchaseRequestController extends Controller
      */
     public function updateDetailPr(Request $request)
     {
-        if(!$request->stock){
+        if (!$request->stock) {
             return response()->json([
                 'success' => false,
                 'message' => 'QTY tidak boleh kosong'
@@ -196,14 +203,14 @@ class PurchaseRequestController extends Controller
             'id_pr' => $request->id_pr,
             'kode_material' => $request->kode_material,
             'uraian' => $request->uraian,
-            'spek'=>$request->spek,
+            'spek' => $request->spek,
             'satuan' => $request->satuan,
             'qty' => $request->stock,
             'waktu' => $request->waktu,
             'keterangan' => $request->keterangan,
-        ]);     
-        
-        if(!$insert){
+        ]);
+
+        if (!$insert) {
             return response()->json([
                 'success' => false,
                 'message' => 'Gagal menambahkan detail PR'
@@ -216,6 +223,8 @@ class PurchaseRequestController extends Controller
             $item->spek = $item->spek ? $item->spek : '';
             $item->keterangan = $item->keterangan ? $item->keterangan : '';
             $item->kode_material = $item->kode_material ? $item->kode_material : '';
+            $item->nomor_spph = Spph::where('id', $item->id_spph)->first()->nomor_spph ?? '';
+            $item->no_po = Purchase_Order::where('id', $item->id_po)->first()->no_po ?? '';
             return $item;
         });
 
@@ -224,7 +233,6 @@ class PurchaseRequestController extends Controller
             'message' => 'Berhasil menambahkan detail PR',
             'pr' => $pr
         ]);
-
     }
 
     /**
