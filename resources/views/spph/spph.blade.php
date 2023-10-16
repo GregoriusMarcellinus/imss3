@@ -280,7 +280,8 @@
                                     </div>
                                     <div id="form" class="card">
                                         <div class="card-body">
-                                            <button type="button" class="btn btn-primary mb-3" id="addAllselected"></i>Tambah Pilihan</button>
+                                            <button type="button" class="btn btn-primary mb-3"
+                                                onclick="addToDetails()"></i>Tambah Pilihan</button>
                                             <table class="table table-bordered">
                                                 <thead>
                                                     <tr>
@@ -289,7 +290,7 @@
                                                         <th>Spesifikasi</th>
                                                         <th>QTY</th>
                                                         <th>Sat</th>
-                                                        <th>No PR</th>
+                                                        <th>No SPPH</th>
                                                         <th>Pilih</th>
                                                     </tr>
                                                 </thead>
@@ -548,11 +549,30 @@
                     //append to #detail-material
                     $('#detail-material').empty();
                     $.each(data.products, function(key, value) {
+                        // console.log(value);
+                        var no_spph
+                        if (!value.id_spph) {
+                            no_spph = '-'
+                        } else {
+                            no_spph = value.nomor_spph
+                        }
+
+                        var checkbox;
+                        if (!value.id_spph) {
+                            checkbox = '<input type="checkbox" id="addToDetails" value="' + value.id +
+                                '" onclick="addToDetailsJs(' + value.id + ')">'
+                        } else {
+                            checkbox = '<input type="checkbox" id="addToDetails" value="' + value.id +
+                                '" onclick="addToDetailsJs(' + value.id + ')" disabled>'
+                        }
+
                         $('#detail-material').append(
                             '<tr><td>' + (key + 1) + '</td><td>' + value.uraian +
                             '</td><td>' + value.spek + '</td><td>' + value.qty + '</td><td>' + value
-                            .satuan + '</td><td>' + value.no_pr +
-                            '</td><td><input type="checkbox" id="addToDetails"' + '</td></tr>'
+                            .satuan + '</td><td>' + no_spph +
+                            '</td><td>' +
+                            checkbox +
+                            '</td></tr>'
                         );
                     });
                 },
@@ -563,6 +583,18 @@
             });
         }
 
+        let selected = [];
+
+        function addToDetailsJs(id) {
+            if (selected.includes(id)) {
+                selected = selected.filter(item => item !== id)
+            } else {
+                selected.push(id)
+            }
+
+            console.log(selected);
+        }
+
         function clearForm() {
             $('#product_id').val("");
             $('#pname').val("");
@@ -571,13 +603,13 @@
             $('#form').hide();
         }
 
-        function addToDetails(id) {
+        function addToDetails() {
             $.ajax({
                 url: '/products/tambah_spph_detail',
                 type: "POST",
                 data: {
                     "_token": "{{ csrf_token() }}",
-                    "product_id": id,
+                    "selected_id": selected,
                     "spph_id": $('#spph_id').val(),
                 },
                 dataType: "json",
@@ -588,12 +620,13 @@
                 success: function(data) {
                     loader(0);
                     $('#form').show();
+                    getSpphDetail();
                     //append to #detail-material
                     $('#table-spph').empty();
                     $.each(data.spph.details, function(key, value) {
                         $('#table-spph').append('<tr><td>' + (key + 1) + '</td><td>' + value
                             .uraian + '</td><td>' + value.spek + '</td><td>' + value.qty +
-                            '</td><td>' + value.satuan +'</td></tr>');
+                            '</td><td>' + value.satuan + '</td></tr>');
                     });
                 },
                 error: function() {

@@ -194,6 +194,7 @@ class SpphController extends Controller
             $item->spek = $item->spek ? $item->spek : '';
             $item->keterangan = $item->keterangan ? $item->keterangan : '';
             $item->kode_material = $item->kode_material ? $item->kode_material : '';
+            $item->nomor_spph = Spph::where('id', $item->id_spph)->first()->nomor_spph ?? '';
             return $item;
         });
 
@@ -249,12 +250,21 @@ class SpphController extends Controller
     function tambahSpphDetail(Request $request)
     {
         $id = $request->spph_id;
-        $id_barang = $request->product_id;
+        $selected = $request->selected_id;
 
-        DetailSpph::create([
-            'spph_id' => $id,
-            'id_detail_pr' => $id_barang
-        ]);
+        //foreach selected_id
+
+        foreach ($selected as $key => $value) {
+            $id_barang = $value;
+            $add = DetailSpph::create([
+                'spph_id' => $id,
+                'id_detail_pr' => $id_barang
+            ]);
+
+            $update = DetailPR::where('id', $id_barang)->update([
+                'id_spph' => $id
+            ]);
+        }
 
         $spph = Spph::where('id', $id)->first();
         $spph->penerima = json_decode($spph->penerima);
@@ -267,6 +277,7 @@ class SpphController extends Controller
             $item->spek = $item->spek ? $item->spek : '';
             $item->keterangan = $item->keterangan ? $item->keterangan : '';
             $item->kode_material = $item->kode_material ? $item->kode_material : '';
+            $item->nomor_spph = Spph::where('id', $item->id_spph)->first()->nomor_spph ?? '';
             return $item;
         });
 
