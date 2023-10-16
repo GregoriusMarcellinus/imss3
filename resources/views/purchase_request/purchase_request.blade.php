@@ -573,19 +573,46 @@
                     clearForm();
                     if (data.pr.details.length == 0) {
                         $('#table-pr').append(
-                            '<tr><td colspan="8" class="text-center">Tidak ada produk</td></tr>');
+                            '<tr><td colspan="11" class="text-center">Tidak ada produk</td></tr>');
                     } else {
                         $('#table-pr').empty();
                         $.each(data.pr.details, function(key, value) {
+                            var status, spph, po;
+                            if (!value.id_spph) {
+                                spph = '-';
+                            } else {
+                                spph = value.nomor_spph
+                            }
+
+                            if (!value.id_po) {
+                                po = '-';
+                            } else {
+                                po = value.no_po
+                            }
+
+                            //0 = Lakukan SPPH, 1 = Lakukan PO, 2 = Completed, 3 = Negosiasi, 4 = Justifikasi
+                            if (value.status == 0 || !value.status) {
+                                status = 'Lakukan SPPH';
+                            } else if (value.status == 1) {
+                                status = 'Lakukan PO';
+                            } else if (value.status == 2) {
+                                status = 'COMPLETED';
+                            } else if (value.status == 3) {
+                                status = 'NEGOSIASI';
+                            } else if (value.status == 4) {
+                                status = 'JUSTIFIKASI';
+                            }
+
                             $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
                                 .kode_material + '</td><td>' + value.uraian + '</td><td>' +
                                 value
                                 .spek + '</td><td>' + value.qty + '</td><td>' + value
                                 .satuan +
-                                '</td><td>' + value.waktu + '</td><td>' + value.keterangan ?? '' +
-                                '</td><td' + value.spph ?? '-' + '</td><td>' + value.po ?? '-' + '</td><td>' +
-                                    value.status ?? '-' + '</td></tr>'
-                                );
+                                '</td><td>' + value.waktu + '</td><td>' + value.keterangan +
+                                '</td><td>' + spph + '</td><td>' + po +
+                                '</td><td>' +
+                                status + '</td></tr>'
+                            );
                         });
                     }
                 }
@@ -618,7 +645,7 @@
                 type: "GET",
                 dataType: "json",
                 beforeSend: function() {
-                    $('#table-pr').append('<tr><td colspan="8" class="text-center">Loading...</td></tr>');
+                    $('#table-pr').append('<tr><td colspan="11" class="text-center">Loading...</td></tr>');
                     $('#button-cetak-pr').html('<i class="fas fa-spinner fa-spin"></i> Loading...');
                     $('#button-cetak-pr').attr('disabled', true);
                 },
@@ -635,20 +662,46 @@
                     if (data.pr.details.length == 0) {
                         $('#table-pr').empty();
                         $('#table-pr').append(
-                            '<tr><td colspan="8" class="text-center">Tidak ada produk</td></tr>');
+                            '<tr><td colspan="11" class="text-center">Tidak ada produk</td></tr>');
                     } else {
                         $('#table-pr').empty();
                         $.each(data.pr.details, function(key, value) {
-                            var status = 'a'
+                            var status, spph, po;
+                            if (!value.id_spph) {
+                                spph = '-';
+                            } else {
+                                spph = value.nomor_spph
+                            }
+
+                            if (!value.id_po) {
+                                po = '-';
+                            } else {
+                                po = value.no_po
+                            }
+
+                            //0 = Lakukan SPPH, 1 = Lakukan PO, 2 = Completed
+                            if (value.status == 0 || !value.status) {
+                                status = 'Lakukan SPPH';
+                            } else if (value.status == 1) {
+                                status = 'Lakukan PO';
+                            } else if (value.status == 2) {
+                                status = 'COMPLETED';
+                            } else if (value.status == 3) {
+                                status = 'NEGOSIASI';
+                            } else if (value.status == 4) {
+                                status = 'JUSTIFIKASI';
+                            }
+
                             $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
                                 .kode_material + '</td><td>' + value.uraian + '</td><td>' +
                                 value
                                 .spek + '</td><td>' + value.qty + '</td><td>' + value
                                 .satuan +
-                                '</td><td>' + value.waktu + '</td><td>' + value.keterangan ?? '' +
-                                '</td><td>' + value.id_spph ?? '-' + '</td><td>' + value.id_po ?? '-' + '</td><td>' +
-                                    status ?? '-' + '</td></tr>'
-                                );
+                                '</td><td>' + value.waktu + '</td><td>' + value.keterangan +
+                                '</td><td>' + spph + '</td><td>' + po +
+                                '</td><td>' +
+                                status + '</td></tr>'
+                            );
                         });
                     }
                     //remove loading
