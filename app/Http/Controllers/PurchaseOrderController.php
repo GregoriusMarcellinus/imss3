@@ -81,7 +81,7 @@ class PurchaseOrderController extends Controller
             ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_order.proyek_id')
             ->where('purchase_order.id', $id)
             ->first();
-        $po->details = DetailPo::where('id_po', $po->id)
+        $po->details = DetailPo::where('detail_po.id_po', $po->id)
             ->leftJoin('detail_pr', 'detail_pr.id', '=', 'detail_po.id_detail_pr')
             ->select('detail_pr.*', 'detail_po.id as id_detail_po', 'detail_po.harga as harga_per_unit', 'detail_po.mata_uang as mata_uang', 'detail_po.vat as vat', 'detail_po.batas_akhir as batas')
             ->get();
