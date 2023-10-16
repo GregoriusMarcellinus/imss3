@@ -220,8 +220,10 @@
                                                 <th>{{ __('SAT') }}</th>
                                                 <th>{{ __('Waktu Penyelesaian') }}</th>
                                                 <th>{{ __('Keterangan') }}</th>
+                                                <th>{{ __('SPPH') }}</th>
+                                                <th>{{ __('PO') }}</th>
+                                                <th>{{ __('STATUS') }}</th>
                                             </thead>
-
                                             <tbody id="table-pr">
                                             </tbody>
                                         </table>
@@ -501,6 +503,8 @@
                             $('#form').show();
                             $('#pname').val(data.materials.nama_barang);
                             $('#material_kode').val(data.materials.kode_material);
+                            $('#spek').val(data.materials.spesifikasi);
+                            $('#satuan').val(data.materials.satuan);
                         } else {
                             $('#form').show();
                             toastr.error("Product Code tidak dikenal!");
@@ -579,22 +583,24 @@
                                 .spek + '</td><td>' + value.qty + '</td><td>' + value
                                 .satuan +
                                 '</td><td>' + value.waktu + '</td><td>' + value.keterangan ?? '' +
-                                '</td></tr>');
+                                '</td><td' + value.spph ?? '-' + '</td><td>' + value.po ?? '-' + '</td><td>' +
+                                    value.status ?? '-' + '</td></tr>'
+                                );
                         });
                     }
                 }
             });
         }
 
-        // on modal #detail-sjn open
+        // on modal #detail-pr open
         $('#detail-pr').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget);
             var data = button.data('detail');
             console.log(data);
-            lihatSjn(data);
+            lihatPR(data);
         });
 
-        function lihatSjn(data) {
+        function lihatPR(data) {
             emptyTableProducts();
             clearForm()
             $('#modal-title').text("Detail Request");
@@ -633,13 +639,16 @@
                     } else {
                         $('#table-pr').empty();
                         $.each(data.pr.details, function(key, value) {
+                            var status = 'a'
                             $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
                                 .kode_material + '</td><td>' + value.uraian + '</td><td>' +
                                 value
                                 .spek + '</td><td>' + value.qty + '</td><td>' + value
                                 .satuan +
                                 '</td><td>' + value.waktu + '</td><td>' + value.keterangan ?? '' +
-                                '</td></tr>');
+                                '</td><td>' + value.id_spph ?? '-' + '</td><td>' + value.id_po ?? '-' + '</td><td>' +
+                                    status ?? '-' + '</td></tr>'
+                                );
                         });
                     }
                     //remove loading

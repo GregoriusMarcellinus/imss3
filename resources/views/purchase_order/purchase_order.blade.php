@@ -112,7 +112,7 @@
                                     @endforeach
                                 @else
                                     <tr class="text-center">
-                                        <td colspan="5">{{ __('No data.') }}</td>
+                                        <td colspan="7">{{ __('No data.') }}</td>
                                     </tr>
                                 @endif
                             </tbody>

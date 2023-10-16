@@ -57,15 +57,15 @@ class VendorController extends Controller
         $request->validate([
             'nama' => 'required',
             'alamat' => 'required',
-            'telp' => 'required',
-            'fax' => 'required',
-            'email' => 'required'
+            // 'telp' => 'required',
+            // 'fax' => 'required',
+            // 'email' => 'required'
         ], [
             'nama.required' => 'Nama harus diisi',
             'alamat.required' => 'Alamat harus diisi',
-            'telp.required' => 'Telepon harus diisi',
-            'fax.required' => 'Fax harus diisi',
-            'email.required' => 'Email harus diisi'
+            // 'telp.required' => 'Telepon harus diisi',
+            // 'fax.required' => 'Fax harus diisi',
+            // 'email.required' => 'Email harus diisi'
         ]);
 
         $data = [
