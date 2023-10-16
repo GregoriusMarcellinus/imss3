@@ -262,7 +262,8 @@ class SpphController extends Controller
             ]);
 
             $update = DetailPR::where('id', $id_barang)->update([
-                'id_spph' => $id
+                'id_spph' => $id,
+                'status' => 1,
             ]);
         }
 
