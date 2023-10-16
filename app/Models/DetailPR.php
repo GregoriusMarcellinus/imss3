@@ -19,6 +19,7 @@ class DetailPR extends Model
         'qty',
         'satuan',
         'waktu',
-        'keterangan'
+        'keterangan',
+        'status'
     ];
 }

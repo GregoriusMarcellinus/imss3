@@ -590,12 +590,17 @@
                                 po = value.no_po
                             }
 
-                            if (value.id_spph && value.id_po) {
-                                status = 'COMPLETED';
-                            } else if (!value.id_spph && !value.id_po) {
+                            //0 = Lakukan SPPH, 1 = Lakukan PO, 2 = Completed, 3 = Negosiasi, 4 = Justifikasi
+                            if (value.status == 0 || !value.status) {
                                 status = 'Lakukan SPPH';
-                            } else if (value.id_spph && !value.id_po) {
+                            } else if (value.status == 1) {
                                 status = 'Lakukan PO';
+                            } else if (value.status == 2) {
+                                status = 'COMPLETED';
+                            } else if (value.status == 3) {
+                                status = 'NEGOSIASI';
+                            } else if (value.status == 4) {
+                                status = 'JUSTIFIKASI';
                             }
 
                             $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
@@ -674,12 +679,17 @@
                                 po = value.no_po
                             }
 
-                            if (value.id_spph && value.id_po) {
-                                status = 'COMPLETED';
-                            } else if (!value.id_spph && !value.id_po) {
+                            //0 = Lakukan SPPH, 1 = Lakukan PO, 2 = Completed
+                            if (value.status == 0 || !value.status) {
                                 status = 'Lakukan SPPH';
-                            } else if (value.id_spph && !value.id_po) {
+                            } else if (value.status == 1) {
                                 status = 'Lakukan PO';
+                            } else if (value.status == 2) {
+                                status = 'COMPLETED';
+                            } else if (value.status == 3) {
+                                status = 'NEGOSIASI';
+                            } else if (value.status == 4) {
+                                status = 'JUSTIFIKASI';
                             }
 
                             $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
