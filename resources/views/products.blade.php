@@ -90,7 +90,7 @@
                                                 'pamount' => $d->product_amount,
                                                 'spesifikasi' => $d->spesifikasi,
                                                 'nama_proyek' => $d->nama_proyek,
-                                                'id_keproyekan' => $d->id_proyek,
+                                                // 'id_keproyekan' => $d->id_proyek,
                                                 'satuan' => $d->satuan,
                                             ];
                                         @endphp
@@ -107,7 +107,7 @@
                                             </td>
                                             <td>{{ $data['satuan'] }}</td>
                                             <td>{{ $data['cname'] }}</td>
-                                            <td>{{ $data['nama_proyek'] }}</td>
+                                            {{-- <td>{{ $data['nama_proyek'] }}</td> --}}
 
                                             <td class="text-center">
                                                 <button title="Edit Produk" type="button" class="btn btn-success btn-xs"
@@ -192,14 +192,14 @@
                                     <input type="text" class="form-control" id="stock" name="stock">
                                 </div>
                             </div>
-                            <div class="form-group row">
+                            {{-- <div class="form-group row">
                                 <label for="keproyekan" class="col-sm-4 col-form-label">Keproyekan</label>
                                 <div class="col-sm-8">
                                     <select class="form-control select2" style="width: 100%;" id="keproyekan"
                                         name="keproyekan">
                                     </select>
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="form-group row">
                                 <label for="category" class="col-sm-4 col-form-label">Lokasi</label>
                                 <div class="col-sm-8">
