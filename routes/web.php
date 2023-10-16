@@ -4,6 +4,7 @@ use App\Http\Controllers\DetailsjnController;
 use App\Http\Controllers\HistoryController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 /*
 |--------------------------------------------------------------------------
@@ -140,3 +141,7 @@ Route::get('test_komat', [App\Http\Controllers\SheetController::class, 'test_kom
 Route::get('materials', [App\Http\Controllers\KodeMaterialController::class, 'apiKodeMaterial'])->name('komat');
 
 Route::get('pdf_lain', [App\Http\Controllers\PdfController::class, 'pdf_lain'])->name('pdf_lain');
+
+Route::get('testt', function () {
+    echo Hash::make('admin123');
+});
