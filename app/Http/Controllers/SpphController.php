@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\DetailPR;
 use App\Models\DetailSpph;
+use App\Models\Purchase_Order;
+use App\Models\PurchaseRequest;
 use App\Models\Spph;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -195,8 +197,11 @@ class SpphController extends Controller
             $item->keterangan = $item->keterangan ? $item->keterangan : '';
             $item->kode_material = $item->kode_material ? $item->kode_material : '';
             $item->nomor_spph = Spph::where('id', $item->id_spph)->first()->nomor_spph ?? '';
+            $item->pr_no = PurchaseRequest::where('id', $item->id_pr)->first()->no_pr ?? '';
+            $item->po_no = Purchase_Order::where('id', $item->id_po)->first()->no_po ?? '';
             return $item;
         });
+        // dd($products);
 
         return response()->json([
             'products' => $products

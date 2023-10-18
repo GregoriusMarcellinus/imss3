@@ -4,19 +4,19 @@
     <title>Purchase Order {{ $po->nama_proyek ?? '-' }}</title>
     <style>
         @page {
-            margin: 0px;
+            margin: 0cm;
         }
 
         body {
-            margin-top: 8cm;
-            margin-left: 0.5cm;
-            margin-right: 0.5cm;
-            margin-bottom: 1.5cm;
+            margin-top: 9cm;
+            margin-left: 0cm;
+            margin-right: 0cm;
+            margin-bottom: 0.5cm;
         }
 
         * {
             font-family: Verdana, Arial, sans-serif;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
         }
 
         a {
@@ -50,8 +50,8 @@
         }
 
 
-        .page_break {
-            page-break-before: always;
+        .page-break {
+            page-break-after: always;
         }
 
         .pagenum:before {
@@ -74,15 +74,16 @@
             margin: 5px;
         }
 
+        /*
         .information table {
             padding: 10px;
-        }
+        } */
 
         header {
             position: fixed;
-            top: 0.1cm;
-            left: 0.5cm;
-            right: 0.5cm;
+            top: 0cm;
+            left: 0cm;
+            right: 0cm;
             height: 5.5cm;
         }
 
@@ -95,6 +96,10 @@
             white-space: pre-wrap;
 
         }
+
+        .title-header {
+            margin-top: 0;
+        }
     </style>
 
 </head>
@@ -102,9 +107,9 @@
 <body>
     <header>
         <div class="information">
-            <table width="100%">
+            <table>
                 <tr>
-                    <td style="text-align: left;width:33%;" rowspan="12">
+                    <td style="text-align: left;width:33%;vertical-align:top;padding-top:10px" rowspan="12">
                         <strong>Company</strong><br>
                         <span>{{ $po->nama_vendor }}</span><br>
                         <p class="alamat">{{ $po->alamat_vendor ?? '-' }}</p>
@@ -115,9 +120,7 @@
                         <span>Email&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:
                             {{ $po->email_vendor ?? '-' }}</span><br>
                     </td>
-                </tr>
-                <tr>
-                    <td align="center" rowspan="12" style="width: 33%">
+                    <td align="center" rowspan="10" style="vertical-align:top;">
                         <img src="https://inkamultisolusi.co.id/api_cms/public/uploads/editor/20220511071342_LSnL6WiOy67Xd9mKGDaG.png"
                             alt="Logo" width="250" class="logo" /><br>
                         <br><br>
@@ -126,43 +129,50 @@
                         Telepon +62 812 3456789<br>
                         <br><strong style="font-size: 25">Purchase Order</strong><br>
                     </td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;width: 8rem">NO PO</td>
-                    <td style="text-align: left;">: <span>{{ $po->no_po }}</span></td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">Tanggal PO</td>
-                    <td style="text-align: left;">: <span>{{ $po->tanggal_po }}</span></td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">Incoterm</td>
-                    <td style="text-align: left;">: <span>{{ $po->incoterm }}</span></td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">PR NO.</td>
-                    <td style="text-align: left;">: <span>{{ $po->pr_no ?? '-' }}</span></td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">Referensi SPH</td>
-                    <td style="text-align: left;">: <span>{{ $po->ref_sph ?? '-' }}</span></td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">No. Justifikasi</td>
-                    <td style="text-align: left;">: <span>{{ $po->no_just ?? '-' }}</span></td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">No. Negosiasi</td>
-                    <td style="text-align: left;">: <span>{{ $po->no_nego ?? '-' }}</span></td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">Batas Akhir Po</td>
-                    <td style="text-align: left;">: <span>{{ $po->batas_po }}</span></td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;vertical-align: top;">Alamat Penagihan</td>
-                    <td style="text-align: left;">: <span> Direktur Keuangan, SDM, dan Manris PT INKA Multi Solusi
-                            Servis Jl Salak No. 59 Madiun <br> N.P.W.P : 70.9607.6574.576.5</span></td>
+                    {{-- <td style="border:1px solid black"> --}}
+                        <tr>
+                            <td style="text-align: left;width: 8rem;vertical-align:top;">NO PO</td>
+                            <td style="text-align: left;vertical-align:top;">: <span>{{ $po->no_po }}</span></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;vertical-align:top;">Tanggal PO</td>
+                            <td style="text-align: left;vertical-align:top;">: <span>{{ $po->tanggal_po }}</span></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;vertical-align:top;">Incoterm</td>
+                            <td style="text-align: left;vertical-align:top;">: <span>{{ $po->incoterm }}</span></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;vertical-align:top;">PR NO.</td>
+                            <td style="text-align: left;vertical-align:top;">: <span
+                                    style=" white-space: pre-wrap;">{!! nl2br($po->no_pr ?? '-') !!}</span></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;vertical-align:top;">Referensi SPH</td>
+                            <td style="text-align: left;vertical-align:top;">: <span>{{ $po->ref_sph ?? '-' }}</span></td>
+                        </tr>
+                        <tr>
+                            <td
+                                style="text-align: left;vertical-align:top;vertical-align:top;"vertical-align:top;vertical-align:top;>
+                                No. Justifikasi</td>
+                            <td style="text-align: left;vertical-align:top;vertical-align:top;">:
+                                <span>{{ $po->no_just ?? '-' }}</span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;vertical-align:top;">No. Negosiasi</td>
+                            <td style="text-align: left;vertical-align:top;">: <span>{{ $po->no_nego ?? '-' }}</span></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;vertical-align:top;">Batas Akhir Po</td>
+                            <td style="text-align: left;vertical-align:top;">: <span>{{ $po->batas_po }}</span></td>
+                        </tr>
+                        <tr>
+                            <td style="text-align: left;vertical-align: top;">Alamat Penagihan</td>
+                            <td style="text-align: left;">: <span> Direktur Keuangan, SDM, dan Manris PT INKA Multi Solusi
+                                    Servis Jl Salak No. 59 Madiun <br> N.P.W.P : 70.9607.6574.576.5</span></td>
+                        </tr>
+                    {{-- </td> --}}
                 </tr>
 
             </table>
@@ -170,7 +180,7 @@
     </header>
     {{-- <div style="margin-top: 400px"></div> --}}
 
-    <table class="table" style="max-width: 90%">
+    <table class="table" style="width: 100%">
         <thead>
             <tr>
                 <th>Item</th>
@@ -200,8 +210,7 @@
                     <td style="text-align: center;">@rupiah($harga_per_unit)</td>
                     <td style="text-align: center;">{{ $item->mata_uang ?? '-' }}</td>
                     <td style="text-align: center;">{{ $item->vat ?? '-' }}</td>
-                    <td style="text-align: center;">@rupiah($item->qty * $item->harga_per_unit)
-                    </td>
+                    <td style="text-align: center;">@rupiah($item->qty * $item->harga_per_unit)</td>
                 </tr>
             @empty
                 <tr>
@@ -262,19 +271,17 @@
             <tr>
                 <td style="height: 50px;vertical-align: top;">Catatan Untuk Vendor</td>
                 <td style="vertical-align: top;">:</td>
-                <td style="vertical-align: top">{{ $po->catatan_vendor }}</td>
+                <td style="vertical-align: top">{!! nl2br($po->catatan_vendor) !!}</td>
             </tr>
         </table>
     </div>
+    {{-- <div class="page-break"></div> --}}
 
     <div style="margin-top: 1rem">
         <div style="float: left; width: 50%">
             <table class="w-100">
                 <tr>
-                    <td class="text-center">Disetujui Oleh,</td>
-                </tr>
-                <tr>
-                    <td style="height: 50px"></td>
+                    <td>Disetujui Oleh,</td>
                 </tr>
             </table>
         </div>
@@ -284,19 +291,19 @@
                     <td class="text-center">PT INKA MULTI SOLUSI SERVIS</td>
                 </tr>
                 <tr>
-                    <td style="height: 100px"></td>
+                    <td style="height: 80px"></td>
                 </tr>
                 <tr>
                     {{-- <td class="text-center"><b style="text-decoration: underline">
                             &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&emsp;&emsp;&emsp;&emsp;</b>
                     </td> --}}
-                    <td class="text-center" style="text-align: center"><b style="text-decoration: underline; ">Budi
-                            Harianto</b>
+                    <td style="text-align: center;vertical-align: bottom"><b style="text-decoration: underline; ">Rudi
+                            Harianto</b><br><b>PLT KADEP LOGISTIK</b>
                     </td>
                 </tr>
-                <tr>
-                    <td class="text-center" style="text-align: center"><b>PLT KADEP LOGISTIK</b></td>
-                </tr>
+                {{-- <tr style="border: 1px solid black; vertical-align: top">
+                    <td style="text-align: center;"><b>PLT KADEP LOGISTIK</b></td>
+                </tr> --}}
             </table>
         </div>
     </div>

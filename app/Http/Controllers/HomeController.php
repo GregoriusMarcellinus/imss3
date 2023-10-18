@@ -43,6 +43,7 @@ class HomeController extends Controller
         $menus = [
             [
                 'name' => 'Logistik',
+                // 'route' => 'apps/spph',
                 'route' => 'div/logistik',
                 'bgcolor' => 'sagegreen',
                 'icon' => 'box'
@@ -55,13 +56,15 @@ class HomeController extends Controller
             ],
             [
                 'name' => 'Wilayah 1',
+                // 'route' => 'apps/purchase_request',
                 'route' => 'div/wilayah1',
                 'bgcolor' => 'red',
                 'icon' => 'map-marker-alt'
             ],
             [
                 'name' => 'Wilayah 2',
-                'route' => 'div/wilayah2',
+                // 'route' => 'apps/purchase_request',
+                'route' => 'div/wilayah1',
                 'bgcolor' => 'goldenrod',
                 'icon' => 'map'
             ],

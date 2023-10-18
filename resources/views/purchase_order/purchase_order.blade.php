@@ -48,6 +48,7 @@
                                 <tr class="text-center">
                                     <th>No.</th>
                                     <th>{{ __('No PO') }}</th>
+                                    {{-- <th>{{ __('No PR') }}</th> --}}
                                     <th>{{ __('Proyek') }}</th>
                                     <th>{{ __('Vendor') }}</th>
                                     <th>{{ __('Tanggal PO') }}</th>
@@ -81,11 +82,13 @@
                                                 'vendor_id' => $d->vendor_id,
                                                 'detail' => $d->detail,
                                                 'pr_id' => $d->pr_id,
+                                                'pr_no' => $d->pr_no,
                                             ];
                                         @endphp
                                         <tr>
                                             <td class="text-center">{{ $data['no'] }}</td>
                                             <td>{{ $data['no_po'] }}</td>
+                                            {{-- <td>{{ $data['pr_no'] }}</td> --}}
                                             <td class="text-center">{{ $data['nama_proyek'] }}</td>
                                             <td class="text-center">{{ $data['nama_vendor'] }}</td>
                                             <td class="text-center">{{ $data['tgpo'] }}</td>
@@ -159,6 +162,18 @@
                             </div>
                         </div>
                         <div class="form-group row">
+                            <label for="proyek_id" class="col-sm-4 col-form-label">{{ __('Proyek') }} </label>
+                            <div class="col-sm-8">
+                                {{-- <input type="date" class="form-control" id="proyek_id" name="proyek_id"> --}}
+                                <select class="form-control" name="proyek_id" id="proyek_id">
+                                    <option value="">Pilih Proyek</option>
+                                    @foreach ($proyeks as $proyek)
+                                        <option value="{{ $proyek->id }}">{{ $proyek->nama_proyek }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
                             <label for="tanggal_po" class="col-sm-4 col-form-label w-50">{{ __('Tanggal PO') }} </label>
                             <div class="col-sm-8">
                                 <input type="date" class="form-control w-50" id="tanggal_po" name="tanggal_po">
@@ -176,10 +191,10 @@
                                 <input type="text" class="form-control" id="incoterm" name="incoterm">
                             </div>
                         </div>
-                        <div class="form-group row">
+                        {{-- <div class="form-group row">
                             <label for="pr_id" class="col-sm-4 col-form-label">{{ __('PR') }} </label>
                             <div class="col-sm-8">
-                                {{-- <input type="date" class="form-control" id="proyek_id" name="proyek_id"> --}}
+                                <input type="date" class="form-control" id="proyek_id" name="proyek_id">
                                 <select class="form-control" name="pr_id" id="pr_id">
                                     <option value="">Pilih Purchase Request</option>
                                     @foreach ($prs as $pr)
@@ -187,7 +202,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="form-group row">
                             <label for="ref_sph" class="col-sm-4 col-form-label">{{ __('Referensi SPH') }} </label>
                             <div class="col-sm-8">
@@ -230,22 +245,9 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label for="proyek_id" class="col-sm-4 col-form-label">{{ __('Proyek') }} </label>
-                            <div class="col-sm-8">
-                                {{-- <input type="date" class="form-control" id="proyek_id" name="proyek_id"> --}}
-                                <select class="form-control" name="proyek_id" id="proyek_id">
-                                    <option value="">Pilih Proyek</option>
-                                    @foreach ($proyeks as $proyek)
-                                        <option value="{{ $proyek->id }}">{{ $proyek->nama_proyek }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group row">
                             <label for="catatan_vendor" class="col-sm-4 col-form-label">{{ __('Catatan Vendor') }}
                             </label>
                             <div class="col-sm-8">
-                                {{-- <input type="textarea" class="form-control" id="catatan_vendor" name="catatan_vendor"> --}}
                                 <textarea class="form-control" name="catatan_vendor" id="catatan_vendor" rows="3"></textarea>
                             </div>
                         </div>
@@ -310,12 +312,12 @@
                                         <td><b>Detail</b></td>
                                         <input type="hidden" name="id" id="id">
                                     </tr>
-                                    {{-- <tr>
+                                    <tr>
                                         <td colspan="3">
                                             <button id="button-tambah-detail" type="button" class="btn btn-info"
                                                 onclick="showAddItem()">{{ __('Tambah Item Detail') }}</button>
                                         </td>
-                                    </tr> --}}
+                                    </tr>
                                 </table>
                                 <div class="table-responsive mt-2">
                                     <table class="table table-bordered">
@@ -338,8 +340,32 @@
                                     </table>
                                 </div>
                             </div>
+
                             <div class="col-0 d-none" id="container-product">
-                                <div class="card">
+                                <div id="form" class="card">
+                                    <div class="table-responsive  card-body">
+                                        <button type="button" class="btn btn-primary mb-3"
+                                            onclick="addToDetails()"></i>Tambah Pilihan</button>
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Deskripsi</th>
+                                                    <th>Spesifikasi</th>
+                                                    <th>QTY</th>
+                                                    <th>Sat</th>
+                                                    <th>No SPPH</th>
+                                                    <th>No PR</th>
+                                                    <th>No PO</th>
+                                                    <th>Pilih</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id='detail-material'>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                {{-- <div class="card">
                                     <div class="card-body">
                                         <div class="input-group input-group-lg">
                                             <input type="text" class="form-control" id="pcode" name="pcode"
@@ -352,7 +378,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div id="loader" class="card">
                                     <div class="card-body text-center">
                                         <div class="spinner-border text-danger" style="width: 3rem; height: 3rem;"
@@ -361,7 +387,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="form" class="card">
+                                {{-- <div id="form" class="card">
                                     <div class="card-body">
                                         <form role="form" id="material-update" method="post">
                                             @csrf
@@ -427,7 +453,7 @@
                                         <button id="button-update-sjn" type="button" class="btn btn-primary w-100"
                                             onclick="PoUpdate()">{{ __('Tambahkan') }}</button>
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>
@@ -812,19 +838,203 @@
         });
 
         function showAddItem() {
-            if ($('#container-product').hasClass('d-none')) {
-                $('#container-product').removeClass('d-none');
-                $('#container-product').addClass('col-4');
+            if ($('#detail-po').find('.modal-dialog').hasClass('modal-xl')) {
+                // $('#detail-po').find('.modal-dialog').removeClass('modal-lg');
+                // $('#detail-po').find('.modal-dialog').addClass('modal-xl');
+                $('#button-tambah-detail').text('Kembali');
                 $('#container-form').removeClass('col-12');
-                $('#container-form').addClass('col-8');
-
+                $('#container-form').addClass('col-6');
+                $('#container-product').removeClass('col-0');
+                $('#container-product').addClass('col-6');
+                $('#container-product').removeClass('d-none');
             } else {
-                $('#container-product').addClass('d-none');
-                $('#container-product').removeClass('col-4');
+                $('#detail-po').find('.modal-dialog').removeClass('modal-xl');
+                $('#detail-po').find('.modal-dialog').addClass('modal-lg');
+                $('#button-tambah-detail').text('Tambah Item Detail');
+                $('#container-form').removeClass('col-6');
                 $('#container-form').addClass('col-12');
-                $('#container-form').removeClass('col-8');
-                $('#button-tambah-detail').removeClass('d-none');
+                $('#container-product').removeClass('col-6');
+                $('#container-product').addClass('col-0');
+                $('#container-product').addClass('d-none');
             }
+
+            getPODetail();
+        }
+
+        function getPODetail() {
+
+            loader();
+            $('#button-check').prop("disabled", true);
+            $.ajax({
+                url: '/products/products_pr/',
+                type: "GET",
+                data: {
+                    "format": "json"
+                },
+                dataType: "json",
+                beforeSend: function() {
+                    $('#loader').show();
+                    $('#form').hide();
+                },
+                success: function(data) {
+                    loader(0);
+                    $('#form').show();
+                    //append to #detail-material
+                    $('#detail-material').empty();
+                    $.each(data.products, function(key, value) {
+                        console.table('a',value)
+                        var no_spph
+                        if (!value.id_spph) {
+                            no_spph = '-'
+                        } else {
+                            no_spph = value.nomor_spph
+                        }
+
+                        var no_pr
+                        if (!value.id_pr) {
+                            no_pr = '-'
+                        } else {
+                            no_pr = value.pr_no
+                        }
+
+                        var no_po
+                        if (!value.id_po) {
+                            no_po = '-'
+                        } else {
+                            no_po = value.po_no
+                        }
+
+                        var checkbox
+                        if (value.id_spph && !value.id_po) {
+                            checkbox = '<input type="checkbox" id="addToDetails" value="' + value.id +
+                                '" onclick="addToDetailsJS(' + value.id + ')" >'
+                        } else {
+                            checkbox = '<input type="checkbox" id="addToDetails" value="' + value.id +
+                                '" onclick="addToDetailsJS(' + value.id + ')" disabled>'
+                        }
+
+
+                        $('#detail-material').append(
+                            '<tr><td>' + (key + 1) + '</td><td>' + value.uraian +
+                            '</td><td>' + value.spek + '</td><td>' + value.qty + '</td><td>' + value
+                            .satuan + '</td><td>' + no_spph + '</td><td>' + no_pr + '</td><td>'+no_po+'</td><td>' +
+                            checkbox + '</td></tr>'
+                        );
+                    });
+                },
+                error: function() {
+                    $('#pcode').prop("disabled", false);
+                    $('#button-check').prop("disabled", false);
+                }
+            });
+        }
+
+        let selected = []
+
+        function addToDetailsJS(id) {
+            if (selected.includes(id)) {
+                selected = selected.filter(item => item !== id)
+            } else {
+                selected.push(id)
+            }
+            console.log(selected)
+        }
+
+        function addToDetails() {
+            $.ajax({
+                    url: '/products/tambah_detail_po/',
+                    type: "POST",
+                    data: {
+                        "id_po": $('#id_po').val(),
+                        "selected": selected,
+                        "_token": "{{ csrf_token() }}",
+                    },
+                    dataType: "json",
+                    beforeSend: function() {
+                        $('#loader').show();
+                        $('#form').hide();
+                    },
+                    success: function(data) {
+                        console.log(data);
+                        $('#no_po').text(data.po.no_po);
+                        $('#id_proyek').text(data.po.nama_proyek);
+                        $('#id_vendor').text(data.po.nama_vendor);
+                        $('#po_tanggal').text(data.po.tgpo);
+                        $('#po_batas').text(data.po.btpo);
+                        $('#id_po').val(data.po.id);
+                        $('#button-cetak-po').html('<i class="fas fa-print"></i> Cetak');
+                        $('#button-cetak-po').attr('disabled', false);
+                        var no = 1;
+                        var id_po = data.po.id;
+
+                        if (data?.po?.details?.length == 0) {
+                            $('#tabel-po').append(
+                                '<tr><td colspan="11" class="text-center">Tidak ada data</td></tr>');
+                        } else {
+                            $.each(data?.po?.details, function(index, value) {
+                                var id = value.id_detail_po;
+                                var kode_material = value.kode_material;
+                                var deskripsi = value.uraian;
+                                var batas = value.batas ?? '-';
+                                var date = value.batas_po?.split('/') ?? '-';
+                                // var newDate = date[2] + '/' + date[1] + '/' + date[0];
+                                var newDate = batas;
+                                var qty = value.qty;
+                                // var total = value.qty * value.harga_per_unit ?? 0;
+                                var satuan = value.satuan;
+                                var harga_per_unit = value.harga_per_unit ?? 0;
+                                var mata_uang = value.mata_uang ?? '-';
+                                var vat = value.vat ?? '-';
+                                var total = qty * harga_per_unit;
+                                console.log({
+                                    kode_material,
+                                    deskripsi,
+                                    batas,
+                                    newDate,
+                                    qty,
+                                    total,
+                                    vat,
+                                    satuan,
+                                    harga_per_unit,
+                                    mata_uang,
+                                })
+                                var html = '<tr>' +
+                                    '<td>' + no + '</td>' +
+                                    '<td>' + kode_material + '</td>' +
+                                    '<td>' + deskripsi + '</td>' +
+                                    '<td><input type="date" value="' + newDate +
+                                    '" class="form-control" id="batas' + id + '" name="batas' + id +
+                                    '"></td>' +
+                                    '<td>' + qty + '</td>' +
+                                    '<td>' + satuan + '</td>' +
+                                    '<td><input type="text" value="' + harga_per_unit +
+                                    '" class="form-control" id="harga_per_unit' + id +
+                                    '" name="harga_per_unit' + id + '"></td>' +
+                                    '<td><input type="text" value="' + mata_uang +
+                                    '" class="form-control" id="mata_uang' + id + '" name="mata_uang' + id +
+                                    '"></td>' +
+                                    '<td><input type="text" value="' + vat +
+                                    '" class="form-control" id="vat' + id + '" name="vat' + id + '"></td>' +
+                                    '<td>' + total + '</td>' +
+                                    '<td><button id="edit_po_save" type="button" class="btn btn-success btn-xs" data-id="' +
+                                    id + '" data-idpo="' + id_po + '" ><i class="fas fa-save"></i>' +
+                                    '</button>' +
+                                    '</tr>';
+                                $('#tabel-po').append(html);
+                                no++;
+                            });
+                        }
+                        //remove loading
+                        $('#tabel-po').find('tr:first').remove();
+                },
+                error: function() {
+                    $('#pcode').prop("disabled", false);
+                    $('#button-check').prop("disabled", false);
+                }
+                
+
+            });
+
         }
 
         function productCheck() {

@@ -204,7 +204,7 @@
                                         </tr>
                                         <tr>
                                             <td colspan="3">
-                                                <button id="button-tambah-produk" type="button" class="btn btn-info"
+                                                <button id="button-tambah-produk" type="button" class="btn btn-info mb-3"
                                                     onclick="showAddProduct()">{{ __('Tambah Produk') }}</button>
                                             </td>
                                         </tr>

@@ -235,7 +235,7 @@
                                         </tr>
                                         <tr>
                                             <td colspan="3">
-                                                <button id="button-tambah-produk" type="button" class="btn btn-info"
+                                                <button id="button-tambah-produk" type="button" class="btn btn-info mb-3"
                                                     onclick="showAddProduct()">{{ __('Tambah Produk') }}</button>
                                             </td>
                                         </tr>
@@ -279,7 +279,7 @@
                                         </div>
                                     </div>
                                     <div id="form" class="card">
-                                        <div class="card-body">
+                                        <div class="table-responsive card-body">
                                             <button type="button" class="btn btn-primary mb-3"
                                                 onclick="addToDetails()"></i>Tambah Pilihan</button>
                                             <table class="table table-bordered">

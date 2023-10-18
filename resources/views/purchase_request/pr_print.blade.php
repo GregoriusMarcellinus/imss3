@@ -4,19 +4,19 @@
     <title>Purchase Request-{{$pr->no_pr}}</title>
     <style>
         @page {
-            margin: 0px;
+            margin: 0cm;
         }
 
         body {
             margin-top: 6cm;
-            margin-left: 1cm;
-            margin-right: 1cm;
+            margin-left: 0.25cm;
+            margin-right: 0.25cm;
             margin-bottom: 0.5cm;
         }
 
         * {
             font-family: Verdana, Arial, sans-serif;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
         }
 
         a {
