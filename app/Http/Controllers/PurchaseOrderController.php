@@ -123,6 +123,23 @@ class PurchaseOrderController extends Controller
         ]);
     }
 
+    public function test_pr(Request $request)
+    {
+        $id_po = $request->id_po;
+        $po = Purchase_Order::select('purchase_order.*', 'vendor.nama as nama_vendor', 'keproyekan.nama_proyek as nama_proyek')
+            ->leftjoin('vendor', 'vendor.id', '=', 'purchase_order.vendor_id')
+            ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_order.proyek_id')
+            ->where('purchase_order.id', $id_po)
+            ->first();
+        $po->details = DetailPo::where('detail_po.id_po', $po->id)
+            ->leftJoin('detail_pr', 'detail_pr.id', '=', 'detail_po.id_detail_pr')
+            ->select('detail_pr.*', 'detail_po.id as id_detail_po', 'detail_po.harga as harga_per_unit', 'detail_po.mata_uang as mata_uang', 'detail_po.vat as vat', 'detail_po.batas_akhir as batas')
+            ->get();
+        return response()->json([
+            'po' => $po
+        ]);
+    }
+
     function tambahDetailPo(Request $request)
     {
         $id = $request->id_po;
@@ -145,14 +162,14 @@ class PurchaseOrderController extends Controller
         }
 
         // Fetch the updated purchase order data
-        $po = Purchase_Order::with('vendor', 'proyek')
-            ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_order.proyek_id')
+        $po = Purchase_Order::leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_order.proyek_id')
             ->leftjoin('purchase_request', 'purchase_request.id', '=', 'purchase_order.pr_id')
             ->leftjoin('vendor', 'vendor.id', '=', 'purchase_order.vendor_id')
+            ->select('purchase_order.*', 'keproyekan.*', 'vendor.*', 'purchase_request.*', 'purchase_order.id as id_po')
             ->where('purchase_order.id', $id)
             ->first();
 
-        $po->details = DetailPo::where('id_po', $po->id)
+        $po->details = DetailPo::where('detail_po.id_po', $po->id_po)
             ->leftJoin('detail_pr', 'detail_pr.id', '=', 'detail_po.id_detail_pr')
             ->select('detail_pr.*', 'detail_po.id as id_detail_po')
             ->get();
@@ -311,7 +328,7 @@ class PurchaseOrderController extends Controller
         $pdf->setPaper('A4', 'landscape');
         $nama = $po->nama_proyek;
         $no = $po->no_po;
-        return $pdf->stream('PO-' . $nama .'('.$no.')'. '.pdf');
+        return $pdf->stream('PO-' . $nama . '(' . $no . ')' . '.pdf');
         // return view('purchase_order.po_print', compact('po'));
     }
 

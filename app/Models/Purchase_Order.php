@@ -23,6 +23,5 @@ class Purchase_Order extends Model
         'term_pay',
         'garansi',
         'proyek_id',
-        // 'catatan_vendor'
     ];
 }
