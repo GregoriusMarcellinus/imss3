@@ -78,6 +78,12 @@ class HomeController extends Controller
         if ($type == "logistik") {
             $menus = [
                 [
+                    'name' => 'Purchase Request',
+                    'route' => 'apps/purchase_request',
+                    'bgcolor' => 'sagegreen',
+                    'icon' => 'hand-holding-usd'
+                ],
+                [
                     'name' => 'SPPH',
                     'route' => 'apps/spph',
                     'bgcolor' => 'orange',

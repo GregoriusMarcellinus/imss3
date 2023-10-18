@@ -290,6 +290,7 @@
                                                         <th>Spesifikasi</th>
                                                         <th>QTY</th>
                                                         <th>Sat</th>
+                                                        <th>NO PR</th>
                                                         <th>No SPPH</th>
                                                         <th>Pilih</th>
                                                     </tr>
@@ -557,6 +558,13 @@
                             no_spph = value.nomor_spph
                         }
 
+                        var no_pr
+                        if (!value.pr_no) {
+                            no_pr = '-'
+                        } else {
+                            no_pr = value.pr_no
+                        }
+
                         var checkbox;
                         if (!value.id_spph) {
                             checkbox = '<input type="checkbox" id="addToDetails" value="' + value.id +
@@ -569,9 +577,8 @@
                         $('#detail-material').append(
                             '<tr><td>' + (key + 1) + '</td><td>' + value.uraian +
                             '</td><td>' + value.spek + '</td><td>' + value.qty + '</td><td>' + value
-                            .satuan + '</td><td>' + no_spph +
-                            '</td><td>' +
-                            checkbox +
+                            .satuan + '</td><td>' + no_pr +'</td><td>'+ no_spph +
+                            '</td><td>' + checkbox +
                             '</td></tr>'
                         );
                     });

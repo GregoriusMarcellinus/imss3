@@ -838,24 +838,19 @@
         });
 
         function showAddItem() {
-            if ($('#detail-po').find('.modal-dialog').hasClass('modal-xl')) {
-                // $('#detail-po').find('.modal-dialog').removeClass('modal-lg');
-                // $('#detail-po').find('.modal-dialog').addClass('modal-xl');
+            //detect #detail-po where id container-product has class d-none
+            if ($('#detail-po').find('#container-product').hasClass('d-none')) {
+                $('#detail-po').find('#container-product').removeClass('d-none');
+                $('#detail-po').find('#container-product').addClass('col-5');
+                $('#detail-po').find('#container-form').removeClass('col-12');
+                $('#detail-po').find('#container-form').addClass('col-7');
                 $('#button-tambah-detail').text('Kembali');
-                $('#container-form').removeClass('col-12');
-                $('#container-form').addClass('col-6');
-                $('#container-product').removeClass('col-0');
-                $('#container-product').addClass('col-6');
-                $('#container-product').removeClass('d-none');
             } else {
-                $('#detail-po').find('.modal-dialog').removeClass('modal-xl');
-                $('#detail-po').find('.modal-dialog').addClass('modal-lg');
+                $('#detail-po').find('#container-product').addClass('d-none');
+                $('#detail-po').find('#container-product').removeClass('col-5');
+                $('#detail-po').find('#container-form').addClass('col-12');
+                $('#detail-po').find('#container-form').removeClass('col-7');
                 $('#button-tambah-detail').text('Tambah Item Detail');
-                $('#container-form').removeClass('col-6');
-                $('#container-form').addClass('col-12');
-                $('#container-product').removeClass('col-6');
-                $('#container-product').addClass('col-0');
-                $('#container-product').addClass('d-none');
             }
 
             getPODetail();

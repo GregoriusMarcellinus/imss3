@@ -166,7 +166,7 @@
 
         {{-- modal lihat detail --}}
         <div class="modal fade" id="detail-pr">
-            <div class="modal-dialog modal-lg">
+            <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 id="modal-title" class="modal-title">{{ __('Detail Purchase Request') }}</h4>
@@ -339,7 +339,7 @@
             </div>
         </div>
 
-        {{-- modal delete sjn --}}
+        {{-- modal delete --}}
         <div class="modal fade" id="delete-pr">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -419,25 +419,18 @@
         }
 
         function showAddProduct() {
-            //if .modal-dialog in #detail-pr has class modal-lg, change to modal-xl, otherwise change to modal-lg
-            if ($('#detail-pr').find('.modal-dialog').hasClass('modal-lg')) {
-                $('#detail-pr').find('.modal-dialog').removeClass('modal-lg');
-                $('#detail-pr').find('.modal-dialog').addClass('modal-xl');
+            if ($('#detail-pr').find('#container-product').hasClass('d-none')) { 
+                $('#detail-pr').find('#container-product').removeClass('d-none');
+                $('#detail-pr').find('#container-product').addClass('col-5');
+                $('#detail-pr').find('#container-form').removeClass('col-12');
+                $('#detail-pr').find('#container-form').addClass('col-7');
                 $('#button-tambah-produk').text('Kembali');
-                $('#container-form').removeClass('col-12');
-                $('#container-form').addClass('col-8');
-                $('#container-product').removeClass('col-0');
-                $('#container-product').addClass('col-4');
-                $('#container-product').removeClass('d-none');
             } else {
-                $('#detail-pr').find('.modal-dialog').removeClass('modal-xl');
-                $('#detail-pr').find('.modal-dialog').addClass('modal-lg');
-                $('#button-tambah-produk').text('Tambah Produk');
-                $('#container-form').removeClass('col-8');
-                $('#container-form').addClass('col-12');
-                $('#container-product').removeClass('col-4');
-                $('#container-product').addClass('col-0');
-                $('#container-product').addClass('d-none');
+                $('#detail-pr').find('#container-product').addClass('d-none');
+                $('#detail-pr').find('#container-product').removeClass('col-5');
+                $('#detail-pr').find('#container-form').addClass('col-12');
+                $('#detail-pr').find('#container-form').removeClass('col-7');
+                $('#button-tambah-produk').text('Tambah Item Detail');
             }
         }
 

@@ -110,7 +110,7 @@ class PurchaseOrderController extends Controller
         ]);
 
         $po = Purchase_Order::select('purchase_order.*', 'vendor.nama as nama_vendor', 'keproyekan.nama_proyek as nama_proyek')
-            ->join('vendor', 'vendor.id', '=', 'purchase_order.vendor_id')
+            ->leftjoin('vendor', 'vendor.id', '=', 'purchase_order.vendor_id')
             ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_order.proyek_id')
             ->where('purchase_order.id', $id_po)
             ->first();
