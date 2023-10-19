@@ -959,6 +959,7 @@
                         $('#id_po').val(data.po.id);
                         $('#button-cetak-po').html('<i class="fas fa-print"></i> Cetak');
                         $('#button-cetak-po').attr('disabled', false);
+                        $('#tabel-po').empty();
                         var no = 1;
                         var id_po = data.po.id;
 
@@ -1021,6 +1022,9 @@
                         }
                         //remove loading
                         $('#tabel-po').find('tr:first').remove();
+                        $('#loader').hide();
+                        $('#form').show();
+                        getPODetail();
                 },
                 error: function() {
                     $('#pcode').prop("disabled", false);

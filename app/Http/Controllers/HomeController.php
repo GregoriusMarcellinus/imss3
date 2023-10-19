@@ -81,13 +81,19 @@ class HomeController extends Controller
                     'name' => 'Purchase Request',
                     'route' => 'apps/purchase_request',
                     'bgcolor' => 'sagegreen',
-                    'icon' => 'hand-holding-usd'
+                    'icon' => 'cart-arrow-down'
                 ],
                 [
                     'name' => 'SPPH',
                     'route' => 'apps/spph',
                     'bgcolor' => 'orange',
                     'icon' => 'mail-bulk'
+                ],
+                [
+                    'name' => 'Tracking Purchase Request',
+                    'route' => 'apps/purchase_request',
+                    'bgcolor' => 'red',
+                    'icon' => 'route'
                 ],
                 [
                     'name' => 'Purchase Order',
@@ -137,7 +143,13 @@ class HomeController extends Controller
                     'name' => 'Purchase Request',
                     'route' => 'apps/purchase_request',
                     'bgcolor' => 'sagegreen',
-                    'icon' => 'hand-holding-usd'
+                    'icon' => 'cart-arrow-down'
+                ],
+                [
+                    'name' => 'Tracking Purchase Request',
+                    'route' => 'apps/purchase_request',
+                    'bgcolor' => 'red',
+                    'icon' => 'route'
                 ]
             ];
             $title = "Wilayah 1";
@@ -147,7 +159,13 @@ class HomeController extends Controller
                     'name' => 'Purchase Request',
                     'route' => 'apps/purchase_request',
                     'bgcolor' => 'sagegreen',
-                    'icon' => 'hand-holding-usd'
+                    'icon' => 'cart-arrow-down'
+                ],
+                [
+                    'name' => 'Tracking Purchase Request',
+                    'route' => 'apps/purchase_request',
+                    'bgcolor' => 'red',
+                    'icon' => 'route'
                 ]
             ];
             $title = "Wilayah 2";

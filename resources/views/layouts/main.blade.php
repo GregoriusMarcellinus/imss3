@@ -86,6 +86,15 @@
                                     </a>
                                 </li>
                             @endif
+                            @if (Auth::user()->role == 0 || Auth::user()->role == 1 || Auth::user()->role == 4)
+                                <li class="nav-item">
+                                    <a class="nav-link {{ Route::current()->getName() == 'vendor.index' ? 'active' : '' }}"
+                                        href="{{ route('vendor.index') }}">
+                                        <i class="nav-icon fas fa-user-cog"></i>
+                                        <p class="text">{{ __('Vendor') }}</p>
+                                    </a>
+                                </li>
+                            @endif
                             @if (Auth::user()->role == 0 || Auth::user()->role == 4)
                                 <li class="nav-header">Product</li>
                                 <li class="nav-item">
@@ -100,13 +109,6 @@
                                         href="{{ route('products.categories') }}">
                                         <i class="nav-icon fas fa-project-diagram"></i>
                                         <p class="text">{{ __('Kategori') }}</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link {{ Route::current()->getName() == 'vendor.index' ? 'active' : '' }}"
-                                        href="{{ route('vendor.index') }}">
-                                        <i class="nav-icon fas fa-user-cog"></i>
-                                        <p class="text">{{ __('Vendor') }}</p>
                                     </a>
                                 </li>
                                 <li class="nav-item">

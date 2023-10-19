@@ -179,6 +179,34 @@ class PurchaseOrderController extends Controller
         ]);
     }
 
+    public function tracking(Request $request){
+        $search = $request->q;
+
+        if (Session::has('selected_warehouse_id')) {
+            $warehouse_id = Session::get('selected_warehouse_id');
+        } else {
+            $warehouse_id = DB::table('warehouse')->first()->warehouse_id;
+        }
+
+        $requests = PurchaseRequest::select('purchase_request.*', 'keproyekan.nama_proyek as proyek_name')
+            ->join('keproyekan', 'keproyekan.id', '=', 'purchase_request.proyek_id')
+            ->paginate(50);
+
+        $proyeks = DB::table('keproyekan')->get();
+
+        if ($search) {
+            $requests = PurchaseRequest::where('nama_proyek', 'LIKE', "%$search%")->paginate(50);
+        }
+
+        if ($request->format == "json") {
+            $requests = PurchaseRequest::where("warehouse_id", $warehouse_id)->get();
+
+            return response()->json($requests);
+        } else {
+            return view('admin.trackingpr', compact('requests', 'proyeks'));
+        }
+    }
+
     public function updateDetailPo(Request $request)
     {
         $id = $request->id;

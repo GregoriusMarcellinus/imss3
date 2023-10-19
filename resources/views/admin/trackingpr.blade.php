@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title', __('Purchase Request'))
+@section('title', __('Tracking Purchase Request'))
 @section('custom-css')
     <link rel="stylesheet" href="/plugins/toastr/toastr.min.css">
     <link rel="stylesheet" href="/plugins/select2/css/select2.min.css">
@@ -16,8 +16,8 @@
         <div class="container-fluid">
             <div class="card">
                 <div class="card-header">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-pr"
-                        onclick="addPR()"><i class="fas fa-plus"></i> Add Purchase Request</button>
+                    {{-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-pr"
+                        onclick="addPR()"><i class="fas fa-plus"></i> Add Purchase Request</button> --}}
                     <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#import-product" onclick="importProduct()"><i class="fas fa-file-excel"></i> Import Product (Excel)</button> -->
                     <!-- <button type="button" class="btn btn-primary" onclick="download('xls')"><i class="fas fa-file-excel"></i> Export Product (XLS)</button> -->
                     <div class="card-tools">
@@ -70,27 +70,12 @@
                                             <td class="text-center">{{ $data['tanggal'] }}</td>
                                             <td class="text-center">{{ $data['dasar_pr'] }}</td>
                                             <td class="text-center">
-                                                {{-- if detail-pr get status == 0 || status == 1 || status == 2 || status == 3 || status == 4 disabled button edit --}}
-                                                @if ($d->status == 0 || $d->status == 1 || $d->status == 2 || $d->status == 3 || $d->status == 4)
-                                                    <button title="Edit Request" type="button"
-                                                        class="btn btn-success btn-xs" data-toggle="modal"
-                                                        data-target="#add-pr"
-                                                        onclick="editPR({{ json_encode($data) }})" disabled><i
-                                                            class="fas fa-edit"></i></button>
-                                                @else
-                                                    <button title="Edit Request" type="button"
-                                                        class="btn btn-success btn-xs" data-toggle="modal"
-                                                        data-target="#add-pr"
-                                                        onclick="editPR({{ json_encode($data) }})"><i
-                                                            class="fas fa-edit"></i></button>
-                                                    
-                                                @endif
-
-                                                {{-- <button title="Edit Request" type="button" class="btn btn-success btn-xs"
+                                                @if (Auth::user()->role == 0 || Auth::user()->role == 2 || Auth::user()->role == 3)
+                                                <button title="Edit Request" type="button" class="btn btn-success btn-xs"
                                                     data-toggle="modal" data-target="#add-pr"
                                                     onclick="editPR({{ json_encode($data) }})"><i
-                                                        class="fas fa-edit"></i></button> --}}
-
+                                                        class="fas fa-edit"></i></button>
+                                                @endif
                                                 <button title="Lihat Detail" type="button" data-toggle="modal"
                                                     data-target="#detail-pr" class="btn-lihat btn btn-info btn-xs"
                                                     data-detail="{{ json_encode($data) }}"><i
@@ -169,13 +154,12 @@
                                     <textarea class="form-control" name="dasar_pr" id="dasar_pr" rows="3"></textarea>
                                 </div>
                             </div>
-                            @if (Auth::user()->role == 0 || Auth::user()->role == 1)
+                            {{-- @if (Auth::user()->role == 0 || Auth::user()->role == 1)
                                 
                             <div class="form-group row">
                                 <label for="proyek" class="col-sm-4 col-form-label">{{ __('Status') }}
                                 </label>
                                 <div class="col-sm-8">
-                                    {{-- <input type="text" class="form-control" id="proyek" name="proyek"> --}}
                                     <select class="form-control" name="proyek_id" id="proyek_id">
                                         <option value="0">Pilih Status</option>
                                         <option value="1">SPPH</option>
@@ -186,7 +170,7 @@
                                     </select>
                                 </div>
                             </div>
-                            @endif
+                            @endif --}}
                         </form>
                     </div>
                     <div class="modal-footer justify-content-between">
@@ -236,12 +220,12 @@
                                         <tr>
                                             <td><b>Produk</b></td>
                                         </tr>
-                                        <tr>
+                                        {{-- <tr>
                                             <td colspan="3">
                                                 <button id="button-tambah-produk" type="button" class="btn btn-info mb-3"
                                                     onclick="showAddProduct()">{{ __('Tambah Produk') }}</button>
                                             </td>
-                                        </tr>
+                                        </tr> --}}
                                     </table>
                                     <div class="table-responsive">
                                         <table class="table table-bordered">
@@ -255,8 +239,13 @@
                                                 <th>{{ __('Waktu Penyelesaian') }}</th>
                                                 <th>{{ __('Keterangan') }}</th>
                                                 <th>{{ __('SPPH') }}</th>
+                                                <th>{{ __('SPH') }}</th>
+                                                <th>{{ __('JUST') }}</th>
+                                                <th>{{ __('NEGO 1') }}</th>
+                                                <th>{{ __('NEGO 2') }}</th>
                                                 <th>{{ __('PO') }}</th>
                                                 <th>{{ __('STATUS') }}</th>
+                                                <th>{{ __('AKSI') }}</th>
                                             </thead>
                                             <tbody id="table-pr">
                                             </tbody>
@@ -600,7 +589,7 @@
                     clearForm();
                     if (data.pr.details.length == 0) {
                         $('#table-pr').append(
-                            '<tr><td colspan="15" class="text-center">Tidak ada produk</td></tr>');
+                            '<tr><td colspan="16" class="text-center">Tidak ada produk</td></tr>');
                     } else {
                         $('#table-pr').empty();
                         $.each(data.pr.details, function(key, value) {
@@ -673,7 +662,7 @@
                 type: "GET",
                 dataType: "json",
                 beforeSend: function() {
-                    $('#table-pr').append('<tr><td colspan="15" class="text-center">Loading...</td></tr>');
+                    $('#table-pr').append('<tr><td colspan="16" class="text-center">Loading...</td></tr>');
                     $('#button-cetak-pr').html('<i class="fas fa-spinner fa-spin"></i> Loading...');
                     $('#button-cetak-pr').attr('disabled', true);
                 },
@@ -690,7 +679,7 @@
                     if (data.pr.details.length == 0) {
                         $('#table-pr').empty();
                         $('#table-pr').append(
-                            '<tr><td colspan="15" class="text-center">Tidak ada produk</td></tr>');
+                            '<tr><td colspan="16" class="text-center">Tidak ada produk</td></tr>');
                     } else {
                         $('#table-pr').empty();
                         $.each(data.pr.details, function(key, value) {
@@ -725,8 +714,12 @@
                                 value
                                 .spek + '</td><td>' + value.qty + '</td><td>' + value
                                 .satuan + '</td><td>' + value.waktu + '</td><td>' + value.keterangan +
-                                '</td><td>' + spph + 
-                                '</td><td>' + po + '</td><td>' + status + '</td></tr>'
+                                '</td><td>' + spph + '</td><td><input type="text" value="'+ '" class="form-control" style="width:200px;" placeholder="No SPH" id="sph' + id + '" name="sph' + id + '">'+ '<input type="date" value="'+'" class="form-control mt-2" style="width:200px;" id="tgl_sph' + id + '" name="tgl_sph' + id + '">'+
+                                '</td><td><input type="text" value="' +'" class="form-control" style="width:200px;" placeholder="No Justifikasi" id="just' + id + '" name="just' + id + '">'+ '<input type="date" value="'+'" class="form-control mt-2" style="width:200px;" id="tgl_just' + id + '" name="tgl_just' + id + '">' + '</td><td><input type="text" value="' +
+                                '" class="form-control" style="width:200px;" placeholder="No Nego 1" id="neg1' + id + '" name="neg1' + id + '">'+ '<p class="mt-2 mb-0">Tanggal Nego 1</p><input type="date" value="'+'" class="form-control" style="width:200px;" id="tgl_nego1' + id + '" name="tgl_nego1' + id + '">' + '<p class="mt-2 mb-0">Batas Nego 1</p><input type="date" value="'+'" class="form-control" style="width:200px;" id="bts_nego1' + id + '" name="bts_nego1' + id + '">' + '</td><td><input type="text" value="' +
+                                '" class="form-control" style="width:200px;" placeholder="No Nego 2" id="neg2' + id + '" name="neg2' + id + '">'+ '<p class="mt-2 mb-0">Tanggal Nego 2</p><input type="date" value="'+'" class="form-control" style="width:200px;" id="tgl_nego2' + id + '" name="tgl_nego2' + id + '">' + '<p class="mt-2 mb-0">Batas Nego 2</p><input type="date" value="'+'" class="form-control" style="width:200px;" id="bts_nego2' + id + '" name="bts_nego2' + id + '">' + 
+                                '</td><td>' + po + '</td><td>' + status + '</td>'+ '<td><button id="edit_po_save" type="button" class="btn btn-success btn-xs"'
+                                + '><i class="fas fa-save"></i></button>' +'</td>'+'</tr>'
                                 
                             );
                         });

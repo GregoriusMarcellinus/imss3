@@ -84,6 +84,7 @@ Route::prefix('products')->group(function () {
     Route::get('cetak_po', [App\Http\Controllers\PurchaseOrderController::class, 'cetakPo'])->name('cetak_po');
     Route::post('detail_pr_save', [App\Http\Controllers\PurchaseOrderController::class, 'detailPrSave'])->name('detail_pr_save');
     Route::post('tambah_detail_po', [App\Http\Controllers\PurchaseOrderController::class, 'tambahDetailPo'])->name('tambah_detail_po');
+    Route::get('tracking', [App\Http\Controllers\PurchaseOrderController::class, 'tracking'])->name('product.tracking');
 
     Route::get('test_pr', [App\Http\Controllers\PurchaseOrderController::class, 'test_pr'])->name('test_pr');
 
