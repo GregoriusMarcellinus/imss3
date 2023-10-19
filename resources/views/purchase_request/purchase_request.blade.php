@@ -237,11 +237,11 @@
                                                 @if ($d->status == 0 || $d->status == 1 || $d->status == 2 || $d->status == 3 || $d->status == 4)
                                                     <button id="button-tambah-produk" type="button"
                                                         class="btn btn-info mb-3" onclick="showAddProduct()"
-                                                        disabled>{{ __('Tambah Produk') }}</button>
+                                                        disabled>{{ __('Tambah Item Detail') }}</button>
                                                 @else
                                                     <button id="button-tambah-produk" type="button"
                                                         class="btn btn-info mb-3"
-                                                        onclick="showAddProduct()">{{ __('Tambah Produk') }}</button>
+                                                        onclick="showAddProduct()">{{ __('Tambah Item Detail') }}</button>
                                                 @endif
                                                 {{-- <button id="button-tambah-produk" type="button" class="btn btn-info mb-3"
                                                     onclick="showAddProduct()">{{ __('Tambah Produk') }}</button> --}}
