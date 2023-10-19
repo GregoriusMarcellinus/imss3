@@ -70,24 +70,24 @@
                                             <td class="text-center">{{ $data['tanggal'] }}</td>
                                             <td class="text-center">{{ $data['dasar_pr'] }}</td>
                                             <td class="text-center">
-                                                @if (Auth::user()->role == 0 || Auth::user()->role == 2 || Auth::user()->role == 3)
+                                                {{-- @if (Auth::user()->role == 0 || Auth::user()->role == 2 || Auth::user()->role == 3)
                                                 <button title="Edit Request" type="button" class="btn btn-success btn-xs"
                                                     data-toggle="modal" data-target="#add-pr"
                                                     onclick="editPR({{ json_encode($data) }})"><i
                                                         class="fas fa-edit"></i></button>
-                                                @endif
+                                                @endif --}}
                                                 <button title="Lihat Detail" type="button" data-toggle="modal"
                                                     data-target="#detail-pr" class="btn-lihat btn btn-info btn-xs"
                                                     data-detail="{{ json_encode($data) }}"><i
                                                         class="fas fa-list"></i></button>
 
-                                                @if (Auth::user()->role == 0 || Auth::user()->role == 2 || Auth::user()->role == 3)
+                                                {{-- @if (Auth::user()->role == 0 || Auth::user()->role == 2 || Auth::user()->role == 3)
                                                     <button title="Hapus Request" type="button"
                                                         class="btn btn-danger btn-xs" data-toggle="modal"
                                                         data-target="#delete-pr"
                                                         onclick="deletePR({{ json_encode($data) }})"><i
                                                             class="fas fa-trash"></i></button>
-                                                @endif
+                                                @endif --}}
                                             </td>
                                         </tr>
                                     @endforeach

@@ -70,20 +70,16 @@
                                             <td class="text-center">{{ $data['tanggal'] }}</td>
                                             <td class="text-center">{{ $data['dasar_pr'] }}</td>
                                             <td class="text-center">
-                                                {{-- if detail-pr get status == 0 || status == 1 || status == 2 || status == 3 || status == 4 disabled button edit --}}
                                                 @if ($d->status == 0 || $d->status == 1 || $d->status == 2 || $d->status == 3 || $d->status == 4)
                                                     <button title="Edit Request" type="button"
                                                         class="btn btn-success btn-xs" data-toggle="modal"
-                                                        data-target="#add-pr"
-                                                        onclick="editPR({{ json_encode($data) }})" disabled><i
-                                                            class="fas fa-edit"></i></button>
+                                                        data-target="#add-pr" onclick="editPR({{ json_encode($data) }})"
+                                                        disabled><i class="fas fa-edit"></i></button>
                                                 @else
                                                     <button title="Edit Request" type="button"
                                                         class="btn btn-success btn-xs" data-toggle="modal"
-                                                        data-target="#add-pr"
-                                                        onclick="editPR({{ json_encode($data) }})"><i
+                                                        data-target="#add-pr" onclick="editPR({{ json_encode($data) }})"><i
                                                             class="fas fa-edit"></i></button>
-                                                    
                                                 @endif
 
                                                 {{-- <button title="Edit Request" type="button" class="btn btn-success btn-xs"
@@ -97,6 +93,7 @@
                                                         class="fas fa-list"></i></button>
 
                                                 @if (Auth::user()->role == 0 || Auth::user()->role == 2 || Auth::user()->role == 3)
+                                                    
                                                     <button title="Hapus Request" type="button"
                                                         class="btn btn-danger btn-xs" data-toggle="modal"
                                                         data-target="#delete-pr"
@@ -170,22 +167,21 @@
                                 </div>
                             </div>
                             @if (Auth::user()->role == 0 || Auth::user()->role == 1)
-                                
-                            <div class="form-group row">
-                                <label for="proyek" class="col-sm-4 col-form-label">{{ __('Status') }}
-                                </label>
-                                <div class="col-sm-8">
-                                    {{-- <input type="text" class="form-control" id="proyek" name="proyek"> --}}
-                                    <select class="form-control" name="proyek_id" id="proyek_id">
-                                        <option value="0">Pilih Status</option>
-                                        <option value="1">SPPH</option>
-                                        <option value="2">SPH</option>
-                                        <option value="3">JUSTIFIKASI</option>
-                                        <option value="4">NEGO 1</option>
-                                        <option value="5">NEGO 2</option>
-                                    </select>
+                                <div class="form-group row">
+                                    <label for="proyek" class="col-sm-4 col-form-label">{{ __('Status') }}
+                                    </label>
+                                    <div class="col-sm-8">
+                                        {{-- <input type="text" class="form-control" id="proyek" name="proyek"> --}}
+                                        <select class="form-control" name="proyek_id" id="proyek_id">
+                                            <option value="0">Pilih Status</option>
+                                            <option value="1">SPPH</option>
+                                            <option value="2">SPH</option>
+                                            <option value="3">JUSTIFIKASI</option>
+                                            <option value="4">NEGO 1</option>
+                                            <option value="5">NEGO 2</option>
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
                             @endif
                         </form>
                     </div>
@@ -238,8 +234,17 @@
                                         </tr>
                                         <tr>
                                             <td colspan="3">
-                                                <button id="button-tambah-produk" type="button" class="btn btn-info mb-3"
-                                                    onclick="showAddProduct()">{{ __('Tambah Produk') }}</button>
+                                                @if ($d->status == 0 || $d->status == 1 || $d->status == 2 || $d->status == 3 || $d->status == 4)
+                                                    <button id="button-tambah-produk" type="button"
+                                                        class="btn btn-info mb-3" onclick="showAddProduct()"
+                                                        disabled>{{ __('Tambah Produk') }}</button>
+                                                @else
+                                                    <button id="button-tambah-produk" type="button"
+                                                        class="btn btn-info mb-3"
+                                                        onclick="showAddProduct()">{{ __('Tambah Produk') }}</button>
+                                                @endif
+                                                {{-- <button id="button-tambah-produk" type="button" class="btn btn-info mb-3"
+                                                    onclick="showAddProduct()">{{ __('Tambah Produk') }}</button> --}}
                                             </td>
                                         </tr>
                                     </table>
@@ -453,7 +458,7 @@
         }
 
         function showAddProduct() {
-            if ($('#detail-pr').find('#container-product').hasClass('d-none')) { 
+            if ($('#detail-pr').find('#container-product').hasClass('d-none')) {
                 $('#detail-pr').find('#container-product').removeClass('d-none');
                 $('#detail-pr').find('#container-product').addClass('col-5');
                 $('#detail-pr').find('#container-form').removeClass('col-12');
@@ -724,10 +729,11 @@
                                 .kode_material + '</td><td>' + value.uraian + '</td><td>' +
                                 value
                                 .spek + '</td><td>' + value.qty + '</td><td>' + value
-                                .satuan + '</td><td>' + value.waktu + '</td><td>' + value.keterangan +
-                                '</td><td>' + spph + 
+                                .satuan + '</td><td>' + value.waktu + '</td><td>' + value
+                                .keterangan +
+                                '</td><td>' + spph +
                                 '</td><td>' + po + '</td><td>' + status + '</td></tr>'
-                                
+
                             );
                         });
                     }
