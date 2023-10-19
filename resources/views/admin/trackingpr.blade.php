@@ -708,8 +708,9 @@
                             } else if (value.id_spph && value.no_sph && !value.no_just) {
                                 status = 'Lakukan Justifikasi';
                             } else if (value.id_spph && value.no_sph && value.no_just && !value.id_po) {
-                                status = 'Lakukan PO';
-                            } else if (value.id_spph && value.no_sph && value.no_just && value.id_po) {
+                                status = 'Lakukan Nego/PO';
+                            } else if (value.id_spph && value.no_sph && value
+                                .id_po) {
                                 status = 'COMPLETED';
                             }
 
@@ -883,8 +884,8 @@
                                 status = 'Lakukan Justifikasi';
                             } else if (value.id_spph && value.no_sph && value.no_just && !value
                                 .id_po) {
-                                status = 'Lakukan PO';
-                            } else if (value.id_spph && value.no_sph && value.no_just && value
+                                status = 'Lakukan Nego/PO';
+                            } else if (value.id_spph && value.no_sph && value
                                 .id_po) {
                                 status = 'COMPLETED';
                             }
