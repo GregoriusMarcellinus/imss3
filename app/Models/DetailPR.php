@@ -20,6 +20,16 @@ class DetailPR extends Model
         'satuan',
         'waktu',
         'keterangan',
-        'status'
+        'status',
+        'no_sph',
+        'tanggal_sph',
+        'no_just',
+        'tanggal_just',
+        'no_nego1',
+        'tanggal_nego1',
+        'batas_nego1',
+        'no_nego2',
+        'tanggal_nego2',
+        'batas_nego2',
     ];
 }

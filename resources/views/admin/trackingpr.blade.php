@@ -155,7 +155,7 @@
                                 </div>
                             </div>
                             {{-- @if (Auth::user()->role == 0 || Auth::user()->role == 1)
-                                
+
                             <div class="form-group row">
                                 <label for="proyek" class="col-sm-4 col-form-label">{{ __('Status') }}
                                 </label>
@@ -442,7 +442,7 @@
         }
 
         function showAddProduct() {
-            if ($('#detail-pr').find('#container-product').hasClass('d-none')) { 
+            if ($('#detail-pr').find('#container-product').hasClass('d-none')) {
                 $('#detail-pr').find('#container-product').removeClass('d-none');
                 $('#detail-pr').find('#container-product').addClass('col-5');
                 $('#detail-pr').find('#container-form').removeClass('col-12');
@@ -683,6 +683,184 @@
                     } else {
                         $('#table-pr').empty();
                         $.each(data.pr.details, function(key, value) {
+
+                            var id = value.id;
+                            var status, spph, po;
+                            if (!value.id_spph) {
+                                spph = '-';
+                            } else {
+                                spph = value.nomor_spph
+                            }
+
+                            if (!value.id_po) {
+                                po = '-';
+                            } else {
+                                po = value.no_po
+                            }
+
+                            // alert(value.no_sph)
+
+                            //0 = Lakukan SPPH, 1 = Lakukan PO, 2 = Completed
+                            if (!value.id_spph) {
+                                status = 'Lakukan SPPH';
+                            } else if (value.id_spph && !value.no_sph) {
+                                status = 'Lakukan SPH';
+                            } else if (value.id_spph && value.no_sph && !value.no_just) {
+                                status = 'Lakukan Justifikasi';
+                            } else if (value.id_spph && value.no_sph && value.no_just && !value.id_po) {
+                                status = 'Lakukan PO';
+                            } else if (value.id_spph && value.no_sph && value.no_just && value.id_po) {
+                                status = 'COMPLETED';
+                            }
+
+                            $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
+                                .kode_material + '</td><td>' + value.uraian + '</td><td>' +
+                                value
+                                .spek + '</td><td>' + value.qty + '</td><td>' + value
+                                .satuan + '</td><td>' + value.waktu + '</td><td>' + value
+                                .keterangan +
+                                '</td><td>' + spph +
+                                '</td><td><input type="text" class="form-control" style="width:200px;" placeholder="No SPH" id="sph' +
+                                id + '" name="sph' + id + '" value="' + value.no_sph +
+                                '">' +
+                                '<input type="date" class="form-control mt-2" style="width:200px;" id="tgl_sph' +
+                                id + '" name="tgl_sph' + id + '" value="' + value
+                                .tanggal_sph + '">' +
+                                '</td><td><input type="text"  class="form-control" style="width:200px;" placeholder="No Justifikasi" id="just' +
+                                id + '" name="just' + id + '" value="' + value.no_just +
+                                '">' +
+                                '<input type="date"  class="form-control mt-2" style="width:200px;" id="tgl_just' +
+                                id + '" name="tgl_just' + id + '" value="' + value
+                                .tanggal_just + '">' +
+                                '</td><td><input type="text"  class="form-control" style="width:200px;" placeholder="No Nego 1" id="neg1' +
+                                id + '" name="neg1' + id + '" value="' + value.no_nego1 +
+                                '">' +
+                                '<p class="mt-2 mb-0">Tanggal Nego 1</p><input type="date"  class="form-control" style="width:200px;" id="tgl_nego1' +
+                                id +
+                                '" name="tgl_nego1' + id + '" value="' + value
+                                .tanggal_nego1 + '">' +
+                                '<p class="mt-2 mb-0">Batas Nego 1</p><input type="date"  class="form-control" style="width:200px;" id="bts_nego1' +
+                                id +
+                                '" name="bts_nego1' + id + '" value="' + value.batas_nego1 +
+                                '">' +
+                                '</td><td><input type="text" value="' + value.no_nego2 +
+                                '" class="form-control" style="width:200px;" placeholder="No Nego 2" id="neg2' +
+                                id + '" name="neg2' + id + '">' +
+                                '<p class="mt-2 mb-0">Tanggal Nego 2</p><input type="date"  class="form-control" style="width:200px;" id="tgl_nego2' +
+                                id +
+                                '" name="tgl_nego2' + id + '" value="' + value
+                                .tanggal_nego2 + '">' +
+                                '<p class="mt-2 mb-0">Batas Nego 2</p><input type="date"  class="form-control" style="width:200px;" id="bts_nego2' +
+                                id +
+                                '" name="bts_nego2' + id + '" value="' + value.batas_nego2 +
+                                '">' +
+                                '</td><td>' + po + '</td><td>' + status + '</td>' +
+                                '<td><button id="edit_pr_save" data-id="' + id +
+                                '" type="button" class="btn btn-success btn-xs"' +
+                                '><i class="fas fa-save"></i></button>' + '</td>' + '</tr>'
+
+                            );
+                        });
+                    }
+                    //remove loading
+                    // $('#table-pr').find('tr:first').remove();
+                }
+            });
+        }
+
+        //action edit_po_save
+        $(document).on('click', '#edit_pr_save', function() {
+            console.log('called')
+            var id = $(this).data('id');
+            //get the batas{id} input
+            var sph = $('#sph' + id).val();
+            var tanggal_sph = $('#tgl_sph' + id).val();
+            var no_just = $('#just' + id).val();
+            var tanggal_just = $('#tgl_just' + id).val();
+            var no_nego1 = $('#neg1' + id).val();
+            var tanggal_nego1 = $('#tgl_nego1' + id).val();
+            var batas_nego1 = $('#bts_nego1' + id).val();
+            var no_nego2 = $('#neg2' + id).val();
+            var tanggal_nego2 = $('#tgl_nego2' + id).val();
+            var batas_nego2 = $('#bts_nego2' + id).val();
+
+
+            var form = {
+                id: id,
+                id_pr: $('#id').val(),
+                no_sph: sph,
+                tanggal_sph: tanggal_sph,
+                no_just: no_just,
+                tanggal_just: tanggal_just,
+                no_nego1: no_nego1,
+                tanggal_nego1: tanggal_nego1,
+                batas_nego1: batas_nego1,
+                no_nego2: no_nego2,
+                tanggal_nego2: tanggal_nego2,
+                batas_nego2: batas_nego2,
+            };
+
+            console.table(form);
+
+            $('#tabel-po').empty();
+
+            //ajax post to products/detail_pr_save
+
+            $.ajax({
+                url: "{{ route('detail_pr_save') }}",
+                type: "POST",
+                data: {
+                    ...form,
+                    _token: '{{ csrf_token() }}'
+                },
+                dataType: "json",
+                beforeSend: function() {
+                    $('#tabel-po').append(
+                        '<tr><td colspan="16" class="text-center">Loading...</td></tr>');
+                    $('#button-cetak-pr').html('<i class="fas fa-spinner fa-spin"></i> Loading...');
+                    $('#button-cetak-pr').attr('disabled', true);
+                },
+                success: function(data) {
+                    $('#button-cetak-pr').html('<i class="fas fa-print"></i> Cetak');
+                    $('#button-cetak-pr').attr('disabled', false);
+                    var no = 1;
+
+                    if (data.pr.details.length == 0) {
+                        $('#table-pr').empty();
+                        $('#table-pr').append(
+                            '<tr><td colspan="16" class="text-center">Tidak ada produk</td></tr>');
+                    } else {
+                        $('#table-pr').empty();
+                        $.each(data.pr.details, function(key, value) {
+                            var id = value.id;
+
+                            var no_sph = value.no_sph;
+                            var tanggal_sph = value.tanggal_sph;
+                            var no_just = value.no_just;
+                            var tanggal_just = value.tanggal_just;
+                            var no_nego1 = value.no_nego1;
+                            var tanggal_nego1 = value.tanggal_nego1;
+                            var batas_nego1 = value.batas_nego1;
+                            var no_nego2 = value.no_nego2;
+                            var tanggal_nego2 = value.tanggal_nego2;
+                            var batas_nego2 = value.batas_nego2;
+
+                            const form = {
+                                no_sph: no_sph,
+                                tanggal_sph: tanggal_sph,
+                                no_just: no_just,
+                                tanggal_just: tanggal_just,
+                                no_nego1: no_nego1,
+                                tanggal_nego1: tanggal_nego1,
+                                batas_nego1: batas_nego1,
+                                no_nego2: no_nego2,
+                                tanggal_nego2: tanggal_nego2,
+                                batas_nego2: batas_nego2,
+                            };
+
+                            console.log(value.no_sph)
+                            console.table(form);
+
                             var status, spph, po;
                             if (!value.id_spph) {
                                 spph = '-';
@@ -697,38 +875,73 @@
                             }
 
                             //0 = Lakukan SPPH, 1 = Lakukan PO, 2 = Completed
-                            if (value.status == 0 || !value.status) {
+                            if (!value.id_spph) {
                                 status = 'Lakukan SPPH';
-                            } else if (value.status == 1) {
+                            } else if (value.id_spph && !value.no_sph) {
+                                status = 'Lakukan SPH';
+                            } else if (value.id_spph && value.no_sph && !value.no_just) {
+                                status = 'Lakukan Justifikasi';
+                            } else if (value.id_spph && value.no_sph && value.no_just && !value
+                                .id_po) {
                                 status = 'Lakukan PO';
-                            } else if (value.status == 2) {
+                            } else if (value.id_spph && value.no_sph && value.no_just && value
+                                .id_po) {
                                 status = 'COMPLETED';
-                            } else if (value.status == 3) {
-                                status = 'NEGOSIASI';
-                            } else if (value.status == 4) {
-                                status = 'JUSTIFIKASI';
                             }
 
                             $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
                                 .kode_material + '</td><td>' + value.uraian + '</td><td>' +
                                 value
                                 .spek + '</td><td>' + value.qty + '</td><td>' + value
-                                .satuan + '</td><td>' + value.waktu + '</td><td>' + value.keterangan +
-                                '</td><td>' + spph + '</td><td><input type="text" value="'+ '" class="form-control" style="width:200px;" placeholder="No SPH" id="sph' + id + '" name="sph' + id + '">'+ '<input type="date" value="'+'" class="form-control mt-2" style="width:200px;" id="tgl_sph' + id + '" name="tgl_sph' + id + '">'+
-                                '</td><td><input type="text" value="' +'" class="form-control" style="width:200px;" placeholder="No Justifikasi" id="just' + id + '" name="just' + id + '">'+ '<input type="date" value="'+'" class="form-control mt-2" style="width:200px;" id="tgl_just' + id + '" name="tgl_just' + id + '">' + '</td><td><input type="text" value="' +
-                                '" class="form-control" style="width:200px;" placeholder="No Nego 1" id="neg1' + id + '" name="neg1' + id + '">'+ '<p class="mt-2 mb-0">Tanggal Nego 1</p><input type="date" value="'+'" class="form-control" style="width:200px;" id="tgl_nego1' + id + '" name="tgl_nego1' + id + '">' + '<p class="mt-2 mb-0">Batas Nego 1</p><input type="date" value="'+'" class="form-control" style="width:200px;" id="bts_nego1' + id + '" name="bts_nego1' + id + '">' + '</td><td><input type="text" value="' +
-                                '" class="form-control" style="width:200px;" placeholder="No Nego 2" id="neg2' + id + '" name="neg2' + id + '">'+ '<p class="mt-2 mb-0">Tanggal Nego 2</p><input type="date" value="'+'" class="form-control" style="width:200px;" id="tgl_nego2' + id + '" name="tgl_nego2' + id + '">' + '<p class="mt-2 mb-0">Batas Nego 2</p><input type="date" value="'+'" class="form-control" style="width:200px;" id="bts_nego2' + id + '" name="bts_nego2' + id + '">' + 
-                                '</td><td>' + po + '</td><td>' + status + '</td>'+ '<td><button id="edit_po_save" type="button" class="btn btn-success btn-xs"'
-                                + '><i class="fas fa-save"></i></button>' +'</td>'+'</tr>'
-                                
+                                .satuan + '</td><td>' + value.waktu + '</td><td>' + value
+                                .keterangan +
+                                '</td><td>' + spph +
+                                '</td><td><input type="text" class="form-control" style="width:200px;" placeholder="No SPH" id="sph' +
+                                id + '" name="sph' + id + '" value="' + value.no_sph +
+                                '">' +
+                                '<input type="date" class="form-control mt-2" style="width:200px;" id="tgl_sph' +
+                                id + '" name="tgl_sph' + id + '" value="' + value
+                                .tanggal_sph + '">' +
+                                '</td><td><input type="text"  class="form-control" style="width:200px;" placeholder="No Justifikasi" id="just' +
+                                id + '" name="just' + id + '" value="' + value.no_just +
+                                '">' +
+                                '<input type="date"  class="form-control mt-2" style="width:200px;" id="tgl_just' +
+                                id + '" name="tgl_just' + id + '" value="' + value
+                                .tanggal_just + '">' +
+                                '</td><td><input type="text"  class="form-control" style="width:200px;" placeholder="No Nego 1" id="neg1' +
+                                id + '" name="neg1' + id + '" value="' + value.no_nego1 +
+                                '">' +
+                                '<p class="mt-2 mb-0">Tanggal Nego 1</p><input type="date"  class="form-control" style="width:200px;" id="tgl_nego1' +
+                                id +
+                                '" name="tgl_nego1' + id + '" value="' + value
+                                .tanggal_nego1 + '">' +
+                                '<p class="mt-2 mb-0">Batas Nego 1</p><input type="date"  class="form-control" style="width:200px;" id="bts_nego1' +
+                                id +
+                                '" name="bts_nego1' + id + '" value="' + value.batas_nego1 +
+                                '">' +
+                                '</td><td><input type="text" value="' + value.no_nego2 +
+                                '" class="form-control" style="width:200px;" placeholder="No Nego 2" id="neg2' +
+                                id + '" name="neg2' + id + '">' +
+                                '<p class="mt-2 mb-0">Tanggal Nego 2</p><input type="date"  class="form-control" style="width:200px;" id="tgl_nego2' +
+                                id +
+                                '" name="tgl_nego2' + id + '" value="' + value
+                                .tanggal_nego2 + '">' +
+                                '<p class="mt-2 mb-0">Batas Nego 2</p><input type="date"  class="form-control" style="width:200px;" id="bts_nego2' +
+                                id +
+                                '" name="bts_nego2' + id + '" value="' + value.batas_nego2 +
+                                '">' +
+                                '</td><td>' + po + '</td><td>' + status + '</td>' +
+                                '<td><button id="edit_pr_save" data-id="' + id +
+                                '" type="button" class="btn btn-success btn-xs"' +
+                                '><i class="fas fa-save"></i></button>' + '</td>' + '</tr>'
+
                             );
                         });
                     }
-                    //remove loading
-                    // $('#table-pr').find('tr:first').remove();
                 }
             });
-        }
+
+        });
 
         function detailPR(data) {
             $('#modal-title').text("Edit Request");
