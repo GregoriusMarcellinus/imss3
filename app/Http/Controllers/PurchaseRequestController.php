@@ -10,6 +10,7 @@ use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use stdClass;
 
 class PurchaseRequestController extends Controller
 {
@@ -92,6 +93,17 @@ class PurchaseRequestController extends Controller
             $item->kode_material = $item->kode_material ? $item->kode_material : '';
             $item->nomor_spph = Spph::where('id', $item->id_spph)->first()->nomor_spph ?? '';
             $item->no_po = Purchase_Order::where('id', $item->id_po)->first()->no_po ?? '';
+
+            $item->no_sph = $item->no_sph ? $item->no_sph : '';
+            $item->tanggal_sph = $item->tanggal_sph ? $item->tanggal_sph : '';
+            $item->no_just = $item->no_just ? $item->no_just : '';
+            $item->tanggal_just = $item->tanggal_just ? $item->tanggal_just : '';
+            $item->no_nego1 = $item->no_nego1 ? $item->no_nego1 : '';
+            $item->tanggal_nego1 = $item->tanggal_nego1 ? $item->tanggal_nego1 : '';
+            $item->batas_nego1 = $item->batas_nego1 ? $item->batas_nego1 : '';
+            $item->no_nego2 = $item->no_nego2 ? $item->no_nego2 : '';
+            $item->tanggal_nego2 = $item->tanggal_nego2 ? $item->tanggal_nego2 : '';
+            $item->batas_nego2 = $item->batas_nego2 ? $item->batas_nego2 : '';
             return $item;
         });
         return response()->json([
@@ -254,5 +266,60 @@ class PurchaseRequestController extends Controller
         }
 
         return redirect()->route('purchase_request.index');
+    }
+
+    public function detailPrSave(Request $request)
+    {
+        $id_pr = $request->id;
+        $id = $request->id_pr;
+        $no_sph = $request->no_sph;
+        $tanggal_sph = $request->tanggal_sph;
+        $no_just = $request->no_just;
+        $tanggal_just = $request->tanggal_just;
+        $no_nego1 = $request->no_nego1;
+        $tanggal_nego1 = $request->tanggal_nego1;
+        $batas_nego1 = $request->batas_nego1;
+        $no_nego2 = $request->no_nego2;
+        $tanggal_nego2 = $request->tanggal_nego2;
+        $batas_nego2 = $request->batas_nego2;
+
+        DetailPR::where('id', $id_pr)->update([
+            'no_sph' => $no_sph,
+            'tanggal_sph' => $tanggal_sph,
+            'no_just' => $no_just,
+            'tanggal_just' => $tanggal_just,
+            'no_nego1' => $no_nego1,
+            'tanggal_nego1' => $tanggal_nego1,
+            'batas_nego1' => $batas_nego1,
+            'no_nego2' => $no_nego2,
+            'tanggal_nego2' => $tanggal_nego2,
+            'batas_nego2' => $batas_nego2,
+        ]);
+
+        $pr = PurchaseRequest::where('id', $id)->first();
+        $pr->details = DetailPR::where('id_pr', $pr->id)->get();
+        // $pr->details = DetailPR::where('id_pr', $id)->leftJoin('kode_material', 'kode_material.id', '=', 'detail_pr.kode_material_id')->get();
+        $pr->details = $pr->details->map(function ($item) {
+            $item->spek = $item->spek ? $item->spek : '';
+            $item->keterangan = $item->keterangan ? $item->keterangan : '';
+            $item->kode_material = $item->kode_material ? $item->kode_material : '';
+            $item->nomor_spph = Spph::where('id', $item->id_spph)->first()->nomor_spph ?? '';
+            $item->no_po = Purchase_Order::where('id', $item->id_po)->first()->no_po ?? '';
+
+            $item->no_sph = $item->no_sph ?? '';
+            $item->tanggal_sph = $item->tanggal_sph ?? '';
+            $item->no_just = $item->no_just ?? '';
+            $item->tanggal_just = $item->tanggal_just ?? '';
+            $item->no_nego1 = $item->no_nego1 ?? '';
+            $item->tanggal_nego1 = $item->tanggal_nego1 ?? '';
+            $item->batas_nego1 = $item->batas_nego1 ?? '';
+            $item->no_nego2 = $item->no_nego2 ?? '';
+            $item->tanggal_nego2 = $item->tanggal_nego2 ?? '';
+            $item->batas_nego2 = $item->batas_nego2 ?? '';
+            return $item;
+        });
+        return response()->json([
+            'pr' => $pr
+        ]);
     }
 }

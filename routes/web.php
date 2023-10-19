@@ -82,7 +82,8 @@ Route::prefix('products')->group(function () {
     //purchase order
     Route::resource('purchase_order', App\Http\Controllers\PurchaseOrderController::class)->except(['destroy']);
     Route::get('cetak_po', [App\Http\Controllers\PurchaseOrderController::class, 'cetakPo'])->name('cetak_po');
-    Route::post('detail_pr_save', [App\Http\Controllers\PurchaseOrderController::class, 'detailPrSave'])->name('detail_pr_save');
+    Route::post('detail_po_save', [App\Http\Controllers\PurchaseOrderController::class, 'detailPrSave'])->name('detail_po_save');
+    Route::post('detail_pr_save', [App\Http\Controllers\PurchaseRequestController::class, 'detailPrSave'])->name('detail_pr_save');
     Route::post('tambah_detail_po', [App\Http\Controllers\PurchaseOrderController::class, 'tambahDetailPo'])->name('tambah_detail_po');
     Route::get('tracking', [App\Http\Controllers\PurchaseOrderController::class, 'tracking'])->name('product.tracking');
 
