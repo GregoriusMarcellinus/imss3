@@ -343,7 +343,23 @@ class PurchaseOrderController extends Controller
             $detail->no_pr = PurchaseRequest::find($detail->id_pr)->no_pr;
             return $detail;
         });
+        $po->details = $po->details->map(function ($detail) {
+            $detail ->no_just = DetailPR::find($detail->id)->no_just;
+            return $detail;
+        });
+        $po->details = $po->details->map(function ($detail) {
+            $detail ->no_sph = DetailPR::find($detail->id)->no_sph;
+            return $detail;
+        });
+
+        $po->details = $po->details->map(function ($detail) {
+            $detail ->no_nego = DetailPR::find($detail->id)->no_nego1;
+            return $detail;
+        });
+
+        $po->no_nego = $po->details->pluck('no_nego')->unique()->implode(', ');
         $po->no_pr = $po->details->pluck('no_pr')->unique()->implode(', ');
+        $po->no_just = $po->details->pluck('no_just')->unique()->implode(', ');
         $po->subtotal = $po->details->sum(function ($detail) {
             return $detail->harga_per_unit * $detail->qty;
         });

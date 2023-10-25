@@ -70,17 +70,16 @@
                                             <td class="text-center">{{ $data['tanggal'] }}</td>
                                             <td class="text-center">{{ $data['dasar_pr'] }}</td>
                                             <td class="text-center">
-                                                @if ($d->status == 0 || $d->status == 1 || $d->status == 2 || $d->status == 3 || $d->status == 4)
                                                     <button title="Edit Request" type="button"
                                                         class="btn btn-success btn-xs" data-toggle="modal"
                                                         data-target="#add-pr" onclick="editPR({{ json_encode($data) }})"
                                                         disabled><i class="fas fa-edit"></i></button>
-                                                @else
+                                             
                                                     <button title="Edit Request" type="button"
                                                         class="btn btn-success btn-xs" data-toggle="modal"
                                                         data-target="#add-pr" onclick="editPR({{ json_encode($data) }})"><i
                                                             class="fas fa-edit"></i></button>
-                                                @endif
+                                        
 
                                                 {{-- <button title="Edit Request" type="button" class="btn btn-success btn-xs"
                                                     data-toggle="modal" data-target="#add-pr"
@@ -166,12 +165,11 @@
                                     <textarea class="form-control" name="dasar_pr" id="dasar_pr" rows="3"></textarea>
                                 </div>
                             </div>
-                            @if (Auth::user()->role == 0 || Auth::user()->role == 1)
+                            {{-- @if (Auth::user()->role == 0 || Auth::user()->role == 1)
                                 <div class="form-group row">
                                     <label for="proyek" class="col-sm-4 col-form-label">{{ __('Status') }}
                                     </label>
                                     <div class="col-sm-8">
-                                        {{-- <input type="text" class="form-control" id="proyek" name="proyek"> --}}
                                         <select class="form-control" name="proyek_id" id="proyek_id">
                                             <option value="0">Pilih Status</option>
                                             <option value="1">SPPH</option>
@@ -182,7 +180,7 @@
                                         </select>
                                     </div>
                                 </div>
-                            @endif
+                            @endif --}}
                         </form>
                     </div>
                     <div class="modal-footer justify-content-between">
@@ -234,17 +232,8 @@
                                         </tr>
                                         <tr>
                                             <td colspan="3">
-                                                @if ($d->status == 0 || $d->status == 1 || $d->status == 2 || $d->status == 3 || $d->status == 4)
-                                                    <button id="button-tambah-produk" type="button"
-                                                        class="btn btn-info mb-3" onclick="showAddProduct()"
-                                                        disabled>{{ __('Tambah Item Detail') }}</button>
-                                                @else
-                                                    <button id="button-tambah-produk" type="button"
-                                                        class="btn btn-info mb-3"
-                                                        onclick="showAddProduct()">{{ __('Tambah Item Detail') }}</button>
-                                                @endif
-                                                {{-- <button id="button-tambah-produk" type="button" class="btn btn-info mb-3"
-                                                    onclick="showAddProduct()">{{ __('Tambah Produk') }}</button> --}}
+                                                <button id="button-tambah-produk" type="button" class="btn btn-info mb-3"
+                                                    onclick="showAddProduct()">{{ __('Tambah Produk') }}</button>
                                             </td>
                                         </tr>
                                     </table>
@@ -259,9 +248,9 @@
                                                 <th>{{ __('SAT') }}</th>
                                                 <th>{{ __('Waktu Penyelesaian') }}</th>
                                                 <th>{{ __('Keterangan') }}</th>
-                                                <th>{{ __('SPPH') }}</th>
+                                                {{-- <th>{{ __('SPPH') }}</th>
                                                 <th>{{ __('PO') }}</th>
-                                                <th>{{ __('STATUS') }}</th>
+                                                <th>{{ __('STATUS') }}</th> --}}
                                             </thead>
                                             <tbody id="table-pr">
                                             </tbody>
@@ -623,16 +612,29 @@
                             }
 
                             //0 = Lakukan SPPH, 1 = Lakukan PO, 2 = Completed, 3 = Negosiasi, 4 = Justifikasi
-                            if (value.status == 0 || !value.status) {
+                            // if (value.status == 0 || !value.status) {
+                            //     status = 'Lakukan SPPH';
+                            // } else if (value.status == 1) {
+                            //     status = 'Lakukan PO';
+                            // } else if (value.status == 2) {
+                            //     status = 'COMPLETED';
+                            // } else if (value.status == 3) {
+                            //     status = 'NEGOSIASI';
+                            // } else if (value.status == 4) {
+                            //     status = 'JUSTIFIKASI';
+                            // }
+
+                            if (!value.id_spph) {
                                 status = 'Lakukan SPPH';
-                            } else if (value.status == 1) {
-                                status = 'Lakukan PO';
-                            } else if (value.status == 2) {
+                            } else if (value.id_spph && !value.no_sph) {
+                                status = 'Lakukan SPH';
+                            } else if (value.id_spph && value.no_sph && !value.no_just) {
+                                status = 'Lakukan Justifikasi';
+                            } else if (value.id_spph && value.no_sph && value.no_just && !value.id_po) {
+                                status = 'Lakukan Nego/PO';
+                            } else if (value.id_spph && value.no_sph && value
+                                .id_po) {
                                 status = 'COMPLETED';
-                            } else if (value.status == 3) {
-                                status = 'NEGOSIASI';
-                            } else if (value.status == 4) {
-                                status = 'JUSTIFIKASI';
                             }
 
                             $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
@@ -641,10 +643,11 @@
                                 .spek + '</td><td>' + value.qty + '</td><td>' + value
                                 .satuan +
                                 '</td><td>' + value.waktu + '</td><td>' + value.keterangan +
-                                '</td><td>' + spph + '</td><td>' + value.sph +
-                                '</td><td>' + po +
-                                '</td><td>' +
-                                status + '</td></tr>'
+                                '</td></tr>'
+                                // + <td>' + spph + '</td><td>' + value.sph +
+                                // '</td><td>' + po +
+                                // '</td><td>' +
+                                // status + '</td> +
                             );
                         });
                     }
@@ -713,16 +716,28 @@
                             }
 
                             //0 = Lakukan SPPH, 1 = Lakukan PO, 2 = Completed
-                            if (value.status == 0 || !value.status) {
+                            // if (value.status == 0 || !value.status) {
+                            //     status = 'Lakukan SPPH';
+                            // } else if (value.status == 1) {
+                            //     status = 'Lakukan PO';
+                            // } else if (value.status == 2) {
+                            //     status = 'COMPLETED';
+                            // } else if (value.status == 3) {
+                            //     status = 'NEGOSIASI';
+                            // } else if (value.status == 4) {
+                            //     status = 'JUSTIFIKASI';
+                            // }
+                            if (!value.id_spph) {
                                 status = 'Lakukan SPPH';
-                            } else if (value.status == 1) {
-                                status = 'Lakukan PO';
-                            } else if (value.status == 2) {
+                            } else if (value.id_spph && !value.no_sph) {
+                                status = 'Lakukan SPH';
+                            } else if (value.id_spph && value.no_sph && !value.no_just) {
+                                status = 'Lakukan Justifikasi';
+                            } else if (value.id_spph && value.no_sph && value.no_just && !value.id_po) {
+                                status = 'Lakukan Nego/PO';
+                            } else if (value.id_spph && value.no_sph && value
+                                .id_po) {
                                 status = 'COMPLETED';
-                            } else if (value.status == 3) {
-                                status = 'NEGOSIASI';
-                            } else if (value.status == 4) {
-                                status = 'JUSTIFIKASI';
                             }
 
                             $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
@@ -731,8 +746,10 @@
                                 .spek + '</td><td>' + value.qty + '</td><td>' + value
                                 .satuan + '</td><td>' + value.waktu + '</td><td>' + value
                                 .keterangan +
-                                '</td><td>' + spph +
-                                '</td><td>' + po + '</td><td>' + status + '</td></tr>'
+                                '</td></tr>'
+
+                                // + <td>' + spph +
+                                // '</td><td>' + po + '</td><td>' + status + '</td> +
 
                             );
                         });

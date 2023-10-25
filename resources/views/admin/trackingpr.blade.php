@@ -627,8 +627,8 @@
                                 '</td><td>' + value.waktu + '</td><td>' + value.keterangan +
                                 '</td><td>' + spph + '</td><td>' + value.sph +
                                 '</td><td>' + po +
-                                '</td><td>' +
-                                status + '</td></tr>'
+                                '</td><td><b>' +
+                                status + '</b></td></tr>'
                             );
                         });
                     }
@@ -755,7 +755,7 @@
                                 id +
                                 '" name="bts_nego2' + id + '" value="' + value.batas_nego2 +
                                 '">' +
-                                '</td><td>' + po + '</td><td>' + status + '</td>' +
+                                '</td><td>' + po + '</td><td><b>' + status + '</b></td>' +
                                 '<td><button id="edit_pr_save" data-id="' + id +
                                 '" type="button" class="btn btn-success btn-xs"' +
                                 '><i class="fas fa-save"></i></button>' + '</td>' + '</tr>'
@@ -931,7 +931,7 @@
                                 id +
                                 '" name="bts_nego2' + id + '" value="' + value.batas_nego2 +
                                 '">' +
-                                '</td><td>' + po + '</td><td>' + status + '</td>' +
+                                '</td><td>' + po + '</td><td><b>' + status + '</b></td>' +
                                 '<td><button id="edit_pr_save" data-id="' + id +
                                 '" type="button" class="btn btn-success btn-xs"' +
                                 '><i class="fas fa-save"></i></button>' + '</td>' + '</tr>'

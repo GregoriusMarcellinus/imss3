@@ -173,12 +173,12 @@
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $item->kode_material }}</td>
-                    <td>{{ $item->uraian }}</td>
-                    <td style="word-wrap: break-word;">{{ $item->spek }}</td>
+                    <td style="text-align: left">{{ $item->uraian }}</td>
+                    <td style="word-wrap: break-word;text-align: left">{{ $item->spek }}</td>
                     <td>{{ $item->qty }}</td>
                     <td>{{ $item->satuan }}</td>
                     <td>{{ $item->waktu }}</td>
-                    <td>{{ $item->keterangan }}</td>
+                    <td style="text-align: left">{{ $item->keterangan }}</td>
                 </tr>
             @empty
             <tr>
@@ -194,7 +194,7 @@
                 <tr>
                     <td align="center" style="width: 25%;">
                         Menyetujui,<br>
-                        Kadiv. Wilayah II
+                        Kadiv. {{ Auth::user()->name }}
                         <br><br><br><br>
                         <strong>HARTONO</strong><br>
                     </td>
@@ -202,13 +202,13 @@
 
                     <td align="center" style="width: 25%;">
                         Diperiksa Oleh<br>
-                        Kadep. Rendal Wil II
+                        Kadep. Rendal {{ Auth::user()->name }}
                         <br><br><br><br><br>
                     </td>
                     </td>
                     <td align="center" style="width: 25%;">
                         Dibuat Oleh,<br>
-                        Rendal Wil II
+                        Rendal {{ Auth::user()->name }}
                         <br><br><br><br>
                         <strong>FAVA WIRA</strong><br>
                     </td>

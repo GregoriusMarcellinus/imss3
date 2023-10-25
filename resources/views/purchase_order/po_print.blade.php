@@ -220,33 +220,33 @@
         </tbody>
     </table>
 
-    <div style="margin-top:400x">
-        <div style="margin-top: 1rem">
-            <div style="margin-left: 70%; width: 50%">
-                <table class="w-100">
-                    <tr>
-                        <td>Sub Total</td>
-                        <td>:</td>
-                        <td>@rupiah($po->subtotal)</td>
-                    </tr>
-                    <tr>
-                        <td>Ongkos Kirim</td>
-                        <td>:</td>
-                        <td>@rupiah($po->ongkos)</td>
-                    </tr>
-                    <tr>
-                        <td>Asuransi</td>
-                        <td>:</td>
-                        <td>@rupiah($po->asuransi)</td>
-                    </tr>
-                    <tr>
-                        <td>Total</td>
-                        <td>:</td>
-                        <td>@rupiah($po->total)</td>
-                    </tr>
-                </table>
-            </div>
+    <div style="margin-top: 1rem">
+        <div style="margin-left: 70%; width: 50%">
+            <table class="w-100">
+                <tr>
+                    <td>Sub Total</td>
+                    <td>:</td>
+                    <td>@rupiah($po->subtotal)</td>
+                </tr>
+                <tr>
+                    <td>Ongkos Kirim</td>
+                    <td>:</td>
+                    <td>@rupiah($po->ongkos)</td>
+                </tr>
+                <tr>
+                    <td>Asuransi</td>
+                    <td>:</td>
+                    <td>@rupiah($po->asuransi)</td>
+                </tr>
+                <tr>
+                    <td>Total</td>
+                    <td>:</td>
+                    <td>@rupiah($po->total)</td>
+                </tr>
+            </table>
         </div>
+    </div>
+    <div style="margin-top:400x">
         <table class="table2" style="width:100%;padding:20px">
             <tr>
                 <td style="width: 16%">
@@ -275,7 +275,7 @@
             </tr>
         </table>
     </div>
-    {{-- <div class="page-break"></div> --}}
+    <div class="page-break"></div>
 
     <div style="margin-top: 1rem">
         <div style="float: left; width: 50%">
