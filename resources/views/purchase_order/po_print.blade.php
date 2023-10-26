@@ -26,7 +26,7 @@
 
         table {
             border-collapse: collapse;
-            padding: 20px
+            padding: 10px;
         }
 
         td {
@@ -40,6 +40,7 @@
 
         .table {
             width: 100%;
+            /* margin-top: 1cm; */
             border: 1px solid black;
         }
 
@@ -74,17 +75,18 @@
             margin: 5px;
         }
 
-        /*
+        
         .information table {
-            padding: 10px;
-        } */
+            /* padding: 10px; */
+            margin-bottom: 2cm;
+        }
 
         header {
             position: fixed;
             top: 0cm;
             left: 0cm;
             right: 0cm;
-            height: 5.5cm;
+            height: 10cm;
         }
 
         .table2 tr {
@@ -106,7 +108,7 @@
 
 <body>
     <header>
-        <div class="information">
+        {{-- <div class="information"> --}}
             <table>
                 <tr>
                     <td style="text-align: left;width:33%;vertical-align:top;padding-top:10px" rowspan="12">
@@ -176,7 +178,7 @@
                 </tr>
 
             </table>
-        </div>
+        {{-- </div> --}}
     </header>
     {{-- <div style="margin-top: 400px"></div> --}}
 
@@ -247,7 +249,7 @@
         </div>
     </div>
     <div style="margin-top:400x">
-        <table class="table2" style="width:100%;padding:20px">
+        <table class="table2" style="width:100%;padding:10px">
             <tr>
                 <td style="width: 16%">
                     <span>Referensi PO</span><br>
@@ -275,7 +277,7 @@
             </tr>
         </table>
     </div>
-    <div class="page-break"></div>
+    {{-- <div class="page-break"></div> --}}
 
     <div style="margin-top: 1rem">
         <div style="float: left; width: 50%">

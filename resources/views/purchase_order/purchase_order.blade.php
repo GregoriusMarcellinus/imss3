@@ -209,7 +209,7 @@
                                 <input type="text" class="form-control" id="ref_sph" name="ref_sph">
                             </div>
                         </div>
-                        <div class="form-group row">
+                        {{-- <div class="form-group row">
                             <label for="no_just" class="col-sm-4 col-form-label">{{ __('No Justifikasi') }} </label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="no_just" name="no_just">
@@ -220,7 +220,7 @@
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="no_nego" name="no_nego">
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="form-group row">
                             <label for="ref_po" class="col-sm-4 col-form-label">{{ __('Refernsi Po') }} </label>
                             <div class="col-sm-8">
