@@ -150,3 +150,7 @@ Route::get('pdf_lain', [App\Http\Controllers\PdfController::class, 'pdf_lain'])-
 Route::get('testt', function () {
     echo Hash::make('admin123');
 });
+
+Route::get('voucher', function () {
+    return view('keuangan.voucher');
+});
