@@ -31,12 +31,12 @@ class PurchaseRequestController extends Controller
             $warehouse_id = DB::table('warehouse')->first()->warehouse_id;
         }
 
-        $requests = PurchaseRequest::select('purchase_request.*', 'keproyekan.nama_proyek as proyek_name' )
+        $requests = PurchaseRequest::select('purchase_request.*', 'keproyekan.nama_proyek as proyek_name')
             ->join('keproyekan', 'keproyekan.id', '=', 'purchase_request.proyek_id')
             ->paginate(50);
 
         $proyeks = DB::table('keproyekan')->get();
-//  dd($requests);
+        //  dd($requests);
 
         if ($search) {
             $requests = PurchaseRequest::where('nama_proyek', 'LIKE', "%$search%")->paginate(50);
@@ -47,6 +47,26 @@ class PurchaseRequestController extends Controller
 
             return response()->json($requests);
         } else {
+
+            //looping the paginate
+            foreach ($requests as $request) {
+                $detail_pr = DetailPR::where('id_pr', $request->id)->get();
+                //if detail_pr empty then editable true
+                if ($detail_pr->isEmpty()) {
+                    $request->editable = TRUE;
+                } else {
+                    //looping detail_pr then check in detailspph with id_detail_pr exist
+                    foreach ($detail_pr as $detail) {
+                        $detail_spph = DetailSpph::where('id_detail_pr', $detail->id)->first();
+                        if ($detail_spph) {
+                            $request->editable = FALSE;
+                            break;
+                        } else {
+                            $request->editable = TRUE;
+                        }
+                    }
+                }
+            }
             return view('purchase_request.purchase_request', compact('requests', 'proyeks'));
         }
     }

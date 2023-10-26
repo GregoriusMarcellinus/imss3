@@ -61,6 +61,7 @@
                                                 'proyek_id' => $d->proyek_id,
                                                 'id' => $d->id,
                                                 'status' => $d->status,
+                                                'editable' => $d->editable,
                                             ];
                                         @endphp
 
@@ -71,10 +72,11 @@
                                             <td class="text-center">{{ $data['tanggal'] }}</td>
                                             <td class="text-center">{{ $data['dasar_pr'] }}</td>
                                             <td class="text-center">
-                                                <button title="Edit Request" type="button"
-                                                    class="btn btn-success btn-xs" data-toggle="modal"
-                                                    data-target="#add-pr" onclick="editPR({{ json_encode($data) }})"><i
-                                                    class="fas fa-edit"></i></button>
+                                                <button title="Edit Request" type="button" class="btn btn-success btn-xs"
+                                                    data-toggle="modal" data-target="#add-pr"
+                                                    onclick="editPR({{ json_encode($data) }})"
+                                                    @if ($data['editable'] == 0) disabled @endif><i
+                                                        class="fas fa-edit"></i></button>
                                                 <button title="Lihat Detail" type="button" data-toggle="modal"
                                                     data-target="#detail-pr" class="btn-lihat btn btn-info btn-xs"
                                                     data-detail="{{ json_encode($data) }}"><i
@@ -83,8 +85,9 @@
                                                     <button title="Hapus Request" type="button"
                                                         class="btn btn-danger btn-xs" data-toggle="modal"
                                                         data-target="#delete-pr"
-                                                        onclick="deletePR({{ json_encode($data) }})"><i
-                                                        class="fas fa-trash"></i></button>
+                                                        onclick="deletePR({{ json_encode($data) }})"
+                                                        @if ($data['editable'] == 0) disabled @endif><i
+                                                            class="fas fa-trash"></i></button>
                                                 @endif
                                             </td>
                                         </tr>
@@ -219,7 +222,8 @@
                                         </tr>
                                         <tr>
                                             <td colspan="3">
-                                                <button id="button-tambah-produk" type="button" class="btn btn-info mb-3"
+                                                <button id="button-tambah-produk" type="button"
+                                                    class="btn btn-info mb-3"
                                                     onclick="showAddProduct()">{{ __('Tambah Produk') }}</button>
                                             </td>
                                         </tr>
@@ -661,6 +665,13 @@
             $('#proyek').text(data.proyek);
             $('#pr_id').val(data.id);
             $('#table-pr').empty();
+
+            //#button-tambah-produk disabled when editable is false
+            if (data.editable == 0) {
+                $('#button-tambah-produk').attr('disabled', true);
+            } else {
+                $('#button-tambah-produk').attr('disabled', false);
+            }
 
             $.ajax({
                 url: '/products/purchase_request_detail/' + data.id,
