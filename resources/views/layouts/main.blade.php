@@ -119,17 +119,19 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link {{ Route::current()->getName() == 'kode_material.index' ? 'active' : '' }}"
-                                        href="{{ url('products/kode_material') }}">
-                                        <i class="nav-icon fas fa-pallet"></i>
-                                        <p class="text">{{ __('Kode Material') }}</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
                                     <a class="nav-link {{ Route::current()->getName() == 'products.shelf' ? 'active' : '' }}"
                                         href="{{ route('products.shelf') }}">
                                         <i class="nav-icon fas fa-cubes"></i>
                                         <p class="text">{{ __('Lokasi Penyimpanan') }}</p>
+                                    </a>
+                                </li>
+                            @endif
+                            @if (Auth::user()->role == 0 || Auth::user()->role == 2 || Auth::user()->role == 3 || Auth::user()->role == 4)
+                                <li class="nav-item">
+                                    <a class="nav-link {{ Route::current()->getName() == 'kode_material.index' ? 'active' : '' }}"
+                                        href="{{ url('products/kode_material') }}">
+                                        <i class="nav-icon fas fa-pallet"></i>
+                                        <p class="text">{{ __('Kode Material') }}</p>
                                     </a>
                                 </li>
                             @endif
@@ -148,7 +150,7 @@
                                         <p class="text">{{ __('Lokasi Penyimpanan') }}</p>
                                     </a>
                                 </li> --}}
-                                {{-- <li class="nav-item">
+                            {{-- <li class="nav-item">
                                     <a class="nav-link {{ Route::current()->getName() == 'products.logistik' ? 'active' : '' }}"
                                         href="{{ route('products.logistik') }}">
                                         <i class="nav-icon fas fa-cubes"></i>
