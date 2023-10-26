@@ -113,6 +113,7 @@
                                         <option value="2">Wilayah 1</option>
                                         <option value="3">Wilayah 2</option>
                                         <option value="4">Gudang</option>
+                                        <option value="5">Keuangan</option>
                                     </select>
                                 </div>
                             </div>
