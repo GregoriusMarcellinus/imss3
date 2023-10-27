@@ -187,7 +187,7 @@
                     </a>
                 </div>
                 <div class="col-lg-3 col-6">
-                    <a href="{{ route('product.trackingwil') }}"> 
+                    <a href="{{ route('product.aprrovedPO_PL') }}"> 
                         <div class="small-box bg-primary">
                             <div class="inner" style="background-color: #186F65">
                                 <p>APRROVAL</p>

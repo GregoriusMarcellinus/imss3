@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title', __('Purchase Order'))
+@section('title', __('Approval Purchase Order'))
 @section('custom-css')
     <link rel="stylesheet" href="/plugins/toastr/toastr.min.css">
     <link rel="stylesheet" href="/plugins/select2/css/select2.min.css">
@@ -26,8 +26,7 @@
         <div class="container-fluid">
             <div class="card">
                 <div class="card-header">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-po"
-                        onclick="addPo()"><i class="fas fa-plus"></i> Add New PO</button>
+                    <h4>Aprroval Purchase Order</h4>
                     <div class="card-tools">
                         <form>
                             {{-- <div class="input-group input-group">
@@ -53,7 +52,8 @@
                                     <th>{{ __('Vendor') }}</th>
                                     <th>{{ __('Tanggal PO') }}</th>
                                     <th>{{ __('Batas Akhir PO') }}</th>
-                                    <th>Approval</th>
+                                    <th>{{ __('Detail PO') }}</th>
+                                    <th>{{ __('Approval') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -94,22 +94,13 @@
                                             <td class="text-center">{{ $data['tgpo'] }}</td>
                                             <td class="text-center">{{ $data['btpo'] }}</td>
                                             <td class="text-center">
-                                                <button title="Edit PO" type="button" class="btn btn-success btn-xs"
-                                                    data-toggle="modal" data-target="#add-po"
-                                                    onclick="editPo({{ json_encode($data) }})"><i
-                                                        class="fas fa-edit"></i></button>
-
-                                                <button title="Lihat Detail" type="button" data-toggle="modal"
-                                                    data-target="#detail-po" class="btn-lihat btn btn-info btn-xs"
-                                                    data-detail="{{ json_encode($data) }}"><i
-                                                        class="fas fa-list"></i></button>
-
-                                                @if ((Auth::user() && Auth::user()->role == 0) || Auth::user()->role == 1)
-                                                    <button title="Hapus PO" type="button" class="btn btn-danger btn-xs"
-                                                        data-toggle="modal" data-target="#delete-po"
-                                                        onclick="deletePo({{ json_encode($data) }})"><i
-                                                            class="fas fa-trash"></i></button>
-                                                @endif
+                                                <button type="button" data-toggle="modal"
+                                                    data-target="#detail-po" class="btn-lihat btn btn-info btn-sm"
+                                                    data-detail="{{ json_encode($data) }}"> Lihat Detail</button>
+                                            </td>
+                                            <td class="text-center">
+                                                <button type="button"class="btn-approve btn btn-success btn-sm">Approve</button>
+                                                <button type="button"class="btn-approve btn btn-danger btn-sm">Reject</button>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -312,12 +303,6 @@
                                         <td><b>Detail</b></td>
                                         <input type="hidden" name="id" id="id">
                                     </tr>
-                                    <tr>
-                                        <td colspan="3">
-                                            <button id="button-tambah-detail" type="button" class="btn btn-info"
-                                                onclick="showAddItem()">{{ __('Tambah Item Detail') }}</button>
-                                        </td>
-                                    </tr>
                                 </table>
                                 <div class="table-responsive mt-2">
                                     <table class="table table-bordered">
@@ -332,7 +317,6 @@
                                             <th>Mata Uang</th>
                                             <th>Vat</th>
                                             <th>Total</th>
-                                            <th>Aksi</th>
                                         </thead>
 
                                         <tbody id="tabel-po">
@@ -692,9 +676,6 @@
                                 '<td><input type="text" value="' + vat +
                                 '" class="form-control" id="vat' + id + '" name="vat' + id + '"></td>' +
                                 '<td>' + total + '</td>' +
-                                '<td><button id="edit_po_save" type="button" class="btn btn-success btn-xs" data-id="' +
-                                id + '" data-idpo="' + id_po + '" ><i class="fas fa-save"></i>' +
-                                '</button>' +
                                 '</tr>';
                             $('#tabel-po').append(html);
                             no++;
@@ -815,10 +796,6 @@
                                 '" class="form-control" id="vat' + id + '" name="vat' + id +
                                 '"></td>' +
                                 '<td>' + total + '</td>' +
-                                '<td><button id="edit_po_save" type="button" class="btn btn-success btn-xs" data-id="' +
-                                id + '" data-idpo="' + id_po +
-                                '" ><i class="fas fa-save"></i>' +
-                                '</button>' +
                                 '</tr>';
                             $('#tabel-po').append(html);
                             no++;
