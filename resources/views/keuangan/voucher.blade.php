@@ -10,20 +10,17 @@
         }
 
         .receipt {
-            /* width: 210mm; Lebar A5 dalam mode landscape
-            height: 148mm; Tinggi A5 dalam mode landscape */
+            width: 210mm; 
+            height: 148mm; 
             margin: 0 auto;
-            border: 1px solid #000;
+            border: 0px solid #000;
             padding: 20px;
-            /* transform: rotate(-90deg); /* Untuk mode landscape
-            transform-origin: left top; Atur rotasi dari kiri atas */
         }
 
-        .company-logo {
-            width: 80px;
-            height: 80px;
-            background: url('logo-perusahaan.jpg') center/cover no-repeat;
-        }
+        /* .company-logo {
+            width: 150;
+            background: url('https://inkamultisolusi.co.id/api_cms/public/uploads/editor/20220511071342_LSnL6WiOy67Xd9mKGDaG.png')
+        } */
 
         .header {
             text-align: center;
@@ -55,7 +52,7 @@
         }
 
         table, th, td {
-            border: 1px solid #000;
+            border: 0px solid #000;
         }
 
         th, td {
@@ -63,12 +60,30 @@
             text-align: left;
         }
 
+        th {
+            border-top: 2px solid #000; /* Garis atas pada header */
+            border-bottom: 2px solid #000; /* Garis bawah pada header */
+        }
+
         .totals {
             margin-top: 20px;
         }
 
+        .totals table {
+            width: 100%;
+            border: none; /* Hapus garis pada total */
+        }
+
+        .totals th, .totals td {
+            border: none;
+            padding: 8px;
+            text-align: left;
+        }
+
         .signature {
-            margin-top: 20px;
+            display: flex; /* Membuat tanda tangan sejajar dalam satu baris */
+            justify-content: space-between; /* Membuat tanda tangan sejajar di antara elemen */
+            margin-top: 5rem;
         }
 
     </style>
@@ -79,13 +94,12 @@
             <tr width="100%">
                 <td align="left" style="width: 25%;">
                     <img src="https://inkamultisolusi.co.id/api_cms/public/uploads/editor/20220511071342_LSnL6WiOy67Xd9mKGDaG.png"
-                        alt="Logo" width="150" class="logo" /><br>
+                        alt="Logo" width="150" class="company-logo" /><br>
+                        <div class="company-logo"></div>
                 </td>
-                <td align="center" style="width: 50%;">
-                    <div class="company-logo"></div>
+                <td align="middle" style="width: 50%;">
                     <div class="header">
-                    <h2>BUKTI KAS MASUK</h2>
-                    <p>Ingoing Payment Voucher</p>
+                    <h2>BUKTI KAS MASUK<br>Ingoing Payment Voucher</h2>
                     </div>      
                 </td>
                 <td><div class="checklist">
@@ -97,40 +111,21 @@
                 </td>
             </tr>
             <tr>
-                <td align="left" style="width: 25%;">
+                <td align="left" style="width: 25%; margin-bottom:2rem;">
                     <br><br>
                     Nama Bank : <span></span><br>
                     Pembayaran : <span></span><br>
                     Jumlah : <span></span><br>
                 </td>
 
-                <td align="center">
+                <td colspan="2" align="left" style="width: 50%; margin-bottom:2rem;">
                     <br><br>
                     No Ref : <span></span><br>
                     Tangggal Posting : <span></span><br>
                     Tanggal Transaksi : <span></span><br>
                 </td>
             </tr>
-        {{-- <div class="company-logo"></div>
-        <div class="header">
-            <h2>BUKTI KAS MASUK</h2>
-            <p>Ingoing Payment Voucher</p>
-        </div>
-        <div class="checklist">
-            <label for="bukti-tf">Bukti TF</label>
-            <input type="checkbox" id="bukti-tf" name="bukti-tf">
-            <label for="scan">Scan</label>
-            <input type="checkbox" id="scan" name="scan">
-        </div>
-        <div class="details">
-            <p>Nama Bank: Bank ABC</p>
-            <p>Keterangan Pembayaran: Pembayaran Barang Jasa</p>
-            <p>Jumlah: $1,000.00</p>
-            <p>Nomor Ref: 123456789</p>
-            <p>Tanggal Posting: 2023-10-26</p>
-            <p>Tanggal Transaksi: 2023-10-25</p>
-        </div> --}}
-        <table>
+        <table style="margin-top: 2rem;">
             <tr>
                 <th>Kode</th>
                 <th>Rekening</th>
@@ -152,14 +147,18 @@
                 <td>$500.00</td>
                 <td>Biaya Pengiriman</td>
             </tr>
+            <div class="totals">
+                    <tr>
+                        <th colspan="2">Total:</th>
+                        <th>$500.00</th>
+                        <th>$500.00</th>
+                        <th></th>
+                    </tr>
+            </div>
         </table>
-        <div class="totals">
-            <p>Total Debit: $500.00</p>
-            <p>Total Kredit: $500.00</p>
-        </div>
         <div class="signature">
-            <p>Tanda Tangan Penerima: _______________________</p>
-            <p>Tanda Tangan Pemberi: _______________________</p>
+            <div>Kabag Akuntansi : _______________________</div>
+            <div>Book Keeper     : _______________________</div>
         </div>
     </div>
 </body>
