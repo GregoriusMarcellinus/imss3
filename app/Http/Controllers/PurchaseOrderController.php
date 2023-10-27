@@ -207,6 +207,34 @@ class PurchaseOrderController extends Controller
         }
     }
 
+    public function trackingwil(Request $request){
+        $search = $request->q;
+
+        if (Session::has('selected_warehouse_id')) {
+            $warehouse_id = Session::get('selected_warehouse_id');
+        } else {
+            $warehouse_id = DB::table('warehouse')->first()->warehouse_id;
+        }
+
+        $requests = PurchaseRequest::select('purchase_request.*', 'keproyekan.nama_proyek as proyek_name')
+            ->join('keproyekan', 'keproyekan.id', '=', 'purchase_request.proyek_id')
+            ->paginate(50);
+
+        $proyeks = DB::table('keproyekan')->get();
+
+        if ($search) {
+            $requests = PurchaseRequest::where('nama_proyek', 'LIKE', "%$search%")->paginate(50);
+        }
+
+        if ($request->format == "json") {
+            $requests = PurchaseRequest::where("warehouse_id", $warehouse_id)->get();
+
+            return response()->json($requests);
+        } else {
+            return view('admin.trackingwil', compact('requests', 'proyeks'));
+        }
+    }
+
     public function updateDetailPo(Request $request)
     {
         $id = $request->id;
@@ -394,5 +422,68 @@ class PurchaseOrderController extends Controller
         }
 
         return redirect()->route('purchase_order.index');
+    }
+
+    // CONTROLLER KEUANGAN
+    public function aprrovedPO(Request  $request){
+        $search = $request->q;
+        if (Session::has('selected_warehouse_id')) {
+            $warehouse_id = Session::get('selected_warehouse_id');
+        } else {
+            $warehouse_id = DB::table('warehouse')->first()->warehouse_id;
+        }
+
+        $purchases = Purchase_Order::select('purchase_order.*', 'vendor.nama as vendor_name', 'keproyekan.nama_proyek as proyek_name', 'purchase_request.no_pr as pr_no')
+            ->join('vendor', 'vendor.id', '=', 'purchase_order.vendor_id')
+            ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_order.proyek_id')
+            ->leftjoin('purchase_request', 'purchase_request.id', '=', 'purchase_order.pr_id')
+            ->paginate(50);
+        $vendors = DB::table('vendor')->get();
+        $proyeks = DB::table('keproyekan')->get();
+
+
+        if ($search) {
+            $purchases = Purchase_Order::where('no_po', 'LIKE', "%$search%")->paginate(50);
+        }
+
+        if ($request->format == "json") {
+            $purchases = Purchase_Order::where("warehouse_id", $warehouse_id)->get();
+
+            return response()->json($purchases);
+        } else {
+            $prs = PurchaseRequest::all();
+            return view('keuangan.approvedPO', compact('purchases', 'vendors', 'proyeks', 'prs'));
+        }
+    }
+
+    public function aprrovedPO_PL(Request  $request){
+        $search = $request->q;
+        if (Session::has('selected_warehouse_id')) {
+            $warehouse_id = Session::get('selected_warehouse_id');
+        } else {
+            $warehouse_id = DB::table('warehouse')->first()->warehouse_id;
+        }
+
+        $purchases = Purchase_Order::select('purchase_order.*', 'vendor.nama as vendor_name', 'keproyekan.nama_proyek as proyek_name', 'purchase_request.no_pr as pr_no')
+            ->join('vendor', 'vendor.id', '=', 'purchase_order.vendor_id')
+            ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_order.proyek_id')
+            ->leftjoin('purchase_request', 'purchase_request.id', '=', 'purchase_order.pr_id')
+            ->paginate(50);
+        $vendors = DB::table('vendor')->get();
+        $proyeks = DB::table('keproyekan')->get();
+
+
+        if ($search) {
+            $purchases = Purchase_Order::where('no_po', 'LIKE', "%$search%")->paginate(50);
+        }
+
+        if ($request->format == "json") {
+            $purchases = Purchase_Order::where("warehouse_id", $warehouse_id)->get();
+
+            return response()->json($purchases);
+        } else {
+            $prs = PurchaseRequest::all();
+            return view('keuangan.approvedPOPL', compact('purchases', 'vendors', 'proyeks', 'prs'));
+        }
     }
 }

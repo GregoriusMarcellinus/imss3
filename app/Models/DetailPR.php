@@ -11,8 +11,10 @@ class DetailPR extends Model
     protected $table = 'detail_pr';
     protected $fillable = [
         'id_pr',
+        'user_id',
         'id_spph',
         'id_po',
+        'id_proyek',
         'kode_material',
         'uraian',
         'spek',

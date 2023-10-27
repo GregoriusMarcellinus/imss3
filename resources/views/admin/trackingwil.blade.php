@@ -13,7 +13,10 @@
         </div>
     </div>
     <section class="content">
-        <div class="container-fluid">
+        <div class="container">
+            <div class="col-12">
+                <h2 class="font-weight-bold">Tracking Purchase Request</h2>
+            </div>
             <div class="card">
                 <div class="card-header">
                     {{-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-pr"
@@ -238,14 +241,14 @@
                                                 <th>{{ __('SAT') }}</th>
                                                 <th>{{ __('Waktu Penyelesaian') }}</th>
                                                 <th>{{ __('Keterangan') }}</th>
-                                                <th>{{ __('SPPH') }}</th>
+                                                {{-- <th>{{ __('SPPH') }}</th>
                                                 <th>{{ __('SPH') }}</th>
                                                 <th>{{ __('JUST') }}</th>
                                                 <th>{{ __('NEGO 1') }}</th>
                                                 <th>{{ __('NEGO 2') }}</th>
-                                                <th>{{ __('PO') }}</th>
+                                                <th>{{ __('PO') }}</th> --}}
                                                 <th>{{ __('STATUS') }}</th>
-                                                <th>{{ __('AKSI') }}</th>
+                                                {{-- <th>{{ __('AKSI') }}</th> --}}
                                             </thead>
                                             <tbody id="table-pr">
                                             </tbody>
@@ -589,7 +592,7 @@
                     clearForm();
                     if (data.pr.details.length == 0) {
                         $('#table-pr').append(
-                            '<tr><td colspan="16" class="text-center">Tidak ada produk</td></tr>');
+                            '<tr><td colspan="10" class="text-center">Tidak ada produk</td></tr>');
                     } else {
                         $('#table-pr').empty();
                         $.each(data.pr.details, function(key, value) {
@@ -679,7 +682,7 @@
                     if (data.pr.details.length == 0) {
                         $('#table-pr').empty();
                         $('#table-pr').append(
-                            '<tr><td colspan="16" class="text-center">Tidak ada produk</td></tr>');
+                            '<tr><td colspan="10" class="text-center">Tidak ada produk</td></tr>');
                     } else {
                         $('#table-pr').empty();
                         $.each(data.pr.details, function(key, value) {
@@ -713,12 +716,6 @@
                                 .id_po) {
                                 status = 'COMPLETED';
                             }
-                            // var userRole = data.role;
-                            // alert(userRole)
-                            // if (userRole === 'wil1' || userRole === 'wil2') {
-                            //     $('input[id^="sph"], input[id^="tgl_sph"], input[id^="just"], input[id^="tgl_just"], input[id^="neg1"], input[id^="tgl_nego1"], input[id^="bts_nego1"], input[id^="neg2"], input[id^="tgl_nego2"], input[id^="bts_nego2"]')
-                            //         .prop('disabled', true);
-                            // }
 
                             $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
                                 .kode_material + '</td><td>' + value.uraian + '</td><td>' +
@@ -726,46 +723,48 @@
                                 .spek + '</td><td>' + value.qty + '</td><td>' + value
                                 .satuan + '</td><td>' + value.waktu + '</td><td>' + value
                                 .keterangan +
-                                '</td><td>' + spph +
-                                '</td><td><input type="text" class="form-control" style="width:200px;" placeholder="No SPH" id="sph' +
-                                id + '" name="sph' + id + '" value="' + value.no_sph +
-                                '">' +
-                                '<input type="date" class="form-control mt-2" style="width:200px;" id="tgl_sph' +
-                                id + '" name="tgl_sph' + id + '" value="' + value
-                                .tanggal_sph + '">' +
-                                '</td><td><input type="text"  class="form-control" style="width:200px;" placeholder="No Justifikasi" id="just' +
-                                id + '" name="just' + id + '" value="' + value.no_just +
-                                '">' +
-                                '<input type="date"  class="form-control mt-2" style="width:200px;" id="tgl_just' +
-                                id + '" name="tgl_just' + id + '" value="' + value
-                                .tanggal_just + '">' +
-                                '</td><td><input type="text"  class="form-control" style="width:200px;" placeholder="No Nego 1" id="neg1' +
-                                id + '" name="neg1' + id + '" value="' + value.no_nego1 +
-                                '">' +
-                                '<p class="mt-2 mb-0">Tanggal Nego 1</p><input type="date"  class="form-control" style="width:200px;" id="tgl_nego1' +
-                                id +
-                                '" name="tgl_nego1' + id + '" value="' + value
-                                .tanggal_nego1 + '">' +
-                                '<p class="mt-2 mb-0">Batas Nego 1</p><input type="date"  class="form-control" style="width:200px;" id="bts_nego1' +
-                                id +
-                                '" name="bts_nego1' + id + '" value="' + value.batas_nego1 +
-                                '">' +
-                                '</td><td><input type="text" value="' + value.no_nego2 +
-                                '" class="form-control" style="width:200px;" placeholder="No Nego 2" id="neg2' +
-                                id + '" name="neg2' + id + '">' +
-                                '<p class="mt-2 mb-0">Tanggal Nego 2</p><input type="date"  class="form-control" style="width:200px;" id="tgl_nego2' +
-                                id +
-                                '" name="tgl_nego2' + id + '" value="' + value
-                                .tanggal_nego2 + '">' +
-                                '<p class="mt-2 mb-0">Batas Nego 2</p><input type="date"  class="form-control" style="width:200px;" id="bts_nego2' +
-                                id +
-                                '" name="bts_nego2' + id + '" value="' + value.batas_nego2 +
-                                '">' +
-                                '</td><td>' + po + '</td><td><b>' + status + '</b></td>' +
-                                '<td><button id="edit_pr_save" data-id="' + id +
-                                '" type="button" class="btn btn-success btn-xs"' +
-                                '><i class="fas fa-save"></i></button>' + '</td>' + '</tr>'
+                                '</td>' + '<td><b>' + status + '</b></td>' + '</tr>'
 
+                                //'td' spph +
+                                // '</td><td><input type="text" class="form-control" style="width:200px;" placeholder="No SPH" id="sph' +
+                                // id + '" name="sph' + id + '" value="' + value.no_sph +
+                                // '">' +
+                                // '<input type="date" class="form-control mt-2" style="width:200px;" id="tgl_sph' +
+                                // id + '" name="tgl_sph' + id + '" value="' + value
+                                // .tanggal_sph + '">' +
+                                // '</td><td><input type="text"  class="form-control" style="width:200px;" placeholder="No Justifikasi" id="just' +
+                                // id + '" name="just' + id + '" value="' + value.no_just +
+                                // '">' +
+                                // '<input type="date"  class="form-control mt-2" style="width:200px;" id="tgl_just' +
+                                // id + '" name="tgl_just' + id + '" value="' + value
+                                // .tanggal_just + '">' +
+                                // '</td><td><input type="text"  class="form-control" style="width:200px;" placeholder="No Nego 1" id="neg1' +
+                                // id + '" name="neg1' + id + '" value="' + value.no_nego1 +
+                                // '">' +
+                                // '<p class="mt-2 mb-0">Tanggal Nego 1</p><input type="date"  class="form-control" style="width:200px;" id="tgl_nego1' +
+                                // id +
+                                // '" name="tgl_nego1' + id + '" value="' + value
+                                // .tanggal_nego1 + '">' +
+                                // '<p class="mt-2 mb-0">Batas Nego 1</p><input type="date"  class="form-control" style="width:200px;" id="bts_nego1' +
+                                // id +
+                                // '" name="bts_nego1' + id + '" value="' + value.batas_nego1 +
+                                // '">' +
+                                // '</td><td><input type="text" value="' + value.no_nego2 +
+                                // '" class="form-control" style="width:200px;" placeholder="No Nego 2" id="neg2' +
+                                // id + '" name="neg2' + id + '">' +
+                                // '<p class="mt-2 mb-0">Tanggal Nego 2</p><input type="date"  class="form-control" style="width:200px;" id="tgl_nego2' +
+                                // id +
+                                // '" name="tgl_nego2' + id + '" value="' + value
+                                // .tanggal_nego2 + '">' +
+                                // '<p class="mt-2 mb-0">Batas Nego 2</p><input type="date"  class="form-control" style="width:200px;" id="bts_nego2' +
+                                // id +
+                                // '" name="bts_nego2' + id + '" value="' + value.batas_nego2 +
+                                // '">' +
+                                // '</td><td>' + po + '</td>'
+                                // +
+                                // '<td><button id="edit_pr_save" data-id="' + id +
+                                // '" type="button" class="btn btn-success btn-xs"' +
+                                // '><i class="fas fa-save"></i></button>' + '</td>'
                             );
                         });
                     }

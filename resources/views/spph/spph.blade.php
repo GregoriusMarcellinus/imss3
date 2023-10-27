@@ -292,6 +292,7 @@
                                                         <th>Sat</th>
                                                         <th>NO PR</th>
                                                         <th>No SPPH</th>
+                                                        <th>Proyek</th>
                                                         <th>Pilih</th>
                                                     </tr>
                                                 </thead>
@@ -577,8 +578,8 @@
                         $('#detail-material').append(
                             '<tr><td>' + (key + 1) + '</td><td>' + value.uraian +
                             '</td><td>' + value.spek + '</td><td>' + value.qty + '</td><td>' + value
-                            .satuan + '</td><td>' + no_pr +'</td><td>'+ no_spph +
-                            '</td><td>' + checkbox +
+                            .satuan + '</td><td>' + no_pr +'</td><td>'+ no_spph +  '</td><td>' + value.nama_proyek +
+                            '</td><td>' + checkbox + 
                             '</td></tr>'
                         );
                     });

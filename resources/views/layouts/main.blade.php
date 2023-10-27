@@ -112,13 +112,6 @@
                                     </a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link {{ Route::current()->getName() == 'keproyekan.index' ? 'active' : '' }}"
-                                        href="{{ route('keproyekan.index') }}">
-                                        <i class="nav-icon fas fa-hard-hat"></i>
-                                        <p class="text">{{ __('Keproyekan') }}</p>
-                                    </a>
-                                </li>
-                                <li class="nav-item">
                                     <a class="nav-link {{ Route::current()->getName() == 'products.shelf' ? 'active' : '' }}"
                                         href="{{ route('products.shelf') }}">
                                         <i class="nav-icon fas fa-cubes"></i>
@@ -127,6 +120,13 @@
                                 </li>
                             @endif
                             @if (Auth::user()->role == 0 || Auth::user()->role == 2 || Auth::user()->role == 3 || Auth::user()->role == 4)
+                                <li class="nav-item">
+                                    <a class="nav-link {{ Route::current()->getName() == 'keproyekan.index' ? 'active' : '' }}"
+                                        href="{{ route('keproyekan.index') }}">
+                                        <i class="nav-icon fas fa-hard-hat"></i>
+                                        <p class="text">{{ __('Keproyekan') }}</p>
+                                    </a>
+                                </li>
                                 <li class="nav-item">
                                     <a class="nav-link {{ Route::current()->getName() == 'kode_material.index' ? 'active' : '' }}"
                                         href="{{ url('products/kode_material') }}">

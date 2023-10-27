@@ -53,7 +53,7 @@
                                     <th>{{ __('Vendor') }}</th>
                                     <th>{{ __('Tanggal PO') }}</th>
                                     <th>{{ __('Batas Akhir PO') }}</th>
-                                    <th></th>
+                                    <th>Approval</th>
                                 </tr>
                             </thead>
                             <tbody>

@@ -8,6 +8,7 @@ use App\Models\DetailSpph;
 use App\Models\Purchase_Order;
 use App\Models\PurchaseRequest;
 use App\Models\Spph;
+use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -116,7 +117,7 @@ class PurchaseRequestController extends Controller
             $item->kode_material = $item->kode_material ? $item->kode_material : '';
             $item->nomor_spph = Spph::where('id', $item->id_spph)->first()->nomor_spph ?? '';
             $item->no_po = Purchase_Order::where('id', $item->id_po)->first()->no_po ?? '';
-
+            $item->userRole = User::where('id', $item->user_id)->first()->role ?? '';
             $item->no_sph = $item->no_sph ? $item->no_sph : '';
             $item->tanggal_sph = $item->tanggal_sph ? $item->tanggal_sph : '';
             $item->no_just = $item->no_just ? $item->no_just : '';
