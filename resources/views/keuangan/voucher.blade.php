@@ -83,7 +83,7 @@
         .signature {
             display: flex; /* Membuat tanda tangan sejajar dalam satu baris */
             justify-content: space-between; /* Membuat tanda tangan sejajar di antara elemen */
-            margin-top: 20px;
+            margin-top: 5rem;
         }
 
     </style>
