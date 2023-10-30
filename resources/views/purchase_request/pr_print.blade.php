@@ -198,20 +198,16 @@
                         <br><br><br><br>
                         <strong>HARTONO</strong><br>
                     </td>
-                    </td>
-
                     <td align="center" style="width: 25%;">
                         Diperiksa Oleh<br>
                         Kadep. Rendal {{ Auth::user()->name }}
                         <br><br><br><br><br>
-                    </td>
                     </td>
                     <td align="center" style="width: 25%;">
                         Dibuat Oleh,<br>
                         Rendal {{ Auth::user()->name }}
                         <br><br><br><br>
                         <strong>FAVA WIRA</strong><br>
-                    </td>
                     </td>
                 </tr>
             </table>

@@ -55,7 +55,7 @@
                                             <td class="text-center">{{ $data['no'] }}</td>
                                             <td class="text-center">{{ $data['nama_proyek'] }}</td>
 
-                                            @if (Auth::user()->role == 0 || Auth::user()->role == 4)
+                                            @if (Auth::user()->role == 0 || Auth::user()->role == 2|| Auth::user()->role == 3)
                                                 <td class="text-center">
                                                     <button title="Edit Produk" type="button"
                                                         class="btn btn-success btn-xs" data-toggle="modal"

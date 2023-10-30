@@ -131,19 +131,6 @@
                 @endif
                 @if (Auth::user()->role == 0 || Auth::user()->role == 1)
                     <div class="col-lg-3 col-6">
-                        <a href="{{ route('purchase_request.index') }}">
-                            <div class="small-box bg-primary">
-                                <div class="inner" style="background-color: coral">
-                                    <p>Purchase</p>
-                                    <h3>Request</h3>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-cart-arrow-down"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-3 col-6">
                         <a href="{{ route('product.tracking') }}">
                             <div class="small-box bg-primary">
                                 <div class="inner">

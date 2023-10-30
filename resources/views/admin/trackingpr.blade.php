@@ -682,6 +682,7 @@
                             '<tr><td colspan="16" class="text-center">Tidak ada produk</td></tr>');
                     } else {
                         $('#table-pr').empty();
+
                         $.each(data.pr.details, function(key, value) {
 
                             var id = value.id;
@@ -699,6 +700,15 @@
                             }
 
                             // alert(value.no_sph)
+                            var hasSPPH = data.pr.details.some(function(item) {
+                            return item.id_spph !== null;
+                        });
+
+                        if (hasSPPH) {
+                            $('#edit_pr_save').prop('disabled', false);
+                        } else {
+                            $('#edit_pr_save').prop('disabled', true);
+                        }
 
                             //0 = Lakukan SPPH, 1 = Lakukan PO, 2 = Completed
                             if (!value.id_spph) {
@@ -831,6 +841,17 @@
                     $('#button-cetak-pr').html('<i class="fas fa-print"></i> Cetak');
                     $('#button-cetak-pr').attr('disabled', false);
                     var no = 1;
+
+                    var hasSPPH = false;
+                    var hasSPPH = data.pr.details.some(function(item) {
+                        return item.id_spph !== null;
+                    });
+
+                    if (hasSPPH) {
+                        $('#edit_pr_save').prop('disabled', false);
+                    } else {
+                        $('#edit_pr_save').prop('disabled', true);
+                    }
 
                     if (data.pr.details.length == 0) {
                         $('#table-pr').empty();

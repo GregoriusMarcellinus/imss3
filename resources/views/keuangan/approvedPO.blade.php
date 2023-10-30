@@ -662,19 +662,12 @@
                                 '<td>' + no + '</td>' +
                                 '<td>' + kode_material + '</td>' +
                                 '<td>' + deskripsi + '</td>' +
-                                '<td><input type="date" value="' + newDate +
-                                '" class="form-control" id="batas' + id + '" name="batas' + id +
-                                '"></td>' +
+                                '<td>' + newDate +'</td>' +
                                 '<td>' + qty + '</td>' +
                                 '<td>' + satuan + '</td>' +
-                                '<td><input type="text" value="' + harga_per_unit +
-                                '" class="form-control" id="harga_per_unit' + id +
-                                '" name="harga_per_unit' + id + '"></td>' +
-                                '<td><input type="text" value="' + mata_uang +
-                                '" class="form-control" id="mata_uang' + id + '" name="mata_uang' + id +
-                                '"></td>' +
-                                '<td><input type="text" value="' + vat +
-                                '" class="form-control" id="vat' + id + '" name="vat' + id + '"></td>' +
+                                '<td>' + harga_per_unit +'</td>' +
+                                '<td>' + mata_uang + '</td>' +
+                                '<td>' + vat +'</td>' +
                                 '<td>' + total + '</td>' +
                                 '</tr>';
                             $('#tabel-po').append(html);
