@@ -299,8 +299,14 @@
                     {{-- <td class="text-center"><b style="text-decoration: underline">
                             &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&emsp;&emsp;&emsp;&emsp;</b>
                     </td> --}}
-                    <td style="text-align: center;vertical-align: bottom"><b style="text-decoration: underline; ">Rudi
-                            Harianto</b><br><b>PLT KADEP LOGISTIK</b>
+                    <td style="text-align: center;vertical-align: bottom"><b style="text-decoration: underline; ">
+                        @if ($po->total < 35000000)  
+                        Rudi Hariyanto</b><br><b>PLT KADEP LOGISTIK</b>
+                        @elseif($po->total >= 35000000 && $po->total < 1000000000)
+                        Adib Ardhian</b><br><b>DIREKTUR OPERSI</b>
+                        @else 
+                        Junaedi</b><br><b>DIREKTUR UTAMA</b>
+                        @endif
                     </td>
                 </tr>
                 {{-- <tr style="border: 1px solid black; vertical-align: top">
