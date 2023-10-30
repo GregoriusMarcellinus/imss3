@@ -836,6 +836,7 @@
             $('#container-product').removeClass('col-4');
             $('#container-form').addClass('col-12');
             $('#container-form').removeClass('col-8');
+            $('#button-tambah-detail').text('Tambah Item Detail');
         });
 
         function showAddItem() {
