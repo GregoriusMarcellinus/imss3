@@ -157,3 +157,6 @@ Route::get('testt', function () {
 Route::get('voucher', function () {
     return view('keuangan.voucher');
 });
+Route::get('ppk', function () {
+    return view('keuangan.ppk');
+});
