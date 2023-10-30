@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,11 +8,14 @@
     <style>
         body {
             font-family: Arial, sans-serif;
+            font-size: 12px;
         }
 
         .container {
-            width: 210mm; /* Ukuran A4 */
-            height: 297mm; /* Ukuran A4 */
+            width: 210mm;
+            /* Ukuran A4 */
+            height: 297mm;
+            /* Ukuran A4 */
             margin: 0 auto;
             border: 1px solid #000;
             padding: 20px;
@@ -32,64 +36,47 @@
             flex-grow: 1;
         }
 
-        /* .request-type {
-            float: right;
-        } */
-
         .info {
-            margin-top: 20px;
+            margin-top: 15px;
         }
 
         .info p {
-            margin: 5px 0;
-        }
-
-        .approval-info {
-            margin-top: 20px;
-        }
-
-        .approval-info p {
-            margin: 5px 0;
+            margin: 3px 0;
         }
 
         table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 20px;
         }
 
-        table, th, td {
+        .border-table,
+        .border-table th,
+        .border-table td {
             border: 1px solid #000;
         }
 
-        th, td {
+        th,
+        td {
             padding: 8px;
             text-align: left;
         }
 
-        .totals {
-            margin-top: 20px;
-        }
-
-        .totals table {
+        .approval-table {
             width: 100%;
-            border: none;
+            border-collapse: collapse;
         }
 
-        .totals th, .totals td {
-            border: none;
-            padding: 8px;
-            text-align: left;
-        }
-
-        .signatures {
-            display: flex;
-            margin-top: 20px;
-        }
-
-        .signatures p {
-            flex-grow: 1;
+        .approval-table th {
             text-align: center;
+            padding: 8px;
+            border-bottom: 1px solid #000;
+        }
+
+        .approval-table td {
+            text-align: center;
+            padding: 8px;
+            border: none;
+            /* Menghapus garis pada sel data */
         }
 
         .column {
@@ -104,32 +91,26 @@
         }
 
         .authorizer {
-            margin-top: 20px;
+            margin-bottom: 25px;
         }
 
         .authorizer p {
-            margin: 5px 0;
-        }
-
-        .verifier {
-            margin-top: 20px;
-        }
-
-        .verifier p {
-            margin: 5px 0;
+            margin: 2px 0;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <div class="header">
-            <div class="logo"><img src="https://inkamultisolusi.co.id/api_cms/public/uploads/editor/20220511071342_LSnL6WiOy67Xd9mKGDaG.png"
-                alt="Logo" width="150" class="company-logo" /><br></div>
+            <div class="logo"><img
+                    src="https://inkamultisolusi.co.id/api_cms/public/uploads/editor/20220511071342_LSnL6WiOy67Xd9mKGDaG.png"
+                    alt="Logo" width="150" class="company-logo" /><br></div>
             <div class="title">
-                <h3>PERMINTAAN PENGELUARAN KAS</h3>
+                <h2>PERMINTAAN PENGELUARAN KAS</h2>
             </div>
             <div class="request-type">
-                <table>
+                <table class="border-table">
                     <tr>
                         <th>NPJK/BKM/PJP</th>
                         <th style="width: 7em"></th>
@@ -137,70 +118,200 @@
                 </table>
             </div>
         </div>
-        <table>
+        <table class="border-table" width: 100%>
             <tr>
-                <td>
-                        <table>
-                        <div class="info">
-                          <tr>No PPK:</tr><br>
-                          <tr>Tanggal Pengajuan:</tr><br>
-                          <tr>Tanggal Pertanggungjawaban:</tr><br>
-                          <tr>Kode Proyek:</tr>
-                        </div>
-                        </table> 
+                <td style="width: 50%">
+                    <div class="info">
+                        <p style="margin-top: 20px;">NO PPK :</p>
+                        <p style="margin-top: 20px;">TANGGAL PENGAJUAN :</p>
+                        <p style="margin-top: 20px;">TANGGAL PERTANGGUNGJAWABAN :</p>
+                        <p style="margin-top: 20px;">KODE PROYEK :</p>
+                    </div>
                 </td>
                 <td>
-                    <div class="approval-info">
-                        <p>s.d 10 juta mengajukan oleh Staff.Kabag dan disetujui Kadep</p>
-                        <p>s.d 10 juta s.d 20 juta mengajukan Kadep disetujui oleh Kadiv</p>
-                        <p>Di atas 20 juta diajukan oleh Kadiv dan disetujui oleh Direksi</p>
+                    <table style="margin-top: 10px" class="approval-table">
+                        <tr style="text-align: left; border: 0px solid #000;">
+                            <b>Batasan Pengajuan & Persetujuan PPK</b>
+                        </tr>
+                        <tr style="border-collapse: collapse">
+                            <th>Batasan</th>
+                            <th>Mengajukan</th>
+                            <th>Menyetujui</th>
+                        </tr>
+                        <tr>
+                            <td>s.d 10 juta</td>
+                            <td>Staff.Kabag</td>
+                            <td>Kadep</td>
+                        </tr>
+                        <tr>
+                            <td>s.d 10 juta s.d 20 juta</td>
+                            <td>Kadep</td>
+                            <td>Kadiv</td>
+                        </tr>
+                        <tr>
+                            <td>Di atas 20 juta</td>
+                            <td>Kadiv</td>
+                            <td>Direksi</td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+        <table style="margin-top: 20px" class="border-table">
+            <tr style="background-color:#000; color:white;">
+                <th style="text-align: center">NO</th>
+                <th style="text-align: center">TANGGAL</th>
+                <th style="text-align: center">AKTIVITAS/PENGGUNAAN</th>
+                <th style="text-align: center">RENCANA</th>
+                <th style="text-align: center">REALISASI</th>
+            </tr>
+            <!-- Isi tabel disini -->
+            <div class="totals">
+                <tr>
+                    <th style="text-align: center" colspan="3">TOTAL NILAI:</th>
+                    <td></td>
+                    <td></td>
+                </tr>
+                <tr>
+                    <th style="text-align: center" colspan="3">SELISIH LEBIH(KURANG):</th>
+                    <td></td>
+                </tr>
+            </div>
+        </table>
+        <table style="margin-top: 20px" class="border-table">
+            <tr style="background-color:#000; color:white">
+                <th style="text-align: center; margin: 0;" colspan="4">PERMOHONAN PPK</th>
+            </tr>
+            <tr>
+                <td style="text-align: center; margin: 0;" colspan="2"><b>RENCANA</b></td>
+                <td style="text-align: center; margin: 0;" colspan="2"><b>REALISASI</b></td>
+            </tr>
+            <tr>
+                <td style="text-align: center; margin: 0;"><b>YANG MENGAJUKAN</b></td>
+                <td style="text-align: center; margin: 0;"><b>YANG MENYETUJUI</b></td>
+                <td style="text-align: center; margin: 0;"><b>YANG MENGAJUKAN</b></td>
+                <td style="text-align: center; margin: 0;"><b>YANG MENYETUJUI</b></td>
+            </tr>
+            <tr>
+                <td>
+                    <div class="column">
+                        <div class="authorizer">
+                            <p>Nama: </p>
+                            <p>NIP: </p>
+                            <p>Tanda Tangan: </p>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="column">
+                        <div class="authorizer">
+                            <p>Nama: </p>
+                            <p>NIP: </p>
+                            <p>Tanda Tangan: </p>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="column">
+                        <div class="authorizer">
+                            <p>Nama: </p>
+                            <p>NIP: </p>
+                            <p>Tanda Tangan: </p>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div class="column">
+                        <div class="authorizer">
+                            <p>Nama: </p>
+                            <p>NIP: </p>
+                            <p>Tanda Tangan: </p>
+                        </div>
                     </div>
                 </td>
             </tr>
         </table>
-        <table>
+        <table class="border-table">
             <tr style="background-color:#000; color:white">
-                <th>No</th>
-                <th>Tanggal</th>
-                <th>Aktivitas/Penggunaan</th>
-                <th>Rencana</th>
-                <th>Realisasi</th>
+                <th style="text-align: center; margin: 0;" colspan="4">OTORISATOR PENGELUARAN UANG</th>
             </tr>
-            <!-- Isi tabel disini -->
+            <tr>
+                <td style="vertical-align: text-top; margin: 0;" rowspan="4">
+                    <h4>Otorisasi Pengesahan Pembayaran</h4><br><br>
+                    <p>Kadep Keuangan : s.d Rp10 Juta </p>
+                    <p>Kadiv Keuangan : Rp10 Juta s.d Rp20 Juta </p>
+                    <p style="margin-bottom: 5rem">Direktur Keuangan, SDM, & Manrisk : diatas Rp20 Juta </p>
+                </td>
+                <td style="text-align: center; margin: 0;"><b>PEJABAT</b></td>
+                <td style="text-align: center; margin: 0;"><b>TANGGAL</b></td>
+                <td style="text-align: center; margin: 0;"><b>TANDA TANGAN</b></td>
+            </tr>
+            <tr>
+                <td><b>
+                    <p style="margin: 0">Kadep Keuangan </p><br>
+                    <p>Nama : </p>
+                    <p style="margin-bottom: 0">NIP: </p></b>
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><b>
+                    <p style="margin: 0">Kadiv Keuangan </p><br>
+                    <p>Nama : </p>
+                    <p style="margin-bottom: 0">NIP: </p></b>
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><b><p style="margin: 0">Direktur Keuangan, SDM, & Manrisk </p><br>
+                    <p>Nama : </p>
+                    <p style="margin-bottom: 0">NIP: </p></b>
+                </td>
+                <td></td>
+                <td></td>
+            </tr>
         </table>
-        <div class="totals">
-            <table>
-                <tr>
-                    <th colspan="3">Total Nilai:</th>
-                    <td>______________</td>
-                    <td>______________</td>
-                </tr>
-                <tr>
-                    <th colspan="3">Selisih Lebih (Kurang):</th>
-                    <td>______________</td>
-                </tr>
-            </table>
-        </div>
-        <div class="signatures">
-            <p>Tanda Tangan Permohonan PPK: ______________</p>
-        </div>
-        <div class="column">
-            <div class="authorizer">
-                <p>Yang Mengajukan</p>
-                <p>Nama: ______________</p>
-                <p>Tanggal: ______________</p>
-                <p>Jabatan: ______________</p>
-            </div>
-        </div>
-        <div class="column">
-            <div class="verifier">
-                <p>Yang Menyetujui</p>
-                <p>Nama: ______________</p>
-                <p>Tanggal: ______________</p>
-                <p>Jabatan: ______________</p>
-            </div>
-        </div>
+        <table class="border-table">
+            <tr style="background-color:#000; color:white">
+                <th style="text-align: center" colspan="4">VERIFIKATOR PENGELUARAN UANG</th>
+            </tr>
+            <tr>
+                <td style="width: 35%"></td>
+                <td style="text-align: center; margin: 0;"><b>RENCANA</b></td>
+                <td style="text-align: center; margin: 0;"><b>REALISASI</b></td>
+                <td style="text-align: center; margin: 0;"><b>KETERANGAN</b></td>
+            </tr>
+            <tr>
+                <td><b>
+                    <p style="margin: 0">Kadiv Keu/Kadep Akuntansi/Verifikator </p><br>
+                    <p style="margin-bottom: 0">Nama/NIP: </p></b>
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><b>
+                    <p style="margin: 0">Dibayar oleh Bendahara </p><br>
+                    <p style="margin-bottom: 0">Nama/NIP: </p></b>
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td><b><p style="margin: 0">Diterima Oleh </p><br>
+                    <p style="margin-bottom: 0">Nama/NIP: </p></b>
+                </td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </table>
         <div class="row"></div>
     </div>
 </body>
+
 </html>
