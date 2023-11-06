@@ -68,6 +68,13 @@ class HomeController extends Controller
                 'bgcolor' => 'goldenrod',
                 'icon' => 'map'
             ],
+            [
+                'name' => 'Engineer',
+                // 'route' => 'apps/purchase_request',
+                'route' => 'div/eng',
+                'bgcolor' => 'violet',
+                'icon' => 'wrench'
+            ],
         ];
 
         return view('home.dashboard', compact('menus'));
@@ -134,7 +141,7 @@ class HomeController extends Controller
                     'route' => 'apps/retur',
                     'bgcolor' => 'goldenrod',
                     'icon' => 'retweet'
-                    ]
+                ]
             ];
             $title = "Gudang";
         } else if ($type == "wilayah1") {
@@ -169,6 +176,16 @@ class HomeController extends Controller
                 ]
             ];
             $title = "Wilayah 2";
+        } else if ($type == 'eng') {
+            $menus = [
+                [
+                    'name' => 'Justifikasi',
+                    'route' => 'apps/justifikasi',
+                    'bgcolor' => 'sagegreen',
+                    'icon' => 'folder-open'
+                ],
+            ];
+            $title = "Engineer";
         }
 
         return view('home.tipe', compact('menus', 'title'));

@@ -114,6 +114,7 @@
                                         <option value="3">Wilayah 2</option>
                                         <option value="4">Gudang</option>
                                         <option value="5">Keuangan</option>
+                                        <option value="6">Engineer</option>
                                     </select>
                                 </div>
                             </div>
