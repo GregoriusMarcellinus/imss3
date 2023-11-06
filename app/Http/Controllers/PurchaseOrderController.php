@@ -51,6 +51,37 @@ class PurchaseOrderController extends Controller
         }
     }
 
+    public function showPOPL(Request $request){
+        $search = $request->q;
+        if (Session::has('selected_warehouse_id')) {
+            $warehouse_id = Session::get('selected_warehouse_id');
+        } else {
+            $warehouse_id = DB::table('warehouse')->first()->warehouse_id;
+        }
+
+        $purchases = Purchase_Order::select('purchase_order.*', 'vendor.nama as vendor_name', 'keproyekan.nama_proyek as proyek_name', 'purchase_request.no_pr as pr_no')
+            ->join('vendor', 'vendor.id', '=', 'purchase_order.vendor_id')
+            ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_order.proyek_id')
+            ->leftjoin('purchase_request', 'purchase_request.id', '=', 'purchase_order.pr_id')
+            ->paginate(50);
+        $vendors = DB::table('vendor')->get();
+        $proyeks = DB::table('keproyekan')->get();
+
+
+        if ($search) {
+            $purchases = Purchase_Order::where('no_po', 'LIKE', "%$search%")->paginate(50);
+        }
+
+        if ($request->format == "json") {
+            $purchases = Purchase_Order::where("warehouse_id", $warehouse_id)->get();
+
+            return response()->json($purchases);
+        } else {
+            $prs = PurchaseRequest::all();
+            return view('purchase_order.po_pl', compact('purchases', 'vendors', 'proyeks', 'prs'));
+        }
+    }
+
     public function indexApps(Request $request)
     {
         $search = $request->q;
