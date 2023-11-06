@@ -46,10 +46,10 @@
                             <thead>
                                 <tr class="text-center">
                                     <th>No.</th>
-                                    <th>{{ __('No PO') }}</th>
+                                    {{-- <th>{{ __('No PO') }}</th> --}}
                                     {{-- <th>{{ __('No PR') }}</th> --}}
                                     <th>{{ __('Proyek') }}</th>
-                                    <th>{{ __('Vendor') }}</th>
+                                    {{-- <th>{{ __('Vendor') }}</th> --}}
                                     <th>{{ __('Tanggal PO') }}</th>
                                     <th>{{ __('Batas Akhir PO') }}</th>
                                     <th>{{ __('Detail PO') }}</th>
@@ -87,10 +87,10 @@
                                         @endphp
                                         <tr>
                                             <td class="text-center">{{ $data['no'] }}</td>
-                                            <td>{{ $data['no_po'] }}</td>
+                                            {{-- <td>{{ $data['no_po'] }}</td> --}}
                                             {{-- <td>{{ $data['pr_no'] }}</td> --}}
                                             <td class="text-center">{{ $data['nama_proyek'] }}</td>
-                                            <td class="text-center">{{ $data['nama_vendor'] }}</td>
+                                            {{-- <td class="text-center">{{ $data['nama_vendor'] }}</td> --}}
                                             <td class="text-center">{{ $data['tgpo'] }}</td>
                                             <td class="text-center">{{ $data['btpo'] }}</td>
                                             <td class="text-center">
@@ -99,12 +99,8 @@
                                                     data-detail="{{ json_encode($data) }}"> Lihat Detail</button>
                                             </td>
                                             <td class="text-center">
-                                                <select name="approve" id="approve">
-                                                    <option value="">Pilih Approval</option>
-                                                    <option value="0">Reject</option>
-                                                    <option value="1">Pending</option>
-                                                    <option value="2">Approve</option>
-                                                </select>
+                                                <button type="button"class="btn-approve btn btn-success btn-sm">Approve</button>
+                                                <button type="button"class="btn-approve btn btn-danger btn-sm">Reject</button>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -168,7 +164,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group row">
+                        {{-- <div class="form-group row">
                             <label for="tanggal_po" class="col-sm-4 col-form-label w-50">{{ __('Tanggal PO') }} </label>
                             <div class="col-sm-8">
                                 <input type="date" class="form-control w-50" id="tanggal_po" name="tanggal_po">
@@ -179,7 +175,7 @@
                             <div class="col-sm-8">
                                 <input type="date" class="form-control w-50" id="batas_po" name="batas_po">
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="form-group row">
                             <label for="incoterm" class="col-sm-4 col-form-label">{{ __('Incoterm') }} </label>
                             <div class="col-sm-8">
@@ -233,7 +229,7 @@
         <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 id="modal-title" class="modal-title">{{ __('Detail Purchase Order') }}</h4>
+                    <h4 id="modal-title" class="modal-title">{{ __('Detail PO/PL') }}</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -249,31 +245,31 @@
                                     onclick="document.getElementById(
                                         'cetak-po').submit();">{{ __('Cetak') }}</button>
                                 <table class="align-top w-100">
-                                    <tr>
+                                    {{-- <tr>
                                         <td style="width: 8%;"><b>No Surat</b></td>
                                         <td style="width:2%">:</td>
                                         <td style="width: 55%"><span id="po_no"></span></td>
-                                    </tr>
+                                    </tr> --}}
                                     <tr>
-                                        <td><b>Proyek</b></td>
-                                        <td>:</td>
-                                        <td><span id="id_proyek"></span></td>
+                                        <td style="width: 8%;"><b>Proyek</b></td>
+                                        <td style="width:2%">:</td>
+                                        <td style="width: 55%"><span id="id_proyek"></span></td>
                                     </tr>
-                                    <tr>
+                                    {{-- <tr>
                                         <td><b>Vendor</b></td>
                                         <td>:</td>
                                         <td><span id="id_vendor"></span></td>
-                                    </tr>
-                                    <tr>
+                                    </tr> --}}
+                                    {{-- <tr>
                                         <td><b>Tanggal PO</b></td>
                                         <td>:</td>
                                         <td><span id="po_tanggal"></span></td>
-                                    </tr>
-                                    <tr>
+                                    </tr> --}}
+                                    {{-- <tr>
                                         <td><b>Batas PO</b></td>
                                         <td>:</td>
                                         <td><span id="po_batas"></span></td>
-                                    </tr>
+                                    </tr> --}}
                                     <tr>
                                         <td><b>Detail</b></td>
                                         <input type="hidden" name="id" id="id">
@@ -486,9 +482,9 @@
             $('modal-title').text("Detail PO");
             $('#button-save').text("Simpan");
             resetForm();
-            $('#po_no').text(data.no_po);
+            // $('#po_no').text(data.no_po);
             $('#id_proyek').text(data.proyek_name);
-            $('#id_vendor').text(data.vendor_name);
+            // $('#id_vendor').text(data.vendor_name);
             $('#po_tanggal').text(data.tgpo);
             $('#po_batas').text(data.btpo);
             $('#tabel-po').empty();
@@ -510,9 +506,9 @@
 
                 success: function(data) {
                     console.log(data);
-                    $('#no_po').text(data.po.no_po);
+                    // $('#no_po').text(data.po.no_po);
                     $('#id_proyek').text(data.po.nama_proyek);
-                    $('#id_vendor').text(data.po.nama_vendor);
+                    // $('#id_vendor').text(data.po.nama_vendor);
                     $('#po_tanggal').text(data.po.tgpo);
                     $('#po_batas').text(data.po.btpo);
                     $('#id_po').val(data.po.id);

@@ -93,6 +93,11 @@ Route::prefix('products')->group(function () {
 
     Route::get('test_pr', [App\Http\Controllers\PurchaseOrderController::class, 'test_pr'])->name('test_pr');
 
+    //justifikasi
+    Route::get('justifikasi', [App\Http\Controllers\JustifikasiController::class, 'index'])->name('product.justifikasi');
+    Route::post('justifikasi', [App\Http\Controllers\JustifikasiController::class, 'store'])->name('product.justifikasi.save');
+    Route::delete('justifikasi', [App\Http\Controllers\JustifikasiController::class, 'destroy'])->name('product.justifikasi.delete');
+
     //purchase request
     Route::resource('purchase_request', App\Http\Controllers\PurchaseRequestController::class)->except(['destroy']);
     Route::get('cetak_pr', [App\Http\Controllers\PurchaseRequestController::class, 'cetakPr'])->name('cetak_pr');

@@ -99,16 +99,30 @@
                         </a>
                     </div>
                 @endif
-                @if (Auth::user()->role == 0 || Auth::user()->role == 1 ||  Auth::user()->role == 5)
-                <div class="col-lg-3 col-6">
-                    <a href="{{ route('purchase_order.index') }}">
-                        <div class="small-box bg-primary">
-                            <div class="inner">
-                                <p>Purchase</p>
-                                <h3>Order</h3>
+                @if (Auth::user()->role == 0 || Auth::user()->role == 1 || Auth::user()->role == 5)
+                    <div class="col-lg-3 col-6">
+                        <a href="{{ route('purchase_order.index') }}">
+                            <div class="small-box bg-primary">
+                                <div class="inner">
+                                    <p>Purchase</p>
+                                    <h3>Order</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-hand-holding-usd"></i>
+                                </div>
                             </div>
-                            <div class="icon">
-                                <i class="fas fa-hand-holding-usd"></i>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        <a href="{{ route('product.showPOPL') }}">
+                            <div class="small-box bg-danger">
+                                <div class="inner">
+                                    <p>Purchase Order</p>
+                                    <h3>Pembelian Langsung</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-exclamation"></i>
+                                </div>
                             </div>
                         </div>
                     </a>
@@ -117,8 +131,8 @@
                     <a href="{{ route('product.showPOPL') }}">
                         <div class="small-box bg-danger">
                             <div class="inner">
-                                <p>Purchase Order</p>
-                                <h3>Pembelian Langsung</h3>
+                                <p>Pembelian Langsung</p>
+                                <h3>Purchase Order [Beta]</h3>
                             </div>
                             <div class="icon">
                                 <i class="fas fa-exclamation"></i>
@@ -127,20 +141,20 @@
                     </a>
                 </div>
                 @endif
-                @if (Auth::user()->role == 0 || Auth::user()->role == 1 || Auth::user()->role == 2|| Auth::user()->role == 3)
-                <div class="col-lg-3 col-6">
-                    <a href="{{ route('purchase_request.index') }}">
-                        <div class="small-box bg-primary">
-                            <div class="inner" style="background-color: coral">
-                                <p>Purchase</p>
-                                <h3>Request</h3>
+                @if (Auth::user()->role == 0 || Auth::user()->role == 1 || Auth::user()->role == 2 || Auth::user()->role == 3)
+                    <div class="col-lg-3 col-6">
+                        <a href="{{ route('purchase_request.index') }}">
+                            <div class="small-box bg-primary">
+                                <div class="inner" style="background-color: coral">
+                                    <p>Purchase</p>
+                                    <h3>Request</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-cart-arrow-down"></i>
+                                </div>
                             </div>
-                            <div class="icon">
-                                <i class="fas fa-cart-arrow-down"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+                        </a>
+                    </div>
                 @endif
                 @if (Auth::user()->role == 0 || Auth::user()->role == 1)
                     <div class="col-lg-3 col-6">
@@ -157,20 +171,20 @@
                         </a>
                     </div>
                 @endif
-                @if ( Auth::user()->role == 2 || Auth::user()->role == 3)
-                <div class="col-lg-3 col-6">
-                    <a href="{{ route('product.trackingwil') }}">
-                        <div class="small-box bg-primary">
-                            <div class="inner" style="background-color: #D988B9">
-                                <p>Purchase Request</p>
-                                <h3>Tracking Wilayah</h3>
+                @if (Auth::user()->role == 2 || Auth::user()->role == 3)
+                    <div class="col-lg-3 col-6">
+                        <a href="{{ route('product.trackingwil') }}">
+                            <div class="small-box bg-primary">
+                                <div class="inner" style="background-color: #D988B9">
+                                    <p>Purchase Request</p>
+                                    <h3>Tracking Wilayah</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-route"></i>
+                                </div>
                             </div>
-                            <div class="icon">
-                                <i class="fas fa-route"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+                        </a>
+                    </div>
                 @endif
                 @if (Auth::user()->role == 0 || Auth::user()->role == 5)
                 <div class="col-lg-3 col-6">
@@ -178,10 +192,20 @@
                         <div class="small-box bg-primary">
                             <div class="inner" style="background-color: #A7D397">
                                 <p>APRROVAL</p>
-                                <h3>PO</h3>
+                                <h3>PO [Beta]</h3>
                             </div>
-                            <div class="icon">
-                                <i class="fas fa-clipboard-check"></i>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        <a href="{{ route('product.aprrovedPO_PL') }}">
+                            <div class="small-box bg-primary">
+                                <div class="inner" style="background-color: #186F65">
+                                    <p>APRROVAL</p>
+                                    <h3>PO/PL</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-tasks"></i>
+                                </div>
                             </div>
                         </div>
                     </a>
@@ -191,14 +215,10 @@
                         <div class="small-box bg-primary">
                             <div class="inner" style="background-color: #186F65">
                                 <p>APRROVAL</p>
-                                <h3>PO/PL</h3>
+                                <h3>PO/PL  [Beta]</h3>
                             </div>
-                            <div class="icon">
-                                <i class="fas fa-tasks"></i>
-                            </div>
-                        </div>
-                    </a>
-                </div>
+                        </a>
+                    </div>
                 @endif
             </div>
         </div>
