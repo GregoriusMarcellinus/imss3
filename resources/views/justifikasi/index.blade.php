@@ -61,7 +61,7 @@
                                     </td>
                                     <td class="text-center">{{ $data['pic'] }}</td>
                                     <td class="text-center">
-                                        @if (Auth::user()->role == 0 || Auth::user()->role == 4)
+                                        @if (Auth::user()->role == 0 || Auth::user()->role == 6)
                                             <button title="Edit Shelf" type="button" class="btn btn-success btn-xs"
                                                 data-toggle="modal" data-target="#add-justifikasi"
                                                 onclick="editJustifikasi({{ json_encode($data) }})"><i
@@ -86,7 +86,7 @@
                 {{ $items->links('pagination::bootstrap-4') }}
             </div>
         </div>
-        @if (Auth::user()->role == 0 || Auth::user()->role == 4)
+        @if (Auth::user()->role == 0 || Auth::user()->role == 6)
             <div class="modal fade" id="add-justifikasi">
                 <div class="modal-dialog">
                     <div class="modal-content">
