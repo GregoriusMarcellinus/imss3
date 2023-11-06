@@ -44,7 +44,7 @@ class DrawingSchematicController extends Controller
                 unlink($file_path);
             }
             $file = $request->file('file');
-            $nama_file = time() . "_" . $file->getClientOriginalExtension();
+            $nama_file = time() . "." . $file->getClientOriginalExtension();
             $tujuan_upload = 'drawing';
             $file->move($tujuan_upload, $nama_file);
         } else {
