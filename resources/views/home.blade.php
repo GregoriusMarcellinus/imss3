@@ -113,6 +113,19 @@
                         </div>
                     </a>
                 </div>
+                <div class="col-lg-3 col-6">
+                    <a href="{{ route('product.showPOPL') }}">
+                        <div class="small-box bg-danger">
+                            <div class="inner">
+                                <p>Purchase Order</p>
+                                <h3>Pembelian Langsung</h3>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-exclamation"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
                 @endif
                 @if (Auth::user()->role == 0 || Auth::user()->role == 1 || Auth::user()->role == 2|| Auth::user()->role == 3)
                 <div class="col-lg-3 col-6">
