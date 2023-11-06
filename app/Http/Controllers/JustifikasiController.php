@@ -62,11 +62,11 @@ class JustifikasiController extends Controller
             'tanggal' => $request->tanggal,
             'nomor' => $request->nomor,
             'keterangan' => $request->keterangan,
-            'file' => $nama_file,
-            'user_id' => auth()->user()->id
+            'file' => $nama_file
         ];
 
         if (empty($justifikasi_id)) {
+            $data['user_id'] = auth()->user()->id;
             $add = Justifikasi::create($data);
             if ($add) {
                 return redirect()->route('product.justifikasi')->with('success', 'Data berhasil ditambahkan');

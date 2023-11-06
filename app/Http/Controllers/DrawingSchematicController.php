@@ -61,10 +61,10 @@ class DrawingSchematicController extends Controller
             'nomor' => $request->nomor,
             'keterangan' => $request->keterangan,
             'file' => $nama_file,
-            'user_id' => auth()->user()->id
         ];
 
         if (empty($drawing_id)) {
+            $data['user_id'] = auth()->user()->id;
             $add = DrawingSchematic::create($data);
             if ($add) {
                 return redirect()->route('product.drawing.schematic')->with('success', 'Data berhasil ditambahkan');
@@ -72,6 +72,7 @@ class DrawingSchematicController extends Controller
                 return redirect()->route('product.drawing.schematic')->with('error', 'Data gagal ditambahkan');
             }
         } else {
+
             $update = DrawingSchematic::where('id', $drawing_id)->update($data);
 
             if ($update) {
