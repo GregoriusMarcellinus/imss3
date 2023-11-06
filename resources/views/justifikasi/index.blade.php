@@ -14,7 +14,7 @@
         <div class="container-fluid">
             <div class="card">
                 <div class="card-header">
-                    @if (Auth::user()->role == 0 || Auth::user()->role == 4)
+                    @if (Auth::user()->role == 0 || Auth::user()->role == 6)
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-justifikasi"
                             onclick="addJustifikasi()"><i class="fas fa-plus"></i> Add New Justifikasi</button>
                     @endif
@@ -51,7 +51,9 @@
                                 @endphp
                                 <tr>
                                     <td class="text-center">{{ $items->firstItem() + $key }}</td>
-                                    <td>{{ $data['tanggal'] }}</td>
+                                    <td>
+                                        {{ \Carbon\Carbon::parse($data['tanggal'])->format('d M Y') }}
+                                    </td>
                                     <td>{{ $data['nomor'] }}</td>
                                     <td>{{ $data['keterangan'] }}</td>
                                     <td class="text-center">
