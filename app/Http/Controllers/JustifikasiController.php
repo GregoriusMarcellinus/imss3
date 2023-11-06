@@ -94,7 +94,14 @@ class JustifikasiController extends Controller
     {
         $delete_id = $request->delete_id;
 
-        $delete = Justifikasi::where('id', $delete_id)->delete();
+        $delete = Justifikasi::where('id', $delete_id);
+
+        //unlink file
+        $justifikasi = Justifikasi::where('id', $delete_id)->first();
+        $file_path = public_path() . '/justifikasi/' . $justifikasi->file;
+        unlink($file_path);
+
+        $delete = $delete->delete();
 
         if ($delete) {
             return redirect()->route('product.justifikasi')->with('success', 'Data berhasil dihapus');
