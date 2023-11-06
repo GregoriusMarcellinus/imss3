@@ -39,7 +39,7 @@
                                 <th>{{ __('Tanggal') }}</th>
                                 <th>{{ __('Nomor') }}</th>
                                 <th>{{ __('Uraian') }}</th>
-                                <th>{{ __('File') }}</th>
+                                {{-- <th>{{ __('File') }}</th> --}}
                                 <th>{{ __('PIC') }}</th>
                                 <th></th>
                             </tr>
@@ -56,11 +56,11 @@
                                     </td>
                                     <td>{{ $data['nomor'] }}</td>
                                     <td>{{ $data['keterangan'] }}</td>
-                                    <td class="text-center">
+                                    {{-- <td class="text-center">
                                         <a href="{{ asset('drawing/' . $data['file']) }}" target="_blank">
                                             Download
                                         </a>
-                                    </td>
+                                    </td> --}}
                                     <td class="text-center">{{ $data['pic'] }}</td>
                                     <td class="text-center">
                                         @if (Auth::user()->role == 0 || Auth::user()->role == 6)
@@ -121,12 +121,12 @@
                                         <input type="text" class="form-control" id="keterangan" name="keterangan">
                                     </div>
                                 </div>
-                                <div class="form-group row">
+                                {{-- <div class="form-group row">
                                     <label for="file" class="col-sm-4 col-form-label">{{ __('File') }}</label>
                                     <div class="col-sm-8">
                                         <input type="file" class="" id="file" name="file">
                                     </div>
-                                </div>
+                                </div> --}}
                             </form>
                         </div>
                         <div class="modal-footer justify-content-between">

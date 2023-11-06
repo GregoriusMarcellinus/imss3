@@ -49,7 +49,8 @@ class DrawingSchematicController extends Controller
             $file->move($tujuan_upload, $nama_file);
         } else {
             if (empty($drawing_id)) {
-                return redirect()->route('product.drawing.schematic')->with('error', 'File harus diisi');
+                // return redirect()->route('product.drawing.schematic')->with('error', 'File harus diisi');
+                $nama_file = "";
             } else {
                 $just = DrawingSchematic::where('id', $drawing_id)->first();
                 $nama_file = $just->file;
@@ -97,7 +98,9 @@ class DrawingSchematicController extends Controller
 
         //unlink file
         $file_path = public_path() . '/drawing/' . $delete->first()->file;
-        unlink($file_path);
+        if (!empty($delete->first()->file)) {
+            unlink($file_path);
+        }
         $delete->delete();
 
         if ($delete) {

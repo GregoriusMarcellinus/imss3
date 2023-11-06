@@ -251,6 +251,19 @@
                             </div>
                         </a>
                     </div>
+                    <div class="col-lg-3 col-6">
+                        <a href="{{ route('product.justifikasi') }}">
+                            <div class="small-box bg-primary">
+                                <div class="inner" style="background-color: #e44b4b">
+                                    <p>Function</p>
+                                    <h3>Control</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-gamepad"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
                 @endif
             </div>
         </div>
