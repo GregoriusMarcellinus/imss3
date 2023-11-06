@@ -51,8 +51,8 @@
                                     {{-- <th>{{ __('No PR') }}</th> --}}
                                     <th>{{ __('Proyek') }}</th>
                                     {{-- <th>{{ __('Vendor') }}</th> --}}
-                                    <th>{{ __('Tanggal PO') }}</th>
-                                    <th>{{ __('Batas Akhir PO') }}</th>
+                                    {{-- <th>{{ __('Tanggal PO') }}</th>
+                                    <th>{{ __('Batas Akhir PO') }}</th> --}}
                                     <th></th>
                                 </tr>
                             </thead>
@@ -91,8 +91,8 @@
                                             {{-- <td>{{ $data['pr_no'] }}</td> --}}
                                             <td class="text-center">{{ $data['nama_proyek'] }}</td>
                                             {{-- <td class="text-center">{{ $data['nama_vendor'] }}</td> --}}
-                                            <td class="text-center">{{ $data['tgpo'] }}</td>
-                                            <td class="text-center">{{ $data['btpo'] }}</td>
+                                            {{-- <td class="text-center">{{ $data['tgpo'] }}</td>
+                                            <td class="text-center">{{ $data['btpo'] }}</td> --}}
                                             <td class="text-center">
                                                 <button title="Edit PO" type="button" class="btn btn-success btn-xs"
                                                     data-toggle="modal" data-target="#add-po"
@@ -282,17 +282,17 @@
                                     onclick="document.getElementById(
                                         'cetak-po').submit();">{{ __('Cetak') }}</button> --}}
                                 <table class="align-top w-100">
-                                    <tr>
+                                    {{-- <tr>
                                         <td style="width: 8%;"><b>No Surat</b></td>
                                         <td style="width:2%">:</td>
                                         <td style="width: 55%"><span id="po_no"></span></td>
-                                    </tr>
+                                    </tr> --}}
                                     <tr>
-                                        <td><b>Proyek</b></td>
-                                        <td>:</td>
-                                        <td><span id="id_proyek"></span></td>
+                                        <td style="width: 8%;"><b>Proyek</b></td>
+                                        <td style="width:2%">:</td>
+                                        <td style="width: 55%"><span id="id_proyek"></span></td>
                                     </tr>
-                                    <tr>
+                                    {{-- <tr>
                                         <td><b>Vendor</b></td>
                                         <td>:</td>
                                         <td><span id="id_vendor"></span></td>
@@ -306,7 +306,7 @@
                                         <td><b>Batas PO</b></td>
                                         <td>:</td>
                                         <td><span id="po_batas"></span></td>
-                                    </tr>
+                                    </tr> --}}
                                     <tr>
                                         <td><b>Detail</b></td>
                                         <input type="hidden" name="id" id="id">

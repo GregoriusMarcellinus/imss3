@@ -117,8 +117,8 @@
                     <a href="{{ route('product.showPOPL') }}">
                         <div class="small-box bg-danger">
                             <div class="inner">
-                                <p>Purchase Order</p>
-                                <h3>Pembelian Langsung</h3>
+                                <p>Pembelian Langsung</p>
+                                <h3>Purchase Order [Beta]</h3>
                             </div>
                             <div class="icon">
                                 <i class="fas fa-exclamation"></i>
@@ -178,7 +178,7 @@
                         <div class="small-box bg-primary">
                             <div class="inner" style="background-color: #A7D397">
                                 <p>APRROVAL</p>
-                                <h3>PO</h3>
+                                <h3>PO [Beta]</h3>
                             </div>
                             <div class="icon">
                                 <i class="fas fa-clipboard-check"></i>
@@ -191,7 +191,7 @@
                         <div class="small-box bg-primary">
                             <div class="inner" style="background-color: #186F65">
                                 <p>APRROVAL</p>
-                                <h3>PO/PL</h3>
+                                <h3>PO/PL  [Beta]</h3>
                             </div>
                             <div class="icon">
                                 <i class="fas fa-tasks"></i>
