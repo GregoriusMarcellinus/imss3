@@ -51,7 +51,9 @@
                                 @endphp
                                 <tr>
                                     <td class="text-center">{{ $items->firstItem() + $key }}</td>
-                                    <td>{{ $data['tanggal'] }}</td>
+                                    <td>
+                                        {{ \Carbon\Carbon::parse($data['tanggal'])->format('d M Y') }}
+                                    </td>
                                     <td>{{ $data['nomor'] }}</td>
                                     <td>{{ $data['keterangan'] }}</td>
                                     <td class="text-center">
