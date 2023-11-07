@@ -29,7 +29,8 @@ class PurchaseOrderController extends Controller
         }
 
         $purchases = Purchase_Order::select('purchase_order.*', 'vendor.nama as vendor_name', 'keproyekan.nama_proyek as proyek_name', 'purchase_request.no_pr as pr_no')
-            ->join('vendor', 'vendor.id', '=', 'purchase_order.vendor_id')
+        ->where('purchase_order.tipe', "0")    
+        ->join('vendor', 'vendor.id', '=', 'purchase_order.vendor_id')
             ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_order.proyek_id')
             ->leftjoin('purchase_request', 'purchase_request.id', '=', 'purchase_order.pr_id')
             ->paginate(50);
@@ -59,12 +60,12 @@ class PurchaseOrderController extends Controller
             $warehouse_id = DB::table('warehouse')->first()->warehouse_id;
         }
 
-        $purchases = Purchase_Order::select('purchase_order.*', 'vendor.nama as vendor_name', 'keproyekan.nama_proyek as proyek_name', 'purchase_request.no_pr as pr_no')
-            ->join('vendor', 'vendor.id', '=', 'purchase_order.vendor_id')
+        $purchases = Purchase_Order::select('purchase_order.*', 'keproyekan.nama_proyek as proyek_name', 'purchase_request.no_pr as pr_no')
+        ->where('purchase_order.tipe', '1')
             ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_order.proyek_id')
             ->leftjoin('purchase_request', 'purchase_request.id', '=', 'purchase_order.pr_id')
             ->paginate(50);
-        $vendors = DB::table('vendor')->get();
+        // $vendors = DB::table('vendor')->get();
         $proyeks = DB::table('keproyekan')->get();
 
 
@@ -78,7 +79,7 @@ class PurchaseOrderController extends Controller
             return response()->json($purchases);
         } else {
             $prs = PurchaseRequest::all();
-            return view('purchase_order.po_pl', compact('purchases', 'vendors', 'proyeks', 'prs'));
+            return view('purchase_order.po_pl', compact('purchases', 'proyeks', 'prs'));
         }
     }
 
@@ -122,6 +123,23 @@ class PurchaseOrderController extends Controller
         return response()->json([
             'po' => $po
         ]);
+    }
+    public function getDetailPOPL(Request $request)
+    {
+        $id = $request->id;
+        $po = Purchase_Order::select('purchase_order.*', 'keproyekan.nama_proyek as nama_proyek')
+            ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_order.proyek_id')
+            ->where('purchase_order.id', $id)
+            ->first();
+        $po->details = DetailPo::where('detail_po.id_po', $po->id)
+            ->leftJoin('detail_pr', 'detail_pr.id', '=', 'detail_po.id_detail_pr')
+            ->select('detail_pr.*', 'detail_po.id as id_detail_po', 'detail_po.harga as harga_per_unit', 'detail_po.mata_uang as mata_uang', 'detail_po.vat as vat', 'detail_po.batas_akhir as batas')
+            ->get();
+            
+            return response()->json([
+                'po' => $po
+            ]);
+        dd($po);
     }
 
     public function detailPrSave(Request $request)
@@ -330,8 +348,10 @@ class PurchaseOrderController extends Controller
         );
 
         if (empty($purchase_order)) {
+            $tipe = 0; // 0 = PO biasa, 1 = PO PL
             $po = DB::table('purchase_order')->insertGetId([
                 'no_po' => $request->no_po,
+                'tipe' => $tipe,
                 'vendor_id' => $request->vendor_id,
                 'tanggal_po' => $request->tanggal_po,
                 'batas_po' => $request->batas_po,
@@ -455,6 +475,91 @@ class PurchaseOrderController extends Controller
         return redirect()->route('purchase_order.index');
     }
 
+    // Controller PO/PL
+    
+    public function storePOPL(Request $request)
+    {
+        $purchase_order = $request->id;
+        $request->validate(
+            [
+                'no_po' => 'nullable',
+                // 'vendor_id' => 'nullable',
+                'tanggal_po' => 'nullable',
+                'batas_po' => 'nullable',
+                'incoterm' => 'required',
+                // 'pr_id' => 'required',
+                'term_pay' => 'required',
+                'proyek_id' => 'required',
+                'ref_po' => 'nullable',
+
+            ],
+            [
+                // 'no_po.required' => 'No. PO harus diisi',
+                // 'vendor_id.required' => 'Vendor harus diisi',
+                // 'tanggal_po.required' => 'Tanggal PO harus diisi',
+                // 'batas_po.required' => 'Batas Akhir PO harus diisi',
+                'incoterm.required' => 'Incoterm harus diisi',
+                // 'pr_id.required' => 'PR harus diisi',
+                'term_pay.required' => 'Termin Pembayaran harus diisi',
+                'proyek_id.required' => 'Proyek harus diisi',
+            ]
+        );
+
+        if (empty($purchase_order)) {
+            $tipe = 1; // 0 = PO biasa, 1 = PO PL
+            $po = DB::table('purchase_order')->insertGetId([
+                'tipe' => $tipe,
+                'incoterm' => $request->incoterm,
+                'ref_po' => $request->ref_po,
+                'term_pay' => $request->term_pay,
+                'garansi' => $request->garansi,
+                'proyek_id' => $request->proyek_id,
+                'pr_id' => $request->pr_id,
+                'catatan_vendor' => $request->catatan_vendor
+            ]);
+
+            $prs = DetailPR::where('id_pr', $request->pr_id)->get();
+
+
+            foreach ($prs as $pr) {
+                DetailPo::insert([
+                    'id_po' => $po,
+                    'id_pr' => $request->pr_id,
+                    'id_detail_pr' => $pr->id,
+                ]);
+            }
+
+            return redirect()->route('product.showPOPL')->with('success', 'Data PO berhasil ditambahkan');
+        } else {
+            DB::table('purchase_order')->where('id', $purchase_order)->update([
+                'incoterm' => $request->incoterm,
+                'pr_id' => $request->pr_id,
+                'ref_po' => $request->ref_po,
+                'term_pay' => $request->term_pay,
+                'garansi' => $request->garansi,
+                'proyek_id' => $request->proyek_id,
+                // 'catatan_vendor' => $request->catatan_vendor
+
+            ]);
+            return redirect()->route('product.showPOPL')->with('success', 'Data PO berhasil diubah');
+        }
+    }
+
+    public function destroyPOPL(Request  $request)
+    {
+        $delete_po = $request->id;
+        $delete_po = DB::table('purchase_order')->where('id', $delete_po)->delete();
+
+        if ($delete_po) {
+            return redirect()->route('product.showPOPL')->with('success', 'Data PO berhasil dihapus');
+        } else {
+            return redirect()->route('product.showPOPL')->with('error', 'Data PO gagal dihapus');
+        }
+
+        return redirect()->route('product.showPOPL');
+    }
+
+
     // CONTROLLER KEUANGAN
     public function aprrovedPO(Request  $request){
         $search = $request->q;
@@ -495,8 +600,8 @@ class PurchaseOrderController extends Controller
             $warehouse_id = DB::table('warehouse')->first()->warehouse_id;
         }
 
-        $purchases = Purchase_Order::select('purchase_order.*', 'vendor.nama as vendor_name', 'keproyekan.nama_proyek as proyek_name', 'purchase_request.no_pr as pr_no')
-            ->join('vendor', 'vendor.id', '=', 'purchase_order.vendor_id')
+        $purchases = Purchase_Order::select('purchase_order.*', 'keproyekan.nama_proyek as proyek_name', 'purchase_request.no_pr as pr_no')
+            ->where('purchase_order.tipe', '1')
             ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_order.proyek_id')
             ->leftjoin('purchase_request', 'purchase_request.id', '=', 'purchase_order.pr_id')
             ->paginate(50);

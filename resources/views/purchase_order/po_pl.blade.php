@@ -50,9 +50,9 @@
                                     {{-- <th>{{ __('No PO') }}</th> --}}
                                     {{-- <th>{{ __('No PR') }}</th> --}}
                                     <th>{{ __('Proyek') }}</th>
-                                    {{-- <th>{{ __('Vendor') }}</th> --}}
-                                    {{-- <th>{{ __('Tanggal PO') }}</th>
-                                    <th>{{ __('Batas Akhir PO') }}</th> --}}
+                                    <th>{{ __('Incoterm') }}</th>
+                                    <th>{{ __('Termin Pembayaran') }}</th>
+                                    {{-- <th>{{ __('Batas Akhir PO') }}</th> --}}
                                     <th></th>
                                 </tr>
                             </thead>
@@ -90,7 +90,8 @@
                                             {{-- <td>{{ $data['no_po'] }}</td> --}}
                                             {{-- <td>{{ $data['pr_no'] }}</td> --}}
                                             <td class="text-center">{{ $data['nama_proyek'] }}</td>
-                                            {{-- <td class="text-center">{{ $data['nama_vendor'] }}</td> --}}
+                                            <td class="text-center">{{ $data['incoterm'] }}</td>
+                                            <td class="text-center">{{ $data['term_pay'] }}</td>
                                             {{-- <td class="text-center">{{ $data['tgpo'] }}</td>
                                             <td class="text-center">{{ $data['btpo'] }}</td> --}}
                                             <td class="text-center">
@@ -134,13 +135,13 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 id="modal-title" class="modal-title">{{ __('Add New PO') }}</h4>
+                    <h4 id="modal-title" class="modal-title">{{ __('Add New PO/PL') }}</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form role="form" id="save" action="{{ route('purchase_order.store') }}" method="post">
+                    <form role="form" id="save" action="{{ route('product.storePOPL') }}" method="post">
                         @csrf
                         <input type="hidden" id="save_id" name="id">
                         {{-- <div class="form-group row">
@@ -172,7 +173,7 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="form-group row">
+                        {{-- <div class="form-group row">
                             <label for="tanggal_po" class="col-sm-4 col-form-label w-50">{{ __('Tanggal PO') }} </label>
                             <div class="col-sm-8">
                                 <input type="date" class="form-control w-50" id="tanggal_po" name="tanggal_po">
@@ -183,7 +184,7 @@
                             <div class="col-sm-8">
                                 <input type="date" class="form-control w-50" id="batas_po" name="batas_po">
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="form-group row">
                             <label for="incoterm" class="col-sm-4 col-form-label">{{ __('Incoterm') }} </label>
                             <div class="col-sm-8">
@@ -237,7 +238,7 @@
                                 </select> --}}
                             </div>
                         </div>
-                        <div class="form-group row">
+                        {{-- <div class="form-group row">
                             <label for="garansi" class="col-sm-4 col-form-label">{{ __('Garansi') }} </label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="garansi" name="garansi">
@@ -249,7 +250,7 @@
                             <div class="col-sm-8">
                                 <textarea class="form-control" name="catatan_vendor" id="catatan_vendor" rows="3"></textarea>
                             </div>
-                        </div>
+                        </div> --}}
                     </form>
                 </div>
                 <div class="modal-footer justify-content-between">
@@ -275,10 +276,10 @@
                     <div class="mb-3">
                         <div class="row">
                             <div class="col-12" id="container-form">
-                                {{-- <form id="cetak-po" method="GET" action="{{ route('cetak_po') }}" target="_blank">
+                                <form id="cetak-po" method="GET" action="{{ route('cetak_po') }}" target="_blank">
                                     <input type="hidden" name="id_po" id="id_po">
                                 </form>
-                                <button id="button-cetak-po" type="button" class="btn btn-primary"
+                                {{-- <button id="button-cetak-po" type="button" class="btn btn-primary"
                                     onclick="document.getElementById(
                                         'cetak-po').submit();">{{ __('Cetak') }}</button> --}}
                                 <table class="align-top w-100">
@@ -354,9 +355,9 @@
                                                     <th>QTY</th>
                                                     <th>Sat</th>
                                                     <th>Proyek</th>
-                                                    <th>No SPPH</th>
+                                                    {{-- <th>No SPPH</th> --}}
                                                     <th>No PR</th>
-                                                    <th>No PO</th>
+                                                    {{-- <th>No PO</th> --}}
                                                     <th>Pilih</th>
                                                 </tr>
                                             </thead>
@@ -373,7 +374,7 @@
                                             <div class="input-group-append">
                                                 <button class="btn btn-primary" id="button-check"
                                                     onclick="productCheck()">
-                                                    <i class="fas fa-add"></i>
+                                                    <i class="fas fa-search"></i>
                                                 </button>
                                             </div>
                                         </div>
@@ -473,7 +474,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form role="form" id="delete" action="{{ route('purchase_order.destroy') }}" method="post">
+                    <form role="form" id="delete" action="{{ route('purchase_order_pl.destroy') }}" method="post">
                         @csrf
                         @method('delete')
                         <input type="hidden" id="delete_id" name="id">
@@ -523,7 +524,7 @@
         }
 
         function addPo() {
-            $('#modal-title').text("Add Purchase Order");
+            $('#modal-title').text("Add Purchase Order PL");
             $('#button-save').text("Tambahkan");
             resetForm();
         }
@@ -549,20 +550,20 @@
 
         function editPo(data) {
             console.log(data);
-            $('#modal-title').text("Edit PO");
+            $('#modal-title').text("Edit PO PL");
             $('#button-save').text("Simpan");
             resetForm();
             $('#save_id').val(data.id);
-            $('#no_po').val(data.no_po);
-            $('#vendor_id').val(data.vendor_id);
-            $('#vendor_id').find('option').each(function() {
-                if ($(this).val() == data.vid) {
-                    console.log($(this).val());
-                    $(this).attr('selected', true);
-                } else {
-                    $(this).attr('selected', false);
-                }
-            });
+            // $('#no_po').val(data.no_po);
+            // $('#vendor_id').val(data.vendor_id);
+            // $('#vendor_id').find('option').each(function() {
+            //     if ($(this).val() == data.vid) {
+            //         console.log($(this).val());
+            //         $(this).attr('selected', true);
+            //     } else {
+            //         $(this).attr('selected', false);
+            //     }
+            // });
             var date = data.tgpo.split('/');
             var newDate = date[2] + '-' + date[1] + '-' + date[0];
             $('#tanggal_po').val(newDate);
@@ -615,7 +616,7 @@
             $('#tabel-po').empty();
 
             $.ajax({
-                url: '/products/purchase_order_detail/' + data.id,
+                url: '/products/purchase_order_pl',
                 type: "GET",
                 data: {
                     id: data.id
@@ -693,7 +694,8 @@
                                 '<td>' + total + '</td>' +
                                 '<td><button id="edit_po_save" type="button" class="btn btn-success btn-xs" data-id="' +
                                 id + '" data-idpo="' + id_po + '" ><i class="fas fa-save"></i>' +
-                                '</button>' +
+                                '</button>' + '<button id="delete_po_save" type="button" class="btn btn-danger btn-xs" data-id="' +
+                                id + '" data-idpo="' + id_po + '" ><i class="fas fa-trash"></i>' +'</button>' + '</td>' +
                                 '</tr>';
                             $('#tabel-po').append(html);
                             no++;
@@ -901,7 +903,7 @@
                         }
 
                         var checkbox
-                        if (value.id_spph && !value.id_po) {
+                        if (!value.id_po) {
                             checkbox = '<input type="checkbox" id="addToDetails" value="' + value.id +
                                 '" onclick="addToDetailsJS(' + value.id + ')" >'
                         } else {
@@ -913,8 +915,7 @@
                         $('#detail-material').append(
                             '<tr><td>' + (key + 1) + '</td><td>' + value.uraian +
                             '</td><td>' + value.spek + '</td><td>' + value.qty + '</td><td>' + value
-                            .satuan + '</td><td>' + value.nama_proyek + '</td><td>' + no_spph + '</td><td>' + no_pr + '</td><td>' +
-                            no_po + '</td><td>' +
+                            .satuan + '</td><td>' + value.nama_proyek + '</td><td>'  + no_pr + '</td><td>' +
                             checkbox + '</td></tr>'
                         );
                     });
@@ -1023,7 +1024,6 @@
                         });
                     }
                     //remove loading
-                    $('#tabel-po').find('tr:first').remove();
                     $('#loader').hide();
                     $('#form').show();
                     getPODetail();

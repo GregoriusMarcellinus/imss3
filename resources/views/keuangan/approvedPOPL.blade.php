@@ -528,7 +528,7 @@
             $('#tabel-po').empty();
 
             $.ajax({
-                url: '/products/purchase_order_detail/' + data.id,
+                url: '/products/purchase_order_pl',
                 type: "GET",
                 data: {
                     id: data.id
