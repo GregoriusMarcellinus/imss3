@@ -99,8 +99,8 @@
                                                     data-detail="{{ json_encode($data) }}"> Lihat Detail</button>
                                             </td>
                                             <td class="text-center">
-                                                <button type="button"class="btn-approve btn btn-success btn-sm">Approve</button>
-                                                <button type="button"class="btn-approve btn btn-danger btn-sm">Reject</button>
+                                                <button type="button" id="approved" class="btn-approve btn btn-success btn-sm" onclick="approvedPO()">Approve</button>
+                                                <button type="button" id="reject" class="btn-approve btn btn-danger btn-sm" onclick="approvedPO()">Reject</button>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -490,7 +490,7 @@
             $('#tabel-po').empty();
 
             $.ajax({
-                url: '/products/purchase_order_detail/' + data.id,
+                url: '/products/purchase_order_pl',
                 type: "GET",
                 data: {
                     id: data.id
