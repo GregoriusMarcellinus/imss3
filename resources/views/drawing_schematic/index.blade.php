@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title', __('Justifikasi'))
+@section('title', __('Drawing Schematic'))
 @section('custom-css')
     <link rel="stylesheet" href="/plugins/toastr/toastr.min.css">
 @endsection
@@ -15,8 +15,8 @@
             <div class="card">
                 <div class="card-header">
                     @if (Auth::user()->role == 0 || Auth::user()->role == 6)
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-justifikasi"
-                            onclick="addJustifikasi()"><i class="fas fa-plus"></i> Add New Justifikasi</button>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-drawing"
+                            onclick="addDrawing()"><i class="fas fa-plus"></i> Add New Drawing</button>
                     @endif
                     <div class="card-tools">
                         <form>
@@ -39,7 +39,7 @@
                                 <th>{{ __('Tanggal') }}</th>
                                 <th>{{ __('Nomor') }}</th>
                                 <th>{{ __('Uraian') }}</th>
-                                <th>{{ __('File') }}</th>
+                                {{-- <th>{{ __('File') }}</th> --}}
                                 <th>{{ __('PIC') }}</th>
                                 <th></th>
                             </tr>
@@ -56,21 +56,21 @@
                                     </td>
                                     <td>{{ $data['nomor'] }}</td>
                                     <td>{{ $data['keterangan'] }}</td>
-                                    <td class="text-center">
-                                        <a href="{{ asset('justifikasi/' . $data['file']) }}" target="_blank">
+                                    {{-- <td class="text-center">
+                                        <a href="{{ asset('drawing/' . $data['file']) }}" target="_blank">
                                             Download
                                         </a>
-                                    </td>
+                                    </td> --}}
                                     <td class="text-center">{{ $data['pic'] }}</td>
                                     <td class="text-center">
                                         @if (Auth::user()->role == 0 || Auth::user()->role == 6)
                                             <button title="Edit Shelf" type="button" class="btn btn-success btn-xs"
-                                                data-toggle="modal" data-target="#add-justifikasi"
-                                                onclick="editJustifikasi({{ json_encode($data) }})"><i
+                                                data-toggle="modal" data-target="#add-drawing"
+                                                onclick="editDrawing({{ json_encode($data) }})"><i
                                                     class="fas fa-edit"></i></button>
                                             <button title="Hapus Produk" type="button" class="btn btn-danger btn-xs"
-                                                data-toggle="modal" data-target="#delete-justifikasi"
-                                                onclick="deleteJustifikasi({{ json_encode($data) }})"><i
+                                                data-toggle="modal" data-target="#delete-drawing"
+                                                onclick="deleteDrawing({{ json_encode($data) }})"><i
                                                     class="fas fa-trash"></i></button>
                                         @endif
                                     </td>
@@ -89,7 +89,7 @@
             </div>
         </div>
         @if (Auth::user()->role == 0 || Auth::user()->role == 6)
-            <div class="modal fade" id="add-justifikasi">
+            <div class="modal fade" id="add-drawing">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -99,10 +99,10 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form role="form" id="save" action="{{ route('product.justifikasi.save') }}"
+                            <form role="form" id="save" action="{{ route('product.drawing.schematic.save') }}"
                                 method="post" enctype="multipart/form-data">
                                 @csrf
-                                <input type="hidden" id="justifikasi_id" name="justifikasi_id">
+                                <input type="hidden" id="drawing_id" name="drawing_id">
                                 <div class="form-group row">
                                     <label for="tanggal" class="col-sm-4 col-form-label">{{ __('Tanggal') }}</label>
                                     <div class="col-sm-8">
@@ -121,12 +121,12 @@
                                         <input type="text" class="form-control" id="keterangan" name="keterangan">
                                     </div>
                                 </div>
-                                <div class="form-group row">
+                                {{-- <div class="form-group row">
                                     <label for="file" class="col-sm-4 col-form-label">{{ __('File') }}</label>
                                     <div class="col-sm-8">
                                         <input type="file" class="" id="file" name="file">
                                     </div>
-                                </div>
+                                </div> --}}
                             </form>
                         </div>
                         <div class="modal-footer justify-content-between">
@@ -138,7 +138,7 @@
                     </div>
                 </div>
             </div>
-            <div class="modal fade" id="delete-justifikasi">
+            <div class="modal fade" id="delete-drawing">
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
@@ -148,14 +148,14 @@
                             </button>
                         </div>
                         <div class="modal-body">
-                            <form role="form" id="delete" action="{{ route('product.justifikasi.delete') }}"
+                            <form role="form" id="delete" action="{{ route('product.drawing.schematic.delete') }}"
                                 method="post">
                                 @csrf
                                 @method('delete')
                                 <input type="hidden" id="delete_id" name="delete_id">
                             </form>
                             <div>
-                                <p>Anda yakin ingin menghapus justifikasi nomor <span id="delete_name"
+                                <p>Anda yakin ingin menghapus drawing nomor <span id="delete_name"
                                         class="font-weight-bold"></span>?</p>
                             </div>
                         </div>
@@ -182,23 +182,23 @@
             $('#file').val('');
         }
 
-        function addJustifikasi() {
+        function addDrawing() {
             resetForm();
             $('#modal-title').text("Add New Justfiikasi");
             $('#button-save').text("Add");
         }
 
-        function editJustifikasi(data) {
+        function editDrawing(data) {
             resetForm();
             $('#modal-title').text("Edit Jusifikasi");
             $('#button-save').text("Simpan");
-            $('#justifikasi_id').val(data.id);
+            $('#drawing_id').val(data.id);
             $('#tanggal').val(data.tanggal);
             $('#nomor').val(data.nomor);
             $('#keterangan').val(data.keterangan);
         }
 
-        function deleteJustifikasi(data) {
+        function deleteDrawing(data) {
             $('#delete_id').val(data.id);
             $('#delete_name').text(data.nomor);
         }

@@ -62,11 +62,11 @@ class JustifikasiController extends Controller
             'tanggal' => $request->tanggal,
             'nomor' => $request->nomor,
             'keterangan' => $request->keterangan,
-            'file' => $nama_file,
-            'user_id' => auth()->user()->id
+            'file' => $nama_file
         ];
 
         if (empty($justifikasi_id)) {
+            $data['user_id'] = auth()->user()->id;
             $add = Justifikasi::create($data);
             if ($add) {
                 return redirect()->route('product.justifikasi')->with('success', 'Data berhasil ditambahkan');
@@ -94,7 +94,14 @@ class JustifikasiController extends Controller
     {
         $delete_id = $request->delete_id;
 
-        $delete = Justifikasi::where('id', $delete_id)->delete();
+        $delete = Justifikasi::where('id', $delete_id);
+
+        //unlink file
+        $justifikasi = Justifikasi::where('id', $delete_id)->first();
+        $file_path = public_path() . '/justifikasi/' . $justifikasi->file;
+        unlink($file_path);
+
+        $delete = $delete->delete();
 
         if ($delete) {
             return redirect()->route('product.justifikasi')->with('success', 'Data berhasil dihapus');

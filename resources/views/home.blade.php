@@ -203,6 +203,19 @@
 
                 @if (Auth::user()->role == 0 || Auth::user()->role == 6)
                     <div class="col-lg-3 col-6">
+                        <a href="{{ route('product.drawing.schematic') }}">
+                            <div class="small-box bg-primary">
+                                <div class="inner" style="background-color: #c8cd21">
+                                    <p>Drawing</p>
+                                    <h3>Schematic</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-drafting-compass"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-6">
                         <a href="{{ route('product.justifikasi') }}">
                             <div class="small-box bg-primary">
                                 <div class="inner" style="background-color: #afc124">
@@ -211,6 +224,19 @@
                                 </div>
                                 <div class="icon">
                                     <i class="fas fa-folder-open"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        <a href="{{ route('product.justifikasi') }}">
+                            <div class="small-box bg-primary">
+                                <div class="inner" style="background-color: #e44b4b">
+                                    <p>Function</p>
+                                    <h3>Control</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-gamepad"></i>
                                 </div>
                             </div>
                         </a>
