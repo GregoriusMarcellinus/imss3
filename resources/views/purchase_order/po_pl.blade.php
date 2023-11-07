@@ -694,7 +694,8 @@
                                 '<td>' + total + '</td>' +
                                 '<td><button id="edit_po_save" type="button" class="btn btn-success btn-xs" data-id="' +
                                 id + '" data-idpo="' + id_po + '" ><i class="fas fa-save"></i>' +
-                                '</button>' +
+                                '</button>' + '<button id="delete_po_save" type="button" class="btn btn-danger btn-xs" data-id="' +
+                                id + '" data-idpo="' + id_po + '" ><i class="fas fa-trash"></i>' +'</button>' + '</td>' +
                                 '</tr>';
                             $('#tabel-po').append(html);
                             no++;

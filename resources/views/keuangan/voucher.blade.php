@@ -93,7 +93,7 @@
         <table width="100%">
             <tr width="100%">
                 <td align="left" style="width: 25%;">
-                    <img src="https://inkamultisolusi.co.id/api_cms/public/uploads/editor/20220511071342_LSnL6WiOy67Xd9mKGDaG.png"
+                    <img src="{{ asset('img/imss-remove.png') }}"
                         alt="Logo" width="150" class="company-logo" /><br>
                         <div class="company-logo"></div>
                 </td>

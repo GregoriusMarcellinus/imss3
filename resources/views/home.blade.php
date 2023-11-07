@@ -198,7 +198,6 @@
                             </div>
                         </a>
                     </div>
-                    </div>
                 @endif
 
                 @if (Auth::user()->role == 0 || Auth::user()->role == 6)
