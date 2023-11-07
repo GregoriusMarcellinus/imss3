@@ -94,13 +94,15 @@
                                             <td class="text-center">{{ $data['tgpo'] }}</td>
                                             <td class="text-center">{{ $data['btpo'] }}</td>
                                             <td class="text-center">
-                                                <button type="button" data-toggle="modal"
-                                                    data-target="#detail-po" class="btn-lihat btn btn-info btn-sm"
+                                                <button type="button" data-toggle="modal" data-target="#detail-po"
+                                                    class="btn-lihat btn btn-info btn-sm"
                                                     data-detail="{{ json_encode($data) }}"> Lihat Detail</button>
                                             </td>
                                             <td class="text-center">
-                                                <button type="button"class="btn-approve btn btn-success btn-sm">Approve</button>
-                                                <button type="button"class="btn-approve btn btn-danger btn-sm">Reject</button>
+                                                <button type="button"class="btn-approve btn btn-success btn-sm"
+                                                    onclick="approveRequest()">Approve</button>
+                                                <button type="button"class="btn-reject btn btn-danger btn-sm"
+                                                    onclick="approveRequest()">Reject</button>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -420,6 +422,42 @@
             $('#id_proyek').text("");
             $('#id_vendor').text("");
 
+        }
+
+        function approveRequest() {
+            // Implementasikan logika untuk menampilkan invoice/bukti pengeluaran kas PDF di sini
+            // Anda dapat menggunakan pustaka seperti jsPDF atau PDF.js untuk menghasilkan PDF
+            // Setelah invoice ditampilkan atau di-generate, ganti tombol "Approve" dengan "Cetak Invoice"
+            var approveButton = document.querySelector('.btn-approve');
+            approveButton.innerHTML = 'Cetak Invoice';
+            approveButton.style.backgroundColor = 'blue'; // Mengubah warna tombol menjadi biru
+
+            // Sembunyikan tombol "Reject"
+            var rejectButton = document.querySelector('.btn-reject');
+            rejectButton.style.display = 'none';
+
+            // Gantikan event handler tombol "Cetak Invoice" untuk mengarahkan ke halaman PPK
+            approveButton.onclick = function() {
+                // Implementasikan logika untuk mengarahkan ke halaman PPK di sini
+                // Misalnya, jika halaman PPK adalah halaman dengan URL "ppk.html":
+                window.location.href = {{ route('voucher')}};
+            };
+        }
+
+        function rejectRequest() {
+            // Ganti tombol "Reject" dengan teks yang tidak dapat ditekan
+            var rejectButton = document.querySelector('.btn-reject');
+            rejectButton.innerHTML = 'Reject (Ditolak)';
+            rejectButton.style.pointerEvents = 'none'; // Menghilangkan kemampuan untuk diklik
+
+            // Sembunyikan tombol "Approve"
+            var approveButton = document.querySelector('.btn-approve');
+            approveButton.style.display = 'none';
+
+            // Implementasikan logika untuk menampilkan informasi terkait penolakan
+            // Anda dapat menampilkan pesan dalam sebuah elemen HTML atau menggunakan alert
+            // Contoh:
+            // alert("Pengajuan ditolak. Silakan lengkapi berkas atau hubungi keuangan.");
         }
 
         function editPo(data) {
@@ -780,7 +818,8 @@
                         $('#detail-material').append(
                             '<tr><td>' + (key + 1) + '</td><td>' + value.uraian +
                             '</td><td>' + value.spek + '</td><td>' + value.qty + '</td><td>' + value
-                            .satuan + '</td><td>' + value.nama_proyek + '</td><td>' + no_spph + '</td><td>' + no_pr + '</td><td>' +
+                            .satuan + '</td><td>' + value.nama_proyek + '</td><td>' + no_spph +
+                            '</td><td>' + no_pr + '</td><td>' +
                             no_po + '</td><td>' +
                             checkbox + '</td></tr>'
                         );
