@@ -425,40 +425,29 @@
         }
 
         function approveRequest() {
-            // Implementasikan logika untuk menampilkan invoice/bukti pengeluaran kas PDF di sini
-            // Anda dapat menggunakan pustaka seperti jsPDF atau PDF.js untuk menghasilkan PDF
-            // Setelah invoice ditampilkan atau di-generate, ganti tombol "Approve" dengan "Cetak Invoice"
             var approveButton = document.querySelector('.btn-approve');
-            approveButton.innerHTML = 'Cetak Invoice';
-            approveButton.style.backgroundColor = 'blue'; // Mengubah warna tombol menjadi biru
-
-            // Sembunyikan tombol "Reject"
             var rejectButton = document.querySelector('.btn-reject');
-            rejectButton.style.display = 'none';
 
-            // Gantikan event handler tombol "Cetak Invoice" untuk mengarahkan ke halaman PPK
-            approveButton.onclick = function() {
-                // Implementasikan logika untuk mengarahkan ke halaman PPK di sini
-                // Misalnya, jika halaman PPK adalah halaman dengan URL "ppk.html":
-                window.location.href = {{ route('voucher')}};
-            };
+            if (approveButton) {
+                approveButton.textContent = 'Cetak Invoice';
+                approveButton.className = 'btn-print-invoice btn btn-success btn-sm';
+                approveButton.onclick = function() {
+                    // Logika untuk mencetak invoice
+                    console.log('Invoice dicetak!');
+                };
+            }
+
+            else if (rejectButton) {
+                rejectButton.textContent = 'Keterangan Lengkapi Dokumen';
+                rejectButton.className = 'btn-incomplete-doc btn btn-danger btn-sm';
+                rejectButton.onclick = function() {
+                    // Logika untuk memberikan keterangan lengkapi dokumen
+                    console.log('Keterangan: Lengkapi Dokumen');
+                };
+
+            }
         }
 
-        function rejectRequest() {
-            // Ganti tombol "Reject" dengan teks yang tidak dapat ditekan
-            var rejectButton = document.querySelector('.btn-reject');
-            rejectButton.innerHTML = 'Reject (Ditolak)';
-            rejectButton.style.pointerEvents = 'none'; // Menghilangkan kemampuan untuk diklik
-
-            // Sembunyikan tombol "Approve"
-            var approveButton = document.querySelector('.btn-approve');
-            approveButton.style.display = 'none';
-
-            // Implementasikan logika untuk menampilkan informasi terkait penolakan
-            // Anda dapat menampilkan pesan dalam sebuah elemen HTML atau menggunakan alert
-            // Contoh:
-            // alert("Pengajuan ditolak. Silakan lengkapi berkas atau hubungi keuangan.");
-        }
 
         function editPo(data) {
             console.log(data);
