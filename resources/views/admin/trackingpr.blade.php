@@ -1030,34 +1030,6 @@
         function download(type) {
             window.location.href = "{{ route('products') }}?search={{ Request::get('search') }}&dl=" + type;
         }
-
-        // Data batas waktu
-        const countdownInput = document.getElementById('countdown');
-
-        // Fungsi untuk memperbarui countdown
-        function updateCountdown() {
-            const deadline = new Date(countdownInput.value).getTime();
-            const now = new Date().getTime();
-            const timeLeft = deadline - now;
-
-            const countdownElement = document.getElementById('countdown');
-
-            if (timeLeft > 0) {
-                const daysLeft = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
-                countdownElement.textContent = `${daysLeft} hari sebelum deadline`;
-                countdownElement.style.color = "green"; // Warna hijau
-            } else {
-                const daysOverdue = Math.floor(-timeLeft / (1000 * 60 * 60 * 24));
-                countdownElement.textContent = `${daysOverdue} hari melebihi deadline`;
-                countdownElement.style.color = "red"; // Warna merah
-            }
-        }
-
-        // Tambahkan event listener untuk mengupdate countdown ketika input berubah
-        countdownInput.addEventListener('change', updateCountdown);
-
-        // Panggil fungsi untuk inisialisasi
-        updateCountdown();
     </script>
     @if (Session::has('success'))
         <script>

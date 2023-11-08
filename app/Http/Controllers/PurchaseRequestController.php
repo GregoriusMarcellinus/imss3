@@ -10,6 +10,7 @@ use App\Models\PurchaseRequest;
 use App\Models\Spph;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -22,7 +23,7 @@ class PurchaseRequestController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request  $request)
+    public function index(Request $request)
     {
         $search = $request->q;
 
@@ -128,6 +129,25 @@ class PurchaseRequestController extends Controller
             $item->no_nego2 = $item->no_nego2 ? $item->no_nego2 : '';
             $item->tanggal_nego2 = $item->tanggal_nego2 ? $item->tanggal_nego2 : '';
             $item->batas_nego2 = $item->batas_nego2 ? $item->batas_nego2 : '';
+            //countdown = waktu - date now
+            $targetDate = Carbon::parse($item->waktu);
+            $currentDate = Carbon::now();
+            $diff = $currentDate->diff($targetDate);
+
+            // You can access the countdown values like this:
+            $days = $diff->d;
+            $hours = $diff->h;
+            $minutes = $diff->i;
+            $seconds = $diff->s;
+
+            // You can also format the countdown as a string
+            $countdownString = $diff->format('%d days, %h hours, %i minutes, %s seconds');
+
+            // Or, if you just want to get the remaining days as a single number
+            $remainingDays = $currentDate->diffInDays($targetDate);
+
+            $item->countdown = $remainingDays;
+
             return $item;
         });
         return response()->json([
