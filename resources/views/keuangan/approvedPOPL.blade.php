@@ -46,7 +46,7 @@
                             <thead>
                                 <tr class="text-center">
                                     <th>No.</th>
-                                    {{-- <th>{{ __('No PO') }}</th> --}}
+                                    <th>{{ __('No PO') }}</th>
                                     {{-- <th>{{ __('No PR') }}</th> --}}
                                     <th>{{ __('Proyek') }}</th>
                                     {{-- <th>{{ __('Vendor') }}</th> --}}
@@ -87,7 +87,7 @@
                                         @endphp
                                         <tr>
                                             <td class="text-center">{{ $data['no'] }}</td>
-                                            {{-- <td>{{ $data['no_po'] }}</td> --}}
+                                            <td>{{ $data['no_po'] }}</td>
                                             {{-- <td>{{ $data['pr_no'] }}</td> --}}
                                             <td class="text-center">{{ $data['nama_proyek'] }}</td>
                                             {{-- <td class="text-center">{{ $data['nama_vendor'] }}</td> --}}
@@ -100,9 +100,11 @@
                                             </td>
                                             <td class="text-center">
                                                 <button type="button"class="btn-approve btn btn-success btn-sm"
-                                                    onclick="approveRequest()">Approve</button>
+                                                    onclick="approveRequest({{ $data['id'] }})"
+                                                    data-id='{{ $data['id'] }}'>Approve</button>
                                                 <button type="button"class="btn-reject btn btn-danger btn-sm"
-                                                    onclick="approveRequest()">Reject</button>
+                                                    onclick="RejectRequest({{ $data['id'] }})"
+                                                    data-id='{{ $data['id'] }}'>Reject</button>
                                             </td>
                                         </tr>
                                     @endforeach
@@ -247,11 +249,11 @@
                                     onclick="document.getElementById(
                                         'cetak-po').submit();">{{ __('Cetak') }}</button>
                                 <table class="align-top w-100">
-                                    {{-- <tr>
+                                    <tr>
                                         <td style="width: 8%;"><b>No Surat</b></td>
                                         <td style="width:2%">:</td>
                                         <td style="width: 55%"><span id="po_no"></span></td>
-                                    </tr> --}}
+                                    </tr>
                                     <tr>
                                         <td style="width: 8%;"><b>Proyek</b></td>
                                         <td style="width:2%">:</td>
@@ -262,16 +264,16 @@
                                         <td>:</td>
                                         <td><span id="id_vendor"></span></td>
                                     </tr> --}}
-                                    {{-- <tr>
+                                    <tr>
                                         <td><b>Tanggal PO</b></td>
                                         <td>:</td>
                                         <td><span id="po_tanggal"></span></td>
-                                    </tr> --}}
-                                    {{-- <tr>
+                                    </tr>
+                                    <tr>
                                         <td><b>Batas PO</b></td>
                                         <td>:</td>
                                         <td><span id="po_batas"></span></td>
-                                    </tr> --}}
+                                    </tr>
                                     <tr>
                                         <td><b>Detail</b></td>
                                         <input type="hidden" name="id" id="id">
@@ -424,29 +426,92 @@
 
         }
 
-        function approveRequest() {
-            var approveButton = document.querySelector('.btn-approve');
-            var rejectButton = document.querySelector('.btn-reject');
+        function approveRequest(id) {
+            var approveButton = document.querySelector('.btn-approve[data-id="' + id + '"]');
+            var rejectButton = document.querySelector('.btn-reject[data-id="' + id + '"]');
 
+            console.log('Fungsi approveRequest diakses dengan ID:', id);
             if (approveButton) {
-                approveButton.textContent = 'Cetak Invoice';
-                approveButton.className = 'btn-print-invoice btn btn-success btn-sm';
-                approveButton.onclick = function() {
-                    // Logika untuk mencetak invoice
-                    console.log('Invoice dicetak!');
-                };
-            }
+                if (approveButton.textContent === 'Approve') {
+                    approveButton.textContent = 'Cetak Invoice';
+                    approveButton.className = 'btn-print-invoice btn btn-success btn-sm';
+                    approveButton.onclick = function() {
+                        console.log('Invoice dicetak untuk ID: ' + id);
+                    };
 
-            else if (rejectButton) {
-                rejectButton.textContent = 'Keterangan Lengkapi Dokumen';
-                rejectButton.className = 'btn-incomplete-doc btn btn-danger btn-sm';
-                rejectButton.onclick = function() {
-                    // Logika untuk memberikan keterangan lengkapi dokumen
-                    console.log('Keterangan: Lengkapi Dokumen');
-                };
+                    //hide reject button
+                    rejectButton.style.display = 'none';
+                    saveStatusToDatabase(id, 'approved');
 
+                } else {
+                    rejectButton.textContent = 'Lengkapi Dokumen';
+                    rejectButton.className = 'btn-incomplete-doc btn btn-danger btn-sm';
+                    rejectButton.onclick = function() {
+                        console.log('Keterangan: Lengkapi Dokumen untuk ID: ' + id);
+                    };
+                }
             }
         }
+
+        function RejectRequest(id){
+            var approvedButton = document.querySelector('.btn-approve[data-id="' + id + '"]');
+            var rejectButton = document.querySelector('.btn-reject[data-id="' + id + '"]');
+            console.log('Fungsi RejectRequest diakses dengan ID:', id);
+
+            if (rejectButton) {
+                if (rejectButton.textContent === 'Reject') {
+                    rejectButton.textContent = 'Lengkapi Dokumen';
+                    rejectButton.className = 'btn-incomplete-doc btn btn-danger btn-sm';
+                    rejectButton.onclick = function() {
+                        console.log('Keterangan: Lengkapi Dokumen untuk ID: ' + id);
+                    };
+
+                } else {
+                    approveButton.textContent = 'Cetak Invoice';
+                    approveButton.className = 'btn-print-invoice btn btn-success btn-sm';
+                    approveButton.onclick = function() {
+                        console.log('Invoice dicetak untuk ID: ' + id);
+                    };
+                }
+            }
+
+        }
+
+        // action saveStatusToDatabase ajax
+        // $(document).on('click', '.btn-approve', function() {
+        //     var id = $(this).data('id');
+        //     var status = $(this).data('status');
+        //     console.log('Fungsi saveStatusToDatabase diakses dengan ID:', id);
+        //     console.log('Fungsi saveStatusToDatabase diakses dengan status:', status);
+        //     $.ajax({
+        //         url: "{{ route('detail_po_save') }}",
+        //         type: "POST",
+        //         data: {
+        //             id,
+        //             status,
+        //             _token: '{{ csrf_token() }}'
+        //         },
+        //         dataType: "json",
+        //         beforeSend: function() {
+        //             $('#loader').show();
+        //         },
+        //         success: function(data) {
+        //             console.log(data);
+        //             $('#loader').hide();
+        //             if (data.status == 'success') {
+        //                 toastr.success(data.message);
+        //                 setTimeout(function() {
+        //                     window.location.reload();
+        //                 }, 1000);
+        //             } else {
+        //                 toastr.error(data.message);
+        //             }
+        //         }
+        //     })
+        // });
+
+
+        ///end button approved delete
 
 
         function editPo(data) {
@@ -509,7 +574,7 @@
             $('modal-title').text("Detail PO");
             $('#button-save').text("Simpan");
             resetForm();
-            // $('#po_no').text(data.no_po);
+            $('#po_no').text(data.no_po);
             $('#id_proyek').text(data.proyek_name);
             // $('#id_vendor').text(data.vendor_name);
             $('#po_tanggal').text(data.tgpo);
@@ -533,7 +598,7 @@
 
                 success: function(data) {
                     console.log(data);
-                    // $('#no_po').text(data.po.no_po);
+                    $('#no_po').text(data.po.no_po);
                     $('#id_proyek').text(data.po.nama_proyek);
                     // $('#id_vendor').text(data.po.nama_vendor);
                     $('#po_tanggal').text(data.po.tgpo);

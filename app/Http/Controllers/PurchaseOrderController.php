@@ -407,11 +407,12 @@ class PurchaseOrderController extends Controller
     {
         $id = $request->id_po;
         $po = Purchase_Order::select('purchase_order.*', 'vendor.nama as nama_vendor', 'vendor.alamat as alamat_vendor', 'vendor.telp as telp_vendor', 'vendor.email as email_vendor', 'vendor.fax as fax_vendor',  'keproyekan.nama_proyek as nama_proyek', 'purchase_request.no_pr as pr_no')
-            ->join('vendor', 'vendor.id', '=', 'purchase_order.vendor_id')
+            ->leftjoin('vendor', 'vendor.id', '=', 'purchase_order.vendor_id')
             ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_order.proyek_id')
             ->leftjoin('purchase_request', 'purchase_request.id', '=', 'purchase_order.pr_id')
             ->where('purchase_order.id', $id)
             ->first();
+        //  dd($po);   
         $po->batas_po = Carbon::parse($po->batas_po)->isoFormat('D MMMM Y');
         $po->tanggal_po = Carbon::parse($po->tanggal_po)->isoFormat('D MMMM Y');
         $po->details = DetailPo::where('detail_po.id_po', $po->id)
@@ -482,10 +483,10 @@ class PurchaseOrderController extends Controller
         $purchase_order = $request->id;
         $request->validate(
             [
-                'no_po' => 'nullable',
+                'no_po' => 'required',
                 // 'vendor_id' => 'nullable',
-                'tanggal_po' => 'nullable',
-                'batas_po' => 'nullable',
+                'tanggal_po' => 'required',
+                'batas_po' => 'required',
                 'incoterm' => 'required',
                 // 'pr_id' => 'required',
                 'term_pay' => 'required',
@@ -494,10 +495,10 @@ class PurchaseOrderController extends Controller
 
             ],
             [
-                // 'no_po.required' => 'No. PO harus diisi',
+                'no_po.required' => 'No. PO harus diisi',
                 // 'vendor_id.required' => 'Vendor harus diisi',
-                // 'tanggal_po.required' => 'Tanggal PO harus diisi',
-                // 'batas_po.required' => 'Batas Akhir PO harus diisi',
+                'tanggal_po.required' => 'Tanggal PO harus diisi',
+                'batas_po.required' => 'Batas Akhir PO harus diisi',
                 'incoterm.required' => 'Incoterm harus diisi',
                 // 'pr_id.required' => 'PR harus diisi',
                 'term_pay.required' => 'Termin Pembayaran harus diisi',
@@ -509,6 +510,9 @@ class PurchaseOrderController extends Controller
             $tipe = 1; // 0 = PO biasa, 1 = PO PL
             $po = DB::table('purchase_order')->insertGetId([
                 'tipe' => $tipe,
+                'no_po' => $request->no_po,
+                'tanggal_po' => $request->tanggal_po,
+                'batas_po' => $request->batas_po,
                 'incoterm' => $request->incoterm,
                 'ref_po' => $request->ref_po,
                 'term_pay' => $request->term_pay,
@@ -532,13 +536,17 @@ class PurchaseOrderController extends Controller
             return redirect()->route('product.showPOPL')->with('success', 'Data PO berhasil ditambahkan');
         } else {
             DB::table('purchase_order')->where('id', $purchase_order)->update([
+                'no_po' => $request->no_po,
+                // 'vendor_id' => $request->vendor_id,
+                'tanggal_po' => $request->tanggal_po,
+                'batas_po' => $request->batas_po,
                 'incoterm' => $request->incoterm,
                 'pr_id' => $request->pr_id,
                 'ref_po' => $request->ref_po,
                 'term_pay' => $request->term_pay,
                 'garansi' => $request->garansi,
                 'proyek_id' => $request->proyek_id,
-                // 'catatan_vendor' => $request->catatan_vendor
+                'catatan_vendor' => $request->catatan_vendor
 
             ]);
             return redirect()->route('product.showPOPL')->with('success', 'Data PO berhasil diubah');
