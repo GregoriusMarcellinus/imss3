@@ -59,6 +59,7 @@
                                                 'tanggal' => date('d/m/Y', strtotime($d->tgl_pr)),
                                                 'dasar_pr' => $d->dasar_pr,
                                                 'proyek_id' => $d->proyek_id,
+                                                'waktu' =>  date('d/m/Y', strtotime($d->waktu)),
                                                 'id' => $d->id,
                                             ];
                                         @endphp
@@ -67,7 +68,7 @@
                                             <td class="text-center">{{ $data['no'] }}</td>
                                             <td class="text-center">{{ $data['no_pr'] }}</td>
                                             <td class="text-center">{{ $data['proyek'] }}</td>
-                                            <td class="text-center">{{ $data['tanggal'] }}</td>
+                                            <td class="text-center">{{ $data['tanggal'] }}</span></td>
                                             <td class="text-center">{{ $data['dasar_pr'] }}</td>
                                             <td class="text-center">
                                                 {{-- @if (Auth::user()->role == 0 || Auth::user()->role == 2 || Auth::user()->role == 3)
@@ -210,7 +211,7 @@
                                         <tr>
                                             <td><b>Tanggal</b></td>
                                             <td>:</td>
-                                            <td><span id="tgl_surat"></span></td>
+                                            <td><span id="tgl_surat"></span><span id="countdown-{{ $data['id'] }}" class="countdown"></span></td>
                                         </tr>
                                         <tr>
                                             <td><b>Proyek</b></td>
@@ -236,7 +237,7 @@
                                                 <th>{{ __('Spesifikasi') }}</th>
                                                 <th>{{ __('QTY') }}</th>
                                                 <th>{{ __('SAT') }}</th>
-                                                <th>{{ __('Waktu Penyelesaian') }}</th>
+                                                <th>{{ __('Waktu Penyelesaian') }}<br></th>
                                                 <th>{{ __('Keterangan') }}</th>
                                                 <th>{{ __('SPPH') }}</th>
                                                 <th>{{ __('SPH') }}</th>
@@ -701,14 +702,14 @@
 
                             // alert(value.no_sph)
                             var hasSPPH = data.pr.details.some(function(item) {
-                            return item.id_spph !== null;
-                        });
+                                return item.id_spph !== null;
+                            });
 
-                        if (hasSPPH) {
-                            $('#edit_pr_save').prop('disabled', false);
-                        } else {
-                            $('#edit_pr_save').prop('disabled', true);
-                        }
+                            if (hasSPPH) {
+                                $('#edit_pr_save').prop('disabled', false);
+                            } else {
+                                $('#edit_pr_save').prop('disabled', true);
+                            }
 
                             //0 = Lakukan SPPH, 1 = Lakukan PO, 2 = Completed
                             if (!value.id_spph) {
@@ -1020,6 +1021,32 @@
         function download(type) {
             window.location.href = "{{ route('products') }}?search={{ Request::get('search') }}&dl=" + type;
         }
+
+        // Data batas waktu
+        const deadline = new Date('{{ $data['waktu'] }}').getTime();
+
+        // Fungsi untuk memperbarui countdown
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const timeLeft = deadline - now;
+
+            const countdownElement = document.getElementById('countdown-{{ $data['id'] }}');
+
+            if (timeLeft > 0) {
+                const daysLeft = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+                countdownElement.textContent = `${daysLeft} hari`;
+                countdownElement.style.color = "green"; // Warna hijau
+            } else {
+                countdownElement.textContent = "Melebihi Deadline";
+                countdownElement.style.color = "red"; // Warna merah
+            }
+        }
+
+        // Perbarui countdown setiap 1 detik
+        setInterval(updateCountdown, 1000);
+
+        // Panggil fungsi untuk inisialisasi
+        updateCountdown();
     </script>
     @if (Session::has('success'))
         <script>
