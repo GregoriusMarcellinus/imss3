@@ -133,27 +133,21 @@ class PurchaseRequestController extends Controller
             $targetDate = Carbon::parse($item->waktu);
             $currentDate = Carbon::now();
             $diff = $currentDate->diff($targetDate);
+            $remainingDays = $diff->days;
 
-            // You can access the countdown values like this:
-            $days = $diff->d;
-            $hours = $diff->h;
-            $minutes = $diff->i;
-            $seconds = $diff->s;
+            $referenceDate = Carbon::parse($item->waktu); // Change this to your desired reference date
 
-            // You can also format the countdown as a string
-            $countdownString = $diff->format('%d days, %h hours, %i minutes, %s seconds');
-
-            // Or, if you just want to get the remaining days as a single number
-            $remainingDays = $currentDate->diffInDays($targetDate);
-            if ($remainingDays > 0) {
-                $item->countdown = $remainingDays . " hari melebihi waktu penyelesaian";
-                $item->backgroundcolor = "#FF0000"; // Blok warna merah
-            } else {
-                $item->countdown = abs($remainingDays) . " hari menuju waktu penyelesaian"; // Menggunakan abs() untuk menghindari nilai negatif
-                $item->backgroundcolor = "#008000"; // Blok warna hijau
+            if ($currentDate->lessThan($referenceDate)) {
+                // If the current date is before the reference date
+                $item->countdown = "$remainingDays  Hari Sebelum Waktu Penyelesaian";
+                $item->backgroundcolor = "#FF0000"; // Red background
+            } elseif ($currentDate->greaterThanOrEqualTo($referenceDate)) {
+                // If the current date is on or after the reference date
+                $item->countdown = "$remainingDays Hari Setelah Waktu Penyelesaian";
+                $item->backgroundcolor = "#008000"; // Green background
             }
-            
             return $item;
+
         });
         return response()->json([
             'pr' => $pr
