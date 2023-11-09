@@ -47,12 +47,13 @@
                             <thead>
                                 <tr class="text-center">
                                     <th>No.</th>
-                                    {{-- <th>{{ __('No PO') }}</th> --}}
+                                    <th>{{ __('No PO') }}</th>
                                     {{-- <th>{{ __('No PR') }}</th> --}}
                                     <th>{{ __('Proyek') }}</th>
-                                    {{-- <th>{{ __('Vendor') }}</th> --}}
-                                    {{-- <th>{{ __('Tanggal PO') }}</th>
-                                    <th>{{ __('Batas Akhir PO') }}</th> --}}
+                                    {{-- <th>{{ __('Incoterm') }}</th> --}}
+                                    {{-- <th>{{ __('Termin Pembayaran') }}</th> --}}
+                                    <th>{{ __('Tanggal PO') }}</th>
+                                    <th>{{ __('Batas Akhir PO') }}</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -87,12 +88,13 @@
                                         @endphp
                                         <tr>
                                             <td class="text-center">{{ $data['no'] }}</td>
-                                            {{-- <td>{{ $data['no_po'] }}</td> --}}
+                                            <td>{{ $data['no_po'] }}</td>
                                             {{-- <td>{{ $data['pr_no'] }}</td> --}}
                                             <td class="text-center">{{ $data['nama_proyek'] }}</td>
-                                            {{-- <td class="text-center">{{ $data['nama_vendor'] }}</td> --}}
-                                            {{-- <td class="text-center">{{ $data['tgpo'] }}</td>
-                                            <td class="text-center">{{ $data['btpo'] }}</td> --}}
+                                            {{-- <td class="text-center">{{ $data['incoterm'] }}</td>
+                                            <td class="text-center">{{ $data['term_pay'] }}</td> --}}
+                                            <td class="text-center">{{ $data['tgpo'] }}</td>
+                                            <td class="text-center">{{ $data['btpo'] }}</td>
                                             <td class="text-center">
                                                 <button title="Edit PO" type="button" class="btn btn-success btn-xs"
                                                     data-toggle="modal" data-target="#add-po"
@@ -134,21 +136,21 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 id="modal-title" class="modal-title">{{ __('Add New PO') }}</h4>
+                    <h4 id="modal-title" class="modal-title">{{ __('Add New PO/PL') }}</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form role="form" id="save" action="{{ route('purchase_order.store') }}" method="post">
+                    <form role="form" id="save" action="{{ route('product.storePOPL') }}" method="post">
                         @csrf
                         <input type="hidden" id="save_id" name="id">
-                        {{-- <div class="form-group row">
+                        <div class="form-group row">
                             <label for="no_po" class="col-sm-4 col-form-label">{{ __('Nomor PO') }} </label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="no_po" name="no_po">
                             </div>
-                        </div> --}}
+                        </div>
                         {{-- <div class="form-group row">
                             <label for="vendor_id" class="col-sm-4 col-form-label">{{ __('Vendor') }} </label>
                             <div class="col-sm-8">
@@ -275,18 +277,18 @@
                     <div class="mb-3">
                         <div class="row">
                             <div class="col-12" id="container-form">
-                                {{-- <form id="cetak-po" method="GET" action="{{ route('cetak_po') }}" target="_blank">
+                                <form id="cetak-po" method="GET" action="{{ route('cetak_po') }}" target="_blank">
                                     <input type="hidden" name="id_po" id="id_po">
                                 </form>
                                 <button id="button-cetak-po" type="button" class="btn btn-primary"
                                     onclick="document.getElementById(
-                                        'cetak-po').submit();">{{ __('Cetak') }}</button> --}}
+                                        'cetak-po').submit();">{{ __('Cetak') }}</button>
                                 <table class="align-top w-100">
-                                    {{-- <tr>
+                                    <tr>
                                         <td style="width: 8%;"><b>No Surat</b></td>
                                         <td style="width:2%">:</td>
                                         <td style="width: 55%"><span id="po_no"></span></td>
-                                    </tr> --}}
+                                    </tr>
                                     <tr>
                                         <td style="width: 8%;"><b>Proyek</b></td>
                                         <td style="width:2%">:</td>
@@ -296,7 +298,7 @@
                                         <td><b>Vendor</b></td>
                                         <td>:</td>
                                         <td><span id="id_vendor"></span></td>
-                                    </tr>
+                                    </tr> --}}
                                     <tr>
                                         <td><b>Tanggal PO</b></td>
                                         <td>:</td>
@@ -306,7 +308,7 @@
                                         <td><b>Batas PO</b></td>
                                         <td>:</td>
                                         <td><span id="po_batas"></span></td>
-                                    </tr> --}}
+                                    </tr>
                                     <tr>
                                         <td><b>Detail</b></td>
                                         <input type="hidden" name="id" id="id">
@@ -354,7 +356,7 @@
                                                     <th>QTY</th>
                                                     <th>Sat</th>
                                                     <th>Proyek</th>
-                                                    <th>No SPPH</th>
+                                                    {{-- <th>No SPPH</th> --}}
                                                     <th>No PR</th>
                                                     <th>No PO</th>
                                                     <th>Pilih</th>
@@ -373,7 +375,7 @@
                                             <div class="input-group-append">
                                                 <button class="btn btn-primary" id="button-check"
                                                     onclick="productCheck()">
-                                                    <i class="fas fa-add"></i>
+                                                    <i class="fas fa-search"></i>
                                                 </button>
                                             </div>
                                         </div>
@@ -473,7 +475,7 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form role="form" id="delete" action="{{ route('purchase_order.destroy') }}" method="post">
+                    <form role="form" id="delete" action="{{ route('purchase_order_pl.destroy') }}" method="post">
                         @csrf
                         @method('delete')
                         <input type="hidden" id="delete_id" name="id">
@@ -523,7 +525,7 @@
         }
 
         function addPo() {
-            $('#modal-title').text("Add Purchase Order");
+            $('#modal-title').text("Add Purchase Order PL");
             $('#button-save').text("Tambahkan");
             resetForm();
         }
@@ -549,20 +551,20 @@
 
         function editPo(data) {
             console.log(data);
-            $('#modal-title').text("Edit PO");
+            $('#modal-title').text("Edit PO PL");
             $('#button-save').text("Simpan");
             resetForm();
             $('#save_id').val(data.id);
             $('#no_po').val(data.no_po);
-            $('#vendor_id').val(data.vendor_id);
-            $('#vendor_id').find('option').each(function() {
-                if ($(this).val() == data.vid) {
-                    console.log($(this).val());
-                    $(this).attr('selected', true);
-                } else {
-                    $(this).attr('selected', false);
-                }
-            });
+            // $('#vendor_id').val(data.vendor_id);
+            // $('#vendor_id').find('option').each(function() {
+            //     if ($(this).val() == data.vid) {
+            //         console.log($(this).val());
+            //         $(this).attr('selected', true);
+            //     } else {
+            //         $(this).attr('selected', false);
+            //     }
+            // });
             var date = data.tgpo.split('/');
             var newDate = date[2] + '-' + date[1] + '-' + date[0];
             $('#tanggal_po').val(newDate);
@@ -615,7 +617,7 @@
             $('#tabel-po').empty();
 
             $.ajax({
-                url: '/products/purchase_order_detail/' + data.id,
+                url: '/products/purchase_order_pl',
                 type: "GET",
                 data: {
                     id: data.id
@@ -693,7 +695,8 @@
                                 '<td>' + total + '</td>' +
                                 '<td><button id="edit_po_save" type="button" class="btn btn-success btn-xs" data-id="' +
                                 id + '" data-idpo="' + id_po + '" ><i class="fas fa-save"></i>' +
-                                '</button>' +
+                                '</button>' + '<button id="delete_po_save" type="button" class="btn btn-danger btn-xs" data-id="' +
+                                id + '" data-idpo="' + id_po + '" ><i class="fas fa-trash"></i>' +'</button>' + '</td>' +
                                 '</tr>';
                             $('#tabel-po').append(html);
                             no++;
@@ -901,7 +904,7 @@
                         }
 
                         var checkbox
-                        if (value.id_spph && !value.id_po) {
+                        if (!value.id_po) {
                             checkbox = '<input type="checkbox" id="addToDetails" value="' + value.id +
                                 '" onclick="addToDetailsJS(' + value.id + ')" >'
                         } else {
@@ -913,9 +916,8 @@
                         $('#detail-material').append(
                             '<tr><td>' + (key + 1) + '</td><td>' + value.uraian +
                             '</td><td>' + value.spek + '</td><td>' + value.qty + '</td><td>' + value
-                            .satuan + '</td><td>' + value.nama_proyek + '</td><td>' + no_spph + '</td><td>' + no_pr + '</td><td>' +
-                            no_po + '</td><td>' +
-                            checkbox + '</td></tr>'
+                            .satuan + '</td><td>' + value.nama_proyek + '</td><td>'  + no_pr + '</td><td>' 
+                            + no_po + '</td><td>' +checkbox + '</td></tr>'
                         );
                     });
                 },
@@ -1023,7 +1025,6 @@
                         });
                     }
                     //remove loading
-                    $('#tabel-po').find('tr:first').remove();
                     $('#loader').hide();
                     $('#form').show();
                     getPODetail();

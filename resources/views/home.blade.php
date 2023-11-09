@@ -117,21 +117,8 @@
                         <a href="{{ route('product.showPOPL') }}">
                             <div class="small-box bg-danger">
                                 <div class="inner">
-                                    <p>Purchase Order</p>
-                                    <h3>Pembelian Langsung</h3>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-exclamation"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-3 col-6">
-                        <a href="{{ route('product.showPOPL') }}">
-                            <div class="small-box bg-danger">
-                                <div class="inner">
                                     <p>Pembelian Langsung</p>
-                                    <h3>Purchase Order [Beta]</h3>
+                                    <h3>Purchase Order</h3>
                                 </div>
                                 <div class="icon">
                                     <i class="fas fa-exclamation"></i>
@@ -191,7 +178,9 @@
                             <div class="small-box bg-primary">
                                 <div class="inner" style="background-color: #A7D397">
                                     <p>APRROVAL</p>
-                                    <h3>PO [Beta]</h3>
+                                    <h3>PO</h3>
+                                </div>
+                                <div class="icon"><i class="fas fa-check-circle"></i>
                                 </div>
                             </div>
                         </a>
@@ -202,19 +191,6 @@
                                 <div class="inner" style="background-color: #186F65">
                                     <p>APRROVAL</p>
                                     <h3>PO/PL</h3>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-tasks"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-3 col-6">
-                        <a href="{{ route('product.aprrovedPO_PL') }}">
-                            <div class="small-box bg-primary">
-                                <div class="inner" style="background-color: #186F65">
-                                    <p>APRROVAL</p>
-                                    <h3>PO/PL [Beta]</h3>
                                 </div>
                                 <div class="icon">
                                     <i class="fas fa-tasks"></i>

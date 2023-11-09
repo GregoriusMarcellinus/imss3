@@ -59,6 +59,7 @@
                                                 'tanggal' => date('d/m/Y', strtotime($d->tgl_pr)),
                                                 'dasar_pr' => $d->dasar_pr,
                                                 'proyek_id' => $d->proyek_id,
+                                                'waktu' => date('d/m/Y', strtotime($d->waktu)),
                                                 'id' => $d->id,
                                             ];
                                         @endphp
@@ -67,7 +68,7 @@
                                             <td class="text-center">{{ $data['no'] }}</td>
                                             <td class="text-center">{{ $data['no_pr'] }}</td>
                                             <td class="text-center">{{ $data['proyek'] }}</td>
-                                            <td class="text-center">{{ $data['tanggal'] }}</td>
+                                            <td class="text-center">{{ $data['tanggal'] }}</span></td>
                                             <td class="text-center">{{ $data['dasar_pr'] }}</td>
                                             <td class="text-center">
                                                 {{-- @if (Auth::user()->role == 0 || Auth::user()->role == 2 || Auth::user()->role == 3)
@@ -237,6 +238,7 @@
                                                 <th>{{ __('QTY') }}</th>
                                                 <th>{{ __('SAT') }}</th>
                                                 <th>{{ __('Waktu Penyelesaian') }}</th>
+                                                <th>{{ __('Countdown') }}</th>
                                                 <th>{{ __('Keterangan') }}</th>
                                                 <th>{{ __('SPPH') }}</th>
                                                 <th>{{ __('SPH') }}</th>
@@ -341,6 +343,13 @@
                                                             name="waktu">
                                                     </div>
                                                 </div>
+                                                <div class="form-group row">
+                                                    <label for="countdown" class="col-sm-4 col-form-label">{{ __('Countdown') }}</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="date" class="form-control" id="countdown" name="countdown">
+                                                    </div>
+                                                </div>
+                                                
                                                 <div class="form-group row">
                                                     <label for="keterangan"
                                                         class="col-sm-4 col-form-label">{{ __('Keterangan') }}</label>
@@ -545,6 +554,7 @@
             $('#spek').val("");
             $('#satuan').val("");
             $('#keterangan').val("");
+            $('#countdown').val("");
             $('#waktu').val("");
             $('#pcode').val("");
             $('#material_kode').val("");
@@ -566,6 +576,7 @@
                     "spek": $('#spek').val(),
                     "satuan": $('#satuan').val(),
                     "waktu": $('#waktu').val(),
+                    "countdown": $('#countdown').val(),
                     "keterangan": $('#keterangan').val(),
 
                 },
@@ -621,14 +632,11 @@
 
                             $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
                                 .kode_material + '</td><td>' + value.uraian + '</td><td>' +
-                                value
-                                .spek + '</td><td>' + value.qty + '</td><td>' + value
-                                .satuan +
-                                '</td><td>' + value.waktu + '</td><td>' + value.keterangan +
-                                '</td><td>' + spph + '</td><td>' + value.sph +
-                                '</td><td>' + po +
-                                '</td><td><b>' +
-                                status + '</b></td></tr>'
+                                value.spek + '</td><td>' + value.qty + '</td><td>' + value
+                                .satuan + '</td><td>' + value.waktu + '</td><td>' + value
+                                .countdown + '</td><td>' + value.keterangan +
+                                '</td><td>' + spph + '</td><td>' + value.sph + '</td><td>' + po +
+                                '</td><td><b>' + status + '</b></td></tr>'
                             );
                         });
                     }
@@ -701,14 +709,14 @@
 
                             // alert(value.no_sph)
                             var hasSPPH = data.pr.details.some(function(item) {
-                            return item.id_spph !== null;
-                        });
+                                return item.id_spph !== null;
+                            });
 
-                        if (hasSPPH) {
-                            $('#edit_pr_save').prop('disabled', false);
-                        } else {
-                            $('#edit_pr_save').prop('disabled', true);
-                        }
+                            if (hasSPPH) {
+                                $('#edit_pr_save').prop('disabled', false);
+                            } else {
+                                $('#edit_pr_save').prop('disabled', true);
+                            }
 
                             //0 = Lakukan SPPH, 1 = Lakukan PO, 2 = Completed
                             if (!value.id_spph) {
@@ -734,7 +742,8 @@
                                 .kode_material + '</td><td>' + value.uraian + '</td><td>' +
                                 value
                                 .spek + '</td><td>' + value.qty + '</td><td>' + value
-                                .satuan + '</td><td>' + value.waktu + '</td><td>' + value
+                                .satuan + '</td><td>' + value.waktu + '</td><td style="color:'+ value.backgroundcolor +'">' + value
+                                .countdown + '</td><td>' + value
                                 .keterangan +
                                 '</td><td>' + spph +
                                 '</td><td><input type="text" class="form-control" style="width:200px;" placeholder="No SPH" id="sph' +
@@ -921,7 +930,8 @@
                                 .kode_material + '</td><td>' + value.uraian + '</td><td>' +
                                 value
                                 .spek + '</td><td>' + value.qty + '</td><td>' + value
-                                .satuan + '</td><td>' + value.waktu + '</td><td>' + value
+                                .satuan + '</td><td>' + value.waktu + '</td><td style="color:'+ value.backgroundcolor +'">' + value
+                                .countdown + '</td><td>' + value
                                 .keterangan +
                                 '</td><td>' + spph +
                                 '</td><td><input type="text" class="form-control" style="width:200px;" placeholder="No SPH" id="sph' +

@@ -104,7 +104,7 @@
     <div class="container">
         <div class="header">
             <div class="logo"><img
-                    src="https://inkamultisolusi.co.id/api_cms/public/uploads/editor/20220511071342_LSnL6WiOy67Xd9mKGDaG.png"
+                    src="{{ asset('img/imss-remove.png') }}"
                     alt="Logo" width="150" class="company-logo" /><br></div>
             <div class="title">
                 <h2>PERMINTAAN PENGELUARAN KAS</h2>
