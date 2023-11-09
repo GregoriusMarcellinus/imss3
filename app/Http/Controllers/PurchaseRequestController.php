@@ -145,9 +145,14 @@ class PurchaseRequestController extends Controller
 
             // Or, if you just want to get the remaining days as a single number
             $remainingDays = $currentDate->diffInDays($targetDate);
-
-            $item->countdown = $remainingDays;
-
+            if ($remainingDays > 0) {
+                $item->countdown = $remainingDays . " hari melebihi waktu penyelesaian";
+                $item->backgroundcolor = "#FF0000"; // Blok warna merah
+            } else {
+                $item->countdown = abs($remainingDays) . " hari menuju waktu penyelesaian"; // Menggunakan abs() untuk menghindari nilai negatif
+                $item->backgroundcolor = "#008000"; // Blok warna hijau
+            }
+            
             return $item;
         });
         return response()->json([
