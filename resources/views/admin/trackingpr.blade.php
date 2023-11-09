@@ -742,7 +742,7 @@
                                 .kode_material + '</td><td>' + value.uraian + '</td><td>' +
                                 value
                                 .spek + '</td><td>' + value.qty + '</td><td>' + value
-                                .satuan + '</td><td>' + value.waktu + '</td><td>' + value
+                                .satuan + '</td><td>' + value.waktu + '</td><td style="color:'+ value.backgroundcolor +'">' + value
                                 .countdown + '</td><td>' + value
                                 .keterangan +
                                 '</td><td>' + spph +
@@ -930,7 +930,7 @@
                                 .kode_material + '</td><td>' + value.uraian + '</td><td>' +
                                 value
                                 .spek + '</td><td>' + value.qty + '</td><td>' + value
-                                .satuan + '</td><td>' + value.waktu + '</td><td>' + value
+                                .satuan + '</td><td>' + value.waktu + '</td><td style="color:'+ value.backgroundcolor +'">' + value
                                 .countdown + '</td><td>' + value
                                 .keterangan +
                                 '</td><td>' + spph +
