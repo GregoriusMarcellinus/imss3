@@ -28,7 +28,7 @@ class VendorController extends Controller
         if ($search) {
             $vendors = Vendor::where('nama', 'LIKE', "%$search%")->paginate(50);
         }
-        
+
         // dd($vendors);
         if ($request->format == "json") {
             $categories = Vendor::where("warehouse_id", $warehouse_id)->get();
@@ -37,7 +37,6 @@ class VendorController extends Controller
         } else {
             return view('vendor', compact('vendors'));
         }
-
     }
 
     /**
@@ -92,7 +91,7 @@ class VendorController extends Controller
             } else {
                 return redirect()->route('vendor.index')->with('error', 'Data gagal diubah');
             }
-        }          
+        }
     }
 
     /**
@@ -112,11 +111,12 @@ class VendorController extends Controller
 
         $delete = Vendor::where('id', $delete_id)->delete();
 
+        // $delete = Vendor::find($delete_id)->delete();
+
         if ($delete) {
             return redirect()->route('vendor.index')->with('success', 'Data berhasil dihapus');
         } else {
             return redirect()->route('vendor.index')->with('error', 'Data gagal dihapus');
         }
-
     }
 }

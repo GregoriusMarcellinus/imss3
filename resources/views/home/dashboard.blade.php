@@ -42,11 +42,11 @@
                             </div>
                             <div class="carousel-item">
                                 <img src="/img/slide2.JPG" class="d-block w-100" height="400" alt="/img/slide4.png"
-                                style="object-fit: cover">
+                                    style="object-fit: cover">
                             </div>
                             <div class="carousel-item">
                                 <img src="/img/slide4.png" class="d-block w-100" height="400" alt="/img/slide4.png"
-                                style="object-fit: contain">
+                                    style="object-fit: contain">
                             </div>
                             <div class="carousel-item">
                                 <img src="/img/slide1.jpg" class="d-block w-100" height="400" alt="/img/slide4.png"
@@ -66,6 +66,23 @@
                     </div>
                 </div>
                 <div class="col-5">
+                    <div class="row">
+                        @foreach ($menus2 as $menu)
+                            <div class="col-4">
+                                <a href="{{ url($menu['route']) }}">
+                                    <div class="small-box bg-success"
+                                        style="border-radius: 0px;box-shadow:0 0 0px transparent;border: 5px solid yellow">
+                                        <div class="inner text-center py-4"
+                                            style="background-color: {{ $menu['bgcolor'] }};">
+                                            <i class="fas fa-{{ $menu['icon'] }} " style="font-size:2rem"></i>
+                                            <h4 class="mb-0 mt-2">{{ $menu['name'] }}</h4>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        @endforeach
+                    </div>
+                    <hr class="mb-4" />
                     <div class="row">
                         @foreach ($menus as $menu)
                             <div class="col-4">

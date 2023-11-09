@@ -13,6 +13,7 @@ class JustifikasiController extends Controller
     {
         $items = Justifikasi::leftJoin('users', 'users.id', '=', 'justifikasi.user_id')
             ->select('justifikasi.*', 'users.name as pic')
+            ->orderBy('justifikasi.tanggal', 'asc')
             ->paginate(10);
         return view('justifikasi.index', compact('items'));
     }
@@ -60,8 +61,8 @@ class JustifikasiController extends Controller
 
         $data = [
             'tanggal' => $request->tanggal,
-            'nomor' => $request->nomor,
             'keterangan' => $request->keterangan,
+            'nomor' => $request->nomor,
             'file' => $nama_file
         ];
 

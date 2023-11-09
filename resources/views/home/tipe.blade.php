@@ -41,11 +41,11 @@
                             </div>
                             <div class="carousel-item">
                                 <img src="/img/slide2.JPG" class="d-block w-100" height="400" alt="/img/slide4.png"
-                                style="object-fit: cover">
+                                    style="object-fit: cover">
                             </div>
                             <div class="carousel-item">
                                 <img src="/img/slide4.png" class="d-block w-100" height="400" alt="/img/slide4.png"
-                                style="object-fit: contain">
+                                    style="object-fit: contain">
                             </div>
                             <div class="carousel-item">
                                 <img src="/img/slide1.jpg" class="d-block w-100" height="400" alt="/img/slide4.png"
@@ -74,11 +74,12 @@
                         <div class="col-12">
                             <div class="row">
                                 <div class="col-4">
-                                    <a href="{{ url('/') }}">
-                                        <div class="small-box bg-success" style="border-radius: 0px;box-shadow:0 0 0px transparent;border: 5px solid yellow">
+                                    <a href="{{ !empty($routeBack) ? url($routeBack) : url('/') }}">
+                                        <div class="small-box bg-success"
+                                            style="border-radius: 0px;box-shadow:0 0 0px transparent;border: 5px solid yellow">
                                             <div class="inner text-center py-4" style="background-color: darkcyan;">
                                                 <i class="fas fa-arrow-left" style="font-size:2rem"></i>
-                                                <p class="mb-0 mt-2"> Menu Utama</p>
+                                                <p class="mb-0 mt-2"> Kembali</p>
                                             </div>
                                         </div>
                                     </a>

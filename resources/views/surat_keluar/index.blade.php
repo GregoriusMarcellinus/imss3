@@ -1,5 +1,5 @@
 @extends('layouts.main')
-@section('title', __('Justifikasi'))
+@section('title', __('Surat Keluar'))
 @section('custom-css')
     <link rel="stylesheet" href="/plugins/toastr/toastr.min.css">
 @endsection
@@ -14,10 +14,12 @@
         <div class="container-fluid">
             <div class="card">
                 <div class="card-header">
-                    @if (Auth::user()->role == 0 || Auth::user()->role == 6)
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-justifikasi"
-                            onclick="addJustifikasi()"><i class="fas fa-plus"></i> Add New Justifikasi</button>
-                    @endif
+                    @auth
+                        @if (Auth::user()->role == 0 || Auth::user()->role == 6)
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-justifikasi"
+                                onclick="addJustifikasi()"><i class="fas fa-plus"></i> Add New Justifikasi</button>
+                        @endif
+                    @endauth
                     <div class="card-tools">
                         <form>
                             <div class="input-group input-group">
@@ -88,87 +90,90 @@
                 {{ $items->links('pagination::bootstrap-4') }}
             </div>
         </div>
-        @if (Auth::user()->role == 0 || Auth::user()->role == 6)
-            <div class="modal fade" id="add-justifikasi">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 id="modal-title" class="modal-title">{{ __('Add New Justifikasi') }}</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form role="form" id="save" action="{{ route('product.justifikasi.save') }}"
-                                method="post" enctype="multipart/form-data">
-                                @csrf
-                                <input type="hidden" id="justifikasi_id" name="justifikasi_id">
-                                <div class="form-group row">
-                                    <label for="tanggal" class="col-sm-4 col-form-label">{{ __('Tanggal') }}</label>
-                                    <div class="col-sm-8">
-                                        <input type="date" class="form-control" id="tanggal" name="tanggal">
+        @auth
+
+            @if (Auth::user()->role == 0 || Auth::user()->role == 6)
+                <div class="modal fade" id="add-justifikasi">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 id="modal-title" class="modal-title">{{ __('Add New Justifikasi') }}</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form role="form" id="save" action="{{ route('product.justifikasi.save') }}"
+                                    method="post" enctype="multipart/form-data">
+                                    @csrf
+                                    <input type="hidden" id="justifikasi_id" name="justifikasi_id">
+                                    <div class="form-group row">
+                                        <label for="tanggal" class="col-sm-4 col-form-label">{{ __('Tanggal') }}</label>
+                                        <div class="col-sm-8">
+                                            <input type="date" class="form-control" id="tanggal" name="tanggal">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="nomor" class="col-sm-4 col-form-label">{{ __('Nomor') }}</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="nomor" name="nomor">
+                                    <div class="form-group row">
+                                        <label for="nomor" class="col-sm-4 col-form-label">{{ __('Nomor') }}</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="nomor" name="nomor">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="keterangan" class="col-sm-4 col-form-label">{{ __('Keterangan') }}</label>
-                                    <div class="col-sm-8">
-                                        <input type="text" class="form-control" id="keterangan" name="keterangan">
+                                    <div class="form-group row">
+                                        <label for="keterangan" class="col-sm-4 col-form-label">{{ __('Keterangan') }}</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="keterangan" name="keterangan">
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group row">
-                                    <label for="file" class="col-sm-4 col-form-label">{{ __('File') }}</label>
-                                    <div class="col-sm-8">
-                                        <input type="file" class="" id="file" name="file">
+                                    <div class="form-group row">
+                                        <label for="file" class="col-sm-4 col-form-label">{{ __('File') }}</label>
+                                        <div class="col-sm-8">
+                                            <input type="file" class="" id="file" name="file">
+                                        </div>
                                     </div>
-                                </div>
-                            </form>
-                        </div>
-                        <div class="modal-footer justify-content-between">
-                            <button type="button" class="btn btn-default"
-                                data-dismiss="modal">{{ __('Cancel') }}</button>
-                            <button id="button-save" type="button" class="btn btn-primary"
-                                onclick="$('#save').submit();">{{ __('Add') }}</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="modal fade" id="delete-justifikasi">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 id="modal-title" class="modal-title">{{ __('Delete Justifikasi') }}</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <form role="form" id="delete" action="{{ route('product.justifikasi.delete') }}"
-                                method="post">
-                                @csrf
-                                @method('delete')
-                                <input type="hidden" id="delete_id" name="delete_id">
-                            </form>
-                            <div>
-                                <p>Anda yakin ingin menghapus justifikasi nomor <span id="delete_name"
-                                        class="font-weight-bold"></span>?</p>
+                                </form>
+                            </div>
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-default"
+                                    data-dismiss="modal">{{ __('Cancel') }}</button>
+                                <button id="button-save" type="button" class="btn btn-primary"
+                                    onclick="$('#save').submit();">{{ __('Add') }}</button>
                             </div>
                         </div>
-                        <div class="modal-footer justify-content-between">
-                            <button type="button" class="btn btn-default"
-                                data-dismiss="modal">{{ __('Batal') }}</button>
-                            <button id="button-save" type="button" class="btn btn-danger"
-                                onclick="$('#delete').submit();">{{ __('Ya, hapus') }}</button>
+                    </div>
+                </div>
+                <div class="modal fade" id="delete-justifikasi">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 id="modal-title" class="modal-title">{{ __('Delete Justifikasi') }}</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <form role="form" id="delete" action="{{ route('product.justifikasi.delete') }}"
+                                    method="post">
+                                    @csrf
+                                    @method('delete')
+                                    <input type="hidden" id="delete_id" name="delete_id">
+                                </form>
+                                <div>
+                                    <p>Anda yakin ingin menghapus justifikasi nomor <span id="delete_name"
+                                            class="font-weight-bold"></span>?</p>
+                                </div>
+                            </div>
+                            <div class="modal-footer justify-content-between">
+                                <button type="button" class="btn btn-default"
+                                    data-dismiss="modal">{{ __('Batal') }}</button>
+                                <button id="button-save" type="button" class="btn btn-danger"
+                                    onclick="$('#delete').submit();">{{ __('Ya, hapus') }}</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        @endif
+            @endif
+        @endauth
     </section>
 @endsection
 @section('custom-js')
