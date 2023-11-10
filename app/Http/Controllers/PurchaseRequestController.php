@@ -34,6 +34,7 @@ class PurchaseRequestController extends Controller
 
         $requests = PurchaseRequest::select('purchase_request.*', 'keproyekan.nama_proyek as proyek_name')
             ->join('keproyekan', 'keproyekan.id', '=', 'purchase_request.proyek_id')
+            ->orderBy('purchase_request.id', 'asc')
             ->paginate(50);
 
         $proyeks = DB::table('keproyekan')->get();
@@ -283,10 +284,11 @@ class PurchaseRequestController extends Controller
         $delete_pr = $request->id;
         $delete_pr = DB::table('purchase_request')->where('id', $delete_pr)->delete();
         $delete_detail_pr = DetailPR::where('id_pr', $request->id)->delete();
-        $delete_detail_po = DetailPo::where('id_pr', $request->id)->delete();
-        $delete_detail_spph = Spph::leftjoin(DetailSpph::class, 'detail_spph.id_spph', '=', 'spph.id')->where('id_pr', $request->id)->delete();
+        // $delete_detail_po = DetailPo::where('id_pr', $request->id)->delete();
+        // $delete_detail_spph = Spph::leftjoin('detail_spph', 'detail_spph.spph_id', '=', 'spph.id')->where('detail_spph.id_detail_pr', $request->id)->delete();
 
-        if ($delete_pr && $delete_detail_pr && $delete_detail_po && $delete_detail_spph) {
+        // if ($delete_pr && $delete_detail_pr && $delete_detail_po && $delete_detail_spph) {
+        if ($delete_pr) {
             return redirect()->route('purchase_request.index')->with('success', 'Data Request berhasil dihapus');
         } else {
             return redirect()->route('purchase_request.index')->with('error', 'Data Request gagal dihapus');

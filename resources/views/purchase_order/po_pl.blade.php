@@ -347,6 +347,16 @@
                                     <div class="table-responsive  card-body">
                                         <button type="button" class="btn btn-primary mb-3"
                                             onclick="addToDetails()"></i>Tambah Pilihan</button>
+
+                                            <div class="input-group input-group-lg">
+                                                <input type="text" class="form-control" id="pcode" name="pcode"
+                                                    min="0" placeholder="Cari No PR">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-primary" >
+                                                        <i class="fas fa-search"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
                                         <table class="table table-bordered">
                                             <thead>
                                                 <tr>

@@ -343,9 +343,22 @@
 
                             <div class="col-0 d-none" id="container-product">
                                 <div id="form" class="card">
-                                    <div class="table-responsive  card-body">
+                                    <div class="card-body">
                                         <button type="button" class="btn btn-primary mb-3"
                                             onclick="addToDetails()"></i>Tambah Pilihan</button>
+    
+                                            <div class="input-group input-group-lg">
+                                                <input type="text" class="form-control" id="prcode" name="prcode"
+                                                    placeholder="Search By Proyek">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-primary" id="check-proyek" onclick="searchByProyek()" >
+                                                      <i class="fas fa-search"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <div class="table-responsive card-body">
+
                                         <table class="table table-bordered">
                                             <thead>
                                                 <tr>
@@ -914,9 +927,9 @@
                         $('#detail-material').append(
                             '<tr><td>' + (key + 1) + '</td><td>' + value.uraian +
                             '</td><td>' + value.spek + '</td><td>' + value.qty + '</td><td>' + value
-                            .satuan + '</td><td>' + value.nama_proyek + '</td><td>' + no_spph + '</td><td>' + no_pr + '</td><td>' +
-                            no_po + '</td><td>' +
-                            checkbox + '</td></tr>'
+                            .satuan + '</td><td>' + value.nama_proyek + '</td><td>' + no_spph +
+                            '</td><td>' + no_pr + '</td><td>' +
+                            no_po + '</td><td>' + checkbox + '</td></tr>'
                         );
                     });
                 },
