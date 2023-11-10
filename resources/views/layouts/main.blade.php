@@ -217,6 +217,7 @@
     </div>
 
     <script src="/plugins/jquery/jquery.min.js"></script>
+    <script src="/js/jquery.inputmask.min.js"></script>
     <script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
     <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>

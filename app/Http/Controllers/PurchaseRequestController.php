@@ -10,6 +10,7 @@ use App\Models\PurchaseRequest;
 use App\Models\Spph;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -22,7 +23,7 @@ class PurchaseRequestController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index(Request  $request)
+    public function index(Request $request)
     {
         $search = $request->q;
 
@@ -129,7 +130,25 @@ class PurchaseRequestController extends Controller
             $item->no_nego2 = $item->no_nego2 ? $item->no_nego2 : '';
             $item->tanggal_nego2 = $item->tanggal_nego2 ? $item->tanggal_nego2 : '';
             $item->batas_nego2 = $item->batas_nego2 ? $item->batas_nego2 : '';
+            //countdown = waktu - date now
+            $targetDate = Carbon::parse($item->waktu);
+            $currentDate = Carbon::now();
+            $diff = $currentDate->diff($targetDate);
+            $remainingDays = $diff->days;
+
+            $referenceDate = Carbon::parse($item->waktu); // Change this to your desired reference date
+
+            if ($currentDate->lessThan($referenceDate)) {
+                // If the current date is before the reference date
+                $item->countdown = "$remainingDays  Hari Sebelum Waktu Penyelesaian";
+                $item->backgroundcolor = "#FF0000"; // Red background
+            } elseif ($currentDate->greaterThanOrEqualTo($referenceDate)) {
+                // If the current date is on or after the reference date
+                $item->countdown = "$remainingDays Hari Setelah Waktu Penyelesaian";
+                $item->backgroundcolor = "#008000"; // Green background
+            }
             return $item;
+
         });
         return response()->json([
             'pr' => $pr

@@ -10,10 +10,10 @@ class Vendor extends Model
     use HasFactory;
     protected $table = 'vendor';
     protected $fillable = [
-        'nama', 
-        'alamat', 
-        'telp', 
-        'fax', 
-        'email', 
+        'nama',
+        'alamat',
+        'telp',
+        'fax',
+        'email',
     ];
 }

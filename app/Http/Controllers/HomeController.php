@@ -77,7 +77,23 @@ class HomeController extends Controller
             ],
         ];
 
-        return view('home.dashboard', compact('menus'));
+        $menus2 = [
+            [
+                'name' => 'Surat Keluar',
+                'route' => 'apps/surat-keluar',
+                'bgcolor' => 'green',
+                'icon' => 'envelope'
+            ],
+            [
+                'name' => 'Peraturan Direksi',
+                // 'route' => 'apps/spph',
+                'route' => 'apps/peraturan-direksi',
+                'bgcolor' => 'violet',
+                'icon' => 'gavel'
+            ],
+        ];
+
+        return view('home.dashboard', compact('menus', 'menus2'));
     }
 
     public function appType($type)
