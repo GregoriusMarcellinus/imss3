@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\DetailPo;
 use App\Models\DetailPR;
 use App\Models\DetailSpph;
+use App\Models\Keproyekan;
 use App\Models\Purchase_Order;
 use App\Models\PurchaseRequest;
 use App\Models\Spph;
@@ -257,6 +258,7 @@ class PurchaseRequestController extends Controller
 
         $insert = DetailPR::create([
             'id_pr' => $request->id_pr,
+            'id_proyek' => $request->id_proyek,
             'kode_material' => $request->kode_material,
             'uraian' => $request->uraian,
             'spek' => $request->spek,

@@ -344,19 +344,23 @@
 
                             <div class="col-0 d-none" id="container-product">
                                 <div id="form" class="card">
-                                    <div class="table-responsive  card-body">
+                                    <div class="card-body">
                                         <button type="button" class="btn btn-primary mb-3"
                                             onclick="addToDetails()"></i>Tambah Pilihan</button>
 
-                                            <div class="input-group input-group-lg">
-                                                <input type="text" class="form-control" id="pcode" name="pcode"
-                                                    min="0" placeholder="Cari No PR">
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-primary" >
-                                                        <i class="fas fa-search"></i>
-                                                    </button>
-                                                </div>
+                                        <div class="input-group input-group-lg">
+                                            <input type="text" class="form-control" id="proyek_name"
+                                                name="proyek_name" placeholder="Search By Proyek">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary" id="check-proyek"
+                                                    onclick="productCheck()">
+                                                    <i class="fas fa-search"></i>
+                                                </button>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="table-responsive  card-body">
+
                                         <table class="table table-bordered">
                                             <thead>
                                                 <tr>
@@ -485,7 +489,8 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form role="form" id="delete" action="{{ route('purchase_order_pl.destroy') }}" method="post">
+                    <form role="form" id="delete" action="{{ route('purchase_order_pl.destroy') }}"
+                        method="post">
                         @csrf
                         @method('delete')
                         <input type="hidden" id="delete_id" name="id">
@@ -705,8 +710,10 @@
                                 '<td>' + total + '</td>' +
                                 '<td><button id="edit_po_save" type="button" class="btn btn-success btn-xs" data-id="' +
                                 id + '" data-idpo="' + id_po + '" ><i class="fas fa-save"></i>' +
-                                '</button>' + '<button id="delete_po_save" type="button" class="btn btn-danger btn-xs" data-id="' +
-                                id + '" data-idpo="' + id_po + '" ><i class="fas fa-trash"></i>' +'</button>' + '</td>' +
+                                '</button>' +
+                                '<button id="delete_po_save" type="button" class="btn btn-danger btn-xs" data-id="' +
+                                id + '" data-idpo="' + id_po + '" ><i class="fas fa-trash"></i>' +
+                                '</button>' + '</td>' +
                                 '</tr>';
                             $('#tabel-po').append(html);
                             no++;
@@ -830,7 +837,9 @@
                                 '<td><button id="edit_po_save" type="button" class="btn btn-success btn-xs" data-id="' +
                                 id + '" data-idpo="' + id_po +
                                 '" ><i class="fas fa-save"></i>' +
-                                '</button>' +
+                                '</button>' + '<button id="delete_po_save" type="button" class="btn btn-danger btn-xs" data-id="' +
+                                id + '" data-idpo="' + id_po + '" ><i class="fas fa-trash"></i>' +
+                                '</button>' + '</td>' +
                                 '</tr>';
                             $('#tabel-po').append(html);
                             no++;
@@ -926,8 +935,9 @@
                         $('#detail-material').append(
                             '<tr><td>' + (key + 1) + '</td><td>' + value.uraian +
                             '</td><td>' + value.spek + '</td><td>' + value.qty + '</td><td>' + value
-                            .satuan + '</td><td>' + value.nama_proyek + '</td><td>'  + no_pr + '</td><td>' 
-                            + no_po + '</td><td>' +checkbox + '</td></tr>'
+                            .satuan + '</td><td>' + value.nama_proyek + '</td><td>' + no_pr +
+                            '</td><td>' +
+                            no_po + '</td><td>' + checkbox + '</td></tr>'
                         );
                     });
                 },
@@ -970,7 +980,7 @@
                     $('#id_vendor').text(data.po.nama_vendor);
                     $('#po_tanggal').text(data.po.tgpo);
                     $('#po_batas').text(data.po.btpo);
-                    $('#id_po').val(data.po.id);
+                    $('#id_po').val(data.po.id_po);
                     $('#button-cetak-po').html('<i class="fas fa-print"></i> Cetak');
                     $('#button-cetak-po').attr('disabled', false);
                     $('#tabel-po').empty();
@@ -1050,14 +1060,13 @@
         }
 
         function productCheck() {
-            var pcode = $('#pcode').val();
-            var ptype = $('input[name="ptype"]:checked').val();
-            if (pcode.length > 0) {
+            var proyek_name = $('#proyek_name').val();
+            if (proyek_name.length > 0) {
                 loader();
-                $('#pcode').prop("disabled", true);
+                $('#proyek_code').prop("disabled", true);
                 $('#button-check').prop("disabled", true);
                 $.ajax({
-                    url: '/materials?type=' + ptype + '&kode=' + pcode,
+                    url: '/products/products_pr?proyek=' + proyek_name,
                     type: "GET",
                     data: {
                         "format": "json"
@@ -1070,16 +1079,53 @@
                     },
                     success: function(data) {
                         loader(0);
-                        if (data.success) {
-                            $('#form').show();
-                            $('#pname').val(data.materials.nama_barang);
-                            $('#material_kode').val(data.materials.kode_material);
-                        } else {
-                            $('#form').show();
-                            toastr.error("Product Code tidak dikenal!");
-                        }
-                        $('#pcode').prop("disabled", false);
-                        $('#button-check').prop("disabled", false);
+                        $('#form').show();
+                        //append to #detail-material
+                        $('#detail-material').empty();
+                        $.each(data.products, function(key, value) {
+                            console.table('a', value)
+                            var no_spph
+                            if (!value.id_spph) {
+                                no_spph = '-'
+                            } else {
+                                no_spph = value.nomor_spph
+                            }
+
+                            var no_pr
+                            if (!value.id_pr) {
+                                no_pr = '-'
+                            } else {
+                                no_pr = value.pr_no
+                            }
+
+                            var no_po
+                            if (!value.id_po) {
+                                no_po = '-'
+                            } else {
+                                no_po = value.po_no
+                            }
+
+                            var checkbox
+                            if (value.id_spph && !value.id_po) {
+                                checkbox = '<input type="checkbox" id="addToDetails" value="' + value
+                                    .id +
+                                    '" onclick="addToDetailsJS(' + value.id + ')" >'
+                            } else {
+                                checkbox = '<input type="checkbox" id="addToDetails" value="' + value
+                                    .id +
+                                    '" onclick="addToDetailsJS(' + value.id + ')" disabled>'
+                            }
+
+                            $('#detail-material').append(
+
+                                '<tr><td>' + (key + 1) + '</td><td>' + value.uraian +
+                                '</td><td>' + value.spek + '</td><td>' + value.qty + '</td><td>' +
+                                value
+                                .satuan + '</td><td>' + value.nama_proyek + '</td><td>' + no_spph +
+                                '</td><td>' + no_pr + '</td><td>' +
+                                no_po + '</td><td>' + checkbox + '</td></tr>'
+                            );
+                        });
                     },
                     error: function() {
                         $('#pcode').prop("disabled", false);
@@ -1090,6 +1136,7 @@
                 toastr.error("Product Code belum diisi!");
             }
         }
+
 
         function PoUpdate() {
             var id = $('#id').val();

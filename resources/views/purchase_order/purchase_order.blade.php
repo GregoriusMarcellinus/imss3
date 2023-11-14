@@ -706,8 +706,9 @@
                                 '" class="form-control" id="vat' + id + '" name="vat' + id + '"></td>' +
                                 '<td>' + total + '</td>' +
                                 '<td><button id="edit_po_save" type="button" class="btn btn-success btn-xs" data-id="' +
-                                id + '" data-idpo="' + id_po + '" ><i class="fas fa-save"></i>' +
-                                '</button>' + 
+                                id + '" data-idpo="' + id_po + '" ><i class="fas fa-save"></i>' + '</button>'+
+                                '<button id="delete_po_save" type="button" class="btn btn-danger btn-xs" data-id="' + id +
+                                '" data-idpo="' + id_po + '" ><i class="fas fa-trash"></i>' + '</button>' + '</td'+
                                 '</tr>';
                             $('#tabel-po').append(html);
                             no++;
@@ -829,9 +830,9 @@
                                 '"></td>' +
                                 '<td>' + total + '</td>' +
                                 '<td><button id="edit_po_save" type="button" class="btn btn-success btn-xs" data-id="' +
-                                id + '" data-idpo="' + id_po +
-                                '" ><i class="fas fa-save"></i>' +
-                                '</button>' + 
+                                id + '" data-idpo="' + id_po + '" ><i class="fas fa-save"></i>' + '</button>' 
+                                '<button id="delete_po_save" type="button" class="btn btn-danger btn-xs" data-id="' + id +
+                                '" data-idpo="' + id_po + '" ><i class="fas fa-trash"></i>' + '</button>' + 
                                 '</tr>';
                             $('#tabel-po').append(html);
                             no++;

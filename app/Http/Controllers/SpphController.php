@@ -189,8 +189,10 @@ class SpphController extends Controller
         ]);
     }
 
-    public function getProductPR()
+    public function getProductPR(Request $request)
     {
+        $proyek = $request->proyek;
+        $proyek = strtolower($proyek);
         $products = DetailPR::all();
 
         $products = $products->map(function ($item) {
@@ -202,6 +204,11 @@ class SpphController extends Controller
             $item->po_no = Purchase_Order::where('id', $item->id_po)->first()->no_po ?? '';
             $item->nama_proyek = Keproyekan::where('id', $item->id_proyek)->first()->nama_proyek ?? '';
             return $item;
+        });
+
+        //filter nama proyek LIKE
+        $products = $products->filter(function ($item) use ($proyek) {
+            return strpos(strtolower($item->nama_proyek), $proyek) !== false;
         });
         // dd($products);
 

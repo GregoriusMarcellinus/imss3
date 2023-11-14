@@ -430,16 +430,15 @@
             var approveButton = document.querySelector('.btn-approve[data-id="' + id + '"]');
             var rejectButton = document.querySelector('.btn-reject[data-id="' + id + '"]');
 
-            console.log('Fungsi approveRequest diakses dengan ID:', id);
+            // console.log('Fungsi approveRequest diakses dengan ID:', id);
             if (approveButton) {
                 if (approveButton.textContent === 'Approve') {
                     approveButton.textContent = 'Cetak Invoice';
                     approveButton.className = 'btn-print-invoice btn btn-success btn-sm';
                     approveButton.onclick = function() {
                         console.log('Invoice dicetak untuk ID: ' + id);
+                        window.location.href =" {{ route('voucher')}}";
                     };
-
-                    //hide reject button
                     rejectButton.style.display = 'none';
                     saveStatusToDatabase(id, 'approved');
 
