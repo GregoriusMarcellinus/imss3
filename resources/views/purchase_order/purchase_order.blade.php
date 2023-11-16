@@ -343,9 +343,22 @@
 
                             <div class="col-0 d-none" id="container-product">
                                 <div id="form" class="card">
-                                    <div class="table-responsive  card-body">
+                                    <div class="card-body">
                                         <button type="button" class="btn btn-primary mb-3"
                                             onclick="addToDetails()"></i>Tambah Pilihan</button>
+    
+                                            <div class="input-group input-group-lg">
+                                                <input type="text" class="form-control" id="proyek_name" name="proyek_name"
+                                                    placeholder="Search By Proyek">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-primary" id="check-proyek" onclick="productCheck()" >
+                                                      <i class="fas fa-search"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                    </div>
+                                    <div class="table-responsive card-body">
+
                                         <table class="table table-bordered">
                                             <thead>
                                                 <tr>
@@ -599,7 +612,7 @@
         $('#detail-po').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget);
             var data = button.data('detail');
-            console.log(data);
+            console.log('d',data);
             lihatPo(data);
         });
 
@@ -631,7 +644,7 @@
                 },
 
                 success: function(data) {
-                    console.log(data);
+                    console.log('f',data);
                     $('#no_po').text(data.po.no_po);
                     $('#id_proyek').text(data.po.nama_proyek);
                     $('#id_vendor').text(data.po.nama_vendor);
@@ -693,8 +706,9 @@
                                 '" class="form-control" id="vat' + id + '" name="vat' + id + '"></td>' +
                                 '<td>' + total + '</td>' +
                                 '<td><button id="edit_po_save" type="button" class="btn btn-success btn-xs" data-id="' +
-                                id + '" data-idpo="' + id_po + '" ><i class="fas fa-save"></i>' +
-                                '</button>' +
+                                id + '" data-idpo="' + id_po + '" ><i class="fas fa-save"></i>' + '</button>'+
+                                '<button id="delete_po_save" type="button" class="btn btn-danger btn-xs" data-id="' + id +
+                                '" data-idpo="' + id_po + '" ><i class="fas fa-trash"></i>' + '</button>' + '</td'+
                                 '</tr>';
                             $('#tabel-po').append(html);
                             no++;
@@ -816,9 +830,9 @@
                                 '"></td>' +
                                 '<td>' + total + '</td>' +
                                 '<td><button id="edit_po_save" type="button" class="btn btn-success btn-xs" data-id="' +
-                                id + '" data-idpo="' + id_po +
-                                '" ><i class="fas fa-save"></i>' +
-                                '</button>' +
+                                id + '" data-idpo="' + id_po + '" ><i class="fas fa-save"></i>' + '</button>' 
+                                '<button id="delete_po_save" type="button" class="btn btn-danger btn-xs" data-id="' + id +
+                                '" data-idpo="' + id_po + '" ><i class="fas fa-trash"></i>' + '</button>' + 
                                 '</tr>';
                             $('#tabel-po').append(html);
                             no++;
@@ -830,6 +844,122 @@
             })
 
         });
+
+
+        //action delete_po_save
+        // $(document).on('click', '#delete_po_save', function() {
+        //     var id = $(this).data('id');
+        //     var id_po = $(this).data('idpo');
+        //     //get the batas{id} input
+        //     var batas = $('#batas' + id).val();
+        //     var harga_per_unit = $('#harga_per_unit' + id).val();
+        //     var mata_uang = $('#mata_uang' + id).val();
+        //     var vat = $('#vat' + id).val();
+        //     var form = {
+        //         id,
+        //         id_po,
+        //         batas,
+        //         harga_per_unit,
+        //         mata_uang,
+        //         vat
+        //     };
+
+        //     console.log(form);
+        //     $('#tabel-po').empty();
+
+        //     $.ajax({
+        //         url: "{{ route('detail_po_delete') }}",
+        //         type: "DELETE",
+        //         data: {
+        //             id,
+        //             id_po,
+        //             batas,
+        //             harga_per_unit,
+        //             mata_uang,
+        //             vat,
+        //             _token: '{{ csrf_token() }}'
+        //         },
+        //         dataType: "json",
+        //         beforeSend: function() {
+        //             $('#tabel-po').append(
+        //                 '<tr><td colspan="11" class="text-center">Loading...</td></tr>');
+        //             $('#button-cetak-po').html(
+        //                 '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
+        //             );
+        //             $('#button-cetak-po').attr('disabled', true);
+        //         },
+        //         success: function(data) {
+        //             console.log(data);
+        //             $('#no_po').text(data.po.no_po);
+        //             $('#id_proyek').text(data.po.nama_proyek);
+        //             $('#id_vendor').text(data.po.nama_vendor);
+        //             $('#po_tanggal').text(data.po.tgpo);
+        //             $('#po_batas').text(data.po.btpo);
+        //             $('#id_po').val(data.po.id);
+        //             $('#button-cetak-po').html('<i class="fas fa-print"></i> Cetak');
+        //             $('#button-cetak-po').attr('disabled', false);
+        //             var no = 1;
+        //             var id_po = data.po.id;
+
+        //             if (data?.po?.details?.length == 0) {
+        //                 $('#tabel-po').append(
+        //                     '<tr><td colspan="11" class="text-center">Tidak ada data</td></tr>');
+        //             } else {
+        //                 $.each(data?.po?.details, function(index,
+        //                     value) {
+        //                     var id = value.id_detail_po;
+        //                     var kode_material = value.kode_material;
+        //                     var deskripsi = value.uraian;
+        //                     var batas = value.batas ?? '-';
+        //                     var date = value.batas_po?.split('/') ?? '-';
+        //                     // var newDate = date[2] + '/' + date[1] + '/' + date[0];
+        //                     var newDate = batas;
+        //                     var qty = value.qty;
+        //                     // var total = value.qty * value.harga_per_unit ?? 0;
+        //                     var satuan = value.satuan;
+        //                     var harga_per_unit = value.harga_per_unit ?? 0;
+        //                     var mata_uang = value.mata_uang ?? '-';
+        //                     var vat = value.vat ?? '-';
+        //                     var total = qty * harga_per_unit;
+        //                     console.log({
+        //                         kode_material,
+        //                         deskripsi,
+        //                         batas,
+        //                         newDate,
+        //                         qty,
+        //                         total,
+        //                         vat,
+        //                         satuan,
+        //                         harga_per_unit,
+        //                         mata_uang,
+        //                     })
+        //                     var html = '<tr>' +
+        //                         '<td>' + no + '</td>' +
+        //                         '<td>' + kode_material + '</td>' +
+        //                         '<td>' + deskripsi + '</td>' +
+        //                         '<td><input type="date" value="' + newDate +
+        //                         '" class="form-control" id="batas' + id + '" name="batas' + id + '"></td>' +
+        //                         '<td>' + qty + '</td>' +
+        //                         '<td>' + satuan + '</td>' + '<td><input type="text" value="' + harga_per_unit +
+        //                         '" class="form-control" id="harga_per_unit' + id + '" name="harga_per_unit' + id + '"></td>' +
+        //                         '<td><input type="text" value="' + mata_uang + '" class="form-control" id="mata_uang' + id +
+        //                         '" name="mata_uang' + id + '"></td>' + '<td><input type="text" value="' + vat + '" class="form-control" id="vat' + id +
+        //                         '" name="vat' + id + '"></td>' + '<td>' + total + '</td>' + 
+        //                         '<td><button id="edit_po_save" type="button" class="btn btn-success btn-xs" data-id="' +
+        //                         id + '" data-idpo="' + id_po + '" ><i class="fas fa-save"></i>' + '</button>' +
+        //                         '<button id="delete_po_save" type="button" class="btn btn-danger btn-xs" data-id="' + id +
+        //                          '" data-idpo="' + id_po + '" ><i class="fas fa-trash"></i>' + '</button>' + '</td>' +
+        //                         '</tr>';
+        //                     $('#tabel-po').append(html);
+        //                     no++;
+        //                 });
+        //             }
+        //             //remove loading
+        //             $('#tabel-po').find('tr:first').remove();
+        //         }
+        //     })
+
+        // });
 
         $('#detail-po').on('hidden.bs.modal', function() {
             $('#container-product').addClass('d-none');
@@ -914,9 +1044,9 @@
                         $('#detail-material').append(
                             '<tr><td>' + (key + 1) + '</td><td>' + value.uraian +
                             '</td><td>' + value.spek + '</td><td>' + value.qty + '</td><td>' + value
-                            .satuan + '</td><td>' + value.nama_proyek + '</td><td>' + no_spph + '</td><td>' + no_pr + '</td><td>' +
-                            no_po + '</td><td>' +
-                            checkbox + '</td></tr>'
+                            .satuan + '</td><td>' + value.nama_proyek + '</td><td>' + no_spph +
+                            '</td><td>' + no_pr + '</td><td>' +
+                            no_po + '</td><td>' + checkbox + '</td></tr>'
                         );
                     });
                 },
@@ -959,12 +1089,12 @@
                     $('#id_vendor').text(data.po.nama_vendor);
                     $('#po_tanggal').text(data.po.tgpo);
                     $('#po_batas').text(data.po.btpo);
-                    $('#id_po').val(data.po.id);
+                    $('#id_po').val(data.po.id_po);
                     $('#button-cetak-po').html('<i class="fas fa-print"></i> Cetak');
                     $('#button-cetak-po').attr('disabled', false);
                     $('#tabel-po').empty();
                     var no = 1;
-                    var id_po = data.po.id;
+                    var id_po = data.po.id_po;
 
                     if (data?.po?.details?.length == 0) {
                         $('#tabel-po').append(
@@ -1024,7 +1154,9 @@
                         });
                     }
                     //remove loading
-                    $('#tabel-po').find('tr:first').remove();
+                    // if(data?.po?.details?.length > 1){
+                    //     $('#tabel-po').find('tr:first').remove();
+                    // }
                     $('#loader').hide();
                     $('#form').show();
                     getPODetail();
@@ -1040,14 +1172,13 @@
         }
 
         function productCheck() {
-            var pcode = $('#pcode').val();
-            var ptype = $('input[name="ptype"]:checked').val();
-            if (pcode.length > 0) {
+            var proyek_name = $('#proyek_name').val();
+            if (proyek_name.length > 0) {
                 loader();
-                $('#pcode').prop("disabled", true);
+                $('#proyek_code').prop("disabled", true);
                 $('#button-check').prop("disabled", true);
                 $.ajax({
-                    url: '/materials?type=' + ptype + '&kode=' + pcode,
+                    url: '/products/products_pr?proyek=' + proyek_name,
                     type: "GET",
                     data: {
                         "format": "json"
@@ -1060,16 +1191,50 @@
                     },
                     success: function(data) {
                         loader(0);
-                        if (data.success) {
-                            $('#form').show();
-                            $('#pname').val(data.materials.nama_barang);
-                            $('#material_kode').val(data.materials.kode_material);
-                        } else {
-                            $('#form').show();
-                            toastr.error("Product Code tidak dikenal!");
-                        }
-                        $('#pcode').prop("disabled", false);
-                        $('#button-check').prop("disabled", false);
+                        $('#form').show();
+                        //append to #detail-material
+                        $('#detail-material').empty();
+                        $.each(data.products, function(key, value) {
+                            console.table('a', value)
+                            var no_spph
+                            if (!value.id_spph) {
+                                no_spph = '-'
+                            } else {
+                                no_spph = value.nomor_spph
+                            }
+
+                            var no_pr
+                            if (!value.id_pr) {
+                                no_pr = '-'
+                            } else {
+                                no_pr = value.pr_no
+                            }
+
+                            var no_po
+                            if (!value.id_po) {
+                                no_po = '-'
+                            } else {
+                                no_po = value.po_no
+                            }
+
+                            var checkbox
+                            if (value.id_spph && !value.id_po) {
+                                checkbox = '<input type="checkbox" id="addToDetails" value="' + value.id +
+                                    '" onclick="addToDetailsJS(' + value.id + ')" >'
+                            } else {
+                                checkbox = '<input type="checkbox" id="addToDetails" value="' + value.id +
+                                    '" onclick="addToDetailsJS(' + value.id + ')" disabled>'
+                            }
+
+                            $('#detail-material').append(
+
+                                '<tr><td>' + (key + 1) + '</td><td>' + value.uraian +
+                                '</td><td>' + value.spek + '</td><td>' + value.qty + '</td><td>' + value
+                                .satuan + '</td><td>' + value.nama_proyek + '</td><td>' + no_spph +
+                                '</td><td>' + no_pr + '</td><td>' +
+                                no_po + '</td><td>' + checkbox + '</td></tr>'
+                            );
+                        });
                     },
                     error: function() {
                         $('#pcode').prop("disabled", false);
@@ -1077,7 +1242,7 @@
                     }
                 });
             } else {
-                toastr.error("Product Code belum diisi!");
+                toastr.error("Nama Proyek tidak ditemukan");
             }
         }
 

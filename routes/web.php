@@ -88,6 +88,7 @@ Route::prefix('products')->group(function () {
     Route::resource('purchase_order', App\Http\Controllers\PurchaseOrderController::class)->except(['destroy']);
     Route::get('cetak_po', [App\Http\Controllers\PurchaseOrderController::class, 'cetakPo'])->name('cetak_po');
     Route::post('detail_po_save', [App\Http\Controllers\PurchaseOrderController::class, 'detailPrSave'])->name('detail_po_save');
+    Route::delete('detail_po_delete', [App\Http\Controllers\PurchaseOrderController::class, 'destroyDetailPo'])->name('detail_po_delete'); //baru delete detail po
     Route::post('detail_pr_save', [App\Http\Controllers\PurchaseRequestController::class, 'detailPrSave'])->name('detail_pr_save');
     Route::post('tambah_detail_po', [App\Http\Controllers\PurchaseOrderController::class, 'tambahDetailPo'])->name('tambah_detail_po');
     Route::get('tracking', [App\Http\Controllers\PurchaseOrderController::class, 'tracking'])->name('product.tracking');
@@ -179,7 +180,7 @@ Route::get('testt', function () {
 
 Route::get('voucher', function () {
     return view('keuangan.voucher');
-});
+})->name('voucher');
 Route::get('ppk', function () {
     return view('keuangan.ppk');
 });

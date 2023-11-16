@@ -172,6 +172,49 @@ class PurchaseOrderController extends Controller
         ]);
     }
 
+    // public function destroyDetailPo(Request $request){
+    //     $id_po = $request->id_po;
+    //     $id_detail_po = $request->id;
+
+    //     $delete_detail_po = DetailPo::where('id', $id_detail_po)->delete();
+    //     $delete_detail_pr = DetailPR::where('detail_pr.id_po', $id_detail_po)->update([
+    //         'id_po' => null
+    //     ]); 
+
+        // if ($delete_detail_po && $delete_detail_pr) {
+        //     $po = Purchase_Order::select('purchase_order.*', 'vendor.nama as nama_vendor', 'keproyekan.nama_proyek as nama_proyek')
+        //         ->leftjoin('vendor', 'vendor.id', '=', 'purchase_order.vendor_id')
+        //         ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_order.proyek_id')
+        //         ->where('purchase_order.id', $id_po)
+        //         ->first();
+        //     $po->details = DetailPo::where('detail_po.id_po', $po->id)
+        //         ->leftJoin('detail_pr', 'detail_pr.id', '=', 'detail_po.id_detail_pr')
+        //         ->select('detail_pr.*', 'detail_po.id as id_detail_po', 'detail_po.harga as harga_per_unit', 'detail_po.mata_uang as mata_uang', 'detail_po.vat as vat', 'detail_po.batas_akhir as batas')
+        //         ->get();
+        //     return response()->json([
+        //         'po' => $po
+        //     ]);
+        // } else {
+        //     return response()->json([
+        //         'po' => null
+        //     ]);
+        // }
+
+    //     $po = Purchase_Order::select('purchase_order.*', 'vendor.nama as nama_vendor', 'keproyekan.nama_proyek as nama_proyek')
+    //         ->leftjoin('vendor', 'vendor.id', '=', 'purchase_order.vendor_id')
+    //         ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_order.proyek_id')
+    //         ->where('purchase_order.id', $id_po)
+    //         ->first();
+    //     $po->details = DetailPo::where('detail_po.id_po', $po->id)
+    //         ->leftJoin('detail_pr', 'detail_pr.id', '=', 'detail_po.id_detail_pr')
+    //         ->select('detail_pr.*', 'detail_po.id as id_detail_po', 'detail_po.harga as harga_per_unit', 'detail_po.mata_uang as mata_uang', 'detail_po.vat as vat', 'detail_po.batas_akhir as batas')
+    //         ->get();
+    //     return response()->json([
+    //         'po' => $po
+    //     ]);
+
+    // }
+
     public function test_pr(Request $request)
     {
         $id_po = $request->id_po;
@@ -198,17 +241,19 @@ class PurchaseOrderController extends Controller
             $detail_pr = DetailPR::find($value);
             $detail_po = DetailPo::where('id_detail_pr', $value)->first();
 
-            $add = DetailPo::create([
-                'id_po' => $id,
-                'id_pr' => $detail_pr->id_pr,
-                'id_detail_pr' => $detail_pr->id,
-            ]);
+            
 
             $update = DetailPR::where('id', $value)->update([
                 'id_po' => $id,
                 'status' => 2,
             ]);
         }
+
+        $add = DetailPo::create([
+            'id_po' => $id,
+            'id_pr' => $detail_pr->id_pr,
+            'id_detail_pr' => $detail_pr->id,
+        ]);
 
         // Fetch the updated purchase order data
         $po = Purchase_Order::leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_order.proyek_id')

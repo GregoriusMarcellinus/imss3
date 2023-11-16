@@ -75,7 +75,7 @@
                                                 <button title="Edit Request" type="button" class="btn btn-success btn-xs"
                                                     data-toggle="modal" data-target="#add-pr"
                                                     onclick="editPR({{ json_encode($data) }})"
-                                                    @if ($data['editable'] == 0) disabled @endif><i
+                                                    @if ($data['editable'] == 0 ) disabled @endif><i
                                                         class="fas fa-edit"></i></button>
                                                 <button title="Lihat Detail" type="button" data-toggle="modal"
                                                     data-target="#detail-pr" class="btn-lihat btn btn-info btn-xs"
@@ -290,6 +290,7 @@
                                                 @csrf
                                                 <input type="hidden" id="pid" name="pid">
                                                 <input type="hidden" id="type" name="type">
+                                                <input type="hidden" id="proyek_id_val" name="proyek_id_val">
                                                 <div class="form-group row">
                                                     <label for="material_kode"
                                                         class="col-sm-4 col-form-label">{{ __('Kode Material') }}</label>
@@ -555,6 +556,7 @@
                 data: {
                     "_token": "{{ csrf_token() }}",
                     "id_pr": id,
+                    "id_proyek": $('#proyek_id_val').val(),
                     "kode_material": $('#material_kode').val(),
                     "uraian": $('#pname').val(),
                     "stock": $('#stock').val(),
@@ -663,6 +665,7 @@
             $('#no_surat').text(data.no_pr);
             $('#tgl_surat').text(data.tanggal);
             $('#proyek').text(data.proyek);
+            $('#proyek_id_val').val(data.proyek_id);
             $('#pr_id').val(data.id);
             $('#table-pr').empty();
 
@@ -672,7 +675,7 @@
             } else {
                 $('#button-tambah-produk').attr('disabled', false);
             }
-
+             
             $.ajax({
                 url: '/products/purchase_request_detail/' + data.id,
                 type: "GET",
@@ -764,8 +767,9 @@
             $('#save_id').val(data.id);
             $('#no_pr').val(data.no_pr);
             $('#tgl_pr').val(data.tgl_pr);
-            $('#proyek_id').val(data.proyek);
+            $('#proyek_id').val(data.proyek_id);
             $('#dasar_pr').val(data.dasar_pr);
+            // alert(proyek_id)
         }
 
         function barcode(code) {
