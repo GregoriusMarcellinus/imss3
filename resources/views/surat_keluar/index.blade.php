@@ -43,6 +43,7 @@
                                 <th>{{ __('Jenis') }}</th>
                                 <th>{{ __('Tujuan') }}</th>
                                 <th>{{ __('Uraian') }}</th>
+                                <th>{{ __('Arsip Elektronik') }}</th>
                                 <th>{{ __('File') }}</th>
                                 <th>{{ __('PIC') }}</th>
                                 <th></th>
@@ -78,6 +79,9 @@
                                     </td>
                                     <td>{{ $data['tujuan'] }}</td>
                                     <td>{{ $data['uraian'] }}</td>
+                                    <td class="text-center">
+                                        {{ $data['status'] == 0 ? '' : ($data['status'] == 1 ? 'Ada' : 'CANCEL') }}
+                                    </td>
                                     <td class="text-center">
                                         @if ($data['file'] == null)
                                             -
@@ -259,6 +263,22 @@
             $('#tujuan').val(data.tujuan);
             $('#no_surat').val(data.no_surat);
             $('#uraian').val(data.uraian);
+            //append file input to form id save in latest div
+            // <div class="form-group row">
+            //                             <label for="file" class="col-sm-4 col-form-label">{{ __('File') }}</label>
+            //                             <div class="col-sm-8">
+            //                                 <input type="file" class="" id="file" name="file">
+            //                             </div>
+            //                         </div>
+            $('#save').append(
+                '<div class="form-group row">' +
+                '<label for="file" class="col-sm-4 col-form-label">File</label>' +
+                '<div class="col-sm-8">' +
+                '<input type="file" class="" id="file" name="file">' +
+                '</div>' +
+                '</div>'
+            );
+
         }
 
         function deleteSuratKeluar(data) {
