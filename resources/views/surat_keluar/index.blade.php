@@ -40,6 +40,7 @@
                                 <th>No.</th>
                                 <th>{{ __('Tanggal') }}</th>
                                 <th>{{ __('Nomor') }}</th>
+                                <th>{{ __('Jenis') }}</th>
                                 <th>{{ __('Tujuan') }}</th>
                                 <th>{{ __('Uraian') }}</th>
                                 <th>{{ __('File') }}</th>
@@ -55,15 +56,36 @@
                                 <tr>
                                     <td class="text-center">{{ $items->firstItem() + $key }}</td>
                                     <td>
-                                        {{ \Carbon\Carbon::parse($data['tanggal'])->format('d M Y') }}
+                                        {{ \Carbon\Carbon::parse($data['created_at'])->format('d M Y') }}
                                     </td>
-                                    <td>{{ $data['nomor'] }}</td>
-                                    <td>{{ $data['keterangan'] }}</td>
+                                    <td>
+                                        @if ($data['type'] == 0)
+                                            SK-{{ $data['no_surat'] }}
+                                        @elseif ($data['type'] == 1)
+                                            PI-{{ $data['no_surat'] }}
+                                        @elseif ($data['type'] == 2)
+                                            M-{{ $data['no_surat'] }}
+                                        @endif
+                                    </td>
+                                    <td>
+                                        @if ($data['type'] == 0)
+                                            Surat Kuasa
+                                        @elseif ($data['type'] == 1)
+                                            Pakta Integritas
+                                        @elseif ($data['type'] == 2)
+                                            Memo
+                                        @endif
+                                    </td>
                                     <td>{{ $data['tujuan'] }}</td>
+                                    <td>{{ $data['uraian'] }}</td>
                                     <td class="text-center">
-                                        <a href="{{ asset('surat_keluar/' . $data['file']) }}" target="_blank">
-                                            Download
-                                        </a>
+                                        @if ($data['file'] == null)
+                                            -
+                                        @else
+                                            <a href="{{ asset('sk/' . $data['file']) }}" target="_blank">
+                                                Download
+                                            </a>
+                                        @endif
                                     </td>
                                     <td class="text-center">{{ $data['pic'] }}</td>
                                     <td class="text-center">
@@ -106,7 +128,7 @@
                             </div>
                             <div class="modal-body">
                                 <form role="form" id="save" action="{{ route('surat_keluar.save') }}" method="post"
-                                    enctype="multipart/form-data">
+                                    enctype="multipart/form-data" autocomplete="off">
                                     @csrf
                                     <input type="hidden" id="surat_keluar_id" name="surat_keluar_id">
                                     <div class="form-group row">
@@ -127,23 +149,33 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="nomor" class="col-sm-4 col-form-label">{{ __('Nomor') }}</label>
+                                        <label for="type" class="col-sm-4 col-form-label">{{ __('Jenis Surat') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="nomor" name="nomor">
+                                            <select class="form-control" id="type" name="type">
+                                                <option value="0">Surat Kuasa</option>
+                                                <option value="1">Pakta Integritas</option>
+                                                <option value="2">Memo</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="keterangan" class="col-sm-4 col-form-label">{{ __('Keterangan') }}</label>
+                                        <label for="tujuan" class="col-sm-4 col-form-label">{{ __('Tujuan') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="keterangan" name="keterangan">
+                                            <input type="text" class="form-control" id="tujuan" name="tujuan">
                                         </div>
                                     </div>
                                     <div class="form-group row">
+                                        <label for="uraian" class="col-sm-4 col-form-label">{{ __('Keterangan') }}</label>
+                                        <div class="col-sm-8">
+                                            <input type="text" class="form-control" id="uraian" name="uraian">
+                                        </div>
+                                    </div>
+                                    {{-- <div class="form-group row">
                                         <label for="file" class="col-sm-4 col-form-label">{{ __('File') }}</label>
                                         <div class="col-sm-8">
                                             <input type="file" class="" id="file" name="file">
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </form>
                             </div>
                             <div class="modal-footer justify-content-between">
@@ -213,18 +245,25 @@
         }
 
         function editSuratKeluar(data) {
+            console.log(data)
             resetForm();
-            $('#modal-title').text("Edit Jusifikasi");
+            $('#modal-title').text("Edit Surat Keluar");
             $('#button-save').text("Simpan");
             $('#surat_keluar_id').val(data.id);
-            $('#tanggal').val(data.tanggal);
-            $('#nomor').val(data.nomor);
-            $('#keterangan').val(data.keterangan);
+            //change date format to yyyy-mm-dd
+            var date = new Date(data.created_at);
+            date = date.toISOString().substr(0, 10);
+            $('#tanggal').val(date);
+            //type select option
+            $('#type').val(data.type);
+            $('#tujuan').val(data.tujuan);
+            $('#no_surat').val(data.no_surat);
+            $('#uraian').val(data.uraian);
         }
 
         function deleteSuratKeluar(data) {
             $('#delete_id').val(data.id);
-            $('#delete_name').text(data.nomor);
+            $('#delete_name').text(data.no_surat);
         }
     </script>
     <script src="/plugins/toastr/toastr.min.js"></script>

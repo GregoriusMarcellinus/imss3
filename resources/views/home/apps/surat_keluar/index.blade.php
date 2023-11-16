@@ -50,10 +50,14 @@
                                     <th>No.</th>
                                     <th>{{ __('Tanggal') }}</th>
                                     <th>{{ __('Nomor') }}</th>
+                                    <th>{{ __('Jenis') }}</th>
+                                    <th>{{ __('Tujuan') }}</th>
                                     <th>{{ __('Uraian') }}</th>
                                     <th>{{ __('File') }}</th>
                                     <th>{{ __('PIC') }}</th>
-                                    <th></th>
+                                    @if (Auth::user())
+                                        <th></th>
+                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
@@ -64,28 +68,53 @@
                                     <tr>
                                         <td class="text-center">{{ $items->firstItem() + $key }}</td>
                                         <td>
-                                            {{ \Carbon\Carbon::parse($data['tanggal'])->format('d M Y') }}
+                                            {{ \Carbon\Carbon::parse($data['created_at'])->format('d M Y') }}
                                         </td>
-                                        <td>{{ $data['nomor'] }}</td>
-                                        <td>{{ $data['keterangan'] }}</td>
-                                        <td class="text-center">
-                                            <a href="{{ asset('justifikasi/' . $data['file']) }}" target="_blank">
-                                                Download
-                                            </a>
-                                        </td>
-                                        <td class="text-center">{{ $data['pic'] }}</td>
-                                        <td class="text-center">
-                                            @if (Auth::user()->role == 0 || Auth::user()->role == 6)
-                                                <button title="Edit Shelf" type="button" class="btn btn-success btn-xs"
-                                                    data-toggle="modal" data-target="#add-justifikasi"
-                                                    onclick="editJustifikasi({{ json_encode($data) }})"><i
-                                                        class="fas fa-edit"></i></button>
-                                                <button title="Hapus Produk" type="button" class="btn btn-danger btn-xs"
-                                                    data-toggle="modal" data-target="#delete-justifikasi"
-                                                    onclick="deleteJustifikasi({{ json_encode($data) }})"><i
-                                                        class="fas fa-trash"></i></button>
+                                        <td>
+                                            @if ($data['type'] == 0)
+                                                SK-{{ $data['no_surat'] }}
+                                            @elseif ($data['type'] == 1)
+                                                PI-{{ $data['no_surat'] }}
+                                            @elseif ($data['type'] == 2)
+                                                M-{{ $data['no_surat'] }}
                                             @endif
                                         </td>
+                                        <td>
+                                            @if ($data['type'] == 0)
+                                                Surat Kuasa
+                                            @elseif ($data['type'] == 1)
+                                                Pakta Integritas
+                                            @elseif ($data['type'] == 2)
+                                                Memo
+                                            @endif
+                                        </td>
+                                        <td>{{ $data['tujuan'] }}</td>
+                                        <td>{{ $data['uraian'] }}</td>
+                                        <td class="text-center">
+                                            @if ($data['file'] == null)
+                                                -
+                                            @else
+                                                <a href="{{ asset('sk/' . $data['file']) }}" target="_blank">
+                                                    Download
+                                                </a>
+                                            @endif
+                                        </td>
+                                        <td class="text-center">{{ $data['pic'] }}</td>
+                                        @if (Auth::user())
+                                            <td class="text-center">
+                                                @if (Auth::user()->role == 0 || Auth::user()->role == 6)
+                                                    <button title="Edit Shelf" type="button" class="btn btn-success btn-xs"
+                                                        data-toggle="modal" data-target="#add-suratkeluar"
+                                                        onclick="editSuratKeluar({{ json_encode($data) }})"><i
+                                                            class="fas fa-edit"></i></button>
+                                                    <button title="Hapus Produk" type="button"
+                                                        class="btn btn-danger btn-xs" data-toggle="modal"
+                                                        data-target="#delete-suratkeluar"
+                                                        onclick="deleteSuratKeluar({{ json_encode($data) }})"><i
+                                                            class="fas fa-trash"></i></button>
+                                                @endif
+                                            </td>
+                                        @endif
                                     </tr>
                                 @empty
                                     <tr class="text-center">
