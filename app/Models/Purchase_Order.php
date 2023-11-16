@@ -11,6 +11,7 @@ class Purchase_Order extends Model
     protected $table = 'purchase_order';
     protected $fillable = [
         'vendor_id',
+        'tipe',
         'no_po',
         'tanggal_po',
         'incoterm',

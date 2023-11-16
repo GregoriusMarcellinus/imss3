@@ -463,6 +463,7 @@
                     rejectButton.className = 'btn-incomplete-doc btn btn-danger btn-sm';
                     rejectButton.onclick = function() {
                         console.log('Keterangan: Lengkapi Dokumen untuk ID: ' + id);
+                        toastr.error('Keterangan: Lengkapi Dokumen');
                     };
 
                 } else {

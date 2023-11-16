@@ -705,10 +705,10 @@
                                 '<td><input type="text" value="' + vat +
                                 '" class="form-control" id="vat' + id + '" name="vat' + id + '"></td>' +
                                 '<td>' + total + '</td>' +
-                                '<td><button id="edit_po_save" type="button" class="btn btn-success btn-xs" data-id="' +
+                                '<td><button title="simpan" id="edit_po_save" type="button" class="btn btn-success btn-xs" data-id="' +
                                 id + '" data-idpo="' + id_po + '" ><i class="fas fa-save"></i>' + '</button>'+
-                                '<button id="delete_po_save" type="button" class="btn btn-danger btn-xs" data-id="' + id +
-                                '" data-idpo="' + id_po + '" ><i class="fas fa-trash"></i>' + '</button>' + '</td'+
+                                '<button title="hapus" id="delete_po_save" type="button" class="btn btn-danger btn-xs" data-id="' + id +
+                                '" data-idpo="' + id_po + '" ><i class="fas fa-trash"></i>' + '</button>' + 
                                 '</tr>';
                             $('#tabel-po').append(html);
                             no++;
@@ -829,9 +829,9 @@
                                 '" class="form-control" id="vat' + id + '" name="vat' + id +
                                 '"></td>' +
                                 '<td>' + total + '</td>' +
-                                '<td><button id="edit_po_save" type="button" class="btn btn-success btn-xs" data-id="' +
+                                '<td><button title="simpan" id="edit_po_save" type="button" class="btn btn-success btn-xs" data-id="' +
                                 id + '" data-idpo="' + id_po + '" ><i class="fas fa-save"></i>' + '</button>' 
-                                '<button id="delete_po_save" type="button" class="btn btn-danger btn-xs" data-id="' + id +
+                                '<button title="hapus" id="delete_po_save" type="button" class="btn btn-danger btn-xs" data-id="' + id +
                                 '" data-idpo="' + id_po + '" ><i class="fas fa-trash"></i>' + '</button>' + 
                                 '</tr>';
                             $('#tabel-po').append(html);
@@ -847,119 +847,120 @@
 
 
         //action delete_po_save
-        // $(document).on('click', '#delete_po_save', function() {
-        //     var id = $(this).data('id');
-        //     var id_po = $(this).data('idpo');
-        //     //get the batas{id} input
-        //     var batas = $('#batas' + id).val();
-        //     var harga_per_unit = $('#harga_per_unit' + id).val();
-        //     var mata_uang = $('#mata_uang' + id).val();
-        //     var vat = $('#vat' + id).val();
-        //     var form = {
-        //         id,
-        //         id_po,
-        //         batas,
-        //         harga_per_unit,
-        //         mata_uang,
-        //         vat
-        //     };
+        $(document).on('click', '#delete_po_save', function() {
+            var id = $(this).data('id');
+            var no_po = $(this).data('no_po');
+            var id_po = $(this).data('idpo');
+            //get the batas{id} input
+            var batas = $('#batas' + id).val();
+            var harga_per_unit = $('#harga_per_unit' + id).val();
+            var mata_uang = $('#mata_uang' + id).val();
+            var vat = $('#vat' + id).val();
+            var form = {
+                id,
+                id_po,
+                batas,
+                harga_per_unit,
+                mata_uang,
+                vat
+            };
 
-        //     console.log(form);
-        //     $('#tabel-po').empty();
+            console.log(form);
+            $('#tabel-po').empty();
 
-        //     $.ajax({
-        //         url: "{{ route('detail_po_delete') }}",
-        //         type: "DELETE",
-        //         data: {
-        //             id,
-        //             id_po,
-        //             batas,
-        //             harga_per_unit,
-        //             mata_uang,
-        //             vat,
-        //             _token: '{{ csrf_token() }}'
-        //         },
-        //         dataType: "json",
-        //         beforeSend: function() {
-        //             $('#tabel-po').append(
-        //                 '<tr><td colspan="11" class="text-center">Loading...</td></tr>');
-        //             $('#button-cetak-po').html(
-        //                 '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
-        //             );
-        //             $('#button-cetak-po').attr('disabled', true);
-        //         },
-        //         success: function(data) {
-        //             console.log(data);
-        //             $('#no_po').text(data.po.no_po);
-        //             $('#id_proyek').text(data.po.nama_proyek);
-        //             $('#id_vendor').text(data.po.nama_vendor);
-        //             $('#po_tanggal').text(data.po.tgpo);
-        //             $('#po_batas').text(data.po.btpo);
-        //             $('#id_po').val(data.po.id);
-        //             $('#button-cetak-po').html('<i class="fas fa-print"></i> Cetak');
-        //             $('#button-cetak-po').attr('disabled', false);
-        //             var no = 1;
-        //             var id_po = data.po.id;
+            $.ajax({
+                url: "{{ route('detail_po_delete') }}",
+                type: "DELETE",
+                data: {
+                    id,
+                    id_po,
+                    batas,
+                    harga_per_unit,
+                    mata_uang,
+                    vat,
+                    _token: '{{ csrf_token() }}'
+                },
+                dataType: "json",
+                beforeSend: function() {
+                    $('#tabel-po').append(
+                        '<tr><td colspan="11" class="text-center">Loading...</td></tr>');
+                    $('#button-cetak-po').html(
+                        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
+                    );
+                    $('#button-cetak-po').attr('disabled', true);
+                },
+                success: function(data) {
+                    console.log(data);
+                    // $('#no_po').text(data.po.no_po);
+                    // $('#id_proyek').text(data.po.nama_proyek);
+                    // $('#id_vendor').text(data.po.nama_vendor);
+                    // $('#po_tanggal').text(data.po.tgpo);
+                    // $('#po_batas').text(data.po.btpo);
+                    // $('#id_po').val(data.po.id);
+                    $('#button-cetak-po').html('<i class="fas fa-print"></i> Cetak');
+                    $('#button-cetak-po').attr('disabled', false);
+                    var no = 1;
+                    // var id_po = data.po.id;
 
-        //             if (data?.po?.details?.length == 0) {
-        //                 $('#tabel-po').append(
-        //                     '<tr><td colspan="11" class="text-center">Tidak ada data</td></tr>');
-        //             } else {
-        //                 $.each(data?.po?.details, function(index,
-        //                     value) {
-        //                     var id = value.id_detail_po;
-        //                     var kode_material = value.kode_material;
-        //                     var deskripsi = value.uraian;
-        //                     var batas = value.batas ?? '-';
-        //                     var date = value.batas_po?.split('/') ?? '-';
-        //                     // var newDate = date[2] + '/' + date[1] + '/' + date[0];
-        //                     var newDate = batas;
-        //                     var qty = value.qty;
-        //                     // var total = value.qty * value.harga_per_unit ?? 0;
-        //                     var satuan = value.satuan;
-        //                     var harga_per_unit = value.harga_per_unit ?? 0;
-        //                     var mata_uang = value.mata_uang ?? '-';
-        //                     var vat = value.vat ?? '-';
-        //                     var total = qty * harga_per_unit;
-        //                     console.log({
-        //                         kode_material,
-        //                         deskripsi,
-        //                         batas,
-        //                         newDate,
-        //                         qty,
-        //                         total,
-        //                         vat,
-        //                         satuan,
-        //                         harga_per_unit,
-        //                         mata_uang,
-        //                     })
-        //                     var html = '<tr>' +
-        //                         '<td>' + no + '</td>' +
-        //                         '<td>' + kode_material + '</td>' +
-        //                         '<td>' + deskripsi + '</td>' +
-        //                         '<td><input type="date" value="' + newDate +
-        //                         '" class="form-control" id="batas' + id + '" name="batas' + id + '"></td>' +
-        //                         '<td>' + qty + '</td>' +
-        //                         '<td>' + satuan + '</td>' + '<td><input type="text" value="' + harga_per_unit +
-        //                         '" class="form-control" id="harga_per_unit' + id + '" name="harga_per_unit' + id + '"></td>' +
-        //                         '<td><input type="text" value="' + mata_uang + '" class="form-control" id="mata_uang' + id +
-        //                         '" name="mata_uang' + id + '"></td>' + '<td><input type="text" value="' + vat + '" class="form-control" id="vat' + id +
-        //                         '" name="vat' + id + '"></td>' + '<td>' + total + '</td>' + 
-        //                         '<td><button id="edit_po_save" type="button" class="btn btn-success btn-xs" data-id="' +
-        //                         id + '" data-idpo="' + id_po + '" ><i class="fas fa-save"></i>' + '</button>' +
-        //                         '<button id="delete_po_save" type="button" class="btn btn-danger btn-xs" data-id="' + id +
-        //                          '" data-idpo="' + id_po + '" ><i class="fas fa-trash"></i>' + '</button>' + '</td>' +
-        //                         '</tr>';
-        //                     $('#tabel-po').append(html);
-        //                     no++;
-        //                 });
-        //             }
-        //             //remove loading
-        //             $('#tabel-po').find('tr:first').remove();
-        //         }
-        //     })
+                    if (data?.po?.details?.length == 0 || data?.po?.details == null) {
+                        $('#tabel-po').append(
+                            '<tr><td colspan="11" class="text-center">Tidak ada data</td></tr>');
+                    } else {
+                        $.each(data?.po?.details, function(index,
+                            value) {
+                            var id = value.id_detail_po;
+                            var kode_material = value.kode_material;
+                            var deskripsi = value.uraian;
+                            var batas = value.batas ?? '-';
+                            var date = value.batas_po?.split('/') ?? '-';
+                            // var newDate = date[2] + '/' + date[1] + '/' + date[0];
+                            var newDate = batas;
+                            var qty = value.qty;
+                            // var total = value.qty * value.harga_per_unit ?? 0;
+                            var satuan = value.satuan;
+                            var harga_per_unit = value.harga_per_unit ?? 0;
+                            var mata_uang = value.mata_uang ?? '-';
+                            var vat = value.vat ?? '-';
+                            var total = qty * harga_per_unit;
+                            console.log({
+                                kode_material,
+                                deskripsi,
+                                batas,
+                                newDate,
+                                qty,
+                                total,
+                                vat,
+                                satuan,
+                                harga_per_unit,
+                                mata_uang,
+                            })
+                            var html = '<tr>' +
+                                '<td>' + no + '</td>' +
+                                '<td>' + kode_material + '</td>' +
+                                '<td>' + deskripsi + '</td>' +
+                                '<td><input type="date" value="' + newDate +
+                                '" class="form-control" id="batas' + id + '" name="batas' + id + '"></td>' +
+                                '<td>' + qty + '</td>' +
+                                '<td>' + satuan + '</td>' + '<td><input type="text" value="' + harga_per_unit +
+                                '" class="form-control" id="harga_per_unit' + id + '" name="harga_per_unit' + id + '"></td>' +
+                                '<td><input type="text" value="' + mata_uang + '" class="form-control" id="mata_uang' + id +
+                                '" name="mata_uang' + id + '"></td>' + '<td><input type="text" value="' + vat + '" class="form-control" id="vat' + id +
+                                '" name="vat' + id + '"></td>' + '<td>' + total + '</td>' + 
+                                '<td><button title="simpan" id="edit_po_save" type="button" class="btn btn-success btn-xs" data-id="' +
+                                id + '" data-idpo="' + id_po + '" ><i class="fas fa-save"></i>' + '</button>' +
+                                '<button title="hapus" id="delete_po_save" type="button" class="btn btn-danger btn-xs" data-id="' + id +
+                                 '" data-idpo="' + id_po + '" ><i class="fas fa-trash"></i>' + '</button>' + '</td>' +
+                                '</tr>';
+                            $('#tabel-po').append(html);
+                            no++;
+                        });
+                    }
+                    //remove loading
+                    $('#tabel-po').find('tr:first').remove();
+                }
+            })
 
-        // });
+        });
 
         $('#detail-po').on('hidden.bs.modal', function() {
             $('#container-product').addClass('d-none');
@@ -1145,9 +1146,10 @@
                                 '<td><input type="text" value="' + vat +
                                 '" class="form-control" id="vat' + id + '" name="vat' + id + '"></td>' +
                                 '<td>' + total + '</td>' +
-                                '<td><button id="edit_po_save" type="button" class="btn btn-success btn-xs" data-id="' +
+                                '<td><button title="simpan" id="edit_po_save" type="button" class="btn btn-success btn-xs" data-id="' +
                                 id + '" data-idpo="' + id_po + '" ><i class="fas fa-save"></i>' +
-                                '</button>' +
+                                '</button>' + '<button title="hapus" id="delete_po_save" type="button" class="btn btn-danger btn-xs" data-id="' + id +
+                                 '" data-idpo="' + id_po + '" ><i class="fas fa-trash"></i>' + '</button>' + '</td>' +
                                 '</tr>';
                             $('#tabel-po').append(html);
                             no++;
