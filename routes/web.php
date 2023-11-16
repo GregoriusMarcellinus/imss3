@@ -144,6 +144,10 @@ Route::prefix('products')->group(function () {
 
     //logistik
     Route::get('logistik', [App\Http\Controllers\LogistikController::class, 'index'])->name('products.logistik');
+
+    // engineering edit pr
+    Route::get('showEditPr', [App\Http\Controllers\PurchaseRequestController::class, 'showEditPr'])->name('eng.purchase_request');
+    Route::post('edit_purchase_request', [App\Http\Controllers\PurchaseRequestController::class, 'editPrEng'])->name('edit_purchase_request');
 });
 
 Route::prefix('users')->group(function () {

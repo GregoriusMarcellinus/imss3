@@ -63,11 +63,10 @@ class PurchaseRequestController extends Controller
                     foreach ($detail_pr as $detail) {
                         $detail_spph = DetailSpph::where('id_detail_pr', $detail->id)->first();
                         $po = Purchase_Order::where('id', $detail->id_po)->first();
-                        if ($po && $po->tipe == '1'){
+                        if ($po && $po->tipe == '1') {
                             $request->editable = FALSE;
                             break;
-                            
-                        } else{
+                        } else {
                             if ($detail_spph) {
                                 $request->editable = FALSE;
                                 break;
@@ -156,7 +155,6 @@ class PurchaseRequestController extends Controller
                 $item->backgroundcolor = "#008000"; // Green background
             }
             return $item;
-
         });
         return response()->json([
             'pr' => $pr
@@ -378,5 +376,102 @@ class PurchaseRequestController extends Controller
         return response()->json([
             'pr' => $pr
         ]);
+    }
+
+    // edit detail produk oleh engginering
+
+    public function showEditPr(Request $request)
+    {
+        $search = $request->q;
+
+        if (Session::has('selected_warehouse_id')) {
+            $warehouse_id = Session::get('selected_warehouse_id');
+        } else {
+            $warehouse_id = DB::table('warehouse')->first()->warehouse_id;
+        }
+
+        $requests = PurchaseRequest::select('purchase_request.*', 'keproyekan.nama_proyek as proyek_name')
+            ->join('keproyekan', 'keproyekan.id', '=', 'purchase_request.proyek_id')
+            ->orderBy('purchase_request.id', 'asc')
+            ->paginate(50);
+
+        $proyeks = DB::table('keproyekan')->get();
+        //  dd($requests);
+
+        if ($search) {
+            $requests = PurchaseRequest::where('nama_proyek', 'LIKE', "%$search%")->paginate(50);
+        }
+
+        if ($request->format == "json") {
+            $requests = PurchaseRequest::where("warehouse_id", $warehouse_id)->get();
+
+            return response()->json($requests);
+        } else {
+
+            //looping the paginate
+            foreach ($requests as $request) {
+                $detail_pr = DetailPR::where('id_pr', $request->id)->get();
+                //if detail_pr empty then editable true
+                if ($detail_pr->isEmpty()) {
+                    $request->editable = TRUE;
+                } else {
+                    //looping detail_pr then check in detailspph with id_detail_pr exist
+                    foreach ($detail_pr as $detail) {
+                        $detail_spph = DetailSpph::where('id_detail_pr', $detail->id)->first();
+                        $po = Purchase_Order::where('id', $detail->id_po)->first();
+                        if ($po && $po->tipe == '1') {
+                            $request->editable = FALSE;
+                            break;
+                        } else {
+                            if ($detail_spph) {
+                                $request->editable = FALSE;
+                                break;
+                            } else {
+                                $request->editable = TRUE;
+                            }
+                        }
+                    }
+                }
+            }
+            return view('engineering.index', compact('requests', 'proyeks'));
+        }
+    }
+    public function editPrEng(Request $request)
+    {
+        $id = $request->id_pr;
+        $kode_material = $request->kode_material;
+        $spek = $request->spek;
+
+        $edit = DetailPR::where('id', $id)->update([
+            'kode_material' => $kode_material,
+            'spek' => $spek,
+        ]);
+
+        if (!$edit) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal mengedit detail PR'
+            ]);
+        }
+
+        $pr = PurchaseRequest::where('id', $request->id_pr)->first();
+        $pr->details = DetailPR::where('id_pr', $pr->id)->get();
+
+        $pr->details = $pr->details->map(function ($item) {
+            $item->spek = $item->spek ? $item->spek : '';
+            $item->keterangan = $item->keterangan ? $item->keterangan : '';
+            $item->kode_material = $item->kode_material ? $item->kode_material : '';
+            $item->nomor_spph = Spph::where('id', $item->id_spph)->first()->nomor_spph ?? '';
+            $item->no_po = Purchase_Order::where('id', $item->id_po)->first()->no_po ?? '';
+            return $item;
+        });
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Berhasil mengedit detail PR',
+            'pr' => $pr
+        ]);
+
+
     }
 }

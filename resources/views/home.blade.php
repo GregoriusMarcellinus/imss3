@@ -188,6 +188,21 @@
                         </a>
                     </div>
                 @endif
+                @if (Auth::user()->role == 6)
+                    <div class="col-lg-3 col-6">
+                        <a href="{{ route('eng.purchase_request') }}">
+                            <div class="small-box bg-primary">
+                                <div class="inner" style="background-color: #D988B9">
+                                    <p>Edit</p>
+                                    <h3>Purchase Request</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-route"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                @endif
                 @if (Auth::user()->role == 0 || Auth::user()->role == 5)
                     <div class="col-lg-3 col-6">
                         <a href="{{ route('product.approvedPO') }}">
