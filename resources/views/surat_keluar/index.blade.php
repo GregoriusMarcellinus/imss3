@@ -16,8 +16,8 @@
                 <div class="card-header">
                     @auth
                         @if (Auth::user()->role == 0 || Auth::user()->role == 6)
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-justifikasi"
-                                onclick="addJustifikasi()"><i class="fas fa-plus"></i> Add New Justifikasi</button>
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-suratkeluar"
+                                onclick="addSuratKeluar()"><i class="fas fa-plus"></i> Add New Surat Keluar</button>
                         @endif
                     @endauth
                     <div class="card-tools">
@@ -40,6 +40,7 @@
                                 <th>No.</th>
                                 <th>{{ __('Tanggal') }}</th>
                                 <th>{{ __('Nomor') }}</th>
+                                <th>{{ __('Tujuan') }}</th>
                                 <th>{{ __('Uraian') }}</th>
                                 <th>{{ __('File') }}</th>
                                 <th>{{ __('PIC') }}</th>
@@ -58,8 +59,9 @@
                                     </td>
                                     <td>{{ $data['nomor'] }}</td>
                                     <td>{{ $data['keterangan'] }}</td>
+                                    <td>{{ $data['tujuan'] }}</td>
                                     <td class="text-center">
-                                        <a href="{{ asset('justifikasi/' . $data['file']) }}" target="_blank">
+                                        <a href="{{ asset('surat_keluar/' . $data['file']) }}" target="_blank">
                                             Download
                                         </a>
                                     </td>
@@ -67,19 +69,19 @@
                                     <td class="text-center">
                                         @if (Auth::user()->role == 0 || Auth::user()->role == 6)
                                             <button title="Edit Shelf" type="button" class="btn btn-success btn-xs"
-                                                data-toggle="modal" data-target="#add-justifikasi"
-                                                onclick="editJustifikasi({{ json_encode($data) }})"><i
+                                                data-toggle="modal" data-target="#add-suratkeluar"
+                                                onclick="editSuratKeluar({{ json_encode($data) }})"><i
                                                     class="fas fa-edit"></i></button>
                                             <button title="Hapus Produk" type="button" class="btn btn-danger btn-xs"
-                                                data-toggle="modal" data-target="#delete-justifikasi"
-                                                onclick="deleteJustifikasi({{ json_encode($data) }})"><i
+                                                data-toggle="modal" data-target="#delete-suratkeluar"
+                                                onclick="deleteSuratKeluar({{ json_encode($data) }})"><i
                                                     class="fas fa-trash"></i></button>
                                         @endif
                                     </td>
                                 </tr>
                             @empty
                                 <tr class="text-center">
-                                    <td colspan="7">{{ __('No data.') }}</td>
+                                    <td colspan="8">{{ __('No data.') }}</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -93,24 +95,35 @@
         @auth
 
             @if (Auth::user()->role == 0 || Auth::user()->role == 6)
-                <div class="modal fade" id="add-justifikasi">
+                <div class="modal fade" id="add-suratkeluar">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 id="modal-title" class="modal-title">{{ __('Add New Justifikasi') }}</h4>
+                                <h4 id="modal-title" class="modal-title">{{ __('Add New Surat Keluar') }}</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form role="form" id="save" action="{{ route('product.justifikasi.save') }}"
-                                    method="post" enctype="multipart/form-data">
+                                <form role="form" id="save" action="{{ route('surat_keluar.save') }}" method="post"
+                                    enctype="multipart/form-data">
                                     @csrf
-                                    <input type="hidden" id="justifikasi_id" name="justifikasi_id">
+                                    <input type="hidden" id="surat_keluar_id" name="surat_keluar_id">
                                     <div class="form-group row">
                                         <label for="tanggal" class="col-sm-4 col-form-label">{{ __('Tanggal') }}</label>
                                         <div class="col-sm-8">
                                             <input type="date" class="form-control" id="tanggal" name="tanggal">
+                                        </div>
+                                    </div>
+                                    {{-- select option --}}
+                                    <div class="form-group row">
+                                        <label for="direksi" class="col-sm-4 col-form-label">{{ __('Direksi') }}</label>
+                                        <div class="col-sm-8">
+                                            <select class="form-control" id="direksi" name="direksi">
+                                                <option value="d1">D1</option>
+                                                <option value="d2">D2</option>
+                                                <option value="d3">D3</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -142,24 +155,24 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal fade" id="delete-justifikasi">
+                <div class="modal fade" id="delete-suratkeluar">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 id="modal-title" class="modal-title">{{ __('Delete Justifikasi') }}</h4>
+                                <h4 id="modal-title" class="modal-title">{{ __('Delete Surat Keluar') }}</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form role="form" id="delete" action="{{ route('product.justifikasi.delete') }}"
+                                <form role="form" id="delete" action="{{ route('surat_keluar.delete') }}"
                                     method="post">
                                     @csrf
                                     @method('delete')
                                     <input type="hidden" id="delete_id" name="delete_id">
                                 </form>
                                 <div>
-                                    <p>Anda yakin ingin menghapus justifikasi nomor <span id="delete_name"
+                                    <p>Anda yakin ingin menghapus surat keluar nomor <span id="delete_name"
                                             class="font-weight-bold"></span>?</p>
                                 </div>
                             </div>
@@ -186,30 +199,30 @@
 
         function resetForm() {
             $('#save').trigger("reset");
-            $('#justifikasi_id').val('');
+            $('#surat_keluar_id').val('');
             $('#tanggal').val('');
             $('#nomor').val('');
             $('#keterangan').val('');
             $('#file').val('');
         }
 
-        function addJustifikasi() {
+        function addSuratKeluar() {
             resetForm();
-            $('#modal-title').text("Add New Justfiikasi");
+            $('#modal-title').text("Add New Surat Keluar");
             $('#button-save').text("Add");
         }
 
-        function editJustifikasi(data) {
+        function editSuratKeluar(data) {
             resetForm();
             $('#modal-title').text("Edit Jusifikasi");
             $('#button-save').text("Simpan");
-            $('#justifikasi_id').val(data.id);
+            $('#surat_keluar_id').val(data.id);
             $('#tanggal').val(data.tanggal);
             $('#nomor').val(data.nomor);
             $('#keterangan').val(data.keterangan);
         }
 
-        function deleteJustifikasi(data) {
+        function deleteSuratKeluar(data) {
             $('#delete_id').val(data.id);
             $('#delete_name').text(data.nomor);
         }

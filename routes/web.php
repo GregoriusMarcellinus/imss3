@@ -34,6 +34,10 @@ Route::prefix('apps')->group(function () {
 });
 Route::get('unauthorized', [App\Http\Controllers\HomeController::class, 'unauthorized'])->name('unauthorized');
 
+Route::get('surat-keluar', [App\Http\Controllers\SuratKeluarController::class, 'index'])->name('surat_keluar.index');
+Route::post('surat-keluar', [App\Http\Controllers\SuratKeluarController::class, 'index'])->name('surat_keluar.save');
+Route::delete('surat-keluar', [App\Http\Controllers\SuratKeluarController::class, 'index'])->name('surat_keluar.delete');
+
 Route::prefix('products')->group(function () {
     Route::get('', [App\Http\Controllers\ProductController::class, 'products'])->name('products');
     Route::post('', [App\Http\Controllers\ProductController::class, 'product_save'])->name('products.save');
@@ -92,7 +96,7 @@ Route::prefix('products')->group(function () {
     Route::get('approvedPO', [App\Http\Controllers\PurchaseOrderController::class, 'aprrovedPO'])->name('product.approvedPO');
     Route::get('aprrovedPO_PL', [App\Http\Controllers\PurchaseOrderController::class, 'aprrovedPO_PL'])->name('product.aprrovedPO_PL');
     Route::post('storePOPL', [App\Http\Controllers\PurchaseOrderController::class, 'storePOPL'])->name('product.storePOPL');
-    
+
 
     Route::get('test_pr', [App\Http\Controllers\PurchaseOrderController::class, 'test_pr'])->name('test_pr');
 

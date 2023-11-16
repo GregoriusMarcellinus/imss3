@@ -48,12 +48,12 @@
                             <thead>
                                 <tr class="text-center">
                                     <th>No.</th>
-                                    <th>{{ __('Nomor SJN') }}</th>
-                                    <th>{{ __('Nama Pengirim') }}</th>
                                     <th>{{ __('Tanggal') }}</th>
-                                    @if (Auth::user())
-                                        <th></th>
-                                    @endif
+                                    <th>{{ __('Nomor') }}</th>
+                                    <th>{{ __('Uraian') }}</th>
+                                    <th>{{ __('File') }}</th>
+                                    <th>{{ __('PIC') }}</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -61,36 +61,35 @@
                                     @php
                                         $data = $d->toArray();
                                     @endphp
-
                                     <tr>
-                                        <td class="text-center">{{ $data['no'] }}</td>
-                                        <td class="text-center">{{ $data['no_sjn'] }}</td>
-                                        <td class="text-center">{{ $data['nama_pengirim'] }}</td>
-                                        <td class="text-center">{{ $data['datetime'] }}</td>
-                                        @if (Auth::user())
-                                            <td class="text-center">
-                                                <button title="Edit SJN" type="button" class="btn btn-success btn-xs"
-                                                    data-toggle="modal" data-target="#add-sjn"
-                                                    onclick="editSjn({{ json_encode($data) }})"><i
+                                        <td class="text-center">{{ $items->firstItem() + $key }}</td>
+                                        <td>
+                                            {{ \Carbon\Carbon::parse($data['tanggal'])->format('d M Y') }}
+                                        </td>
+                                        <td>{{ $data['nomor'] }}</td>
+                                        <td>{{ $data['keterangan'] }}</td>
+                                        <td class="text-center">
+                                            <a href="{{ asset('justifikasi/' . $data['file']) }}" target="_blank">
+                                                Download
+                                            </a>
+                                        </td>
+                                        <td class="text-center">{{ $data['pic'] }}</td>
+                                        <td class="text-center">
+                                            @if (Auth::user()->role == 0 || Auth::user()->role == 6)
+                                                <button title="Edit Shelf" type="button" class="btn btn-success btn-xs"
+                                                    data-toggle="modal" data-target="#add-justifikasi"
+                                                    onclick="editJustifikasi({{ json_encode($data) }})"><i
                                                         class="fas fa-edit"></i></button>
-
-                                                <button title="Lihat Detail" type="button" data-toggle="modal"
-                                                    data-target="#detail-sjn" class="btn-lihat btn btn-info btn-xs"
-                                                    data-detail="{{ json_encode($data) }}"><i
-                                                        class="fas fa-list"></i></button>
-                                                @if (Auth::user() && Auth::user()->role == 0)
-                                                    <button title="Hapus Produk" type="button"
-                                                        class="btn btn-danger btn-xs" data-toggle="modal"
-                                                        data-target="#delete-sjn"
-                                                        onclick="deleteSjn({{ json_encode($data) }})"><i
-                                                            class="fas fa-trash"></i></button>
-                                                @endif
-                                            </td>
-                                        @endif
+                                                <button title="Hapus Produk" type="button" class="btn btn-danger btn-xs"
+                                                    data-toggle="modal" data-target="#delete-justifikasi"
+                                                    onclick="deleteJustifikasi({{ json_encode($data) }})"><i
+                                                        class="fas fa-trash"></i></button>
+                                            @endif
+                                        </td>
                                     </tr>
                                 @empty
                                     <tr class="text-center">
-                                        <td colspan="8">{{ __('No data.') }}</td>
+                                        <td colspan="7">{{ __('No data.') }}</td>
                                     </tr>
                                 @endforelse
                             </tbody>
