@@ -175,6 +175,7 @@ class SuratKeluarController extends Controller
             $items =  SuratKeluar::leftJoin('users', 'users.id', '=', 'surat_keluar.id_user')
                 ->select('surat_keluar.*', 'users.name as pic')
                 ->orderBy('surat_keluar.no_surat', 'asc')
+                ->where('surat_keluar.direksi', $direksi)
                 ->paginate(10);
             $type = strtoupper($direksi);
             return view('home.apps.surat_keluar.index', compact('items', 'type'));
