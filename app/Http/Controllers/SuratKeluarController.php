@@ -234,6 +234,10 @@ class SuratKeluarController extends Controller
         } else {
             $update = SuratKeluar::findOrFail($sk);
             $data['file'] = $data['file'] ? $data['file'] : $update->file;
+            //unlink file if $data['file']
+            if ($update->file && $data['file']) {
+                unlink(public_path('sk/' . $update->file));
+            }
             $data['no_surat'] = $update->no_surat;
             $data['status'] = $data['file'] ? 1 : 0;
             $update->update($data);
