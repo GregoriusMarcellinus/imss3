@@ -245,6 +245,10 @@ class SuratKeluarController extends Controller
         $id = $request->delete_id;
 
         $item = SuratKeluar::findOrFail($id);
+        //unlink file
+        if ($item->file) {
+            unlink(public_path('sk/' . $item->file));
+        }
         $item->delete();
 
         return redirect()->route('surat_keluar.index')->with('success', 'Surat Keluar berhasil dihapus');
