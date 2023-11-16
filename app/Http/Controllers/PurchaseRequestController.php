@@ -62,11 +62,18 @@ class PurchaseRequestController extends Controller
                     //looping detail_pr then check in detailspph with id_detail_pr exist
                     foreach ($detail_pr as $detail) {
                         $detail_spph = DetailSpph::where('id_detail_pr', $detail->id)->first();
-                        if ($detail_spph) {
+                        $po = Purchase_Order::where('id', $detail->id_po)->first();
+                        if ($po && $po->tipe == '1'){
                             $request->editable = FALSE;
                             break;
-                        } else {
-                            $request->editable = TRUE;
+                            
+                        } else{
+                            if ($detail_spph) {
+                                $request->editable = FALSE;
+                                break;
+                            } else {
+                                $request->editable = TRUE;
+                            }
                         }
                     }
                 }
