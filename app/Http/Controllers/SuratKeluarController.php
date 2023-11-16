@@ -172,7 +172,11 @@ class SuratKeluarController extends Controller
             $title = 'Surat Keluar';
             return view('home.tipe', compact('menus', 'title', 'routeBack'));
         } else if ($direksi) {
-            $items = SuratKeluar::paginate(10);
+            $items =  SuratKeluar::leftJoin('users', 'users.id', '=', 'surat_keluar.id_user')
+                ->select('surat_keluar.*', 'users.name as pic')
+                ->orderBy('surat_keluar.no_surat', 'asc')
+                ->where('surat_keluar.direksi', $direksi)
+                ->paginate(10);
             $type = strtoupper($direksi);
             return view('home.apps.surat_keluar.index', compact('items', 'type'));
         }
@@ -180,8 +184,79 @@ class SuratKeluarController extends Controller
 
     public function index()
     {
-        $items = SuratKeluar::paginate(10);
+        $items = SuratKeluar::leftJoin('users', 'users.id', '=', 'surat_keluar.id_user')
+            ->select('surat_keluar.*', 'users.name as pic')
+            ->orderBy('surat_keluar.no_surat', 'asc')
+            ->paginate(10);
 
         return view('surat_keluar.index', compact('items'));
+    }
+
+    public function create(Request $request)
+    {
+        $sk = $request->surat_keluar_id;
+        $request->validate([
+            'direksi' => 'required',
+            'type' => 'required',
+            'tujuan' => 'required',
+            'uraian' => 'required',
+            'file' => 'nullable|mimes:pdf|max:2048',
+            'tanggal' => 'required|date'
+        ]);
+
+        $latestSurat = SuratKeluar::where('type', $request->direksi)->where('status', '0')
+            ->orderBy('id', 'desc')->latest()->first();
+
+        if ($latestSurat && empty($sk)) {
+            if ($latestSurat->status == 0) {
+                return redirect()->back()->with('error', 'Surat sebelumnya belum diupload! Mohon hubungi PIC sebelumnya.');
+            }
+        }
+
+
+        $data = $request->all();
+        if ($request->hasFile('file')) {
+            $file = $request->file('file');
+            $fileName = time() . '.' . $file->extension();
+            $file->move(public_path('sk'), $fileName);
+            $data['file'] = $fileName;
+        } else {
+            $data['file'] = null;
+        }
+        $data['id_user'] = auth()->user()->id;
+        $data['no_surat'] = $this->generateNomorSurat($request->direksi, $request->tanggal);
+        $data['created_at'] = $request->tanggal;
+        //remove tanggal from $data
+        unset($data['tanggal']);
+
+        if (empty($sk)) {
+            SuratKeluar::create($data);
+            return redirect()->route('surat_keluar.index')->with('success', 'Surat Keluar berhasil ditambahkan');
+        } else {
+            $update = SuratKeluar::findOrFail($sk);
+            $data['file'] = $data['file'] ? $data['file'] : $update->file;
+            //unlink file if $data['file']
+            if ($update->file && $data['file']) {
+                unlink(public_path('sk/' . $update->file));
+            }
+            $data['no_surat'] = $update->no_surat;
+            $data['status'] = $data['file'] ? 1 : 0;
+            $update->update($data);
+            return redirect()->route('surat_keluar.index')->with('success', 'Surat Keluar berhasil diupdate');
+        }
+    }
+
+    public function delete(Request $request)
+    {
+        $id = $request->delete_id;
+
+        $item = SuratKeluar::findOrFail($id);
+        //unlink file
+        if ($item->file) {
+            unlink(public_path('sk/' . $item->file));
+        }
+        $item->delete();
+
+        return redirect()->route('surat_keluar.index')->with('success', 'Surat Keluar berhasil dihapus');
     }
 }

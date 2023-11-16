@@ -14,6 +14,7 @@ class CreateSuratKeluarTable extends Migration
     public function up()
     {
         Schema::create('surat_keluar', function (Blueprint $table) {
+            $table->id();
             $table->string('direksi');
             $table->integer('type');
             $table->string('no_surat');

@@ -115,6 +115,7 @@
                                         <option value="4">Gudang</option>
                                         <option value="5">Keuangan</option>
                                         <option value="6">Engineer</option>
+                                        <option value="7">SDM</option>
                                     </select>
                                 </div>
                             </div>
