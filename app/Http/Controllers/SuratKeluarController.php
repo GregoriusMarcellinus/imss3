@@ -233,6 +233,7 @@ class SuratKeluarController extends Controller
             return redirect()->route('surat_keluar.index')->with('success', 'Surat Keluar berhasil ditambahkan');
         } else {
             $update = SuratKeluar::findOrFail($sk);
+            $data['file'] = $data['file'] ? $data['file'] : $update->file;
             $data['no_surat'] = $update->no_surat;
             $data['status'] = $data['file'] ? 1 : 0;
             $update->update($data);
