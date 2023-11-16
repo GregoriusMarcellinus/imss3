@@ -15,7 +15,23 @@
         </div>
     </div>
     <section class="content">
-        <div class="container-fluid">
+        <div class="container-fluid pb-5">
+            <div class="row">
+                <div class="col-lg-3 col-6">
+                    <a href="{{ route('surat_keluar.index') }}">
+                        <div class="small-box bg-success">
+                            <div class="inner" style="background-color: green;">
+                                <p>Surat</p>
+                                <h3>Keluar</h3>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <hr class="mb-4" />
             <div class="row">
                 @if (Auth::user()->role == 0 || Auth::user()->role == 4)
                     <div class="col-lg-3 col-6">
