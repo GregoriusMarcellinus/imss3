@@ -132,10 +132,11 @@
                                 </label>
                                 <div class="col-sm-8">
                                     <input type="date" class="form-control" id="tgl_pr" name="tgl_pr"
-                                        min="<?php echo date('Y-m-d', strtotime('-7 days')); ?>">
+                                        min="{{ date('Y-m-d', strtotime('-7 days')) }}">
                                 </div>
                             </div>
-                            <div class="form-group row">
+                            <div class="form-group
+                                        row">
                                 <label for="proyek" class="col-sm-4 col-form-label">{{ __('Proyek') }}
                                 </label>
                                 <div class="col-sm-8">
