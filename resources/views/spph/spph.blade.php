@@ -141,7 +141,8 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form role="form" id="save" action="{{ route('spph.store') }}" method="post">
+                        <form role="form" id="save" action="{{ route('spph.store') }}" method="post"
+                            enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" id="save_id" name="id">
                             <div class="form-group row">
@@ -269,7 +270,8 @@
                                         </tr>
                                         <tr>
                                             <td colspan="3">
-                                                <button id="button-tambah-produk" type="button" class="btn btn-info mb-3"
+                                                <button id="button-tambah-produk" type="button"
+                                                    class="btn btn-info mb-3"
                                                     onclick="showAddProduct()">{{ __('Tambah Produk') }}</button>
                                             </td>
                                         </tr>
@@ -483,94 +485,102 @@
         //     }
         // }
 
-        function generateLampiranList(data){
-            if (data){
+        function generateLampiranList(data) {
+            if (data) {
                 $('#lampiran-row').empty();
                 var length = data.length;
 
                 data.map((item, index) => {
                     const counter = index + 1
                     var formGroup =
-                    '<div class="group">' +
+                        '<div class="group">' +
                         '<div class="form-group custom-file row">' +
-                            '<label for="lampiran' + counter + '" class="col-sm-4 col-form-label">Lampiran ' + counter + '</label>' +
-                            '<div class="col-sm-8 d-flex align-items-center ">' +
-                                '<input type="file" class="form-control custom-file-input" id="lampiran' + counter + '" name="lampiran[]" value="' + item + '">' +
-                                '<button type="button" class="ml-2 btn btn-danger btn-sm" onclick="removeLampiran(' + counter + ')"><i class="fas fa-trash"></i></button>' +
-                            '</div>' +
+                        '<label for="lampiran' + counter + '" class="col-sm-4 col-form-label">Lampiran ' + counter +
+                        '</label>' +
+                        '<div class="col-sm-8 d-flex align-items-center ">' +
+                        '<input type="file" class="form-control custom-file-input" id="lampiran' + counter +
+                        '" name="lampiran[]" value="' + item + '">' +
+                        '<button type="button" class="ml-2 btn btn-danger btn-sm" onclick="removeLampiran(' +
+                        counter + ')"><i class="fas fa-trash"></i></button>' +
+                        '</div>' +
                         '</div>' +
                         // '<hr/>' +
-                    '</div>';
+                        '</div>';
                     $("#lampiran-row").append(formGroup);
                 })
-            }else {
+            } else {
                 var length = $("#lampiran-row").children().length;
                 var counter = length + 1;
 
                 var formGroup =
-                '<div class="group">' + 
-                    '<div class="form-group row">' + 
-                        '<label for="lampiran' + counter + '" class="col-sm-4 col-form-label">Lampiran ' + counter + '</label>' + 
-                        '<div class="col-sm-8 d-flex align-items-center">' + 
-                            '<input type="file" class="form-control" id="lampiran' + counter + '" name="lampiran[]">' + 
-                            //remove button
-                            '<button type="button" class="ml-2 btn btn-danger btn-sm" onclick="removeLampiran(' + counter + ')"><i class="fas fa-trash"></i></button>' + 
-                        '</div>' +
+                    '<div class="group">' +
+                    '<div class="form-group row">' +
+                    '<label for="lampiran' + counter + '" class="col-sm-4 col-form-label">Lampiran ' + counter +
+                    '</label>' +
+                    '<div class="col-sm-8 d-flex align-items-center">' +
+                    '<input type="file" class="form-control" id="lampiran' + counter + '" name="lampiran[]">' +
+                    //remove button
+                    '<button type="button" class="ml-2 btn btn-danger btn-sm" onclick="removeLampiran(' + counter +
+                    ')"><i class="fas fa-trash"></i></button>' +
+                    '</div>' +
                     '</div>' +
                     // '<hr/>' +
-                '</div>';
+                    '</div>';
                 $("#lampiran-row").append(formGroup);
             }
         }
 
 
-        function generateVendorList(data){
-            if (data){
+        function generateVendorList(data) {
+            if (data) {
                 $('#vendor-row').empty();
                 var length = data.length;
 
-                data.map((item, index) =>{
+                data.map((item, index) => {
                     const counter = index + 1
-                    var formGroup = 
-                    '<div class="group">' + 
-                        '<div class="form-group row">' + 
-                            '<label for="vendor' + counter + '" class="col-sm-4 col-form-label">Vendor ' + counter + '</label>' + 
-                            '<div class="col-sm-8 d-flex align-items-center">' + 
-                                '<select class="form-control" id="vendor' + counter + '" name="vendor[]">' + 
-                                    '<option value="">Pilih Vendor</option>' + 
-                                    '@foreach ($vendors as $vendor)' + 
-                                        '<option value="{{ $vendor->id }}">{{ $vendor->nama }}</option>' + 
-                                    '@endforeach' + 
-                                '</select>' + 
-                                //remove button
-                                '<button type="button" class="ml-2 btn btn-danger btn-sm" onclick="removeNamaAlamat(' + counter + ')"><i class="fas fa-trash"></i></button>' + 
-                            '</div>' +
+                    var formGroup =
+                        '<div class="group">' +
+                        '<div class="form-group row">' +
+                        '<label for="vendor' + counter + '" class="col-sm-4 col-form-label">Vendor ' + counter +
+                        '</label>' +
+                        '<div class="col-sm-8 d-flex align-items-center">' +
+                        '<select class="form-control" id="vendor' + counter + '" name="vendor[]">' +
+                        '<option value="">Pilih Vendor</option>' +
+                        '@foreach ($vendors as $vendor)' +
+                        '<option value="{{ $vendor->id }}">{{ $vendor->nama }}</option>' +
+                        '@endforeach' +
+                        '</select>' +
+                        //remove button
+                        '<button type="button" class="ml-2 btn btn-danger btn-sm" onclick="removeNamaAlamat(' +
+                        counter + ')"><i class="fas fa-trash"></i></button>' +
+                        '</div>' +
                         '</div>' +
                         // '<hr/>' +
-                    '</div>';
+                        '</div>';
                     $("#vendor-row").append(formGroup);
                 })
-            }else {
+            } else {
                 var length = $("#vendor-row").children().length;
                 var counter = length + 1;
 
                 var formGroup =
-                '<div class="group"' +
-                 '<div class="form-group row">' +
+                    '<div class="group"' +
+                    '<div class="form-group row">' +
                     '<label for="vendor' + counter + '" class="col-sm-4 col-form-label">Vendor ' + counter + '</label>' +
                     '<div class="col-sm-8 d-flex align-items-center">' +
-                        '<select class="form-control" id="vendor' + counter + '" name="vendor[]">' +
-                            '<option value="">Pilih Vendor</option>' +
-                            '@foreach ($vendors as $vendor)' +
-                                '<option value="{{ $vendor->id }}">{{ $vendor->nama }}</option>' +
-                            '@endforeach' +
-                        '</select>' +
-                        //remove button
-                        '<button type="button" class="ml-2 btn btn-danger btn-sm" onclick="removeNamaAlamat(' + counter + ')"><i class="fas fa-trash"></i></button>' +
+                    '<select class="form-control" id="vendor' + counter + '" name="vendor[]">' +
+                    '<option value="">Pilih Vendor</option>' +
+                    '@foreach ($vendors as $vendor)' +
+                    '<option value="{{ $vendor->id }}">{{ $vendor->nama }}</option>' +
+                    '@endforeach' +
+                    '</select>' +
+                    //remove button
+                    '<button type="button" class="ml-2 btn btn-danger btn-sm" onclick="removeNamaAlamat(' + counter +
+                    ')"><i class="fas fa-trash"></i></button>' +
                     '</div>' +
-                '</div>' +
-                // '<hr/>' +
-                '</div>';
+                    '</div>' +
+                    // '<hr/>' +
+                    '</div>';
                 $("#vendor-row").append(formGroup);
 
             }
@@ -580,6 +590,7 @@
             // $('#penerima' + counter).closest('.group').remove();
             $('#vendor' + counter).closest('.group').remove();
         }
+
         function removeLampiran(counter) {
             $('#lampiran' + counter).closest('.group').remove();
         }
@@ -717,8 +728,9 @@
                         $('#detail-material').append(
                             '<tr><td>' + (key + 1) + '</td><td>' + value.uraian +
                             '</td><td>' + value.spek + '</td><td>' + value.qty + '</td><td>' + value
-                            .satuan + '</td><td>' + no_pr +'</td><td>'+ no_spph +  '</td><td>' + value.nama_proyek +
-                            '</td><td>' + checkbox + 
+                            .satuan + '</td><td>' + no_pr + '</td><td>' + no_spph + '</td><td>' +
+                            value.nama_proyek +
+                            '</td><td>' + checkbox +
                             '</td></tr>'
                         );
                     });
