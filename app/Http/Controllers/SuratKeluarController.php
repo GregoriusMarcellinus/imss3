@@ -204,12 +204,14 @@ class SuratKeluarController extends Controller
             'tanggal' => 'required|date'
         ]);
 
-        $latestSurat = SuratKeluar::where('type', $request->direksi)->where('status', '0')
+        $latestSurat = SuratKeluar::where('direksi', $request->direksi)->where('status', '0')
             ->orderBy('id', 'desc')->latest()->first();
 
-        if ($latestSurat && empty($sk)) {
-            if ($latestSurat->status == 0) {
-                return redirect()->back()->with('error', 'Surat sebelumnya belum diupload! Mohon hubungi PIC sebelumnya.');
+        if ($sk == null) {
+            if ($latestSurat) {
+                if ($latestSurat->status == 0) {
+                    return redirect()->back()->with('error', 'Surat sebelumnya belum diupload! Mohon hubungi PIC sebelumnya.');
+                }
             }
         }
 

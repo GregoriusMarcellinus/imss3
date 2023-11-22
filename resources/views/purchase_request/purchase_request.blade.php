@@ -75,7 +75,7 @@
                                                 <button title="Edit Request" type="button" class="btn btn-success btn-xs"
                                                     data-toggle="modal" data-target="#add-pr"
                                                     onclick="editPR({{ json_encode($data) }})"
-                                                    @if ($data['editable'] == 0 ) disabled @endif><i
+                                                    @if ($data['editable'] == 0) disabled @endif><i
                                                         class="fas fa-edit"></i></button>
                                                 <button title="Lihat Detail" type="button" data-toggle="modal"
                                                     data-target="#detail-pr" class="btn-lihat btn btn-info btn-xs"
@@ -131,10 +131,12 @@
                                 <label for="tgl_pr" class="col-sm-4 col-form-label">{{ __('Tanggal') }}
                                 </label>
                                 <div class="col-sm-8">
-                                    <input type="date" class="form-control" id="tgl_pr" name="tgl_pr">
+                                    <input type="date" class="form-control" id="tgl_pr" name="tgl_pr"
+                                        min="{{ date('Y-m-d', strtotime('-7 days')) }}">
                                 </div>
                             </div>
-                            <div class="form-group row">
+                            <div class="form-group
+                                        row">
                                 <label for="proyek" class="col-sm-4 col-form-label">{{ __('Proyek') }}
                                 </label>
                                 <div class="col-sm-8">
@@ -675,7 +677,7 @@
             } else {
                 $('#button-tambah-produk').attr('disabled', false);
             }
-             
+
             $.ajax({
                 url: '/products/purchase_request_detail/' + data.id,
                 type: "GET",

@@ -86,9 +86,13 @@
                                         @if ($data['file'] == null)
                                             -
                                         @else
-                                            <a href="{{ asset('sk/' . $data['file']) }}" target="_blank">
-                                                Download
-                                            </a>
+                                            @if ($data['id_user'] == Auth::user()->id)
+                                                <a href="{{ asset('sk/' . $data['file']) }}" target="_blank">
+                                                    Download
+                                                </a>
+                                            @else
+                                                Ada
+                                            @endif
                                         @endif
                                     </td>
                                     <td class="text-center">{{ $data['pic'] }}</td>
