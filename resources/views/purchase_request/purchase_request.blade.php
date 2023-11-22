@@ -240,6 +240,7 @@
                                                 <th>{{ __('QTY') }}</th>
                                                 <th>{{ __('SAT') }}</th>
                                                 <th>{{ __('Waktu Penyelesaian') }}</th>
+                                                <th>{{ __('Lampiran Nota') }}</th>
                                                 <th>{{ __('Keterangan') }}</th>
                                                 {{-- <th>{{ __('SPPH') }}</th>
                                                 <th>{{ __('PO') }}</th>
@@ -636,7 +637,13 @@
                                 value
                                 .spek + '</td><td>' + value.qty + '</td><td>' + value
                                 .satuan +
-                                '</td><td>' + value.waktu + '</td><td>' + value.keterangan +
+                                '</td><td>' + value.waktu + '</td><td>' +
+                                    '<div class="input-group">' +
+                                '<input type="file" class="form-control" id="lampiran" name="lampiran"/>' +
+                                '<button title="simpan" id="edit_pr_save" type="button" class="btn btn-success btn-xs" data-id="' +
+                                id + '" data-idpr="' + id + '" ><i class="fas fa-save"></i></button>' +
+                                '</div>' +
+                                '</td><td>' + value.keterangan +
                                 '</td></tr>'
                                 // + <td>' + spph + '</td><td>' + value.sph +
                                 // '</td><td>' + po +
@@ -746,8 +753,13 @@
                                 .kode_material + '</td><td>' + value.uraian + '</td><td>' +
                                 value
                                 .spek + '</td><td>' + value.qty + '</td><td>' + value
-                                .satuan + '</td><td>' + value.waktu + '</td><td>' + value
-                                .keterangan +
+                                .satuan + '</td><td>' + value.waktu + '</td><td>' +
+                                '<div class="input-group">' +
+                                '<input type="file" class="form-control" id="lampiran" name="lampiran"/>' +
+                                '<button title="simpan" id="edit_pr_save" type="button" class="btn btn-success btn-xs" data-id="' +
+                                id + '" data-idpr="' + id + '" ><i class="fas fa-save"></i></button>' +
+                                '</div>' + '</td><td>' +
+                                value.keterangan +
                                 '</td></tr>'
 
                                 // + <td>' + spph +
