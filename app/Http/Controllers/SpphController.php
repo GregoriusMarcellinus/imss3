@@ -31,19 +31,19 @@ class SpphController extends Controller
         } else {
             $warehouse_id = DB::table('warehouse')->first()->warehouse_id;
         }
-            $spphes = Spph::paginate(50);
-            foreach ($spphes as $key => $item) {
-                $id = json_decode($item->vendor_id);
-                $item->vendor = Vendor::whereIn('id', $id)->get();
-                $item->vendor = $item->vendor->map(function ($item) {
-                    return $item->nama;
-                });
-                //change $item->vendor collection to array
-                $item->vendor = $item->vendor->toArray();
-                $item->vendor = implode(', ', $item->vendor);
-            }
+        $spphes = Spph::paginate(50);
+        foreach ($spphes as $key => $item) {
+            $id = json_decode($item->vendor_id);
+            $item->vendor = Vendor::whereIn('id', $id)->get();
+            $item->vendor = $item->vendor->map(function ($item) {
+                return $item->nama;
+            });
+            //change $item->vendor collection to array
+            $item->vendor = $item->vendor->toArray();
+            $item->vendor = implode(', ', $item->vendor);
+        }
         $vendors = Vendor::all();
-// dd($spphes);
+        // dd($spphes);
         if ($search) {
             $spphes = Spph::where('tanggal_spph', 'LIKE', "%$search%")->paginate(50);
         }
@@ -122,7 +122,7 @@ class SpphController extends Controller
             'nomor_spph' => $request->nomor_spph,
             'lampiran' => $request->lampiran,
             // 'vendor' =>json_encode($request->vendor_id),
-            'vendor' =>json_encode('$request->vendor_id'),
+            'vendor' => json_encode('$request->vendor_id'),
             'tanggal_spph' => $request->tanggal_spph,
             'batas_spph' => $request->batas_spph,
             'perihal' => $request->perihal,
@@ -188,9 +188,14 @@ class SpphController extends Controller
     {
         $id = $request->id;
         $spph = Spph::where('id', $id)->first();
-        //join spph penerima ['x','y'] to x,y
-        $spph->penerima = json_decode($spph->penerima);
-        $spph->penerima = implode(', ', $spph->penerima);
+        $vendor = json_decode($spph->vendor_id);
+        $vendor = Vendor::whereIn('id', $vendor)->get();
+        $vendor = $vendor->map(function ($item) {
+            return $item->nama;
+        });
+        $vendor = $vendor->toArray();
+        $vendor = implode(', ', $vendor);
+        $spph->penerima = $vendor;
 
         $spph->details = DetailSpph::where('spph_id', $id)
             ->leftjoin('detail_pr', 'detail_pr.id', '=', 'detail_spph.id_detail_pr')
@@ -256,19 +261,29 @@ class SpphController extends Controller
         // $page_count = $dummy->get_canvas()->get_page_count();
         // $pdf = PDF::loadview('spph_print', compact('spph', 'page_count'));
 
-        $penerimas = $spph->penerima;
-        $penerimas = json_decode($penerimas);
+        $vendor = json_decode($spph->vendor_id);
+        $vendor_name = Vendor::whereIn('id', $vendor)->get();
+        $vendor_name = $vendor_name->map(function ($item) {
+            return $item->nama;
+        });
+        $vendor_name = $vendor_name->toArray();
 
-        $alamats = $spph->alamat;
-        $alamats = json_decode($alamats);
+        $vendor_alamat = Vendor::whereIn('id', $vendor)->get();
+        $vendor_alamat = $vendor_alamat->map(function ($item) {
+            return $item->alamat;
+        });
+        $vendor_alamat = $vendor_alamat->toArray();
 
         $newObjects = [];
-        foreach ($penerimas as $key => $penerima) {
+
+        //push to newObject with nama=vendor_name, alamat=vendor_alamat
+        foreach ($vendor_name as $key => $value) {
             $newObject = new \stdClass();
-            $newObject->nama = $penerima;
-            $newObject->alamat = $alamats[$key];
-            $newObjects[] = $newObject;
+            $newObject->nama = $value;
+            $newObject->alamat = $vendor_alamat[$key];
+            array_push($newObjects, $newObject);
         }
+
 
         $spphs = $newObjects;
         $count = count($spphs);
