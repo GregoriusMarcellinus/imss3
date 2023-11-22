@@ -57,7 +57,8 @@
                                     <th>{{ __('Perihal') }}</th>
                                     <th>{{ __('Tanggal SPPH') }}</th>
                                     <th>{{ __('Batas SPPH') }}</th>
-                                    <th>{{ __('Penerima') }}</th>
+                                    <th>{{ __('Vendor') }}</th>
+                                    {{-- <th>{{ __('Penerima') }}</th> --}}
                                     <th></th>
                                 </tr>
                             </thead>
@@ -65,17 +66,20 @@
                                 @if (count($spphes) > 0)
                                     @foreach ($spphes as $key => $d)
                                         @php
-                                            $penerima = $d->penerima;
-                                            $penerima = json_decode($penerima);
-                                            $penerima = implode(', ', $penerima);
+                                            // $penerima = $d->penerima;
+                                            // $penerima = json_decode($penerima);
+                                            // $penerima = implode(', ', $penerima);
+                                            $vendor = $d->vendor;
                                             $data = [
                                                 'no' => $spphes->firstItem() + $key,
                                                 'nomor_spph' => $d->nomor_spph,
                                                 'lampiran' => $d->lampiran,
+                                                'vendor_id' => $d->vendor_id,
+                                                'vendor' => $vendor,
                                                 'perihal' => $d->perihal,
                                                 'tanggal' => date('d/m/Y', strtotime($d->tanggal_spph)),
                                                 'batas' => date('d/m/Y', strtotime($d->batas_spph)),
-                                                'penerima' => $penerima,
+                                                'penerima' => $d->penerima,
                                                 'alamat' => $d->alamat,
                                                 'id' => $d->id,
                                                 'penerima_asli' => $d->penerima,
@@ -90,7 +94,8 @@
                                             <td class="text-center">{{ $data['perihal'] }}</td>
                                             <td class="text-center">{{ $data['tanggal'] }}</td>
                                             <td class="text-center">{{ $data['batas'] }}</td>
-                                            <td class="text-center">{{ $data['penerima'] }}</td>
+                                            <td class="text-center">{{ $data['vendor'] }}</td>
+                                            {{-- <td class="text-center">{{ $data['penerima'] }}</td> --}}
                                             <td class="text-center">
                                                 <button title="Edit SPPH" type="button" class="btn btn-success btn-xs"
                                                     data-toggle="modal" data-target="#add-SPPH"
@@ -112,7 +117,7 @@
                                     @endforeach
                                 @else
                                     <tr class="text-center">
-                                        <td colspan="8">{{ __('No data.') }}</td>
+                                        <td colspan="9">{{ __('No data.') }}</td>
                                     </tr>
                                 @endif
                             </tbody>
@@ -152,7 +157,19 @@
                                     <input type="text" class="form-control" id="lampiran" name="lampiran">
                                 </div>
                             </div>
-
+                            {{-- <div class="form-group row">
+                                <label for="vendor_id" class="col-sm-4 col-form-label">{{ __('Vendor') }} </label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="vendor_id" name="vendor_id">
+                                    <select class="form-control" id=
+                                    "vendor_id" name="vendor_id">
+                                        <option value="">Pilih Vendor</option>
+                                        @foreach ($vendors as $vendor)
+                                            <option value="{{ $vendor->id }}">{{ $vendor->nama }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div> --}}
                             <div class="form-group row">
                                 <label for="perihal" class="col-sm-4 col-form-label">{{ __('Perihal') }}
                                 </label>
@@ -175,13 +192,21 @@
                                 </div>
                             </div>
 
-                            <h6>Penerima -- </h6>
+                            {{-- <h6>Penerima -- </h6>
 
                             <div id="penerima-row">
 
                             </div>
 
-                            <a id="tambah" style="cursor: pointer">Tambah Penerima</a>
+                            <a id="tambah" style="cursor: pointer">Tambah Penerima</a> --}}
+
+                            <h6>Vendor -- </h6>
+
+                            <div id="vendor-row">
+
+                            </div>
+
+                            <a id="tambah" style="cursor: pointer">Tambah vendor</a>
 
                         </form>
                     </div>
@@ -386,74 +411,131 @@
             resetForm();
         }
 
-        function generateNamaAlamat(data) {
-            if (data) {
-                $('#penerima-row').empty();
+        //fungsi generate alamat
+
+        // function generateNamaAlamat(data) {
+        //     if (data) {
+        //         $('#penerima-row').empty();
+        //         var length = data.length;
+
+        //         data.map((item, index) => {
+        //             const counter = index + 1
+        //             var formGroup =
+        //                 '<div class="group">' +
+        //                 '<div class="form-group row">' +
+        //                 '<label for="penerima' + counter + '" class="col-sm-4 col-form-label">Penerima ' + counter +
+        //                 '</label>' +
+        //                 '<div class="col-sm-8 d-flex align-items-center">' +
+        //                 '<input type="text" class="form-control" id="penerima' + counter +
+        //                 '" name="penerima[]" value="' + item.penerima + '">' +
+        //                 //remove button
+        //                 '<button type="button" class="ml-2 btn btn-danger btn-sm" onclick="removeNamaAlamat(' +
+        //                 counter +
+        //                 ')"><i class="fas fa-trash"></i></button>' +
+        //                 '</div>' +
+        //                 '</div>' +
+        //                 '<div class="form-group row">' +
+        //                 '<label for="alamat' + counter + '" class="col-sm-4 col-form-label">Alamat ' + counter +
+        //                 '</label>' +
+        //                 '<div class="col-sm-8">' +
+        //                 '<textarea class="form-control" id="alamat' + counter +
+        //                 '" name="alamat[]" rows="3">' + item.alamat + '</textarea>' +
+        //                 '</div>' +
+        //                 '</div>' +
+        //                 '<hr/>' +
+        //                 '</div>';
+        //             $("#penerima-row").append(formGroup);
+        //         })
+        //     } else {
+        //         var length = $("#penerima-row").children().length;
+        //         var counter = length + 1;
+
+        //         var formGroup =
+        //             '<div class="group">' +
+        //             '<div class="form-group row">' +
+        //             '<label for="penerima' + counter + '" class="col-sm-4 col-form-label">Penerima ' + counter +
+        //             '</label>' +
+        //             '<div class="col-sm-8 d-flex align-items-center">' +
+        //             '<input type="text" class="form-control" id="penerima' + counter + '" name="penerima[]">' +
+        //             //remove button
+        //             '<button type="button" class="ml-2 btn btn-danger btn-sm" onclick="removeNamaAlamat(' + counter +
+        //             ')"><i class="fas fa-trash"></i></button>' +
+        //             '</div>' +
+        //             '</div>' +
+        //             '<div class="form-group row">' +
+        //             '<label for="alamat' + counter + '" class="col-sm-4 col-form-label">Alamat ' + counter + '</label>' +
+        //             '<div class="col-sm-8">' +
+        //             '<textarea class="form-control" id="alamat' + counter + '" name="alamat[]"></textarea>' +
+        //             '</div>' +
+        //             '</div>' +
+        //             '<hr/>' +
+        //             '</div>';
+        //         $("#penerima-row").append(formGroup);
+        //     }
+        // }
+
+
+        function generateVendorList(data){
+            if (data){
+                $('#vendor-row').empty();
                 var length = data.length;
 
-                data.map((item, index) => {
+                data.map((item, index) =>{
                     const counter = index + 1
-                    var formGroup =
-                        '<div class="group">' +
-                        '<div class="form-group row">' +
-                        '<label for="penerima' + counter + '" class="col-sm-4 col-form-label">Penerima ' + counter +
-                        '</label>' +
-                        '<div class="col-sm-8 d-flex align-items-center">' +
-                        '<input type="text" class="form-control" id="penerima' + counter +
-                        '" name="penerima[]" value="' + item.penerima + '">' +
-                        //remove button
-                        '<button type="button" class="ml-2 btn btn-danger btn-sm" onclick="removeNamaAlamat(' +
-                        counter +
-                        ')"><i class="fas fa-trash"></i></button>' +
+                    var formGroup = 
+                    '<div class="group">' + 
+                        '<div class="form-group row">' + 
+                            '<label for="vendor' + counter + '" class="col-sm-4 col-form-label">Vendor ' + counter + '</label>' + 
+                            '<div class="col-sm-8 d-flex align-items-center">' + 
+                                '<select class="form-control" id="vendor' + counter + '" name="vendor[]">' + 
+                                    '<option value="">Pilih Vendor</option>' + 
+                                    '@foreach ($vendors as $vendor)' + 
+                                        '<option value="{{ $vendor->id }}">{{ $vendor->nama }}</option>' + 
+                                    '@endforeach' + 
+                                '</select>' + 
+                                //remove button
+                                '<button type="button" class="ml-2 btn btn-danger btn-sm" onclick="removeNamaAlamat(' + counter + ')"><i class="fas fa-trash"></i></button>' + 
+                            '</div>' +
                         '</div>' +
-                        '</div>' +
-                        '<div class="form-group row">' +
-                        '<label for="alamat' + counter + '" class="col-sm-4 col-form-label">Alamat ' + counter +
-                        '</label>' +
-                        '<div class="col-sm-8">' +
-                        '<textarea class="form-control" id="alamat' + counter +
-                        '" name="alamat[]" rows="3">' + item.alamat + '</textarea>' +
-                        '</div>' +
-                        '</div>' +
-                        '<hr/>' +
-                        '</div>';
-                    $("#penerima-row").append(formGroup);
+                        // '<hr/>' +
+                    '</div>';
+                    $("#vendor-row").append(formGroup);
                 })
-            } else {
-                var length = $("#penerima-row").children().length;
+            }else {
+                var length = $("#vendor-row").children().length;
                 var counter = length + 1;
 
                 var formGroup =
-                    '<div class="group">' +
-                    '<div class="form-group row">' +
-                    '<label for="penerima' + counter + '" class="col-sm-4 col-form-label">Penerima ' + counter +
-                    '</label>' +
+                '<div class="group"' +
+                 '<div class="form-group row">' +
+                    '<label for="vendor' + counter + '" class="col-sm-4 col-form-label">Vendor ' + counter + '</label>' +
                     '<div class="col-sm-8 d-flex align-items-center">' +
-                    '<input type="text" class="form-control" id="penerima' + counter + '" name="penerima[]">' +
-                    //remove button
-                    '<button type="button" class="ml-2 btn btn-danger btn-sm" onclick="removeNamaAlamat(' + counter +
-                    ')"><i class="fas fa-trash"></i></button>' +
+                        '<select class="form-control" id="vendor' + counter + '" name="vendor[]">' +
+                            '<option value="">Pilih Vendor</option>' +
+                            '@foreach ($vendors as $vendor)' +
+                                '<option value="{{ $vendor->id }}">{{ $vendor->nama }}</option>' +
+                            '@endforeach' +
+                        '</select>' +
+                        //remove button
+                        '<button type="button" class="ml-2 btn btn-danger btn-sm" onclick="removeNamaAlamat(' + counter + ')"><i class="fas fa-trash"></i></button>' +
                     '</div>' +
-                    '</div>' +
-                    '<div class="form-group row">' +
-                    '<label for="alamat' + counter + '" class="col-sm-4 col-form-label">Alamat ' + counter + '</label>' +
-                    '<div class="col-sm-8">' +
-                    '<textarea class="form-control" id="alamat' + counter + '" name="alamat[]"></textarea>' +
-                    '</div>' +
-                    '</div>' +
-                    '<hr/>' +
-                    '</div>';
-                $("#penerima-row").append(formGroup);
+                '</div>' +
+                // '<hr/>' +
+                '</div>';
+                $("#vendor-row").append(formGroup);
+
             }
         }
 
         function removeNamaAlamat(counter) {
-            $('#penerima' + counter).closest('.group').remove();
+            // $('#penerima' + counter).closest('.group').remove();
+            $('#vendor' + counter).closest('.group').remove();
         }
 
         $(document).ready(function() {
             $("#tambah").click(function() {
-                generateNamaAlamat(null);
+                // generateNamaAlamat(null);
+                generateVendorList(null);
             });
         });
 

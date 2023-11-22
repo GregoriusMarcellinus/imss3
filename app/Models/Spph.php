@@ -12,6 +12,7 @@ class Spph extends Model
     protected $fillable = [
         'nomor_spph',
         'lampiran',
+        'vendor_id',
         'tanggal_spph',
         'batas_spph',
         'perihal',

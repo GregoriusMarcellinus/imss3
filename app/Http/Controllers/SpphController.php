@@ -8,6 +8,7 @@ use App\Models\Keproyekan;
 use App\Models\Purchase_Order;
 use App\Models\PurchaseRequest;
 use App\Models\Spph;
+use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
@@ -30,9 +31,19 @@ class SpphController extends Controller
         } else {
             $warehouse_id = DB::table('warehouse')->first()->warehouse_id;
         }
-
-        $spphes = Spph::paginate(50);
-
+            $spphes = Spph::paginate(50);
+            foreach ($spphes as $key => $item) {
+                $id = json_decode($item->vendor_id);
+                $item->vendor = Vendor::whereIn('id', $id)->get();
+                $item->vendor = $item->vendor->map(function ($item) {
+                    return $item->nama;
+                });
+                //change $item->vendor collection to array
+                $item->vendor = $item->vendor->toArray();
+                $item->vendor = implode(', ', $item->vendor);
+            }
+        $vendors = Vendor::all();
+// dd($spphes);
         if ($search) {
             $spphes = Spph::where('tanggal_spph', 'LIKE', "%$search%")->paginate(50);
         }
@@ -42,7 +53,7 @@ class SpphController extends Controller
 
             return response()->json($categories);
         } else {
-            return view('spph.spph', compact('spphes'));
+            return view('spph.spph', compact('spphes', 'vendors'));
         }
     }
 
@@ -57,6 +68,7 @@ class SpphController extends Controller
         }
 
         $spphes = Spph::paginate(50);
+        $vendors = Vendor::all();
 
         if ($search) {
             $spphes = Spph::where('tanggal_spph', 'LIKE', "%$search%")->paginate(50);
@@ -67,7 +79,7 @@ class SpphController extends Controller
 
             return response()->json($categories);
         } else {
-            return view('home.apps.logistik.spph', compact('spphes'));
+            return view('home.apps.logistik.spph', compact('spphes', 'vendors'));
         }
     }
 
@@ -89,14 +101,16 @@ class SpphController extends Controller
         $request->validate([
             'nomor_spph' => 'required',
             // 'lampiran' => 'required',
+            'vendor' => 'required',
             'tanggal_spph' => 'required',
             'batas_spph' => 'required',
             'perihal' => 'required',
-            'penerima' => 'required',
-            'alamat' => 'required'
+            // 'penerima' => 'required',
+            // 'alamat' => 'required'
         ], [
             'nomor_spph.required' => 'Nomor SPPH harus diisi',
             // 'lampiran.required' => 'Lampiran harus diisi',
+            'vendor.required' => 'Vendor harus diisi',
             'tanggal_spph.required' => 'Tanggal SPPH harus diisi',
             'batas_spph.required' => 'Batas SPPH harus diisi',
             'perihal.required' => 'Perihal harus diisi',
@@ -107,6 +121,8 @@ class SpphController extends Controller
         $data = [
             'nomor_spph' => $request->nomor_spph,
             'lampiran' => $request->lampiran,
+            // 'vendor' =>json_encode($request->vendor_id),
+            'vendor' =>json_encode('$request->vendor_id'),
             'tanggal_spph' => $request->tanggal_spph,
             'batas_spph' => $request->batas_spph,
             'perihal' => $request->perihal,
@@ -114,6 +130,8 @@ class SpphController extends Controller
             // 'warehouse_id' => $warehouse_id
             'alamat' => json_encode($request->alamat)
         ];
+
+        // dd($data);
 
         if (empty($spph)) {
             $add = Spph::create($data);

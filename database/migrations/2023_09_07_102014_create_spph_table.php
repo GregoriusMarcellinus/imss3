@@ -17,6 +17,7 @@ class CreateSpphTable extends Migration
             $table->id();
             $table->string('nomor_spph');
             $table->integer('lampiran');
+            $table->integer('vendor_id');
             $table->date('tanggal_spph');
             $table->string('batas_spph');
             $table->string('perihal');

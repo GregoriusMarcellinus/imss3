@@ -287,7 +287,7 @@
                             </div>
                         </a>
                     </div>
-                    <div class="col-lg-3 col-6">
+                    {{-- <div class="col-lg-3 col-6">
                         <a href="{{ route('product.justifikasi') }}">
                             <div class="small-box bg-primary">
                                 <div class="inner" style="background-color: #afc124">
@@ -312,7 +312,7 @@
                                 </div>
                             </div>
                         </a>
-                    </div>
+                    </div> --}}
                 @endif
             </div>
         </div>
