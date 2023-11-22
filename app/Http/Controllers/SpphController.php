@@ -8,6 +8,7 @@ use App\Models\Keproyekan;
 use App\Models\Purchase_Order;
 use App\Models\PurchaseRequest;
 use App\Models\Spph;
+use App\Models\SpphLampiran;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -41,6 +42,9 @@ class SpphController extends Controller
             //change $item->vendor collection to array
             $item->vendor = $item->vendor->toArray();
             $item->vendor = implode(', ', $item->vendor);
+            $lampiran = SpphLampiran::where('spph_id', $item->id)->get();
+            //sum in tipe column
+            $item->lampiran = $lampiran->count();
         }
         $vendors = Vendor::all();
         // dd($spphes);
@@ -83,6 +87,13 @@ class SpphController extends Controller
         }
     }
 
+    function FunctionCountPages($path)
+    {
+        $pdftextfile = file_get_contents($path);
+        $pagenumber = preg_match_all("/\/Page\W/", $pdftextfile, $dummy);
+        return $pagenumber;
+    }
+
     /**
      * Store a newly created resource in storage.
      *
@@ -120,9 +131,9 @@ class SpphController extends Controller
 
         $data = [
             'nomor_spph' => $request->nomor_spph,
-            'lampiran' => $request->lampiran,
+            // 'lampiran' => $request->lampiran,
             // 'vendor' =>json_encode($request->vendor_id),
-            'vendor' => json_encode('$request->vendor_id'),
+            'vendor_id' => json_encode($request->vendor),
             'tanggal_spph' => $request->tanggal_spph,
             'batas_spph' => $request->batas_spph,
             'perihal' => $request->perihal,
@@ -136,11 +147,19 @@ class SpphController extends Controller
         if (empty($spph)) {
             $add = Spph::create($data);
 
-            // return response()->json([
-            //     'status' => 'success',
-            //     'message' => 'SPPH berhasil ditambahkan',
-            //     'data' => $add
-            // ]);
+            $files = $request->file('lampiran');
+            //looping multiple file
+            foreach ($files as $file) {
+                $file_name = rand() . '.' . $file->getClientOriginalExtension();
+                $file->move(public_path('lampiran'), $file_name);
+                SpphLampiran::create([
+                    'spph_id' => $add->id,
+                    'file' => $file_name,
+                    'tipe' => $this->FunctionCountPages(public_path('lampiran/' . $file_name))
+                ]);
+            }
+
+
             if ($add) {
                 return redirect()->route('spph.index')->with('success', 'SPPH berhasil ditambahkan');
             } else {
@@ -283,6 +302,10 @@ class SpphController extends Controller
             $newObject->alamat = $vendor_alamat[$key];
             array_push($newObjects, $newObject);
         }
+
+        $lampiran = SpphLampiran::where('spph_id', $spph->id)->get();
+        //sum in tipe column
+        $spph->lampiran = $lampiran->count();
 
 
         $spphs = $newObjects;
