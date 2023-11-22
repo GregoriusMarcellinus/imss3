@@ -150,13 +150,13 @@
                                     <input type="text" class="form-control" id="nomor_spph" name="nomor_spph">
                                 </div>
                             </div>
-                            <div class="form-group row">
+                            {{-- <div class="form-group row">
                                 <label for="lampiran" class="col-sm-4 col-form-label">{{ __('Lampiran') }}
                                 </label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="lampiran" name="lampiran">
                                 </div>
-                            </div>
+                            </div> --}}
                             {{-- <div class="form-group row">
                                 <label for="vendor_id" class="col-sm-4 col-form-label">{{ __('Vendor') }} </label>
                                 <div class="col-sm-8">
@@ -199,6 +199,15 @@
                             </div>
 
                             <a id="tambah" style="cursor: pointer">Tambah Penerima</a> --}}
+
+                            <h6>Lampiran -- </h6>
+
+                            <div id="lampiran-row">
+
+                            </div>
+
+                            <a id="tambah-lampiran" style="cursor: pointer">Tambah Lampiran</a>
+                            <hr>
 
                             <h6>Vendor -- </h6>
 
@@ -474,6 +483,46 @@
         //     }
         // }
 
+        function generateLampiranList(data){
+            if (data){
+                $('#lampiran-row').empty();
+                var length = data.length;
+
+                data.map((item, index) => {
+                    const counter = index + 1
+                    var formGroup =
+                    '<div class="group">' +
+                        '<div class="form-group custom-file row">' +
+                            '<label for="lampiran' + counter + '" class="col-sm-4 col-form-label">Lampiran ' + counter + '</label>' +
+                            '<div class="col-sm-8 d-flex align-items-center ">' +
+                                '<input type="file" class="form-control custom-file-input" id="lampiran' + counter + '" name="lampiran[]" value="' + item + '">' +
+                                '<button type="button" class="ml-2 btn btn-danger btn-sm" onclick="removeLampiran(' + counter + ')"><i class="fas fa-trash"></i></button>' +
+                            '</div>' +
+                        '</div>' +
+                        // '<hr/>' +
+                    '</div>';
+                    $("#lampiran-row").append(formGroup);
+                })
+            }else {
+                var length = $("#lampiran-row").children().length;
+                var counter = length + 1;
+
+                var formGroup =
+                '<div class="group">' + 
+                    '<div class="form-group row">' + 
+                        '<label for="lampiran' + counter + '" class="col-sm-4 col-form-label">Lampiran ' + counter + '</label>' + 
+                        '<div class="col-sm-8 d-flex align-items-center">' + 
+                            '<input type="file" class="form-control" id="lampiran' + counter + '" name="lampiran[]">' + 
+                            //remove button
+                            '<button type="button" class="ml-2 btn btn-danger btn-sm" onclick="removeLampiran(' + counter + ')"><i class="fas fa-trash"></i></button>' + 
+                        '</div>' +
+                    '</div>' +
+                    // '<hr/>' +
+                '</div>';
+                $("#lampiran-row").append(formGroup);
+            }
+        }
+
 
         function generateVendorList(data){
             if (data){
@@ -531,11 +580,19 @@
             // $('#penerima' + counter).closest('.group').remove();
             $('#vendor' + counter).closest('.group').remove();
         }
+        function removeLampiran(counter) {
+            $('#lampiran' + counter).closest('.group').remove();
+        }
 
         $(document).ready(function() {
             $("#tambah").click(function() {
                 // generateNamaAlamat(null);
                 generateVendorList(null);
+            });
+        });
+        $(document).ready(function() {
+            $("#tambah-lampiran").click(function() {
+                generateLampiranList(null);
             });
         });
 
