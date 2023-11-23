@@ -585,7 +585,7 @@
                     $('#tgl_surat').text(data.pr.tanggal);
                     $('#proyek').text(data.pr.proyek);
                     $('#button-update-pr').html('Tambahkan');
-                    $('#button-update-pr').attr('disabled', false);                                                         
+                    $('#button-update-pr').attr('disabled', false);
                     clearForm();
                     if (data.pr.details.length == 0) {
                         $('#table-pr').append(
@@ -638,11 +638,14 @@
                                 .spek + '</td><td>' + value.qty + '</td><td>' + value
                                 .satuan +
                                 '</td><td>' + value.waktu + '</td><td>' +
-                                    '<div class="input-group">' +
+                                '<form id="uploadForm" enctype="multipart/form-data">' +
+                                '<div class="input-group">' +
                                 '<input type="file" class="form-control" id="lampiran" name="lampiran"/>' +
                                 '<button title="simpan" id="edit_pr_save" type="button" class="btn btn-success btn-xs" data-id="' +
-                                id + '" data-idpr="' + id + '" ><i class="fas fa-save"></i></button>' +
+                                id + '" data-idpr="' + id +
+                                '" ><i class="fas fa-save"></i></button>' +
                                 '</div>' +
+                                '</form>' +
                                 '</td><td>' + value.keterangan + '</td><td>' + status +
                                 '</td></tr>'
                                 // + <td>' + spph + '</td><td>' + value.sph +
@@ -754,12 +757,15 @@
                                 value
                                 .spek + '</td><td>' + value.qty + '</td><td>' + value
                                 .satuan + '</td><td>' + value.waktu + '</td><td>' +
+                                '<form id="uploadForm" enctype="multipart/form-data">' +
                                 '<div class="input-group">' +
                                 '<input type="file" class="form-control" id="lampiran" name="lampiran"/>' +
                                 '<button title="simpan" id="edit_pr_save" type="button" class="btn btn-success btn-xs" data-id="' +
-                                id + '" data-idpr="' + id + '" ><i class="fas fa-save"></i></button>' +
-                                '</div>' + '</td><td>' +
-                                value.keterangan +  '</td><td><b>' + status +
+                                id + '" data-idpr="' + id +
+                                '" ><i class="fas fa-save"></i></button>' +
+                                '</div>' +
+                                '</form>' + '</td><td>' +
+                                value.keterangan + '</td><td><b>' + status +
                                 '</b></td></tr>'
 
                                 // + <td>' + spph +
@@ -786,31 +792,22 @@
             // alert(proyek_id)
         }
 
-        //action edit_po_save
+        //action edit_pr_save
         $(document).on('click', '#edit_pr_save', function() {
             var id = $(this).data('id');
             var id_pr = $(this).data('id_pr');
-            var lampiran = $('#lampiran' + id).val();
-            var form = {
-                id,
-                id_pr,
-                lampiran
-            }
-
-            console.log(form);
-            $('#tabel-pr').empty();
-
-            //ajax post to products/upload_file
+            var lampiran = $('#lampiran' + id).prop('files')[0];
+            var formData = new FormData();
+            formData.append('id', id);
+            formData.append('id_pr', id_pr);
+            formData.append('lampiran', lampiran);
             $.ajax({
                 url: '/products/upload_file',
                 type: "POST",
                 dataType: "json",
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    "id": id,
-                    "id_pr": id_pr,
-                    "lampiran": lampiran
-                },
+                data: formData,
+                processData: false,
+                contentType: false,
                 beforeSend: function() {
                     $('#edit_pr_save').html('<i class="fas fa-spinner fa-spin"></i> Loading...');
                     $('#edit_pr_save').attr('disabled', true);
@@ -818,19 +815,22 @@
                 success: function(data) {
                     if (!data.success) {
                         toastr.error(data.message);
-                        $('#edit_pr_save').html('<i class="fas fa-save"></i> Simpan');
-                        $('#edit_pr_save').attr('disabled', false);
-                        return
+                    } else {
+                        toastr.success(data.message);
+                        $('#detail-pr').modal('hide');
+                        $('#detail-pr').modal('show');
                     }
+
+                    // Reset button state and text
                     $('#edit_pr_save').html('<i class="fas fa-save"></i> Simpan');
                     $('#edit_pr_save').attr('disabled', false);
-                    toastr.success(data.message);
-                    $('#detail-pr').modal('hide');
-                    $('#detail-pr').modal('show');
                 }
             });
 
+            // Additional code, if needed, can go here
+
         });
+
 
         function barcode(code) {
             $("#pcode_print").val(code);
