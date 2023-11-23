@@ -243,8 +243,8 @@
                                                 <th>{{ __('Lampiran Nota') }}</th>
                                                 <th>{{ __('Keterangan') }}</th>
                                                 {{-- <th>{{ __('SPPH') }}</th>
-                                                <th>{{ __('PO') }}</th>
-                                                <th>{{ __('STATUS') }}</th> --}}
+                                                <th>{{ __('PO') }}</th> --}}
+                                                <th>{{ __('STATUS') }}</th>
                                             </thead>
                                             <tbody id="table-pr">
                                             </tbody>
@@ -632,7 +632,7 @@
                                 status = 'COMPLETED';
                             }
 
-                            $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
+                            $('#table-pr').append('<><td>' + (key + 1) + '</td><td>' + value
                                 .kode_material + '</td><td>' + value.uraian + '</td><td>' +
                                 value
                                 .spek + '</td><td>' + value.qty + '</td><td>' + value
@@ -643,7 +643,7 @@
                                 '<button title="simpan" id="edit_pr_save" type="button" class="btn btn-success btn-xs" data-id="' +
                                 id + '" data-idpr="' + id + '" ><i class="fas fa-save"></i></button>' +
                                 '</div>' +
-                                '</td><td>' + value.keterangan +
+                                '</td><td>' + value.keterangan + '</td><td>' + status +
                                 '</td></tr>'
                                 // + <td>' + spph + '</td><td>' + value.sph +
                                 // '</td><td>' + po +
@@ -759,8 +759,8 @@
                                 '<button title="simpan" id="edit_pr_save" type="button" class="btn btn-success btn-xs" data-id="' +
                                 id + '" data-idpr="' + id + '" ><i class="fas fa-save"></i></button>' +
                                 '</div>' + '</td><td>' +
-                                value.keterangan +
-                                '</td></tr>'
+                                value.keterangan +  '</td><td><b>' + status +
+                                '</b></td></tr>'
 
                                 // + <td>' + spph +
                                 // '</td><td>' + po + '</td><td>' + status + '</td> +
@@ -789,108 +789,46 @@
         //action edit_po_save
         $(document).on('click', '#edit_pr_save', function() {
             var id = $(this).data('id');
-            var id_pr = $(this).data('idpr');
-            //get the batas{id} input
+            var id_pr = $(this).data('id_pr');
             var lampiran = $('#lampiran' + id).val();
-            };
+            var form = {
+                id,
+                id_pr,
+                lampiran
+            }
 
             console.log(form);
             $('#tabel-pr').empty();
 
-            //ajax post to products/detail_pr_save
-
+            //ajax post to products/upload_file
             $.ajax({
-                url: "{{ route('detail_pr_save') }}",
+                url: '/products/upload_file',
                 type: "POST",
-                data: {
-                    id,
-                    id_pr,
-                    lampiran,
-                    _token: '{{ csrf_token() }}'
-                },
                 dataType: "json",
+                data: {
+                    "_token": "{{ csrf_token() }}",
+                    "id": id,
+                    "id_pr": id_pr,
+                    "lampiran": lampiran
+                },
                 beforeSend: function() {
-                    $('#tabel-pr').append(
-                        '<tr><td colspan="11" class="text-center">Loading...</td></tr>');
-                    $('#button-cetak-po').html(
-                        '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Loading...'
-                    );
-                    $('#button-cetak-pr').attr('disabled', true);
+                    $('#edit_pr_save').html('<i class="fas fa-spinner fa-spin"></i> Loading...');
+                    $('#edit_pr_save').attr('disabled', true);
                 },
                 success: function(data) {
-                    console.log(data);
-                    $('#id').val(data.pr.id);
-                    $('#no_surat').text(data.pr.no_pr);
-                    $('#tgl_surat').text(data.pr.tanggal);
-                    $('#proyek').text(data.pr.proyek);
-                    $('#lampiran').text(data.pr.lampiran);
-                    var no = 1;
-                    var id_pr = data.pr.id;
-
-                    if (data?.pr?.details?.length == 0) {
-                        $('#tabel-pr').append(
-                            '<tr><td colspan="11" class="text-center">Tidak ada data</td></tr>');
-                    } else {
-                        $.each(data?.po?.details, function(index, value) {
-                            var id = value.id_detail_po;
-                            var kode_material = value.kode_material;
-                            var deskripsi = value.uraian;
-                            var batas = value.batas ?? '-';
-                            var date = value.batas_po?.split('/') ?? '-';
-                            // var newDate = date[2] + '/' + date[1] + '/' + date[0];
-                            var newDate = batas;
-                            var qty = value.qty;
-                            // var total = value.qty * value.harga_per_unit ?? 0;
-                            var satuan = value.satuan;
-                            var harga_per_unit = value.harga_per_unit ?? 0;
-                            var mata_uang = value.mata_uang ?? '-';
-                            var vat = value.vat ?? '-';
-                            var total = qty * harga_per_unit;
-                            console.log({
-                                kode_material,
-                                deskripsi,
-                                batas,
-                                newDate,
-                                qty,
-                                total,
-                                vat,
-                                satuan,
-                                harga_per_unit,
-                                mata_uang,
-                            })
-                            var html = '<tr>' +
-                                '<td>' + no + '</td>' +
-                                '<td>' + kode_material + '</td>' +
-                                '<td>' + deskripsi + '</td>' +
-                                '<td><input type="date" value="' + newDate +
-                                '" class="form-control" id="batas' + id + '" name="batas' + id +
-                                '"></td>' +
-                                '<td>' + qty + '</td>' +
-                                '<td>' + satuan + '</td>' +
-                                '<td><input type="text" value="' + harga_per_unit +
-                                '" class="form-control" id="harga_per_unit' + id +
-                                '" name="harga_per_unit' + id + '"></td>' +
-                                '<td><input type="text" value="' + mata_uang +
-                                '" class="form-control" id="mata_uang' + id +
-                                '" name="mata_uang' + id +
-                                '"></td>' +
-                                '<td><input type="text" value="' + vat +
-                                '" class="form-control" id="vat' + id + '" name="vat' + id +
-                                '"></td>' +
-                                '<td>' + total + '</td>' +
-                                '<td><button title="simpan" id="edit_po_save" type="button" class="btn btn-success btn-xs" data-id="' +
-                                id + '" data-idpo="' + id_po + '" ><i class="fas fa-save"></i>' + '</button>' 
-                                '<button title="hapus" id="delete_po_save" type="button" class="btn btn-danger btn-xs" data-id="' + id +
-                                '" data-idpo="' + id_po + '" ><i class="fas fa-trash"></i>' + '</button>' + 
-                                '</tr>';
-                            $('#tabel-po').append(html);
-                            no++;
-                        });
+                    if (!data.success) {
+                        toastr.error(data.message);
+                        $('#edit_pr_save').html('<i class="fas fa-save"></i> Simpan');
+                        $('#edit_pr_save').attr('disabled', false);
+                        return
                     }
-                    //remove loading
-                    $('#tabel-po').find('tr:first').remove();
+                    $('#edit_pr_save').html('<i class="fas fa-save"></i> Simpan');
+                    $('#edit_pr_save').attr('disabled', false);
+                    toastr.success(data.message);
+                    $('#detail-pr').modal('hide');
+                    $('#detail-pr').modal('show');
                 }
-            })
+            });
 
         });
 

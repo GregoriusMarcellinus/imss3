@@ -477,7 +477,7 @@ class PurchaseRequestController extends Controller
     public function uploadFile(Request $request)
     {
         $request->validate([
-            'lampiran' => 'required|file|mimes:pdf,doc,docx|max:500', // Menetapkan batasan tipe file dan ukuran
+            'lampiran' => 'nullable|file|mimes:pdf|max:500', // Menetapkan batasan tipe file dan ukuran
             'detail_id' => 'required|exists:details,id',
         ]);
 
@@ -491,7 +491,7 @@ class PurchaseRequestController extends Controller
         $file->storeAs('lampiran', $fileName);
 
         // Simpan informasi file di database, misalnya menyimpan nama file di kolom 'attachment' di tabel 'details'
-        Detail::where('id', $detailId)->update(['Lampiran' => $fileName]);
+        DetailPR::where('id', $detailId)->update(['Lampiran' => $fileName]);
 
         return redirect()->back()->with('success', 'File berhasil diupload');
     }

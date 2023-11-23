@@ -70,7 +70,7 @@ Route::prefix('products')->group(function () {
     Route::post('pr', [App\Http\Controllers\PurchaseRequestController::class, 'store'])->name('products.pr.store');
     Route::get('pr_print', [App\Http\Controllers\ProductController::class, 'pr_print'])->name('pr.print');
     Route::get('spph_print', [App\Http\Controllers\SpphController::class, 'spphPrint'])->name('spph.print');
-    Route::post('upload-file', [App\Http\Controllers\PurchaseRequestController::class, 'uploadFile'])->name('detail_pr_save');
+    Route::post('upload-file', [App\Http\Controllers\PurchaseRequestController::class, 'uploadFile'])->name('upload_file');
 
 
     //keproyekan
