@@ -712,6 +712,8 @@
                                 return item.id_spph !== null;
                             });
 
+                            var batas_po = new Date(value.batas_po);
+
                             if (hasSPPH) {
                                 $('#edit_pr_save').prop('disabled', false);
                             } else {
@@ -721,13 +723,15 @@
                             //0 = Lakukan SPPH, 1 = Lakukan PO, 2 = Completed
                             if (!value.id_spph) {
                                 status = 'Lakukan SPPH';
-                            } else if (value.id_spph && !value.no_sph) {
+                            } 
+                            else if (value.id_spph && !value.no_sph) {
                                 status = 'Lakukan SPH';
                             } else if (value.id_spph && value.no_sph && !value.no_just) {
                                 status = 'Lakukan Justifikasi';
                             } else if (value.id_spph && value.no_sph && value.no_just && !value.id_po) {
                                 status = 'Lakukan Nego/PO';
-                            } else if (value.id_spph && value.no_sph && value
+                            }
+                             else if (value.id_spph && value.no_sph && value
                                 .id_po) {
                                 status = 'COMPLETED';
                             }

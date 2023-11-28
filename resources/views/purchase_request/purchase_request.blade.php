@@ -642,7 +642,7 @@
                                 '<div class="input-group">' +
                                 '<input type="file" class="form-control" id="lampiran" name="lampiran"/>' +
                                 '<button title="simpan" id="edit_pr_save" type="button" class="btn btn-success btn-xs" data-id="' +
-                                id + '" data-idpr="' + id +
+                                id +
                                 '" ><i class="fas fa-save"></i></button>' +
                                 '</div>' +
                                 '</form>' +
@@ -761,8 +761,7 @@
                                 '<div class="input-group">' +
                                 '<input type="file" class="form-control" id="lampiran" name="lampiran"/>' +
                                 '<button title="simpan" id="edit_pr_save" type="button" class="btn btn-success btn-xs" data-id="' +
-                                id + '" data-idpr="' + id +
-                                '" ><i class="fas fa-save"></i></button>' +
+                                data.pr.id + '"><i class="fas fa-save"></i></button>' +
                                 '</div>' +
                                 '</form>' + '</td><td>' +
                                 value.keterangan + '</td><td><b>' + status +
@@ -794,15 +793,18 @@
 
         //action edit_pr_save
         $(document).on('click', '#edit_pr_save', function() {
-            var id = $(this).data('id');
-            var id_pr = $(this).data('id_pr');
+            var id = $(this).val('id');
+            // var id_pr = $(this).val('id_pr');
             var lampiran = $('#lampiran' + id).prop('files')[0];
-            var formData = new FormData();
-            formData.append('id', id);
-            formData.append('id_pr', id_pr);
-            formData.append('lampiran', lampiran);
+            var formData = {
+                '_token': '{{ csrf_token() }}',
+                'id': id,
+                // 'id_pr': id_pr,
+                'lampiran': lampiran,
+            }
+
             $.ajax({
-                url: '/products/upload_file',
+                url: '/products/upload_file' + id,
                 type: "POST",
                 dataType: "json",
                 data: formData,
@@ -813,22 +815,86 @@
                     $('#edit_pr_save').attr('disabled', true);
                 },
                 success: function(data) {
-                    if (!data.success) {
-                        toastr.error(data.message);
-                    } else {
-                        toastr.success(data.message);
-                        $('#detail-pr').modal('hide');
-                        $('#detail-pr').modal('show');
-                    }
+                    console.log(data);
+                    $('#id').val(data.pr.id);
+                    $('#no_surat').text(data.pr.no_pr);
+                    $('#tgl_surat').text(data.pr.tanggal);
+                    $('#proyek').text(data.pr.proyek);
+                    $('#button-cetak-pr').html('<i class="fas fa-print"></i> Cetak');
+                    $('#button-cetak-pr').attr('disabled', false);
+                    var no = 1;
 
-                    // Reset button state and text
-                    $('#edit_pr_save').html('<i class="fas fa-save"></i> Simpan');
-                    $('#edit_pr_save').attr('disabled', false);
+                    if (data.pr.details.length == 0) {
+                        $('#table-pr').empty();
+                        $('#table-pr').append(
+                            '<tr><td colspan="15" class="text-center">Tidak ada produk</td></tr>');
+                    } else {
+                        $('#table-pr').empty();
+                        $.each(data.pr.details, function(key, value) {
+                            var status, spph, po;
+                            if (!value.id_spph) {
+                                spph = '-';
+                            } else {
+                                spph = value.nomor_spph
+                            }
+
+                            if (!value.id_po) {
+                                po = '-';
+                            } else {
+                                po = value.no_po
+                            }
+
+                            //0 = Lakukan SPPH, 1 = Lakukan PO, 2 = Completed
+                            // if (value.status == 0 || !value.status) {
+                            //     status = 'Lakukan SPPH';
+                            // } else if (value.status == 1) {
+                            //     status = 'Lakukan PO';
+                            // } else if (value.status == 2) {
+                            //     status = 'COMPLETED';
+                            // } else if (value.status == 3) {
+                            //     status = 'NEGOSIASI';
+                            // } else if (value.status == 4) {
+                            //     status = 'JUSTIFIKASI';
+                            // }
+                            if (!value.id_spph) {
+                                status = 'Lakukan SPPH';
+                            } else if (value.id_spph && !value.no_sph) {
+                                status = 'Lakukan SPH';
+                            } else if (value.id_spph && value.no_sph && !value.no_just) {
+                                status = 'Lakukan Justifikasi';
+                            } else if (value.id_spph && value.no_sph && value.no_just && !value.id_po) {
+                                status = 'Lakukan Nego/PO';
+                            } else if (value.id_spph && value.no_sph && value
+                                .id_po) {
+                                status = 'COMPLETED';
+                            }
+
+                            $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
+                                .kode_material + '</td><td>' + value.uraian + '</td><td>' +
+                                value
+                                .spek + '</td><td>' + value.qty + '</td><td>' + value
+                                .satuan + '</td><td>' + value.waktu + '</td><td>' +
+                                '<form id="uploadForm" enctype="multipart/form-data">' +
+                                '<div class="input-group">' +
+                                '<input type="file" class="form-control" id="lampiran" name="lampiran"/>' +
+                                '<button title="simpan" id="edit_pr_save" type="button" class="btn btn-success btn-xs" data-id="' +
+                                id +
+                                '" ><i class="fas fa-save"></i></button>' +
+                                '</div>' +
+                                '</form>' + '</td><td>' +
+                                value.keterangan + '</td><td><b>' + status +
+                                '</b></td></tr>'
+
+                                // + <td>' + spph +
+                                // '</td><td>' + po + '</td><td>' + status + '</td> +
+
+                            );
+                        });
+                    }
+                    //remove loading
+                    // $('#table-pr').find('tr:first').remove();
                 }
             });
-
-            // Additional code, if needed, can go here
-
         });
 
 

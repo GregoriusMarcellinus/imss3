@@ -338,8 +338,8 @@ class SpphController extends Controller
         }
 
         $spph = Spph::where('id', $id)->first();
-        $spph->penerima = json_decode($spph->penerima);
-        $spph->penerima = implode(', ', $spph->penerima);
+        // $spph->penerima = json_decode($spph->penerima);
+        // $spph->penerima = implode(', ', $spph->penerima);
 
         $spph->details = DetailSpph::where('spph_id', $id)
             ->leftjoin('detail_pr', 'detail_pr.id', '=', 'detail_spph.id_detail_pr')

@@ -137,6 +137,7 @@ class PurchaseRequestController extends Controller
             $item->no_nego2 = $item->no_nego2 ? $item->no_nego2 : '';
             $item->tanggal_nego2 = $item->tanggal_nego2 ? $item->tanggal_nego2 : '';
             $item->batas_nego2 = $item->batas_nego2 ? $item->batas_nego2 : '';
+            $item->waktu_penyelesaian = Purchase_Order::where('id', $item->id_po)->first()->batas_akhir ?? '';
             //countdown = waktu - date now
             $targetDate = Carbon::parse($item->waktu);
             $currentDate = Carbon::now();
@@ -478,7 +479,7 @@ class PurchaseRequestController extends Controller
     {
         $request->validate([
             'lampiran' => 'nullable|file|mimes:pdf|max:500', // Menetapkan batasan tipe file dan ukuran
-            'detail_id' => 'required|exists:details,id',
+            // 'detail_id' => 'required|exists:details,id',
         ]);
 
         $detailId = $request->input('detail_id');
