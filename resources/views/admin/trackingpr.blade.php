@@ -712,7 +712,7 @@
                                 return item.id_spph !== null;
                             });
 
-                            var batas_po = new Date(value.batas_po);
+                            
 
                             if (hasSPPH) {
                                 $('#edit_pr_save').prop('disabled', false);
@@ -784,7 +784,7 @@
                                 id +
                                 '" name="bts_nego2' + id + '" value="' + value.batas_nego2 +
                                 '">' +
-                                '</td><td>' + po + '</td><td><b>' + status + '</b></td>' +
+                                '</td><td>' + po + '</td><td><b>' + status + '<b value="'+ value.batas_akhir +'"></b>' + '</b></td>' +
                                 '<td><button id="edit_pr_save" data-id="' + id +
                                 '" type="button" class="btn btn-success btn-xs"' +
                                 '><i class="fas fa-save"></i></button>' + '</td>' + '</tr>'

@@ -137,7 +137,7 @@ class PurchaseRequestController extends Controller
             $item->no_nego2 = $item->no_nego2 ? $item->no_nego2 : '';
             $item->tanggal_nego2 = $item->tanggal_nego2 ? $item->tanggal_nego2 : '';
             $item->batas_nego2 = $item->batas_nego2 ? $item->batas_nego2 : '';
-            $item->waktu_penyelesaian = Purchase_Order::where('id', $item->id_po)->first()->batas_akhir ?? '';
+            $item->batas_akhir = Purchase_Order::where('id', $item->id_po)->first()->batas_akhir ?? '';
             //countdown = waktu - date now
             $targetDate = Carbon::parse($item->waktu);
             $currentDate = Carbon::now();
@@ -492,7 +492,7 @@ class PurchaseRequestController extends Controller
         $file->storeAs('lampiran', $fileName);
 
         // Simpan informasi file di database, misalnya menyimpan nama file di kolom 'attachment' di tabel 'details'
-        DetailPR::where('id', $detailId)->update(['Lampiran' => $fileName]);
+        DetailPR::where('id', $detailId)->update(['lampiran' => $fileName]);
 
         return redirect()->back()->with('success', 'File berhasil diupload');
     }
