@@ -315,9 +315,11 @@
                                         </div>
                                     </div>
                                     <div id="form" class="card">
-                                        <div class="table-responsive card-body">
-                                            <button type="button" class="btn btn-primary mb-3"
+                                        <div class="card-body">
+                                            <button type="button" class="btn btn-primary"
                                                 onclick="addToDetails()"></i>Tambah Pilihan</button>
+                                        </div>
+                                        <div class="table-responsive card-body">
                                             <table class="table table-bordered">
                                                 <thead>
                                                     <tr>

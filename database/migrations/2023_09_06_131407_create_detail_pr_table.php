@@ -22,6 +22,7 @@ class CreateDetailPrTable extends Migration
             $table->string('qty');
             $table->string('satuan');
             $table->date('waktu');
+            $table->string('lampiran')->nullable();
             $table->string('keterangan')->nullable();
             $table->timestamps();
         });
