@@ -473,6 +473,7 @@
                 $('#detail-pr').find('#container-form').addClass('col-12');
                 $('#detail-pr').find('#container-form').removeClass('col-7');
                 $('#button-tambah-produk').text('Tambah Item Detail');
+                clearForm();
             }
         }
 
