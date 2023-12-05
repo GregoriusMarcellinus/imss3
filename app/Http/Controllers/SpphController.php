@@ -322,6 +322,13 @@ class SpphController extends Controller
         $id = $request->spph_id;
         $selected = $request->selected_id;
 
+        if (empty($selected)) {
+            return response()->json([
+                'success' => FALSE,
+                'message' => 'Pilih barang terlebih dahulu'
+            ]);
+        }
+
         //foreach selected_id
 
         foreach ($selected as $key => $value) {
@@ -353,6 +360,8 @@ class SpphController extends Controller
         });
 
         return response()->json([
+            'success' => TRUE,
+            'message' => 'Barang berhasil ditambahkan',
             'spph' => $spph
         ]);
     }

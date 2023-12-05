@@ -782,6 +782,12 @@
                     loader(0);
                     $('#form').show();
                     getSpphDetail();
+
+                    if (!data.success) {
+                        toastr.error(data?.message);
+                        return
+                    }
+
                     //append to #detail-material
                     $('#table-spph').empty();
                     $.each(data.spph.details, function(key, value) {
