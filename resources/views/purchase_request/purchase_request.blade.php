@@ -712,6 +712,7 @@
             $('#modal-title').text("Detail Request");
             $('#button-save').text("Cetak");
             resetForm();
+            $('#button-tambah-produk').text('Tambah Item Detail');
             $('#id').val(data.id);
             $('#no_surat').text(data.no_pr);
             $('#tgl_surat').text(data.tanggal);
