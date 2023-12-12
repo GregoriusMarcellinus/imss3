@@ -704,17 +704,37 @@
                             // alert(value.no_sph)
 
                             //0 = Lakukan SPPH, 1 = Lakukan PO, 2 = Completed
-                            if (!value.id_spph) {
+                            // if (!value.id_spph) {
+                            //     status = 'Lakukan SPPH';
+                            // } else if (value.id_spph && !value.no_sph) {
+                            //     status = 'Lakukan SPH';
+                            // } else if (value.id_spph && value.no_sph && !value.no_just) {
+                            //     status = 'Lakukan Justifikasi';
+                            // } else if (value.id_spph && value.no_sph && value.no_just && !value.id_po) {
+                            //     status = 'Lakukan Nego/PO';
+                            // } else if (value.id_spph && value.no_sph && value
+                            //     .id_po) {
+                            //     status = 'COMPLETED';
+                            // }
+
+                            if (!value.id_spph && !value.nomor_spph) {
                                 status = 'Lakukan SPPH';
-                            } else if (value.id_spph && !value.no_sph) {
-                                status = 'Lakukan SPH';
-                            } else if (value.id_spph && value.no_sph && !value.no_just) {
-                                status = 'Lakukan Justifikasi';
-                            } else if (value.id_spph && value.no_sph && value.no_just && !value.id_po) {
-                                status = 'Lakukan Nego/PO';
-                            } else if (value.id_spph && value.no_sph && value
-                                .id_po) {
+                            } else if (value.id_spph && value.nomor_spph && !value.id_po) {
+                                status = 'PROSES PO';
+                            } else if (value.id_spph && value.nomor_spph && value
+                                .id_po && value.no_po) {
                                 status = 'COMPLETED';
+                            }
+
+                            var date;
+                            var msg = '';
+
+                            if (value.batas_akhir == null) {
+                                date = '-';
+                                msg = '-';
+                            } else {
+                                msg = 'batas penerimaan barang : ';
+                                date = value.batas_akhir;
                             }
 
                             $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
@@ -723,7 +743,8 @@
                                 .spek + '</td><td>' + value.qty + '</td><td>' + value
                                 .satuan + '</td><td>' + value.waktu + '</td><td>' + value
                                 .keterangan +
-                                '</td>' + '<td><b>' + status + '</b></td>' + '</tr>'
+                                '</td>' + '<td><b>' + status + '</b><br><br><b>'+ msg 
+                                    + date +'</b></td>' + '</tr>'
 
                                 //'td' spph +
                                 // '</td><td><input type="text" class="form-control" style="width:200px;" placeholder="No SPH" id="sph' +

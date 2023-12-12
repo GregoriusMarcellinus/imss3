@@ -600,7 +600,7 @@
                     clearForm();
                     if (data.pr.details.length == 0) {
                         $('#table-pr').append(
-                            '<tr><td colspan="16" class="text-center">Tidak ada produk</td></tr>');
+                            '<tr><td colspan="17" class="text-center">Tidak ada produk</td></tr>');
                     } else {
                         $('#table-pr').empty();
                         $.each(data.pr.details, function(key, value) {
@@ -618,6 +618,8 @@
                             }
 
                             //0 = Lakukan SPPH, 1 = Lakukan PO, 2 = Completed, 3 = Negosiasi, 4 = Justifikasi
+
+                            //optional
                             if (value.status == 0 || !value.status) {
                                 status = 'Lakukan SPPH';
                             } else if (value.status == 1) {
@@ -670,7 +672,7 @@
                 type: "GET",
                 dataType: "json",
                 beforeSend: function() {
-                    $('#table-pr').append('<tr><td colspan="16" class="text-center">Loading...</td></tr>');
+                    $('#table-pr').append('<tr><td colspan="17" class="text-center">Loading...</td></tr>');
                     $('#button-cetak-pr').html('<i class="fas fa-spinner fa-spin"></i> Loading...');
                     $('#button-cetak-pr').attr('disabled', true);
                 },
@@ -687,7 +689,7 @@
                     if (data.pr.details.length == 0) {
                         $('#table-pr').empty();
                         $('#table-pr').append(
-                            '<tr><td colspan="16" class="text-center">Tidak ada produk</td></tr>');
+                            '<tr><td colspan="17" class="text-center">Tidak ada produk</td></tr>');
                     } else {
                         $('#table-pr').empty();
 
@@ -712,6 +714,12 @@
                                 return item.id_spph !== null;
                             });
 
+                            if (value.batas_akhir == null) {
+                                value.batas_akhir = '-';
+                            } else {
+                                value.batas_akhir = value.batas_akhir;
+                            }                        
+
                             if (hasSPPH) {
                                 $('#edit_pr_save').prop('disabled', false);
                             } else {
@@ -719,18 +727,40 @@
                             }
 
                             //0 = Lakukan SPPH, 1 = Lakukan PO, 2 = Completed
-                            if (!value.id_spph) {
+                            if (!value.id_spph && !value.nomor_spph) {
                                 status = 'Lakukan SPPH';
-                            } else if (value.id_spph && !value.no_sph) {
-                                status = 'Lakukan SPH';
-                            } else if (value.id_spph && value.no_sph && !value.no_just) {
-                                status = 'Lakukan Justifikasi';
-                            } else if (value.id_spph && value.no_sph && value.no_just && !value.id_po) {
-                                status = 'Lakukan Nego/PO';
-                            } else if (value.id_spph && value.no_sph && value
-                                .id_po) {
+                            } else if (value.id_spph && value.nomor_spph && !value.id_po) {
+                                status = 'PROSES PO';
+                            } else if (value.id_spph && value.nomor_spph && value
+                                .id_po && value.no_po) {
                                 status = 'COMPLETED';
                             }
+
+                            // STATUS LAMA
+
+                            // else if (value.id_spph && !value.no_sph) {
+                            //     status = 'Lakukan SPH';
+                            // } else if (value.id_spph && value.no_sph && !value.no_just) {
+                            //     status = 'Lakukan Justifikasi';
+                            // } else if (value.id_spph && value.no_sph && value.no_just && !value.id_po) {
+                            //     status = 'Lakukan Nego/PO';
+                            // }
+                            //  else if (value.id_spph && value.no_sph && value
+                            //     .id_po) {
+                            //     status = 'COMPLETED';
+                            // }
+
+                            var date;
+                            var msg = '';
+
+                            if (value.batas_akhir == null) {
+                                date = '-';
+                                msg = '-';
+                            } else {
+                                msg = 'batas penerimaan barang : ';
+                                date = value.batas_akhir;
+                            }
+
                             // var userRole = data.role;
                             // alert(userRole)
                             // if (userRole === 'wil1' || userRole === 'wil2') {
@@ -780,7 +810,7 @@
                                 id +
                                 '" name="bts_nego2' + id + '" value="' + value.batas_nego2 +
                                 '">' +
-                                '</td><td>' + po + '</td><td><b>' + status + '</b></td>' +
+                                '</td><td>' + po + '</td><td><b>' + status + '</b><br><br><b>' + msg + date +'</b>' + '</b></td>' +
                                 '<td><button id="edit_pr_save" data-id="' + id +
                                 '" type="button" class="btn btn-success btn-xs"' +
                                 '><i class="fas fa-save"></i></button>' + '</td>' + '</tr>'
@@ -842,7 +872,7 @@
                 dataType: "json",
                 beforeSend: function() {
                     $('#tabel-po').append(
-                        '<tr><td colspan="16" class="text-center">Loading...</td></tr>');
+                        '<tr><td colspan="17" class="text-center">Loading...</td></tr>');
                     $('#button-cetak-pr').html('<i class="fas fa-spinner fa-spin"></i> Loading...');
                     $('#button-cetak-pr').attr('disabled', true);
                 },
@@ -865,7 +895,7 @@
                     if (data.pr.details.length == 0) {
                         $('#table-pr').empty();
                         $('#table-pr').append(
-                            '<tr><td colspan="16" class="text-center">Tidak ada produk</td></tr>');
+                            '<tr><td colspan="17" class="text-center">Tidak ada produk</td></tr>');
                     } else {
                         $('#table-pr').empty();
                         $.each(data.pr.details, function(key, value) {
@@ -912,18 +942,39 @@
                             }
 
                             //0 = Lakukan SPPH, 1 = Lakukan PO, 2 = Completed
-                            if (!value.id_spph) {
+                            if (!value.id_spph && !value.nomor_spph) {
                                 status = 'Lakukan SPPH';
-                            } else if (value.id_spph && !value.no_sph) {
-                                status = 'Lakukan SPH';
-                            } else if (value.id_spph && value.no_sph && !value.no_just) {
-                                status = 'Lakukan Justifikasi';
-                            } else if (value.id_spph && value.no_sph && value.no_just && !value
-                                .id_po) {
-                                status = 'Lakukan Nego/PO';
-                            } else if (value.id_spph && value.no_sph && value
-                                .id_po) {
+                            } else if (value.id_spph && value.nomor_spph && !value.id_po) {
+                                status = 'PROSES PO';
+                            } else if (value.id_spph && value.nomor_spph && value
+                                .id_po && value.no_po) {
                                 status = 'COMPLETED';
+                            }
+
+                            // STATUS LAMA
+                            // if (!value.id_spph) {
+                            //     status = 'Lakukan SPPH';
+                            // } else if (value.id_spph && !value.no_sph) {
+                            //     status = 'Lakukan SPH';
+                            // } else if (value.id_spph && value.no_sph && !value.no_just) {
+                            //     status = 'Lakukan Justifikasi';
+                            // } else if (value.id_spph && value.no_sph && value.no_just && !value
+                            //     .id_po) {
+                            //     status = 'Lakukan Nego/PO';
+                            // } else if (value.id_spph && value.no_sph && value
+                            //     .id_po) {
+                            //     status = 'COMPLETED';
+                            // }
+
+                            var date;
+                            var msg = '';
+
+                            if (value.batas_akhir == null) {
+                                date = '-';
+                                msg = '-';
+                            } else {
+                                msg = 'batas penerimaan barang : ';
+                                date = value.batas_akhir;
                             }
 
                             $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
@@ -968,7 +1019,7 @@
                                 id +
                                 '" name="bts_nego2' + id + '" value="' + value.batas_nego2 +
                                 '">' +
-                                '</td><td>' + po + '</td><td><b>' + status + '</b></td>' +
+                                '</td><td>' + po + '</td><td><b>' + status + '</b><br><br><b>'+ msg + date +'</b>' + '</b></td>' +
                                 '<td><button id="edit_pr_save" data-id="' + id +
                                 '" type="button" class="btn btn-success btn-xs"' +
                                 '><i class="fas fa-save"></i></button>' + '</td>' + '</tr>'

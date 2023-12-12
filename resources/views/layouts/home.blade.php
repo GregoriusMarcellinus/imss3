@@ -7,9 +7,9 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ config('app.name', 'Laravel') }} | @yield('title')</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/plugins/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="{{ asset('plugins/fontawesome-free/css/all.min.css') }}">
     <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
-    <link rel="stylesheet" href="/css/adminlte.min.css">
+    <link rel="stylesheet" href="{{ asset('css/adminlte.min.css') }}">
     <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.css" />
 
@@ -20,7 +20,8 @@
 
 <body class="hold-transition sidebar-mini layout-fixed">
     <div class="wrapper" style="margin-left: 0">
-        <nav class="main-header navbar navbar-expand navbar-white navbar-dark" style="margin-left: 0;background-color: firebrick">
+        <nav class="main-header navbar navbar-expand navbar-white navbar-dark"
+            style="margin-left: 0;background-color: firebrick">
             <ul class="navbar-nav d-flex justify-content-between w-100 align-items-center">
                 <li class="nav-item d-none d-sm-inline-block">
                     <span class="nav-link">Selamat Datang di Software IMSS</span>
@@ -193,11 +194,11 @@
         </aside>
     </div>
 
-    <script src="/plugins/jquery/jquery.min.js"></script>
-    <script src="/plugins/jquery-ui/jquery-ui.min.js"></script>
-    <script src="/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ asset('plugins/jquery/jquery.min.js') }}"></script>
+    <script src="{{ asset('plugins/jquery-ui/jquery-ui.min.js') }}"></script>
+    <script src="{{ asset('plugins/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.js"></script>
-    <script src="/js/adminlte.js"></script>
+    <script src="{{ asset('js/adminlte.js') }}"></script>
     @hasSection('custom-js')
         @yield('custom-js')
     @endif

@@ -20,6 +20,7 @@ class DetailPR extends Model
         'spek',
         'qty',
         'satuan',
+        'lampiran',
         'waktu',
         'keterangan',
         'status',

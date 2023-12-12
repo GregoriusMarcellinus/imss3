@@ -315,9 +315,21 @@
                                         </div>
                                     </div>
                                     <div id="form" class="card">
-                                        <div class="table-responsive card-body">
+                                        <div class="card-body">
                                             <button type="button" class="btn btn-primary mb-3"
                                                 onclick="addToDetails()"></i>Tambah Pilihan</button>
+                                            <div class="input-group input-group-lg">
+                                                <input type="text" class="form-control" id="proyek_name"
+                                                    name="proyek_name" placeholder="Search By Proyek">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-primary" id="check-proyek"
+                                                        onclick="productCheck()">
+                                                        <i class="fas fa-search"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="table-responsive card-body">
                                             <table class="table table-bordered">
                                                 <thead>
                                                     <tr>
@@ -780,6 +792,12 @@
                     loader(0);
                     $('#form').show();
                     getSpphDetail();
+
+                    if (!data.success) {
+                        toastr.error(data?.message);
+                        return
+                    }
+
                     //append to #detail-material
                     $('#table-spph').empty();
                     $.each(data.spph.details, function(key, value) {
@@ -793,6 +811,81 @@
                     $('#button-check').prop("disabled", false);
                 }
             });
+        }
+
+        function productCheck() {
+            var proyek_name = $('#proyek_name').val();
+            if (proyek_name.length > 0) {
+                loader();
+                $('#proyek_code').prop("disabled", true);
+                $('#button-check').prop("disabled", true);
+                $.ajax({
+                    url: '/products/products_pr?proyek=' + proyek_name,
+                    type: "GET",
+                    data: {
+                        "format": "json"
+                    },
+                    dataType: "json",
+                    beforeSend: function() {
+                        $('#loader').show();
+                        $('#form').hide();
+
+                    },
+                    success: function(data) {
+                        loader(0);
+                        $('#form').show();
+                        //append to #detail-material
+                        $('#detail-material').empty();
+                        $.each(data.products, function(key, value) {
+                            console.table('a', value)
+                            var no_spph
+                            if (!value.id_spph) {
+                                no_spph = '-'
+                            } else {
+                                no_spph = value.nomor_spph
+                            }
+
+                            var no_pr
+                            if (!value.id_pr) {
+                                no_pr = '-'
+                            } else {
+                                no_pr = value.pr_no
+                            }
+
+                            var no_po
+                            if (!value.id_po) {
+                                no_po = '-'
+                            } else {
+                                no_po = value.po_no
+                            }
+
+                            var checkbox;
+                        if (!value.id_spph) {
+                            checkbox = '<input type="checkbox" id="addToDetails" value="' + value.id +
+                                '" onclick="addToDetailsJs(' + value.id + ')">'
+                        } else {
+                            checkbox = '<input type="checkbox" id="addToDetails" value="' + value.id +
+                                '" onclick="addToDetailsJs(' + value.id + ')" disabled>'
+                        }
+
+                            $('#detail-material').append(
+
+                                '<tr><td>' + (key + 1) + '</td><td>' + value.uraian +
+                                '</td><td>' + value.spek + '</td><td>' + value.qty + '</td><td>' + value
+                                .satuan + '</td><td>' + value.nama_proyek + '</td><td>' + no_spph +
+                                '</td><td>' + no_pr + '</td><td>' +
+                                no_po + '</td><td>' + checkbox + '</td></tr>'
+                            );
+                        });
+                    },
+                    error: function() {
+                        $('#pcode').prop("disabled", false);
+                        $('#button-check').prop("disabled", false);
+                    }
+                });
+            } else {
+                toastr.error("Nama Proyek tidak ditemukan");
+            }
         }
 
         function sjnProductUpdate() {

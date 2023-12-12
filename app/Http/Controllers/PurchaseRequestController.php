@@ -137,6 +137,8 @@ class PurchaseRequestController extends Controller
             $item->no_nego2 = $item->no_nego2 ? $item->no_nego2 : '';
             $item->tanggal_nego2 = $item->tanggal_nego2 ? $item->tanggal_nego2 : '';
             $item->batas_nego2 = $item->batas_nego2 ? $item->batas_nego2 : '';
+            $item->batas_akhir = Purchase_Order::leftjoin('detail_po', 'detail_po.id_po', '=', 'purchase_order.id')->where('detail_po.id_detail_pr', $item->id)->first()->batas_akhir ?? '-';
+
             //countdown = waktu - date now
             $targetDate = Carbon::parse($item->waktu);
             $currentDate = Carbon::now();
@@ -260,7 +262,16 @@ class PurchaseRequestController extends Controller
                 'message' => 'QTY tidak boleh kosong'
             ]);
         }
+        $request->validate([
+            'lampiran' => 'nullable|file|mimes:pdf|max:500', 
+        ]);
 
+        $file = $request->file('lampiran');
+// dd($file);
+        $fileName = rand() . '.' . $file->getClientOriginalExtension();
+// dd($fileName);
+        $file->move(public_path('lampiran'), $fileName);
+        
         $insert = DetailPR::create([
             'id_pr' => $request->id_pr,
             'id_proyek' => $request->id_proyek,
@@ -271,6 +282,7 @@ class PurchaseRequestController extends Controller
             'qty' => $request->stock,
             'waktu' => $request->waktu,
             'keterangan' => $request->keterangan,
+            'lampiran' => $fileName,
         ]);
 
         if (!$insert) {
@@ -288,6 +300,7 @@ class PurchaseRequestController extends Controller
             $item->kode_material = $item->kode_material ? $item->kode_material : '';
             $item->nomor_spph = Spph::where('id', $item->id_spph)->first()->nomor_spph ?? '';
             $item->no_po = Purchase_Order::where('id', $item->id_po)->first()->no_po ?? '';
+            $item->lampiran = $item->lampiran ? $item->lampiran : '';
             return $item;
         });
 
@@ -478,7 +491,7 @@ class PurchaseRequestController extends Controller
     {
         $request->validate([
             'lampiran' => 'nullable|file|mimes:pdf|max:500', // Menetapkan batasan tipe file dan ukuran
-            'detail_id' => 'required|exists:details,id',
+            // 'detail_id' => 'required|exists:details,id',
         ]);
 
         $detailId = $request->input('detail_id');
@@ -491,7 +504,7 @@ class PurchaseRequestController extends Controller
         $file->storeAs('lampiran', $fileName);
 
         // Simpan informasi file di database, misalnya menyimpan nama file di kolom 'attachment' di tabel 'details'
-        DetailPR::where('id', $detailId)->update(['Lampiran' => $fileName]);
+        DetailPR::where('id', $detailId)->update(['lampiran' => $fileName]);
 
         return redirect()->back()->with('success', 'File berhasil diupload');
     }

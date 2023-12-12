@@ -254,6 +254,13 @@ class SpphController extends Controller
         });
         // dd($products);
 
+        // if ($products->count() == 0) {
+        //     return response()->json([
+        //         'products' => $products,
+        //         'message' => 'Tidak ada barang yang ditemukan'
+        //     ]);
+        // }
+
         return response()->json([
             'products' => $products
         ]);
@@ -307,6 +314,17 @@ class SpphController extends Controller
         //sum in tipe column
         $spph->lampiran = $lampiran->count();
 
+        // $files = [];
+        // foreach ($lampiran as $key => $value) {
+        //     $file = public_path('lampiran/' . $value->file);
+        //     $page_count = $this->FunctionCountPages($file);
+        //     $value->page_count = $page_count;
+        //     array_push($files, $value);
+        // }
+
+        // foreach ($files as $key => $value) {
+        //     $pdf->prependPDF($value->file);
+        // }
 
         $spphs = $newObjects;
         $count = count($spphs);
@@ -321,6 +339,13 @@ class SpphController extends Controller
     {
         $id = $request->spph_id;
         $selected = $request->selected_id;
+
+        if (empty($selected)) {
+            return response()->json([
+                'success' => FALSE,
+                'message' => 'Pilih barang terlebih dahulu'
+            ]);
+        }
 
         //foreach selected_id
 
@@ -338,8 +363,8 @@ class SpphController extends Controller
         }
 
         $spph = Spph::where('id', $id)->first();
-        $spph->penerima = json_decode($spph->penerima);
-        $spph->penerima = implode(', ', $spph->penerima);
+        // $spph->penerima = json_decode($spph->penerima);
+        // $spph->penerima = implode(', ', $spph->penerima);
 
         $spph->details = DetailSpph::where('spph_id', $id)
             ->leftjoin('detail_pr', 'detail_pr.id', '=', 'detail_spph.id_detail_pr')
@@ -353,6 +378,8 @@ class SpphController extends Controller
         });
 
         return response()->json([
+            'success' => TRUE,
+            'message' => 'Barang berhasil ditambahkan',
             'spph' => $spph
         ]);
     }
