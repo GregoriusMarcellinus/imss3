@@ -282,7 +282,7 @@
                                     <h3>Karyawan</h3>
                                 </div>
                                 <div class="icon">
-                                    <i class="fas fa-drafting-compass"></i>
+                                    <i class="fas fa-restroom"></i>
                                 </div>
                             </div>
                         </a>
