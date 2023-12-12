@@ -1,11 +1,11 @@
 @extends('layouts.home')
 @section('title', __('Dashboard'))
 @section('custom-css')
-    <link rel="stylesheet" href="/plugins/toastr/toastr.min.css">
-    <link rel="stylesheet" href="/plugins/select2/css/select2.min.css">
-    <link rel="stylesheet" href="/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
-    <link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker.css">
-    <link rel="stylesheet" href="/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
     <style>
         button {
             background-color: transparent;
@@ -37,20 +37,20 @@
                         </ol>
                         <div class="carousel-inner">
                             <div class="carousel-item active">
-                                <img src="/img/akhlak_main.png" class="d-block w-100" height="400" alt="/img/slide4.png"
-                                    style="object-fit: contain">
+                                <img src="{{ asset('img/akhlak_main.png') }}" class="d-block w-100" height="400"
+                                    alt="/img/slide4.png" style="object-fit: contain">
                             </div>
                             <div class="carousel-item">
-                                <img src="/img/slide2.JPG" class="d-block w-100" height="400" alt="/img/slide4.png"
-                                    style="object-fit: cover">
+                                <img src="{{ asset('img/slide2.JPG') }}" class="d-block w-100" height="400"
+                                    alt="/img/slide4.png" style="object-fit: cover">
                             </div>
                             <div class="carousel-item">
-                                <img src="/img/slide4.png" class="d-block w-100" height="400" alt="/img/slide4.png"
-                                    style="object-fit: contain">
+                                <img src="{{ asset('img/slide4.png') }}" class="d-block w-100" height="400"
+                                    alt="/img/slide4.png" style="object-fit: contain">
                             </div>
                             <div class="carousel-item">
-                                <img src="/img/slide1.jpg" class="d-block w-100" height="400" alt="/img/slide4.png"
-                                    style="object-fit: cover">
+                                <img src="{{ asset('img/slide1.jpg') }}" class="d-block w-100" height="400"
+                                    alt="/img/slide4.png" style="object-fit: cover">
                             </div>
                         </div>
                         <button class="carousel-control-prev" type="button" data-target="#carouselExampleIndicators"
