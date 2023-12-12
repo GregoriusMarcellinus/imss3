@@ -665,18 +665,28 @@
                             //     status = 'JUSTIFIKASI';
                             // }
 
-                            if (!value.id_spph) {
+                            // if (!value.id_spph) {
+                            //     status = 'Lakukan SPPH';
+                            // } else if (value.id_spph && !value.no_sph) {
+                            //     status = 'Lakukan SPH';
+                            // } else if (value.id_spph && value.no_sph && !value.no_just) {
+                            //     status = 'Lakukan Justifikasi';
+                            // } else if (value.id_spph && value.no_sph && value.no_just && !value.id_po) {
+                            //     status = 'Lakukan Nego/PO';
+                            // } else if (value.id_spph && value.no_sph && value
+                            //     .id_po) {
+                            //     status = 'COMPLETED';
+                            // }
+
+                            if (!value.id_spph && !value.nomor_spph) {
                                 status = 'Lakukan SPPH';
-                            } else if (value.id_spph && !value.no_sph) {
-                                status = 'Lakukan SPH';
-                            } else if (value.id_spph && value.no_sph && !value.no_just) {
-                                status = 'Lakukan Justifikasi';
-                            } else if (value.id_spph && value.no_sph && value.no_just && !value.id_po) {
-                                status = 'Lakukan Nego/PO';
-                            } else if (value.id_spph && value.no_sph && value
-                                .id_po) {
+                            } else if (value.id_spph && value.nomor_spph && !value.id_po) {
+                                status = 'PROSES PO';
+                            } else if (value.id_spph && value.nomor_spph && value
+                                .id_po && value.no_po) {
                                 status = 'COMPLETED';
                             }
+
 
                             $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
                                 .kode_material + '</td><td>' + value.uraian + '</td><td>' +
@@ -787,16 +797,25 @@
                             // } else if (value.status == 4) {
                             //     status = 'JUSTIFIKASI';
                             // }
-                            if (!value.id_spph) {
+                            // if (!value.id_spph) {
+                            //     status = 'Lakukan SPPH';
+                            // } else if (value.id_spph && !value.no_sph) {
+                            //     status = 'Lakukan SPH';
+                            // } else if (value.id_spph && value.no_sph && !value.no_just) {
+                            //     status = 'Lakukan Justifikasi';
+                            // } else if (value.id_spph && value.no_sph && value.no_just && !value.id_po) {
+                            //     status = 'Lakukan Nego/PO';
+                            // } else if (value.id_spph && value.no_sph && value
+                            //     .id_po) {
+                            //     status = 'COMPLETED';
+                            // }
+                            
+                            if (!value.id_spph && !value.nomor_spph) {
                                 status = 'Lakukan SPPH';
-                            } else if (value.id_spph && !value.no_sph) {
-                                status = 'Lakukan SPH';
-                            } else if (value.id_spph && value.no_sph && !value.no_just) {
-                                status = 'Lakukan Justifikasi';
-                            } else if (value.id_spph && value.no_sph && value.no_just && !value.id_po) {
-                                status = 'Lakukan Nego/PO';
-                            } else if (value.id_spph && value.no_sph && value
-                                .id_po) {
+                            } else if (value.id_spph && value.nomor_spph && !value.id_po) {
+                                status = 'PROSES PO';
+                            } else if (value.id_spph && value.nomor_spph && value
+                                .id_po && value.no_po) {
                                 status = 'COMPLETED';
                             }
 

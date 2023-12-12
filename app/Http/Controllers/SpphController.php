@@ -254,6 +254,13 @@ class SpphController extends Controller
         });
         // dd($products);
 
+        // if ($products->count() == 0) {
+        //     return response()->json([
+        //         'products' => $products,
+        //         'message' => 'Tidak ada barang yang ditemukan'
+        //     ]);
+        // }
+
         return response()->json([
             'products' => $products
         ]);
@@ -307,6 +314,17 @@ class SpphController extends Controller
         //sum in tipe column
         $spph->lampiran = $lampiran->count();
 
+        // $files = [];
+        // foreach ($lampiran as $key => $value) {
+        //     $file = public_path('lampiran/' . $value->file);
+        //     $page_count = $this->FunctionCountPages($file);
+        //     $value->page_count = $page_count;
+        //     array_push($files, $value);
+        // }
+
+        // foreach ($files as $key => $value) {
+        //     $pdf->prependPDF($value->file);
+        // }
 
         $spphs = $newObjects;
         $count = count($spphs);

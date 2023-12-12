@@ -140,24 +140,24 @@ class HomeController extends Controller
                     'bgcolor' => 'orange',
                     'icon' => 'mail-bulk'
                 ],
-                [
-                    'name' => 'Stock IN',
-                    'route' => 'apps/stock_in',
-                    'bgcolor' => 'blue',
-                    'icon' => 'warehouse'
-                ],
-                [
-                    'name' => 'Stock OUT',
-                    'route' => 'apps/stock_out',
-                    'bgcolor' => 'red',
-                    'icon' => 'map-marker-alt'
-                ],
-                [
-                    'name' => 'Retur',
-                    'route' => 'apps/retur',
-                    'bgcolor' => 'goldenrod',
-                    'icon' => 'retweet'
-                ]
+                // [
+                //     'name' => 'Stock IN',
+                //     'route' => 'apps/stock_in',
+                //     'bgcolor' => 'blue',
+                //     'icon' => 'warehouse'
+                // ],
+                // [
+                //     'name' => 'Stock OUT',
+                //     'route' => 'apps/stock_out',
+                //     'bgcolor' => 'red',
+                //     'icon' => 'map-marker-alt'
+                // ],
+                // [
+                //     'name' => 'Retur',
+                //     'route' => 'apps/retur',
+                //     'bgcolor' => 'goldenrod',
+                //     'icon' => 'retweet'
+                // ]
             ];
             $title = "Gudang";
         } else if ($type == "wilayah1") {
@@ -200,6 +200,12 @@ class HomeController extends Controller
                     'bgcolor' => 'sagegreen',
                     'icon' => 'folder-open'
                 ],
+                [
+                    'name' => 'Tracking Purchase Request',
+                    'route' => 'apps/purchase_request',
+                    'bgcolor' => 'red',
+                    'icon' => 'route'
+                ]
             ];
             $title = "Engineer";
         }
