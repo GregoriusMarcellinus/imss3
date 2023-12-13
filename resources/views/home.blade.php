@@ -287,12 +287,12 @@
                             </div>
                         </a>
                     </div>
-                    {{-- <div class="col-lg-3 col-6">
+                    <div class="col-lg-3 col-6">
                         <a href="{{ route('product.justifikasi') }}">
                             <div class="small-box bg-primary">
                                 <div class="inner" style="background-color: #afc124">
-                                    <p>Menu</p>
-                                    <h3>Justifikasi</h3>
+                                    <p>Manajemen</p>
+                                    <h3>Aset</h3>
                                 </div>
                                 <div class="icon">
                                     <i class="fas fa-folder-open"></i>
@@ -303,16 +303,29 @@
                     <div class="col-lg-3 col-6">
                         <a href="{{ route('product.justifikasi') }}">
                             <div class="small-box bg-primary">
-                                <div class="inner" style="background-color: #e44b4b">
-                                    <p>Function</p>
-                                    <h3>Control</h3>
+                                <div class="inner" style="background-color: #afc124">
+                                    <p>Manajemen</p>
+                                    <h3>Inventaris</h3>
                                 </div>
                                 <div class="icon">
-                                    <i class="fas fa-gamepad"></i>
+                                    <i class="fas fa-folder-open"></i>
                                 </div>
                             </div>
                         </a>
-                    </div> --}}
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        <a href="{{ route('product.justifikasi') }}">
+                            <div class="small-box bg-primary">
+                                <div class="inner" style="background-color: #afc124">
+                                    <p>History</p>
+                                    <h3>Penghapusan</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-folder-open"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
                 @endif
             </div>
         </div>
