@@ -209,7 +209,7 @@
 
         <footer class="main-footer">
             <b>PT</b> {{ config('app.version') }}
-            <img src="/img/garis.jpg" style="width: 100%;" />
+            <img src="{{ asset('img/garis.jpg')}}" style="width: 100%;" />
         </footer>
 
         <aside class="control-sidebar control-sidebar-dark">
