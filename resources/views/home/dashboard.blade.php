@@ -41,7 +41,7 @@
                                     alt="/img/slide4.png" style="object-fit: contain">
                             </div>
                             <div class="carousel-item">
-                                <img src="{{ asset('img/slide2.JPG') }}" class="d-block w-100" height="400"
+                                <img src="{{ asset('img/slide2.jpg') }}" class="d-block w-100" height="400"
                                     alt="/img/slide4.png" style="object-fit: cover">
                             </div>
                             <div class="carousel-item">

@@ -1,9 +1,9 @@
 @extends('layouts.main')
 @section('title', __('SPPH'))
 @section('custom-css')
-    <link rel="stylesheet" href="/plugins/toastr/toastr.min.css">
-    <link rel="stylesheet" href="/plugins/select2/css/select2.min.css">
-    <link rel="stylesheet" href="/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+    <link rel="stylesheet" href="{{ asset('plugins/toastr/toastr.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
     <style>
         /* Important part */
         .modal-dialog {
@@ -776,7 +776,7 @@
 
         function addToDetails() {
             $.ajax({
-                url: '/products/tambah_spph_detail',
+                url: "{{ url('products/tambah_spph_detail') }}",
                 type: "POST",
                 data: {
                     "_token": "{{ csrf_token() }}",
@@ -860,18 +860,21 @@
                             }
 
                             var checkbox;
-                        if (!value.id_spph) {
-                            checkbox = '<input type="checkbox" id="addToDetails" value="' + value.id +
-                                '" onclick="addToDetailsJs(' + value.id + ')">'
-                        } else {
-                            checkbox = '<input type="checkbox" id="addToDetails" value="' + value.id +
-                                '" onclick="addToDetailsJs(' + value.id + ')" disabled>'
-                        }
+                            if (!value.id_spph) {
+                                checkbox = '<input type="checkbox" id="addToDetails" value="' + value
+                                    .id +
+                                    '" onclick="addToDetailsJs(' + value.id + ')">'
+                            } else {
+                                checkbox = '<input type="checkbox" id="addToDetails" value="' + value
+                                    .id +
+                                    '" onclick="addToDetailsJs(' + value.id + ')" disabled>'
+                            }
 
                             $('#detail-material').append(
 
                                 '<tr><td>' + (key + 1) + '</td><td>' + value.uraian +
-                                '</td><td>' + value.spek + '</td><td>' + value.qty + '</td><td>' + value
+                                '</td><td>' + value.spek + '</td><td>' + value.qty + '</td><td>' +
+                                value
                                 .satuan + '</td><td>' + value.nama_proyek + '</td><td>' + no_spph +
                                 '</td><td>' + no_pr + '</td><td>' +
                                 no_po + '</td><td>' + checkbox + '</td></tr>'
@@ -953,7 +956,7 @@
             $('#tgl_spph').text(data.tanggal);
             $('#table-spph').empty();
             $.ajax({
-                url: '/products/spph_detail/' + data.id,
+                url: "{{ url('products/spph_detail') }}" + "/" + data.id,
                 type: "GET",
                 dataType: "json",
                 beforeSend: function() {
