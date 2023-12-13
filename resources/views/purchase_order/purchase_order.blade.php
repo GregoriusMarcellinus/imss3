@@ -346,16 +346,17 @@
                                     <div class="card-body">
                                         <button type="button" class="btn btn-primary mb-3"
                                             onclick="addToDetails()"></i>Tambah Pilihan</button>
-    
-                                            <div class="input-group input-group-lg">
-                                                <input type="text" class="form-control" id="proyek_name" name="proyek_name"
-                                                    placeholder="Search By Proyek">
-                                                <div class="input-group-append">
-                                                    <button class="btn btn-primary" id="check-proyek" onclick="productCheck()" >
-                                                      <i class="fas fa-search"></i>
-                                                    </button>
-                                                </div>
+
+                                        <div class="input-group input-group-lg">
+                                            <input type="text" class="form-control" id="proyek_name"
+                                                name="proyek_name" placeholder="Search By Proyek">
+                                            <div class="input-group-append">
+                                                <button class="btn btn-primary" id="check-proyek"
+                                                    onclick="productCheck()">
+                                                    <i class="fas fa-search"></i>
+                                                </button>
                                             </div>
+                                        </div>
                                     </div>
                                     <div class="table-responsive card-body">
 
@@ -612,7 +613,7 @@
         $('#detail-po').on('show.bs.modal', function(event) {
             var button = $(event.relatedTarget);
             var data = button.data('detail');
-            console.log('d',data);
+            console.log('d', data);
             lihatPo(data);
         });
 
@@ -629,7 +630,7 @@
             $('#tabel-po').empty();
 
             $.ajax({
-                url: '/products/purchase_order_detail/' + data.id,
+                url: "{{ url('products/purchase_order_detail') }}" + "/" + data.id,
                 type: "GET",
                 data: {
                     id: data.id
@@ -644,7 +645,7 @@
                 },
 
                 success: function(data) {
-                    console.log('f',data);
+                    console.log('f', data);
                     $('#no_po').text(data.po.no_po);
                     $('#id_proyek').text(data.po.nama_proyek);
                     $('#id_vendor').text(data.po.nama_vendor);
@@ -706,9 +707,12 @@
                                 '" class="form-control" id="vat' + id + '" name="vat' + id + '"></td>' +
                                 '<td>' + total + '</td>' +
                                 '<td><button title="simpan" id="edit_po_save" type="button" class="btn btn-success btn-xs" data-id="' +
-                                id + '" data-idpo="' + id_po + '" ><i class="fas fa-save"></i>' + '</button>'+
-                                '<button title="hapus" id="delete_po_save" type="button" class="btn btn-danger btn-xs" data-id="' + id +
-                                '" data-idpo="' + id_po + '" ><i class="fas fa-trash"></i>' + '</button>' + 
+                                id + '" data-idpo="' + id_po + '" ><i class="fas fa-save"></i>' +
+                                '</button>' +
+                                '<button title="hapus" id="delete_po_save" type="button" class="btn btn-danger btn-xs" data-id="' +
+                                id +
+                                '" data-idpo="' + id_po + '" ><i class="fas fa-trash"></i>' +
+                                '</button>' +
                                 '</tr>';
                             $('#tabel-po').append(html);
                             no++;
@@ -830,9 +834,12 @@
                                 '"></td>' +
                                 '<td>' + total + '</td>' +
                                 '<td><button title="simpan" id="edit_po_save" type="button" class="btn btn-success btn-xs" data-id="' +
-                                id + '" data-idpo="' + id_po + '" ><i class="fas fa-save"></i>' + '</button>' 
-                                '<button title="hapus" id="delete_po_save" type="button" class="btn btn-danger btn-xs" data-id="' + id +
-                                '" data-idpo="' + id_po + '" ><i class="fas fa-trash"></i>' + '</button>' + 
+                                id + '" data-idpo="' + id_po +
+                                '" ><i class="fas fa-save"></i>' + '</button>'
+                            '<button title="hapus" id="delete_po_save" type="button" class="btn btn-danger btn-xs" data-id="' +
+                            id +
+                                '" data-idpo="' + id_po + '" ><i class="fas fa-trash"></i>' +
+                                '</button>' +
                                 '</tr>';
                             $('#tabel-po').append(html);
                             no++;
@@ -844,7 +851,7 @@
             })
 
         });
-        
+
 
 
         //action delete_po_save
@@ -940,17 +947,26 @@
                                 '<td>' + kode_material + '</td>' +
                                 '<td>' + deskripsi + '</td>' +
                                 '<td><input type="date" value="' + newDate +
-                                '" class="form-control" id="batas' + id + '" name="batas' + id + '"></td>' +
+                                '" class="form-control" id="batas' + id + '" name="batas' + id +
+                                '"></td>' +
                                 '<td>' + qty + '</td>' +
-                                '<td>' + satuan + '</td>' + '<td><input type="text" value="' + harga_per_unit +
-                                '" class="form-control" id="harga_per_unit' + id + '" name="harga_per_unit' + id + '"></td>' +
-                                '<td><input type="text" value="' + mata_uang + '" class="form-control" id="mata_uang' + id +
-                                '" name="mata_uang' + id + '"></td>' + '<td><input type="text" value="' + vat + '" class="form-control" id="vat' + id +
-                                '" name="vat' + id + '"></td>' + '<td>' + total + '</td>' + 
+                                '<td>' + satuan + '</td>' + '<td><input type="text" value="' +
+                                harga_per_unit +
+                                '" class="form-control" id="harga_per_unit' + id +
+                                '" name="harga_per_unit' + id + '"></td>' +
+                                '<td><input type="text" value="' + mata_uang +
+                                '" class="form-control" id="mata_uang' + id +
+                                '" name="mata_uang' + id + '"></td>' +
+                                '<td><input type="text" value="' + vat +
+                                '" class="form-control" id="vat' + id +
+                                '" name="vat' + id + '"></td>' + '<td>' + total + '</td>' +
                                 '<td><button title="simpan" id="edit_po_save" type="button" class="btn btn-success btn-xs" data-id="' +
-                                id + '" data-idpo="' + id_po + '" ><i class="fas fa-save"></i>' + '</button>' +
-                                '<button title="hapus" id="delete_po_save" type="button" class="btn btn-danger btn-xs" data-id="' + id +
-                                 '" data-idpo="' + id_po + '" ><i class="fas fa-trash"></i>' + '</button>' + '</td>' +
+                                id + '" data-idpo="' + id_po +
+                                '" ><i class="fas fa-save"></i>' + '</button>' +
+                                '<button title="hapus" id="delete_po_save" type="button" class="btn btn-danger btn-xs" data-id="' +
+                                id +
+                                '" data-idpo="' + id_po + '" ><i class="fas fa-trash"></i>' +
+                                '</button>' + '</td>' +
                                 '</tr>';
                             $('#tabel-po').append(html);
                             no++;
@@ -995,7 +1011,7 @@
             loader();
             $('#button-check').prop("disabled", true);
             $.ajax({
-                url: '/products/products_pr/',
+                url: "{{ url('products/products_pr') }}" + "/",
                 type: "GET",
                 data: {
                     "format": "json"
@@ -1072,7 +1088,7 @@
 
         function addToDetails() {
             $.ajax({
-                url: '/products/tambah_detail_po/',
+                url: "{{ url('products/tambah_detail_po') }}" + "/",
                 type: "POST",
                 data: {
                     "id_po": $('#id_po').val(),
@@ -1149,8 +1165,11 @@
                                 '<td>' + total + '</td>' +
                                 '<td><button title="simpan" id="edit_po_save" type="button" class="btn btn-success btn-xs" data-id="' +
                                 id + '" data-idpo="' + id_po + '" ><i class="fas fa-save"></i>' +
-                                '</button>' + '<button title="hapus" id="delete_po_save" type="button" class="btn btn-danger btn-xs" data-id="' + id +
-                                 '" data-idpo="' + id_po + '" ><i class="fas fa-trash"></i>' + '</button>' + '</td>' +
+                                '</button>' +
+                                '<button title="hapus" id="delete_po_save" type="button" class="btn btn-danger btn-xs" data-id="' +
+                                id +
+                                '" data-idpo="' + id_po + '" ><i class="fas fa-trash"></i>' +
+                                '</button>' + '</td>' +
                                 '</tr>';
                             $('#tabel-po').append(html);
                             no++;
@@ -1181,7 +1200,7 @@
                 $('#proyek_code').prop("disabled", true);
                 $('#button-check').prop("disabled", true);
                 $.ajax({
-                    url: '/products/products_pr?proyek=' + proyek_name,
+                    url: "{{ url('products/products_pr?proyek=') }}" + proyek_name,
                     type: "GET",
                     data: {
                         "format": "json"
@@ -1222,17 +1241,20 @@
 
                             var checkbox
                             if (value.id_spph && !value.id_po) {
-                                checkbox = '<input type="checkbox" id="addToDetails" value="' + value.id +
+                                checkbox = '<input type="checkbox" id="addToDetails" value="' + value
+                                    .id +
                                     '" onclick="addToDetailsJS(' + value.id + ')" >'
                             } else {
-                                checkbox = '<input type="checkbox" id="addToDetails" value="' + value.id +
+                                checkbox = '<input type="checkbox" id="addToDetails" value="' + value
+                                    .id +
                                     '" onclick="addToDetailsJS(' + value.id + ')" disabled>'
                             }
 
                             $('#detail-material').append(
 
                                 '<tr><td>' + (key + 1) + '</td><td>' + value.uraian +
-                                '</td><td>' + value.spek + '</td><td>' + value.qty + '</td><td>' + value
+                                '</td><td>' + value.spek + '</td><td>' + value.qty + '</td><td>' +
+                                value
                                 .satuan + '</td><td>' + value.nama_proyek + '</td><td>' + no_spph +
                                 '</td><td>' + no_pr + '</td><td>' +
                                 no_po + '</td><td>' + checkbox + '</td></tr>'
@@ -1258,7 +1280,7 @@
             var qty = $('#qty').val();
             var unit = $('#unit').val();
             var token = $('input[name=_token]').val();
-            var url = '/products/purchase_order_detail/update';
+            var url = "{{ url('products/purchase_order_detail/update') }}";
             $.ajax({
                 url: url,
                 type: "POST",

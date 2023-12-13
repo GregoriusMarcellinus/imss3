@@ -387,7 +387,7 @@
                 $('#pcode').prop("disabled", true);
                 $('#button-check').prop("disabled", true);
                 $.ajax({
-                    url: '/products/check/' + pcode,
+                    url: "{{ url('products/check') }}" + "/" + pcode,
                     type: "GET",
                     data: {
                         "format": "json"
@@ -431,7 +431,7 @@
         function sjnProductUpdate() {
             const id = $('#product_id').val();
             $.ajax({
-                url: '/products/update_detail_sjn/',
+                url: "{{ url('products/update_detail_sjn/') }}",
                 type: "POST",
                 dataType: "json",
                 data: {
@@ -493,7 +493,7 @@
             $('#datetime').val(data.datetime);
             $('#table-products').empty();
             $.ajax({
-                url: '/products/detail_sjn/' + data.sjn_id,
+                url: "{{ url('products/detail_sjn')}}" + "/" + data.sjn_id,
                 type: "GET",
                 dataType: "json",
                 beforeSend: function() {
@@ -548,30 +548,6 @@
 
         function deleteSjn(data) {
             $('#delete_id').val(data.sjn_id);
-        }
-
-        $("#download-template").click(function() {
-            $.ajax({
-                url: '/downloads/template_import_product.xls',
-                type: "GET",
-                xhrFields: {
-                    responseType: 'blob'
-                },
-                success: function(data) {
-                    var a = document.createElement('a');
-                    var url = window.URL.createObjectURL(data);
-                    a.href = url;
-                    a.download = "template_import_product.xls";
-                    document.body.append(a);
-                    a.click();
-                    a.remove();
-                    window.URL.revokeObjectURL(url);
-                }
-            });
-        });
-
-        function download(type) {
-            window.location.href = "{{ route('products') }}?search={{ Request::get('search') }}&dl=" + type;
         }
     </script>
     @if (Session::has('success'))

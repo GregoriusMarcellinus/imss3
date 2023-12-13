@@ -459,7 +459,7 @@
             $('#container-form').removeClass('col-7');
             $('#button-tambah-detail').text('Tambah Item Detail');
         });
-        
+
         function showAddProduct() {
             if ($('#detail-pr').find('#container-product').hasClass('d-none')) {
                 $('#detail-pr').find('#container-product').removeClass('d-none');
@@ -522,7 +522,7 @@
                 $('#pcode').prop("disabled", true);
                 $('#button-check').prop("disabled", true);
                 $.ajax({
-                    url: '/materials?type=' + ptype + '&kode=' + pcode,
+                    url: "{{ url('materials?type=') }}" + ptype + '&kode=' + pcode,
                     type: "GET",
                     data: {
                         "format": "json"
@@ -587,7 +587,7 @@
             formData.append('satuan', $('#satuan').val());
             formData.append('waktu', $('#waktu').val());
             formData.append('keterangan', $('#keterangan').val());
-            
+
             if ($('#waktu').val() == null || $('#waktu').val() == "") {
                 toastr.error("Waktu Penyelesaian belum diisi!");
                 return
@@ -604,7 +604,7 @@
             }
 
             $.ajax({
-                url: '/products/update_purchase_request_detail/',
+                url: "{{ url('products/update_purchase_request_detail') }}" + "/",
                 type: "POST",
                 data: formData,
                 contentType: false,
@@ -739,7 +739,7 @@
             }
 
             $.ajax({
-                url: '/products/purchase_request_detail/' + data.id,
+                url: "{{ url('products/purchase_request_detail')}}"+ "/" + data.id,
                 type: "GET",
                 dataType: "json",
                 beforeSend: function() {
@@ -809,7 +809,7 @@
                             //     .id_po) {
                             //     status = 'COMPLETED';
                             // }
-                            
+
                             if (!value.id_spph && !value.nomor_spph) {
                                 status = 'Lakukan SPPH';
                             } else if (value.id_spph && value.nomor_spph && !value.id_po) {
@@ -824,7 +824,8 @@
                                 value
                                 .spek + '</td><td>' + value.qty + '</td><td>' + value
                                 .satuan + '</td><td>' + value.waktu + '</td><td>' +
-                                lampiran +'</td><td>' + value.keterangan + '</td><td><b>' + status +
+                                lampiran + '</td><td>' + value.keterangan + '</td><td><b>' +
+                                status +
                                 '</b></td></tr>'
 
                                 // + <td>' + spph +

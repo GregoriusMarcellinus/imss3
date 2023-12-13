@@ -511,7 +511,7 @@
                 $('#pcode').prop("disabled", true);
                 $('#button-check').prop("disabled", true);
                 $.ajax({
-                    url: '/materials?type=' + ptype + '&kode=' + pcode,
+                    url: "{{ url('materials?type=')}}" + ptype + '&kode=' + pcode,
                     type: "GET",
                     data: {
                         "format": "json"
@@ -564,7 +564,7 @@
         function PRupdate() {
             const id = $('#pr_id').val()
             $.ajax({
-                url: '/products/update_purchase_request_detail/',
+                url: "{{ url('products/update_purchase_request_detail')}}" +"/",
                 type: "POST",
                 dataType: "json",
                 data: {
@@ -668,7 +668,7 @@
             $('#table-pr').empty();
 
             $.ajax({
-                url: '/products/purchase_request_detail/' + data.id,
+                url: "{{ url('products/purchase_request_detail')}}"+"/" + data.id,
                 type: "GET",
                 dataType: "json",
                 beforeSend: function() {
