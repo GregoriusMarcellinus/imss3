@@ -342,7 +342,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="row justify-content-center">
-                            <img width="300px" src="/img/scan.jpg" />
+                            <img width="300px" src="{{ asset('img/scan.jpg') }}" />
                         </div>
                         <div class="card">
                             <div class="card-body">
@@ -444,7 +444,7 @@
                     </div>
                     <div class="modal-body">
                         <div class="row justify-content-center">
-                            <img width="300px" src="/img/scan.jpg" />
+                            <img width="300px" src="{{ asset('img/scan.jpg') }}" />
                         </div>
                         <div class="card">
                             <div class="card-body">
