@@ -697,7 +697,7 @@
             loader();
             $('#button-check').prop("disabled", true);
             $.ajax({
-                url: '/products/products_pr/',
+                url: "{{ url('products/products_pr/') }}",
                 type: "GET",
                 data: {
                     "format": "json"
@@ -820,7 +820,7 @@
                 $('#proyek_code').prop("disabled", true);
                 $('#button-check').prop("disabled", true);
                 $.ajax({
-                    url: '/products/products_pr?proyek=' + proyek_name,
+                    url: "{{ url('products/products_pr?proyek=') }}" + "/" + proyek_name,
                     type: "GET",
                     data: {
                         "format": "json"
@@ -894,7 +894,7 @@
         function sjnProductUpdate() {
             const id = $('#product_id').val();
             $.ajax({
-                url: '/products/update_detail_sjn/',
+                url: "{{ url('products/update_detail_sjn/') }}",
                 type: "POST",
                 dataType: "json",
                 data: {
@@ -1011,30 +1011,6 @@
 
         function deletespph(data) {
             $('#delete_id').val(data.id);
-        }
-
-        $("#download-template").click(function() {
-            $.ajax({
-                url: '/downloads/template_import_product.xls',
-                type: "GET",
-                xhrFields: {
-                    responseType: 'blob'
-                },
-                success: function(data) {
-                    var a = document.createElement('a');
-                    var url = window.URL.createObjectURL(data);
-                    a.href = url;
-                    a.download = "template_import_product.xls";
-                    document.body.append(a);
-                    a.click();
-                    a.remove();
-                    window.URL.revokeObjectURL(url);
-                }
-            });
-        });
-
-        function download(type) {
-            window.location.href = "{{ route('products') }}?search={{ Request::get('search') }}&dl=" + type;
         }
     </script>
     @if (Session::has('success'))
