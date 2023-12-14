@@ -1,12 +1,12 @@
 @extends('layouts.main')
 @section('title', __('Dashboard'))
-@section('custom-css')
-    {{-- <link rel="stylesheet" href="/plugins/toastr/toastr.min.css">
+{{-- @section('custom-css')
+    <link rel="stylesheet" href="/plugins/toastr/toastr.min.css">
     <link rel="stylesheet" href="/plugins/select2/css/select2.min.css">
     <link rel="stylesheet" href="/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
     <link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker.css">
-    <link rel="stylesheet" href="/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css"> --}}
-@endsection
+    <link rel="stylesheet" href="/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+@endsection --}}
 @section('content')
     <div class="content-header">
         <div class="container-fluid">

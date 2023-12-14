@@ -1,10 +1,6 @@
 @extends('layouts.main')
 @section('title', __('Tracking Purchase Request'))
-@section('custom-css')
-    <link rel="stylesheet" href="/plugins/toastr/toastr.min.css">
-    <link rel="stylesheet" href="/plugins/select2/css/select2.min.css">
-    <link rel="stylesheet" href="/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
-@endsection
+
 @section('content')
     <div class="content-header">
         <div class="container-fluid">
@@ -406,9 +402,6 @@
 
 {{-- custom Js --}}
 @section('custom-js')
-    <script src="/plugins/toastr/toastr.min.js"></script>
-    <script src="/plugins/select2/js/select2.full.min.js"></script>
-    <script src="/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
     <script>
         $(function() {
             bsCustomFileInput.init();
