@@ -1013,7 +1013,7 @@
             loader();
             $('#button-check').prop("disabled", true);
             $.ajax({
-                url: "{{ url('products/products_pr') }}" + "/",
+                url: "{{ url('products/products_pr') }}",
                 type: "GET",
                 data: {
                     "format": "json"
@@ -1090,7 +1090,7 @@
 
         function addToDetails() {
             $.ajax({
-                url: "{{ url('products/tambah_detail_po') }}" + "/",
+                url: "{{ url('products/tambah_detail_po') }}",
                 type: "POST",
                 data: {
                     "id_po": $('#id_po').val(),
