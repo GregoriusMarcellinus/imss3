@@ -263,15 +263,15 @@ class PurchaseRequestController extends Controller
             ]);
         }
         $request->validate([
-            'lampiran' => 'nullable|file|mimes:pdf|max:500', 
+            'lampiran' => 'nullable|file|mimes:pdf|max:500',
         ]);
 
         $file = $request->file('lampiran');
-// dd($file);
+        // dd($file);
         $fileName = rand() . '.' . $file->getClientOriginalExtension();
-// dd($fileName);
+        // dd($fileName);
         $file->move(public_path('lampiran'), $fileName);
-        
+
         $insert = DetailPR::create([
             'id_pr' => $request->id_pr,
             'id_proyek' => $request->id_proyek,
@@ -484,8 +484,6 @@ class PurchaseRequestController extends Controller
             'message' => 'Berhasil mengedit detail PR',
             'pr' => $pr
         ]);
-
-
     }
     public function uploadFile(Request $request)
     {
@@ -507,5 +505,23 @@ class PurchaseRequestController extends Controller
         DetailPR::where('id', $detailId)->update(['lampiran' => $fileName]);
 
         return redirect()->back()->with('success', 'File berhasil diupload');
+    }
+
+    public function penerimaan_barang()
+    {
+        $items = DetailPR::select('detail_pr.*', 'purchase_request.no_pr', 'purchase_order.no_po', 'purchase_order.tipe')
+            ->leftjoin('purchase_request', 'purchase_request.id', '=', 'detail_pr.id_pr')
+            ->leftjoin('purchase_order', 'purchase_order.id', '=', 'detail_pr.id_po')
+            ->whereNotNull('detail_pr.id_po')
+            ->get();
+
+        $items = $items->map(function ($item) {
+            $item->tipe = $item->tipe == 0 ? 'PO' : 'PO/PL';
+            return $item;
+        });
+
+        dd($items);
+
+        return view('penerimaan_barang.index', compact('items'));
     }
 }

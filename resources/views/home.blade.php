@@ -327,6 +327,22 @@
                         </a>
                     </div>
                 @endif
+
+                @if (Auth::user()->role == 0 || Auth::user()->role == 8)
+                    <div class="col-lg-3 col-6">
+                        <a href="{{ route('penerimaan-barang') }}">
+                            <div class="small-box bg-primary">
+                                <div class="inner" style="background-color: #c8cd21">
+                                    <p>Penerimaan</p>
+                                    <h3>Barang</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-truck-loading"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                @endif
             </div>
         </div>
 

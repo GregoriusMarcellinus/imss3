@@ -29,8 +29,8 @@ class PurchaseOrderController extends Controller
         }
 
         $purchases = Purchase_Order::select('purchase_order.*', 'vendor.nama as vendor_name', 'keproyekan.nama_proyek as proyek_name', 'purchase_request.no_pr as pr_no')
-        ->where('purchase_order.tipe', "0")    
-        ->join('vendor', 'vendor.id', '=', 'purchase_order.vendor_id')
+            ->where('purchase_order.tipe', "0")
+            ->join('vendor', 'vendor.id', '=', 'purchase_order.vendor_id')
             ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_order.proyek_id')
             ->leftjoin('purchase_request', 'purchase_request.id', '=', 'purchase_order.pr_id')
             ->paginate(50);
@@ -52,7 +52,8 @@ class PurchaseOrderController extends Controller
         }
     }
 
-    public function showPOPL(Request $request){
+    public function showPOPL(Request $request)
+    {
         $search = $request->q;
         if (Session::has('selected_warehouse_id')) {
             $warehouse_id = Session::get('selected_warehouse_id');
@@ -61,7 +62,7 @@ class PurchaseOrderController extends Controller
         }
 
         $purchases = Purchase_Order::select('purchase_order.*', 'keproyekan.nama_proyek as proyek_name', 'purchase_request.no_pr as pr_no')
-        ->where('purchase_order.tipe', '1')
+            ->where('purchase_order.tipe', '1')
             ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_order.proyek_id')
             ->leftjoin('purchase_request', 'purchase_request.id', '=', 'purchase_order.pr_id')
             ->paginate(50);
@@ -116,7 +117,7 @@ class PurchaseOrderController extends Controller
             ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_order.proyek_id')
             ->where('purchase_order.id', $id)
             ->first();
-        $po->details = DetailPo::where('detail_po.id_po', $po->id)
+        $po->details = DetailPo::where('detail_po.id_po', $id)
             ->leftJoin('detail_pr', 'detail_pr.id', '=', 'detail_po.id_detail_pr')
             ->select('detail_pr.*', 'detail_po.id as id_detail_po', 'detail_po.harga as harga_per_unit', 'detail_po.mata_uang as mata_uang', 'detail_po.vat as vat', 'detail_po.batas_akhir as batas')
             ->get();
@@ -135,10 +136,10 @@ class PurchaseOrderController extends Controller
             ->leftJoin('detail_pr', 'detail_pr.id', '=', 'detail_po.id_detail_pr')
             ->select('detail_pr.*', 'detail_po.id as id_detail_po', 'detail_po.harga as harga_per_unit', 'detail_po.mata_uang as mata_uang', 'detail_po.vat as vat', 'detail_po.batas_akhir as batas')
             ->get();
-            
-            return response()->json([
-                'po' => $po
-            ]);
+
+        return response()->json([
+            'po' => $po
+        ]);
         dd($po);
     }
 
@@ -172,14 +173,15 @@ class PurchaseOrderController extends Controller
         ]);
     }
 
-    public function destroyDetailPo(Request $request){
+    public function destroyDetailPo(Request $request)
+    {
         $id = $request->id;
         $id_po = $request->id_po;
 
         $delete_detail_po = DetailPo::where('id', $id)->delete();
         $delete_detail_pr = DetailPR::where('detail_pr.id_po', $id_po)->update([
             'id_po' => null
-        ]); 
+        ]);
 
         if ($delete_detail_po && $delete_detail_pr) {
             $po = Purchase_Order::select('purchase_order.*', 'vendor.nama as nama_vendor', 'keproyekan.nama_proyek as nama_proyek')
@@ -190,8 +192,14 @@ class PurchaseOrderController extends Controller
 
             $po->details = DetailPo::where('detail_po.id_po', $po->id)
                 ->leftJoin('detail_pr', 'detail_pr.id', '=', 'detail_po.id_detail_pr')
-                ->select('detail_pr.*', 'detail_po.id as id_detail_po', 'detail_po.harga as harga_per_unit', 'detail_po.mata_uang as mata_uang',
-                 'detail_po.vat as vat', 'detail_po.batas_akhir as batas')
+                ->select(
+                    'detail_pr.*',
+                    'detail_po.id as id_detail_po',
+                    'detail_po.harga as harga_per_unit',
+                    'detail_po.mata_uang as mata_uang',
+                    'detail_po.vat as vat',
+                    'detail_po.batas_akhir as batas'
+                )
                 ->get();
             return response()->json([
                 'po' => $po
@@ -272,7 +280,8 @@ class PurchaseOrderController extends Controller
         ]);
     }
 
-    public function tracking(Request $request){
+    public function tracking(Request $request)
+    {
         $search = $request->q;
 
         if (Session::has('selected_warehouse_id')) {
@@ -300,7 +309,8 @@ class PurchaseOrderController extends Controller
         }
     }
 
-    public function trackingwil(Request $request){
+    public function trackingwil(Request $request)
+    {
         $search = $request->q;
 
         if (Session::has('selected_warehouse_id')) {
@@ -456,7 +466,7 @@ class PurchaseOrderController extends Controller
             ->leftjoin('purchase_request', 'purchase_request.id', '=', 'purchase_order.pr_id')
             ->where('purchase_order.id', $id)
             ->first();
-        //  dd($po);   
+        //  dd($po);
         $po->batas_po = Carbon::parse($po->batas_po)->isoFormat('D MMMM Y');
         $po->tanggal_po = Carbon::parse($po->tanggal_po)->isoFormat('D MMMM Y');
         $po->details = DetailPo::where('detail_po.id_po', $po->id)
@@ -468,16 +478,16 @@ class PurchaseOrderController extends Controller
             return $detail;
         });
         $po->details = $po->details->map(function ($detail) {
-            $detail ->no_just = DetailPR::find($detail->id)->no_just;
+            $detail->no_just = DetailPR::find($detail->id)->no_just;
             return $detail;
         });
         $po->details = $po->details->map(function ($detail) {
-            $detail ->no_sph = DetailPR::find($detail->id)->no_sph;
+            $detail->no_sph = DetailPR::find($detail->id)->no_sph;
             return $detail;
         });
 
         $po->details = $po->details->map(function ($detail) {
-            $detail ->no_nego = DetailPR::find($detail->id)->no_nego1;
+            $detail->no_nego = DetailPR::find($detail->id)->no_nego1;
             return $detail;
         });
 
@@ -521,7 +531,7 @@ class PurchaseOrderController extends Controller
     }
 
     // Controller PO/PL
-    
+
     public function storePOPL(Request $request)
     {
         $purchase_order = $request->id;
@@ -613,7 +623,8 @@ class PurchaseOrderController extends Controller
 
 
     // CONTROLLER KEUANGAN
-    public function aprrovedPO(Request  $request){
+    public function aprrovedPO(Request  $request)
+    {
         $search = $request->q;
         if (Session::has('selected_warehouse_id')) {
             $warehouse_id = Session::get('selected_warehouse_id');
@@ -644,7 +655,8 @@ class PurchaseOrderController extends Controller
         }
     }
 
-    public function aprrovedPO_PL(Request  $request){
+    public function aprrovedPO_PL(Request  $request)
+    {
         $search = $request->q;
         if (Session::has('selected_warehouse_id')) {
             $warehouse_id = Session::get('selected_warehouse_id');

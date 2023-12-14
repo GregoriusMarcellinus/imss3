@@ -116,6 +116,8 @@
                                         <option value="5">Keuangan</option>
                                         <option value="6">Engineer</option>
                                         <option value="7">SDM</option>
+                                        <option value="8">Ekspedisi</option>
+                                        <option value="9">QC</option>
                                     </select>
                                 </div>
                             </div>
