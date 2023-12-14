@@ -192,4 +192,6 @@ Route::get('ppk', function () {
     return view('keuangan.ppk');
 });
 
-Route::get('penerimaan-barang', [App\Http\Controllers\PurchaseRequestController::class, 'penerimaan_barang'])->name('penerimaan-barang');
+Route::get('penerimaan-barang', [App\Http\Controllers\PurchaseRequestController::class, 'penerimaan_barang'])->name('penerimaan_barang');
+Route::post('registrasi-barang', [App\Http\Controllers\PurchaseRequestController::class, 'registrasi_barang'])->name('registrasi_barang.save');
+Route::put('edit-registrasi-barang', [App\Http\Controllers\PurchaseRequestController::class, 'edit_registrasi_barang'])->name('registrasi_barang.edit');

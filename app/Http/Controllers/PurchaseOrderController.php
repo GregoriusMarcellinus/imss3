@@ -254,13 +254,13 @@ class PurchaseOrderController extends Controller
                 'id_po' => $id,
                 'status' => 2,
             ]);
+            $add = DetailPo::create([
+                'id_po' => $id,
+                'id_pr' => $detail_pr->id_pr,
+                'id_detail_pr' => $detail_pr->id,
+            ]);
         }
 
-        $add = DetailPo::create([
-            'id_po' => $id,
-            'id_pr' => $detail_pr->id_pr,
-            'id_detail_pr' => $detail_pr->id,
-        ]);
 
         // Fetch the updated purchase order data
         $po = Purchase_Order::leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_order.proyek_id')

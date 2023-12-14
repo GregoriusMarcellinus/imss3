@@ -330,7 +330,7 @@
 
                 @if (Auth::user()->role == 0 || Auth::user()->role == 8)
                     <div class="col-lg-3 col-6">
-                        <a href="{{ route('penerimaan-barang') }}">
+                        <a href="{{ route('penerimaan_barang') }}">
                             <div class="small-box bg-primary">
                                 <div class="inner" style="background-color: #c8cd21">
                                     <p>Penerimaan</p>

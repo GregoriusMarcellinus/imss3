@@ -243,6 +243,8 @@
                                                 <th>{{ __('NEGO 2') }}</th>
                                                 <th>{{ __('PO') }}</th>
                                                 <th>{{ __('STATUS') }}</th>
+                                                <th>{{ __('EKSPEDISI') }}</th>
+                                                <th>{{ __('QC') }}</th>
                                                 <th>{{ __('AKSI') }}</th>
                                             </thead>
                                             <tbody id="table-pr">
@@ -340,12 +342,14 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label for="countdown" class="col-sm-4 col-form-label">{{ __('Countdown') }}</label>
+                                                    <label for="countdown"
+                                                        class="col-sm-4 col-form-label">{{ __('Countdown') }}</label>
                                                     <div class="col-sm-8">
-                                                        <input type="date" class="form-control" id="countdown" name="countdown">
+                                                        <input type="date" class="form-control" id="countdown"
+                                                            name="countdown">
                                                     </div>
                                                 </div>
-                                                
+
                                                 <div class="form-group row">
                                                     <label for="keterangan"
                                                         class="col-sm-4 col-form-label">{{ __('Keterangan') }}</label>
@@ -504,7 +508,7 @@
                 $('#pcode').prop("disabled", true);
                 $('#button-check').prop("disabled", true);
                 $.ajax({
-                    url: "{{ url('materials?type=')}}" + ptype + '&kode=' + pcode,
+                    url: "{{ url('materials?type=') }}" + ptype + '&kode=' + pcode,
                     type: "GET",
                     data: {
                         "format": "json"
@@ -557,7 +561,7 @@
         function PRupdate() {
             const id = $('#pr_id').val()
             $.ajax({
-                url: "{{ url('products/update_purchase_request_detail')}}" +"/",
+                url: "{{ url('products/update_purchase_request_detail') }}" + "/",
                 type: "POST",
                 dataType: "json",
                 data: {
@@ -661,7 +665,7 @@
             $('#table-pr').empty();
 
             $.ajax({
-                url: "{{ url('products/purchase_request_detail')}}"+"/" + data.id,
+                url: "{{ url('products/purchase_request_detail') }}" + "/" + data.id,
                 type: "GET",
                 dataType: "json",
                 beforeSend: function() {
@@ -711,7 +715,7 @@
                                 value.batas_akhir = '-';
                             } else {
                                 value.batas_akhir = value.batas_akhir;
-                            }                        
+                            }
 
                             if (hasSPPH) {
                                 $('#edit_pr_save').prop('disabled', false);
@@ -761,11 +765,14 @@
                             //         .prop('disabled', true);
                             // }
 
+                            const ekspedisi = value.ekspedisi ? value.ekspedisi : '-';
+
                             $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
                                 .kode_material + '</td><td>' + value.uraian + '</td><td>' +
                                 value
                                 .spek + '</td><td>' + value.qty + '</td><td>' + value
-                                .satuan + '</td><td>' + value.waktu + '</td><td style="color:'+ value.backgroundcolor +'">' + value
+                                .satuan + '</td><td>' + value.waktu + '</td><td style="color:' +
+                                value.backgroundcolor + '">' + value
                                 .countdown + '</td><td>' + value
                                 .keterangan +
                                 '</td><td>' + spph +
@@ -803,7 +810,10 @@
                                 id +
                                 '" name="bts_nego2' + id + '" value="' + value.batas_nego2 +
                                 '">' +
-                                '</td><td>' + po + '</td><td><b>' + status + '</b><br><br><b>' + msg + date +'</b>' + '</b></td>' +
+                                '</td><td>' + po + '</td><td><b>' + status + '</b><br><br><b>' +
+                                msg + date + '</b>' + '</b></td>' +
+                                '<td>' + ekspedisi + '</td>' +
+                                '<td></td>' +
                                 '<td><button id="edit_pr_save" data-id="' + id +
                                 '" type="button" class="btn btn-success btn-xs"' +
                                 '><i class="fas fa-save"></i></button>' + '</td>' + '</tr>'
@@ -974,7 +984,9 @@
                                 .kode_material + '</td><td>' + value.uraian + '</td><td>' +
                                 value
                                 .spek + '</td><td>' + value.qty + '</td><td>' + value
-                                .satuan + '</td><td>' + value.waktu + '</td><td style="color:'+ value.backgroundcolor +'">' + value
+                                .satuan + '</td><td>' + value.waktu +
+                                '</td><td style="color:' + value.backgroundcolor + '">' +
+                                value
                                 .countdown + '</td><td>' + value
                                 .keterangan +
                                 '</td><td>' + spph +
@@ -1012,7 +1024,8 @@
                                 id +
                                 '" name="bts_nego2' + id + '" value="' + value.batas_nego2 +
                                 '">' +
-                                '</td><td>' + po + '</td><td><b>' + status + '</b><br><br><b>'+ msg + date +'</b>' + '</b></td>' +
+                                '</td><td>' + po + '</td><td><b>' + status +
+                                '</b><br><br><b>' + msg + date + '</b>' + '</b></td>' +
                                 '<td><button id="edit_pr_save" data-id="' + id +
                                 '" type="button" class="btn btn-success btn-xs"' +
                                 '><i class="fas fa-save"></i></button>' + '</td>' + '</tr>'

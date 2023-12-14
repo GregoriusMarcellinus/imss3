@@ -8,6 +8,7 @@ use App\Models\DetailSpph;
 use App\Models\Keproyekan;
 use App\Models\Purchase_Order;
 use App\Models\PurchaseRequest;
+use App\Models\RegistrasiBarang;
 use App\Models\Spph;
 use App\Models\User;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -138,6 +139,9 @@ class PurchaseRequestController extends Controller
             $item->tanggal_nego2 = $item->tanggal_nego2 ? $item->tanggal_nego2 : '';
             $item->batas_nego2 = $item->batas_nego2 ? $item->batas_nego2 : '';
             $item->batas_akhir = Purchase_Order::leftjoin('detail_po', 'detail_po.id_po', '=', 'purchase_order.id')->where('detail_po.id_detail_pr', $item->id)->first()->batas_akhir ?? '-';
+
+            $ekspedisi = RegistrasiBarang::where('id_barang', $item->id)->first();
+            $item->ekspedisi = $ekspedisi ? $ekspedisi->keterangan : null;
 
             //countdown = waktu - date now
             $targetDate = Carbon::parse($item->waktu);
@@ -509,19 +513,58 @@ class PurchaseRequestController extends Controller
 
     public function penerimaan_barang()
     {
-        $items = DetailPR::select('detail_pr.*', 'purchase_request.no_pr', 'purchase_order.no_po', 'purchase_order.tipe')
+        $items = DetailPR::select('detail_pr.*', 'purchase_request.no_pr', 'purchase_order.no_po', 'purchase_order.tipe', 'keproyekan.nama_proyek')
             ->leftjoin('purchase_request', 'purchase_request.id', '=', 'detail_pr.id_pr')
             ->leftjoin('purchase_order', 'purchase_order.id', '=', 'detail_pr.id_po')
+            ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_request.proyek_id')
             ->whereNotNull('detail_pr.id_po')
-            ->get();
+            ->paginate(10);
 
-        $items = $items->map(function ($item) {
+        foreach ($items as $item) {
             $item->tipe = $item->tipe == 0 ? 'PO' : 'PO/PL';
-            return $item;
-        });
-
-        dd($items);
+            $item->diterima = RegistrasiBarang::where('id_barang', $item->id)->first() ? 1 : 0;
+            $item->keterangan = RegistrasiBarang::where('id_barang', $item->id)->first() ? RegistrasiBarang::where('id_barang', $item->id)->first()->keterangan : '';
+        }
 
         return view('penerimaan_barang.index', compact('items'));
+    }
+
+    public function registrasi_barang(Request $request)
+    {
+        $request->validate([
+            'keterangan' => 'required',
+        ], [
+            'keterangan.required' => 'Keterangan harus diisi',
+        ]);
+
+        $id = $request->id_barang;
+        $keterangan = $request->keterangan;
+
+        $add = RegistrasiBarang::create([
+            'id_barang' => $id,
+            'id_user' => auth()->user()->id,
+            'keterangan' => $keterangan,
+        ]);
+
+        return redirect()->route('penerimaan_barang')->with('success', 'Berhasil menambahkan registrasi barang');
+    }
+
+    public function edit_registrasi_barang(Request $request)
+    {
+        $request->validate([
+            'keterangan' => 'required',
+        ], [
+            'keterangan.required' => 'Keterangan harus diisi',
+        ]);
+
+        $id = $request->id_barang;
+        $keterangan = $request->keterangan;
+
+        $add = RegistrasiBarang::where('id_barang', $id)->update([
+            'id_user' => auth()->user()->id,
+            'keterangan' => $keterangan,
+        ]);
+
+        return redirect()->route('penerimaan_barang')->with('success', 'Berhasil mengubah keterangan');
     }
 }
