@@ -343,6 +343,22 @@
                         </a>
                     </div>
                 @endif
+
+                @if (Auth::user()->role == 0 || Auth::user()->role == 9)
+                    <div class="col-lg-3 col-6">
+                        <a href="{{ route('lppb') }}">
+                            <div class="small-box bg-primary">
+                                <div class="inner" style="background-color: #c45421">
+                                    <p>Laporan</p>
+                                    <h3>LPPB</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-file-alt"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                @endif
             </div>
         </div>
 
