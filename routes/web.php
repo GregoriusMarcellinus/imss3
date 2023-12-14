@@ -197,3 +197,6 @@ Route::post('registrasi-barang', [App\Http\Controllers\PurchaseRequestController
 Route::put('edit-registrasi-barang', [App\Http\Controllers\PurchaseRequestController::class, 'edit_registrasi_barang'])->name('registrasi_barang.edit');
 
 Route::get('lppb', [App\Http\Controllers\PurchaseRequestController::class, 'lppb'])->name('lppb');
+Route::get('lppb_print', function(){
+    return view('lppb.print');
+})->name('lppb.print');
