@@ -191,3 +191,5 @@ Route::get('voucher', function () {
 Route::get('ppk', function () {
     return view('keuangan.ppk');
 });
+
+Route::get('penerimaan-barang', [App\Http\Controllers\PurchaseRequestController::class, 'penerimaan_barang'])->name('penerimaan-barang');
