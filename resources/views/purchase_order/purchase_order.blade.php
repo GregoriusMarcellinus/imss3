@@ -1011,7 +1011,7 @@
             loader();
             $('#button-check').prop("disabled", true);
             $.ajax({
-                url: "{{ url('products/products_pr') }}" + "/",
+                url: "{{ url('products/products_pr') }}",
                 type: "GET",
                 data: {
                     "format": "json"
