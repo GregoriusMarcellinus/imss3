@@ -597,7 +597,7 @@
                     clearForm();
                     if (data.pr.details.length == 0) {
                         $('#table-pr').append(
-                            '<tr><td colspan="17" class="text-center">Tidak ada produk</td></tr>');
+                            '<tr><td colspan="19" class="text-center">Tidak ada produk</td></tr>');
                     } else {
                         $('#table-pr').empty();
                         $.each(data.pr.details, function(key, value) {
@@ -669,7 +669,7 @@
                 type: "GET",
                 dataType: "json",
                 beforeSend: function() {
-                    $('#table-pr').append('<tr><td colspan="17" class="text-center">Loading...</td></tr>');
+                    $('#table-pr').append('<tr><td colspan="19" class="text-center">Loading...</td></tr>');
                     $('#button-cetak-pr').html('<i class="fas fa-spinner fa-spin"></i> Loading...');
                     $('#button-cetak-pr').attr('disabled', true);
                 },
@@ -686,7 +686,7 @@
                     if (data.pr.details.length == 0) {
                         $('#table-pr').empty();
                         $('#table-pr').append(
-                            '<tr><td colspan="17" class="text-center">Tidak ada produk</td></tr>');
+                            '<tr><td colspan="19" class="text-center">Tidak ada produk</td></tr>');
                     } else {
                         $('#table-pr').empty();
 
@@ -875,7 +875,7 @@
                 dataType: "json",
                 beforeSend: function() {
                     $('#tabel-po').append(
-                        '<tr><td colspan="17" class="text-center">Loading...</td></tr>');
+                        '<tr><td colspan="19" class="text-center">Loading...</td></tr>');
                     $('#button-cetak-pr').html('<i class="fas fa-spinner fa-spin"></i> Loading...');
                     $('#button-cetak-pr').attr('disabled', true);
                 },

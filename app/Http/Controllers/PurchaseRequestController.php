@@ -141,7 +141,15 @@ class PurchaseRequestController extends Controller
             $item->batas_akhir = Purchase_Order::leftjoin('detail_po', 'detail_po.id_po', '=', 'purchase_order.id')->where('detail_po.id_detail_pr', $item->id)->first()->batas_akhir ?? '-';
 
             $ekspedisi = RegistrasiBarang::where('id_barang', $item->id)->first();
-            $item->ekspedisi = $ekspedisi ? $ekspedisi->keterangan : null;
+            if ($ekspedisi) {
+                $keterangan = $ekspedisi->keterangan;
+                $tanggal = $ekspedisi->created_at;
+                $tanggal = Carbon::parse($tanggal)->isoFormat('D MMMM Y');
+                $keterangan = $keterangan . ' tanggal ' . $tanggal;
+            } else {
+                $keterangan = null;
+            }
+            $item->ekspedisi = $keterangan;
 
             //countdown = waktu - date now
             $targetDate = Carbon::parse($item->waktu);
@@ -523,6 +531,7 @@ class PurchaseRequestController extends Controller
         foreach ($items as $item) {
             $item->tipe = $item->tipe == 0 ? 'PO' : 'PO/PL';
             $item->diterima = RegistrasiBarang::where('id_barang', $item->id)->first() ? 1 : 0;
+            $keterangan = RegistrasiBarang::where('id_barang', $item->id)->first() ? RegistrasiBarang::where('id_barang', $item->id)->first()->keterangan : '';
             $item->keterangan = RegistrasiBarang::where('id_barang', $item->id)->first() ? RegistrasiBarang::where('id_barang', $item->id)->first()->keterangan : '';
         }
 
@@ -566,5 +575,25 @@ class PurchaseRequestController extends Controller
         ]);
 
         return redirect()->route('penerimaan_barang')->with('success', 'Berhasil mengubah keterangan');
+    }
+
+    public function lppb()
+    {
+        $items = RegistrasiBarang::select('detail_pr.*', 'purchase_request.no_pr', 'purchase_order.no_po', 'purchase_order.tipe', 'keproyekan.nama_proyek')
+            ->leftjoin('detail_pr', 'detail_pr.id', '=', 'registrasi_barang.id_barang')
+            ->leftjoin('purchase_request', 'purchase_request.id', '=', 'detail_pr.id_pr')
+            ->leftjoin('purchase_order', 'purchase_order.id', '=', 'detail_pr.id_po')
+            ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_request.proyek_id')
+            ->whereNotNull('detail_pr.id_po')
+            ->paginate(10);
+
+        foreach ($items as $item) {
+            $item->tipe = $item->tipe == 0 ? 'PO' : 'PO/PL';
+            $item->diterima = RegistrasiBarang::where('id_barang', $item->id)->first() ? 1 : 0;
+            $keterangan = RegistrasiBarang::where('id_barang', $item->id)->first() ? RegistrasiBarang::where('id_barang', $item->id)->first()->keterangan : '';
+            $item->keterangan = RegistrasiBarang::where('id_barang', $item->id)->first() ? RegistrasiBarang::where('id_barang', $item->id)->first()->keterangan : '';
+        }
+
+        return view('lppb.index', compact('items'));
     }
 }
