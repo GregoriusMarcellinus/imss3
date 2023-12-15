@@ -134,7 +134,7 @@
                 </td>
                 <td align="center" style="vertical-align: top; width:33%; border:1px solid black;">
                     <br><br>
-                    <strong style="font-size: 25">LAPORAN PEMERIKSAAN & PENERIMAAN<br>BARANG</strong>
+                    <strong style="font-size: 25px">LAPORAN PEMERIKSAAN & PENERIMAAN<br>BARANG</strong>
                 </td>
                 <td style="width:33%; border:1px solid black;">
                     <table>
@@ -163,8 +163,8 @@
             </tr>
         </table>
     </header>
-    <span>Diterima dari : <br>PEMBELIAN LANGSUNG <br> Dunia Terpal <br></span>
-    <span>Barang-barang dengan kualitas dan kuantitas seperti tersebut dibawah</span>
+    Diterima dari : <br>PEMBELIAN LANGSUNG <br> Dunia Terpal <br>
+    Barang-barang dengan kualitas dan kuantitas seperti tersebut dibawah
     <table class="table" style="width: 100%">
         <thead>
             <tr>
@@ -223,16 +223,17 @@
         </tbody>
     </table>
 
-    <div class="footer">
-        <div style="width: 50%;">
-            <table class="no-border">
-                <tr>
-                    <td class="signature">
-                        <b style="text-decoration: underline;">
-                            AMRON BAITARRIZAQ
-                        </b><br>KEPALA DIVISI TEKNIK & LOGISTIK
-                    </td>
-                </tr>
+    <div style="margin-left: 80%; width: 50%; margin-top: 5%; text-align:center;">
+        <table class="w-100">
+            <tr>
+                <td style="font-size: 18px" class="text-center">KEPALA DIVISI TEKNIK & LOGISTIK</td>
+            </tr>
+            <tr>
+                <td style="height: 80px;"></td>
+            </tr>
+            <tr>
+                <td style="font-size: 18px">AMRON BAITARRIZAQ</td>
+            </tr>
             </table>
         </div>
     </div>
