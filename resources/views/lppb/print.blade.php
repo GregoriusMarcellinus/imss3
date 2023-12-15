@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 
+<html lang="en">
+
 <head>
-    <title>Purchase Order 
-        {{-- {{ $po->nama_proyek ?? '-' }} --}}
-    </title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Purchase Order</title>
     <style>
         @page {
+            size: A4 landscape;
             margin: 0cm;
         }
 
@@ -42,7 +45,6 @@
 
         .table {
             width: 100%;
-            /* margin-top: 1cm; */
             border: 1px solid black;
         }
 
@@ -51,7 +53,6 @@
         .table td {
             border: 1px solid black;
         }
-
 
         .page-break {
             page-break-after: always;
@@ -77,18 +78,20 @@
             margin: 5px;
         }
 
-        
-        .information table {
-            /* padding: 10px; */
-            margin-bottom: 2cm;
-        }
-
         header {
             position: fixed;
             top: 0cm;
             left: 0cm;
             right: 0cm;
-            height: 10cm;
+            /* height: 5cm; */
+        }
+
+        .header-table th {
+            border-bottom: 1px solid black;
+        }
+
+        .header-table td {
+            padding: 5px;
         }
 
         .table2 tr {
@@ -98,77 +101,105 @@
 
         .alamat {
             white-space: pre-wrap;
-
         }
 
         .title-header {
             margin-top: 0;
         }
-    </style>
 
+        .footer {
+            position: fixed;
+            bottom: 0;
+            right: 0;
+            text-align: right;
+        }
+
+        .signature {
+            text-align: center;
+        }
+
+        .no-border {
+            border: none;
+        }
+    </style>
 </head>
 
 <body>
     <header>
-        {{-- <div class="information"> --}}
-            <table>
-                <tr>
-                    <td style="text-align: left;width:33%;vertical-align:top;padding-top:10px" rowspan="12">
-                        <img src="https://inkamultisolusi.co.id/api_cms/public/uploads/editor/20220511071342_LSnL6WiOy67Xd9mKGDaG.png"
-                            alt="Logo" width="250" class="logo" />
-                    </td>
-                    <td align="center" rowspan="10" style="vertical-align:top;">
-                        <br>
-                        <br><br>
-                        <strong>LAPORAN PEMERIKSAAN & PENERIMAAN<br>BARANG</strong>
-                        {{-- <br><strong style="font-size: 25">Purchase Order</strong><br> --}}
-                    </td>
-                    {{-- <td style="border:1px solid black"> --}}
+        <table class="header-table" style="width: 100%; border:1px solid black;">
+            <tr>
+                <td align="center" style="width:33%; border:1px solid black;">
+                    <img src="https://inkamultisolusi.co.id/api_cms/public/uploads/editor/20220511071342_LSnL6WiOy67Xd9mKGDaG.png"
+                        alt="Logo" class="logo" width="250"/>
+                </td>
+                <td align="center" style="vertical-align: top; width:33%; border:1px solid black;">
+                    <br><br>
+                    <strong style="font-size: 25">LAPORAN PEMERIKSAAN & PENERIMAAN<br>BARANG</strong>
+                </td>
+                <td style="width:33%; border:1px solid black;">
+                    <table>
                         <tr>
-                            <td style="text-align: left;width: 8rem;vertical-align:top;">Nomor</td>
-                            <td style="text-align: left;vertical-align:top;">: </td>
+                            <td>Nomor</td>
+                            <td>: </td>
                         </tr>
                         <tr>
-                            <td style="text-align: left;vertical-align:top;">Tanggal</td>
-                            <td style="text-align: left;vertical-align:top;">: </td>
+                            <td>Tanggal</td>
+                            <td>: </td>
                         </tr>
                         <tr>
-                            <td style="text-align: left;vertical-align:top;">No PO</td>
-                            <td style="text-align: left;vertical-align:top;">: </td>
+                            <td>No PO</td>
+                            <td>: </td>
                         </tr>
                         <tr>
-                            <td style="text-align: left;vertical-align:top;">Proyek</td>
-                            <td style="text-align: left;vertical-align:top;">: </td>
+                            <td>Proyek</td>
+                            <td>: </td>
                         </tr>
-                    {{-- </td> --}}
-                </tr>
-                <tr>
-                    <td style="text-align: left;vertical-align: top;">Alamat Penagihan</td>
-                    <td style="text-align: left;">: <span> Direktur Keuangan, SDM, dan Manris PT INKA Multi Solusi
-                            Servis Jl Salak No. 59 Madiun <br> N.P.W.P : 70.9607.6574.576.5</span></td>
-                </tr>
-            </table>
-        {{-- </div> --}}
+                        <tr>
+                            <td>Halaman</td>
+                            <td>: </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
     </header>
-    {{-- <div style="margin-top: 400px"></div> --}}
-
+    <span>Diterima dari : <br>PEMBELIAN LANGSUNG <br> Dunia Terpal <br></span>
+    <span>Barang-barang dengan kualitas dan kuantitas seperti tersebut dibawah</span>
     <table class="table" style="width: 100%">
         <thead>
             <tr>
-                <th>No</th>
-                <th>Nama & Spesifikasi Barang</th>
-                <th>Kode<br>Bar   ang</th>
-                <th>Satuan</th>
-                <th>Kuantitas</th>
-                <th>Unit</th>
-                <th>Harga Per Unit</th>
-                <th>Mata Uang</th>
-                <th>Vat</th>
-                <th>Total</th>
+                <th rowspan="2">No</th>
+                <th rowspan="2">Nama & Spesifikasi Barang</th>
+                <th rowspan="2">Kode<br>Barang</th>
+                <th rowspan="2">Satuan</th>
+                <th colspan="2">Kuantitas</th>
+                <th colspan="2">Hasil Pemeriksaan</th>
+                <th rowspan="2">Sudah<br>Diterima</th>
+                <th rowspan="2">Belum<br>Diterima</th>
+                <th rowspan="2">Keterangan</th>
+            </tr>
+            <tr>
+                <th>PO</th>
+                <th>Penerimaan</th>
+                <th>Baik</th>
+                <th>Tidak Baik</th>
+            </tr>
+            <tr>
+                <th>1</th>
+                <th>2</th>
+                <th>3</th>
+                <th>4</th>
+                <th>5</th>
+                <th>6</th>
+                <th>7</th>
+                <th>8</th>
+                <th>9</th>
+                <th>10</th>
+                <th>11</th>
             </tr>
         </thead>
         <tbody>
-            @forelse ($po->details as $item)
+            {{-- @forelse ($po->details as $item)
                 @php
                     $harga_per_unit = $item->harga_per_unit ?? 0;
                 @endphp
@@ -184,108 +215,27 @@
                     <td style="text-align: center;">{{ $item->vat ?? '-' }}</td>
                     <td style="text-align: center;">@rupiah($item->qty * $item->harga_per_unit)</td>
                 </tr>
-            @empty
-                <tr>
-                    <td colspan="10" style="text-align: center">Tidak ada data</td>
-                </tr>
-            @endforelse
+            @empty --}}
+            <tr>
+                <td colspan="11" style="text-align: center">Tidak ada data</td>
+            </tr>
+            {{-- @endforelse --}}
         </tbody>
     </table>
 
-    <div style="margin-top: 1rem">
-        <div style="margin-left: 70%; width: 50%">
-            <table class="w-100">
+    <div class="footer">
+        <div style="width: 50%;">
+            <table class="no-border">
                 <tr>
-                    <td>Sub Total</td>
-                    <td>:</td>
-                    <td>@rupiah($po->subtotal)</td>
-                </tr>
-                <tr>
-                    <td>Ongkos Kirim</td>
-                    <td>:</td>
-                    <td>@rupiah($po->ongkos)</td>
-                </tr>
-                <tr>
-                    <td>Asuransi</td>
-                    <td>:</td>
-                    <td>@rupiah($po->asuransi)</td>
-                </tr>
-                <tr>
-                    <td>Total</td>
-                    <td>:</td>
-                    <td>@rupiah($po->total)</td>
-                </tr>
-            </table>
-        </div>
-    </div>
-    <div style="margin-top:400x">
-        <table class="table2" style="width:100%;padding:10px">
-            <tr>
-                <td style="width: 16%">
-                    <span>Referensi PO</span><br>
-                    <span>Termin Pembayaran</span><br>
-                    <span>Garansi</span><br>
-                    <span>Proyek</span><br>
-                </td>
-                <td style="width: 1%">
-                    <span>:</span><br>
-                    <span>:</span><br>
-                    <span>:</span><br>
-                    <span>:</span><br>
-                </td>
-                <td>
-                    <span>{{ $po->ref_po }}</span><br>
-                    <span>{{ $po->term_pay }}</span><br>
-                    <span>{{ $po->garansi }}</span><br>
-                    <span>{{ $po->nama_proyek }}</span><br>
-                </td>
-            </tr>
-            <tr>
-                <td style="height: 50px;vertical-align: top;">Catatan Untuk Vendor</td>
-                <td style="vertical-align: top;">:</td>
-                <td style="vertical-align: top">{!! nl2br($po->catatan_vendor) !!}</td>
-            </tr>
-        </table>
-    </div>
-    {{-- <div class="page-break"></div> --}}
-
-    <div style="margin-top: 1rem">
-        <div style="float: left; width: 50%">
-            <table class="w-100">
-                <tr>
-                    <td>Disetujui Oleh,</td>
-                </tr>
-            </table>
-        </div>
-        <div style="margin-left: 50%; width: 50%; margin-top: 5%">
-            <table class="w-100">
-                <tr>
-                    <td class="text-center">PT INKA MULTI SOLUSI SERVIS</td>
-                </tr>
-                <tr>
-                    <td style="height: 80px"></td>
-                </tr>
-                <tr>
-                    {{-- <td class="text-center"><b style="text-decoration: underline">
-                            &ensp;&ensp;&ensp;&ensp;&ensp;&ensp;&emsp;&emsp;&emsp;&emsp;</b>
-                    </td> --}}
-                    <td style="text-align: center;vertical-align: bottom"><b style="text-decoration: underline; ">
-                        @if ($po->total < 35000000)  
-                        Rudi Hariyanto</b><br><b>PLT KADEP LOGISTIK</b>
-                        @elseif($po->total >= 35000000 && $po->total < 1000000000)
-                        Adib Ardhian</b><br><b>DIREKTUR OPERSI</b>
-                        @else 
-                        Junaedi</b><br><b>DIREKTUR UTAMA</b>
-                        @endif
+                    <td class="signature">
+                        <b style="text-decoration: underline;">
+                            AMRON BAITARRIZAQ
+                        </b><br>KEPALA DIVISI TEKNIK & LOGISTIK
                     </td>
                 </tr>
-                {{-- <tr style="border: 1px solid black; vertical-align: top">
-                    <td style="text-align: center;"><b>PLT KADEP LOGISTIK</b></td>
-                </tr> --}}
             </table>
         </div>
     </div>
-
 </body>
 
 </html>
