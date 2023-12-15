@@ -35,6 +35,7 @@
                                 <th>{{ __('No PR') }}</th>
                                 <th>{{ __('No PO') }}</th>
                                 <th>{{ __('Jenis PO') }}</th>
+                                <th>{{ __('Kode Material') }}</th>
                                 <th>{{ __('Nama Barang') }}</th>
                                 <th>{{ __('Spesifikasi') }}</th>
                                 <th>{{ __('QTY') }}</th>
@@ -55,6 +56,7 @@
                                     </td>
                                     <td>{{ $d->no_po }}</td>
                                     <td>{{ $d->tipe }}</td>
+                                    <td>{{ $d->kode_material }}</td>
                                     <td>{{ $d->uraian }}</td>
                                     <td>{{ $d->spek }}</td>
                                     <td>{{ $d->qty }}</td>
