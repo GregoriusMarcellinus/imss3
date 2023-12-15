@@ -767,6 +767,20 @@
 
                             const ekspedisi = value.ekspedisi ? value.ekspedisi : '-';
 
+                            const qc = value?.qc
+
+                            let content = ''
+
+                            if (qc) {
+                                //append the qc.penerimaan, qc.hasil_ok, qc.hasil_nok, qc.tanggal_qc
+                                content = `<p class="mt-2 mb-0">Penerimaan : ${qc.penerimaan}</p>
+                                <p class="mt-2 mb-0">OK : ${qc.hasil_ok}</p>
+                                <p class="mt-2 mb-0">NOK : ${qc.hasil_nok}</p>
+                                <p class="mt-2 mb-0">${qc.tanggal_qc}</p>`
+                            } else {
+                                content = '-'
+                            }
+
                             $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
                                 .kode_material + '</td><td>' + value.uraian + '</td><td>' +
                                 value
@@ -812,8 +826,8 @@
                                 '">' +
                                 '</td><td>' + po + '</td><td><b>' + status + '</b><br><br><b>' +
                                 msg + date + '</b>' + '</b></td>' +
-                                '<td>' + ekspedisi + '</td>' +
-                                '<td></td>' +
+                                '<td style="min-width:200px">' + ekspedisi + '</td>' +
+                                '<td style="min-width:200px">' + content + '</td>' +
                                 '<td><button id="edit_pr_save" data-id="' + id +
                                 '" type="button" class="btn btn-success btn-xs"' +
                                 '><i class="fas fa-save"></i></button>' + '</td>' + '</tr>'

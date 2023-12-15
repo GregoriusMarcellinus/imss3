@@ -498,7 +498,7 @@
                 $('#pcode').prop("disabled", true);
                 $('#button-check').prop("disabled", true);
                 $.ajax({
-                    url: '/materials?type=' + ptype + '&kode=' + pcode,
+                    url: "{{ url('/materials?type=') }}" + "/" + ptype + '&kode=' + pcode,
                     type: "GET",
                     data: {
                         "format": "json"
@@ -549,7 +549,7 @@
         function PRupdate() {
             const id = $('#pr_id').val()
             $.ajax({
-                url: '/products/update_purchase_request_detail/',
+                url: "{{ url('/products/update_purchase_request_detail/') }}",
                 type: "POST",
                 dataType: "json",
                 data: {
@@ -676,7 +676,7 @@
             }
 
             $.ajax({
-                url: '/products/purchase_request_detail/' + data.id,
+                url: "{{ url('/products/purchase_request_detail/') }}" + "/" + data.id,
                 type: "GET",
                 dataType: "json",
                 beforeSend: function() {
@@ -743,17 +743,25 @@
                                 '<input type="text" class="form-control" name="kode_material[]" value="' +
                                 value.kode_material + '">';
                             var spekInput =
-                                '<input type="text" class="form-control" name="spek[]" value="' + value
-                                .spek + '">';
+                                '<textarea type="text" class="form-control" name="spek[]" value="' +
+                                value
+                                .spek + '">' + value.spek + '</textarea>';
+                            var hiddenId = '<input type="hidden" name="id_detail_pr[]" value="' + value
+                                .id +
+                                '">';
                             // var saveButton = '<button title="hapus" id="delete_po_save" type="button" class="btn btn-danger btn-xs" data-id="' +
                             //     id + '" data-idpo="' + id_po + '" ><i class="fas fa-trash"></i>' +
                             //     '</button>';
 
 
-                            $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + kodeMaterialInput + '</td><td>' + value.uraian + '</td><td>' +
+                            $('#table-pr').append('<tr>' + hiddenId + '<td>' + (key + 1) +
+                                '</td><td>' +
+                                kodeMaterialInput + '</td><td>' + value.uraian + '</td><td>' +
                                 spekInput + '</td><td>' + value.qty + '</td><td>' + value
                                 .satuan + '</td><td>' + value.waktu + '</td><td>' + value
-                                .keterangan + '</td><td><button id="edit_pr_save" class="btn btn-success btn-xs" onclick="saveDetailPr(' + key + ')"><i class="fas fa-save"></i></button></td></tr>'
+                                .keterangan +
+                                '</td><td><button id="edit_pr_save" class="btn btn-success btn-xs" onclick="saveDetailPr(' +
+                                key + ')"><i class="fas fa-save"></i></button></td></tr>'
 
                                 // + <td>' + spph +
                                 // '</td><td>' + po + '</td><td>' + status + '</td> +
@@ -769,16 +777,18 @@
 
         //action edit_pr_save
         function saveDetailPr(key) {
-            var id = $('#id').val();
+            var id = $("input[name='id_detail_pr[]']").eq(key).val();
+            var id_pr = $('#id').val();
             var kode_material = $("input[name='kode_material[]']").eq(key).val();
-            var spek = $("input[name='spek[]']").eq(key).val();
+            var spek = $("textarea[name='spek[]']").eq(key).val();
             $.ajax({
-                url: '/products/edit_purchase_request/',
+                url: "{{ url('/products/edit_purchase_request/') }}",
                 type: "POST",
                 dataType: "json",
                 data: {
                     "_token": "{{ csrf_token() }}",
-                    "id_pr": id,
+                    "id": id,
+                    "id_pr": id_pr,
                     "kode_material": kode_material,
                     "spek": spek,
                 },
@@ -825,30 +835,6 @@
 
         function deletePR(data) {
             $('#delete_id').val(data.id);
-        }
-
-        $("#download-template").click(function() {
-            $.ajax({
-                url: '/downloads/template_import_product.xls',
-                type: "GET",
-                xhrFields: {
-                    responseType: 'blob'
-                },
-                success: function(data) {
-                    var a = document.createElement('a');
-                    var url = window.URL.createObjectURL(data);
-                    a.href = url;
-                    a.download = "template_import_product.xls";
-                    document.body.append(a);
-                    a.click();
-                    a.remove();
-                    window.URL.revokeObjectURL(url);
-                }
-            });
-        });
-
-        function download(type) {
-            window.location.href = "{{ route('products') }}?search={{ Request::get('search') }}&dl=" + type;
         }
     </script>
     @if (Session::has('success'))

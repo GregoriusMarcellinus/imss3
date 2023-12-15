@@ -6,6 +6,7 @@ use App\Models\DetailPo;
 use App\Models\DetailPR;
 use App\Models\DetailSpph;
 use App\Models\Keproyekan;
+use App\Models\Lppb;
 use App\Models\Purchase_Order;
 use App\Models\PurchaseRequest;
 use App\Models\RegistrasiBarang;
@@ -145,11 +146,39 @@ class PurchaseRequestController extends Controller
                 $keterangan = $ekspedisi->keterangan;
                 $tanggal = $ekspedisi->created_at;
                 $tanggal = Carbon::parse($tanggal)->isoFormat('D MMMM Y');
-                $keterangan = $keterangan . ' tanggal ' . $tanggal;
+                $keterangan = $keterangan . ', ' . $tanggal;
             } else {
                 $keterangan = null;
             }
             $item->ekspedisi = $keterangan;
+
+            //qc
+            if ($ekspedisi) {
+                $qc = Lppb::where('id_registrasi_barang', $ekspedisi->id)->first();
+            } else {
+                $qc = null;
+            }
+
+            if ($qc) {
+                $penerimaan = $qc->penerimaan;
+                $hasil_ok = $qc->hasil_ok;
+                $hasil_nok = $qc->hasil_nok;
+                $tanggal_qc = $qc->created_at;
+                $tanggal_qc = Carbon::parse($qc->created_at)->isoFormat('D MMMM Y');
+                $qc = new stdClass();
+                $qc->penerimaan = $penerimaan;
+                $qc->hasil_ok = $hasil_ok;
+                $qc->hasil_nok = $hasil_nok;
+                $qc->tanggal_qc = $tanggal_qc;
+            } else {
+                $penerimaan = null;
+                $hasil_ok = null;
+                $hasil_nok = null;
+                $tanggal_qc = null;
+                $qc = null;
+            }
+
+            $item->qc = $qc;
 
             //countdown = waktu - date now
             $targetDate = Carbon::parse($item->waktu);
@@ -463,7 +492,8 @@ class PurchaseRequestController extends Controller
     }
     public function editPrEng(Request $request)
     {
-        $id = $request->id_pr;
+        $id = $request->id;
+        $id_pr = $request->id_pr;
         $kode_material = $request->kode_material;
         $spek = $request->spek;
 
@@ -480,7 +510,7 @@ class PurchaseRequestController extends Controller
         }
 
         $pr = PurchaseRequest::where('id', $request->id_pr)->first();
-        $pr->details = DetailPR::where('id_pr', $pr->id)->get();
+        $pr->details = DetailPR::where('id_pr', $pr->id_pr)->get();
 
         $pr->details = $pr->details->map(function ($item) {
             $item->spek = $item->spek ? $item->spek : '';
@@ -555,7 +585,7 @@ class PurchaseRequestController extends Controller
             'keterangan' => $keterangan,
         ]);
 
-        return redirect()->route('penerimaan_barang')->with('success', 'Berhasil menambahkan registrasi barang');
+        return redirect()->route('penerimaan_barang')->with('success', 'Berhasil registrasi barang');
     }
 
     public function edit_registrasi_barang(Request $request)
@@ -579,7 +609,7 @@ class PurchaseRequestController extends Controller
 
     public function lppb()
     {
-        $items = RegistrasiBarang::select('detail_pr.*', 'purchase_request.no_pr', 'purchase_order.no_po', 'purchase_order.tipe', 'keproyekan.nama_proyek')
+        $items = RegistrasiBarang::select('detail_pr.*', 'purchase_request.no_pr', 'purchase_order.no_po', 'purchase_order.tipe', 'keproyekan.nama_proyek', 'registrasi_barang.created_at as diterima_ekspedisi', 'registrasi_barang.id as id_registrasi_barang')
             ->leftjoin('detail_pr', 'detail_pr.id', '=', 'registrasi_barang.id_barang')
             ->leftjoin('purchase_request', 'purchase_request.id', '=', 'detail_pr.id_pr')
             ->leftjoin('purchase_order', 'purchase_order.id', '=', 'detail_pr.id_po')
@@ -589,11 +619,44 @@ class PurchaseRequestController extends Controller
 
         foreach ($items as $item) {
             $item->tipe = $item->tipe == 0 ? 'PO' : 'PO/PL';
-            $item->diterima = RegistrasiBarang::where('id_barang', $item->id)->first() ? 1 : 0;
-            $keterangan = RegistrasiBarang::where('id_barang', $item->id)->first() ? RegistrasiBarang::where('id_barang', $item->id)->first()->keterangan : '';
-            $item->keterangan = RegistrasiBarang::where('id_barang', $item->id)->first() ? RegistrasiBarang::where('id_barang', $item->id)->first()->keterangan : '';
+            $item->diterima = Lppb::where('id_registrasi_barang', $item->id_registrasi_barang)->first() ? 1 : 0;
+            $keterangan = Lppb::where('id_registrasi_barang', $item->id)->first() ? Lppb::where('id_registrasi_barang', $item->id)->first()->keterangan : '';
+            $item->keterangan = Lppb::where('id_registrasi_barang', $item->id)->first() ? Lppb::where('id_registrasi_barang', $item->id)->first()->keterangan : '';
+            $item->diterima_ekspedisi = Carbon::parse($item->diterima_ekspedisi)->isoFormat('D MMMM Y');
         }
 
         return view('lppb.index', compact('items'));
+    }
+
+    public function tambah_lppb(Request $request)
+    {
+        $request->validate([
+            'keterangan' => 'nullable',
+            'kuantitas_penerimaan' =>   'required',
+            'baik' => 'required',
+            'tidak_baik' => 'required',
+        ], [
+            'keterangan.required' => 'Keterangan harus diisi',
+            'kuantitas_penerimaan.required' => 'Kuantitas penerimaan harus diisi',
+            'baik.required' => 'Kuantitas barang baik harus diisi',
+            'tidak_baik.required' => 'Kuantitas barang tidak baik harus diisi',
+        ]);
+
+        $id = $request->id_barang;
+        $id_registrasi_barang = $request->id_registrasi_barang;
+        $keterangan = $request->keterangan;
+        $kuantitas_penerimaan = $request->kuantitas_penerimaan;
+        $baik = $request->baik;
+        $tidak_baik = $request->tidak_baik;
+
+        $add = Lppb::create([
+            'id_registrasi_barang' => $id_registrasi_barang,
+            'keterangan' => $keterangan,
+            'penerimaan' => $kuantitas_penerimaan,
+            'hasil_ok' => $baik,
+            'hasil_nok' => $tidak_baik,
+        ]);
+
+        return redirect()->route('lppb')->with('success', 'Berhasil menerima barang');
     }
 }
