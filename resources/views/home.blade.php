@@ -207,7 +207,8 @@
                     <div class="col-lg-3 col-6">
                         <a href="{{ route('product.approvedPO') }}">
                             <div class="small-box bg-primary">
-                                <div class="inner" style="background-color: #A7D397">
+                                {{-- <div class="inner" style="background-color: #A7D397"> --}}
+                                <div class="inner" style="background-color: #607274">
                                     <p>APRROVAL</p>
                                     <h3>PO</h3>
                                 </div>
@@ -219,7 +220,8 @@
                     <div class="col-lg-3 col-6">
                         <a href="{{ route('product.aprrovedPO_PL') }}">
                             <div class="small-box bg-primary">
-                                <div class="inner" style="background-color: #186F65">
+                                {{-- <div class="inner" style="background-color: #186F65"> --}}
+                                <div class="inner" style="background-color: #607274">
                                     <p>APRROVAL</p>
                                     <h3>PO/PL</h3>
                                 </div>
@@ -235,7 +237,8 @@
                     <div class="col-lg-3 col-6">
                         <a href="{{ route('product.drawing.schematic') }}">
                             <div class="small-box bg-primary">
-                                <div class="inner" style="background-color: #c8cd21">
+                                {{-- <div class="inner" style="background-color: #c8cd21"> --}}
+                                <div class="inner" style="background-color: #607274">
                                     <p>Drawing</p>
                                     <h3>Schematic</h3>
                                 </div>
@@ -248,7 +251,8 @@
                     <div class="col-lg-3 col-6">
                         <a href="{{ route('product.justifikasi') }}">
                             <div class="small-box bg-primary">
-                                <div class="inner" style="background-color: #afc124">
+                                {{-- <div class="inner" style="background-color: #afc124"> --}}
+                                <div class="inner" style="background-color: #607274">
                                     <p>Menu</p>
                                     <h3>Justifikasi</h3>
                                 </div>
@@ -261,7 +265,8 @@
                     <div class="col-lg-3 col-6">
                         <a href="{{ route('product.justifikasi') }}">
                             <div class="small-box bg-primary">
-                                <div class="inner" style="background-color: #e44b4b">
+                                {{-- <div class="inner" style="background-color: #e44b4b"> --}}
+                                <div class="inner" style="background-color: #607274">
                                     <p>Function</p>
                                     <h3>Control</h3>
                                 </div>
@@ -277,7 +282,8 @@
                     <div class="col-lg-3 col-6">
                         <a href="{{ route('product.drawing.schematic') }}">
                             <div class="small-box bg-primary">
-                                <div class="inner" style="background-color: #c8cd21">
+                                {{-- <div class="inner" style="background-color: #c8cd21"> --}}
+                                <div class="inner" style="background-color: #607274">
                                     <p>Data</p>
                                     <h3>Karyawan</h3>
                                 </div>
@@ -290,7 +296,8 @@
                     <div class="col-lg-3 col-6">
                         <a href="{{ route('product.justifikasi') }}">
                             <div class="small-box bg-primary">
-                                <div class="inner" style="background-color: #afc124">
+                                {{-- <div class="inner" style="background-color: #afc124"> --}}
+                                <div class="inner" style="background-color: #607274">
                                     <p>Manajemen</p>
                                     <h3>Aset</h3>
                                 </div>
@@ -303,7 +310,8 @@
                     <div class="col-lg-3 col-6">
                         <a href="{{ route('product.justifikasi') }}">
                             <div class="small-box bg-primary">
-                                <div class="inner" style="background-color: #afc124">
+                                {{-- <div class="inner" style="background-color: #afc124"> --}}
+                                <div class="inner" style="background-color: #607274">
                                     <p>Manajemen</p>
                                     <h3>Inventaris</h3>
                                 </div>
@@ -316,7 +324,8 @@
                     <div class="col-lg-3 col-6">
                         <a href="{{ route('product.justifikasi') }}">
                             <div class="small-box bg-primary">
-                                <div class="inner" style="background-color: #afc124">
+                                {{-- <div class="inner" style="background-color: #afc124"> --}}
+                                <div class="inner" style="background-color: #607274">
                                     <p>History</p>
                                     <h3>Penghapusan</h3>
                                 </div>

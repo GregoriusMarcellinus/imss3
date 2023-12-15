@@ -198,3 +198,6 @@ Route::put('edit-registrasi-barang', [App\Http\Controllers\PurchaseRequestContro
 
 Route::get('lppb', [App\Http\Controllers\PurchaseRequestController::class, 'lppb'])->name('lppb');
 Route::post('save-lppb', [App\Http\Controllers\PurchaseRequestController::class, 'tambah_lppb'])->name('lppb.save');
+Route::get('lppb_print', function () {
+    return view('lppb.print');
+})->name('lppb.print');
