@@ -1,5 +1,5 @@
 @extends('layouts.home')
-@section('title', __('Tracking Purchase Request'))
+@section('title', __('Purchase Request'))
 @section('custom-css')
     <link rel="stylesheet" href="/plugins/toastr/toastr.min.css">
     <link rel="stylesheet" href="/plugins/select2/css/select2.min.css">
@@ -7,22 +7,18 @@
 @endsection
 @section('content')
     <div class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
+        <div class="container">
+            <div class="row my-5">
+                <div class="col-12">
+                    <h2 class="font-weight-bold">Purchase Request</h2>
+                </div>
             </div>
         </div>
     </div>
     <section class="content">
         <div class="container">
-            <div class="col-12">
-                <h2 class="font-weight-bold">Tracking Purchase Request</h2>
-            </div>
             <div class="card">
                 <div class="card-header">
-                    {{-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-pr"
-                        onclick="addPR()"><i class="fas fa-plus"></i> Add Purchase Request</button> --}}
-                    <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#import-product" onclick="importProduct()"><i class="fas fa-file-excel"></i> Import Product (Excel)</button> -->
-                    <!-- <button type="button" class="btn btn-primary" onclick="download('xls')"><i class="fas fa-file-excel"></i> Export Product (XLS)</button> -->
                     <div class="card-tools">
                         <form>
                             {{-- <div class="input-group input-group">
@@ -63,6 +59,8 @@
                                                 'dasar_pr' => $d->dasar_pr,
                                                 'proyek_id' => $d->proyek_id,
                                                 'id' => $d->id,
+                                                'status' => $d->status,
+                                                'editable' => $d->editable,
                                             ];
                                         @endphp
 
@@ -73,22 +71,21 @@
                                             <td class="text-center">{{ $data['tanggal'] }}</td>
                                             <td class="text-center">{{ $data['dasar_pr'] }}</td>
                                             <td class="text-center">
-                                                {{-- @if (Auth::user()->role == 0 || Auth::user()->role == 2 || Auth::user()->role == 3)
-                                                <button title="Edit Request" type="button" class="btn btn-success btn-xs"
+                                                {{-- <button title="Edit Request" type="button" class="btn btn-success btn-xs"
                                                     data-toggle="modal" data-target="#add-pr"
-                                                    onclick="editPR({{ json_encode($data) }})"><i
-                                                        class="fas fa-edit"></i></button>
-                                                @endif --}}
+                                                    onclick="editPR({{ json_encode($data) }})"
+                                                    @if ($data['editable'] == 0) disabled @endif><i
+                                                        class="fas fa-edit"></i></button> --}}
                                                 <button title="Lihat Detail" type="button" data-toggle="modal"
                                                     data-target="#detail-pr" class="btn-lihat btn btn-info btn-xs"
                                                     data-detail="{{ json_encode($data) }}"><i
                                                         class="fas fa-list"></i></button>
-
                                                 {{-- @if (Auth::user()->role == 0 || Auth::user()->role == 2 || Auth::user()->role == 3)
                                                     <button title="Hapus Request" type="button"
                                                         class="btn btn-danger btn-xs" data-toggle="modal"
                                                         data-target="#delete-pr"
-                                                        onclick="deletePR({{ json_encode($data) }})"><i
+                                                        onclick="deletePR({{ json_encode($data) }})"
+                                                        @if ($data['editable'] == 0) disabled @endif><i
                                                             class="fas fa-trash"></i></button>
                                                 @endif --}}
                                             </td>
@@ -133,10 +130,12 @@
                                 <label for="tgl_pr" class="col-sm-4 col-form-label">{{ __('Tanggal') }}
                                 </label>
                                 <div class="col-sm-8">
-                                    <input type="date" class="form-control" id="tgl_pr" name="tgl_pr">
+                                    <input type="date" class="form-control" id="tgl_pr" name="tgl_pr"
+                                        min="{{ date('Y-m-d', strtotime('-7 days')) }}">
                                 </div>
                             </div>
-                            <div class="form-group row">
+                            <div class="form-group
+                                        row">
                                 <label for="proyek" class="col-sm-4 col-form-label">{{ __('Proyek') }}
                                 </label>
                                 <div class="col-sm-8">
@@ -158,21 +157,20 @@
                                 </div>
                             </div>
                             {{-- @if (Auth::user()->role == 0 || Auth::user()->role == 1)
-
-                            <div class="form-group row">
-                                <label for="proyek" class="col-sm-4 col-form-label">{{ __('Status') }}
-                                </label>
-                                <div class="col-sm-8">
-                                    <select class="form-control" name="proyek_id" id="proyek_id">
-                                        <option value="0">Pilih Status</option>
-                                        <option value="1">SPPH</option>
-                                        <option value="2">SPH</option>
-                                        <option value="3">JUSTIFIKASI</option>
-                                        <option value="4">NEGO 1</option>
-                                        <option value="5">NEGO 2</option>
-                                    </select>
+                                <div class="form-group row">
+                                    <label for="proyek" class="col-sm-4 col-form-label">{{ __('Status') }}
+                                    </label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" name="proyek_id" id="proyek_id">
+                                            <option value="0">Pilih Status</option>
+                                            <option value="1">SPPH</option>
+                                            <option value="2">SPH</option>
+                                            <option value="3">JUSTIFIKASI</option>
+                                            <option value="4">NEGO 1</option>
+                                            <option value="5">NEGO 2</option>
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
                             @endif --}}
                         </form>
                     </div>
@@ -223,12 +221,13 @@
                                         <tr>
                                             <td><b>Produk</b></td>
                                         </tr>
-                                        {{-- <tr>
+                                        <tr>
                                             <td colspan="3">
-                                                <button id="button-tambah-produk" type="button" class="btn btn-info mb-3"
-                                                    onclick="showAddProduct()">{{ __('Tambah Produk') }}</button>
+                                                <button id="button-tambah-produk" type="button"
+                                                    class="btn btn-info mb-3"
+                                                    onclick="showAddProduct()">{{ __('Tambah Item Detail') }}</button>
                                             </td>
-                                        </tr> --}}
+                                        </tr>
                                     </table>
                                     <div class="table-responsive">
                                         <table class="table table-bordered">
@@ -240,15 +239,11 @@
                                                 <th>{{ __('QTY') }}</th>
                                                 <th>{{ __('SAT') }}</th>
                                                 <th>{{ __('Waktu Penyelesaian') }}</th>
+                                                <th>{{ __('Nota Pembelian') }}</th>
                                                 <th>{{ __('Keterangan') }}</th>
                                                 {{-- <th>{{ __('SPPH') }}</th>
-                                                <th>{{ __('SPH') }}</th>
-                                                <th>{{ __('JUST') }}</th>
-                                                <th>{{ __('NEGO 1') }}</th>
-                                                <th>{{ __('NEGO 2') }}</th>
                                                 <th>{{ __('PO') }}</th> --}}
                                                 <th>{{ __('STATUS') }}</th>
-                                                {{-- <th>{{ __('AKSI') }}</th> --}}
                                             </thead>
                                             <tbody id="table-pr">
                                             </tbody>
@@ -293,10 +288,12 @@
                                     </div>
                                     <div id="form" class="card">
                                         <div class="card-body">
-                                            <form role="form" id="stock-update" method="post">
+                                            <form role="form" id="stock-update" method="post"
+                                                enctype="multipart/form-data">
                                                 @csrf
                                                 <input type="hidden" id="pid" name="pid">
                                                 <input type="hidden" id="type" name="type">
+                                                <input type="hidden" id="proyek_id_val" name="proyek_id_val">
                                                 <div class="form-group row">
                                                     <label for="material_kode"
                                                         class="col-sm-4 col-form-label">{{ __('Kode Material') }}</label>
@@ -352,6 +349,16 @@
                                                             name="keterangan">
                                                     </div>
                                                 </div>
+
+                                                <div class="form-group row">
+                                                    <label for="lampiran"
+                                                        class="col-sm-4 col-form-label">{{ __('Nota Pembelian') }}</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="file" class="form-control" id="lampiran"
+                                                            name="lampiran" />
+                                                    </div>
+                                                </div>
+
                                             </form>
                                             <button id="button-update-pr" type="button" class="btn btn-primary w-100"
                                                 onclick="PRupdate()">{{ __('Tambahkan') }}</button>
@@ -444,6 +451,14 @@
             resetForm();
         }
 
+        $('#detail-pr').on('hidden.bs.modal', function() {
+            $('#container-product').addClass('d-none');
+            $('#container-product').removeClass('col-5');
+            $('#container-form').addClass('col-12');
+            $('#container-form').removeClass('col-7');
+            $('#button-tambah-detail').text('Tambah Item Detail');
+        });
+
         function showAddProduct() {
             if ($('#detail-pr').find('#container-product').hasClass('d-none')) {
                 $('#detail-pr').find('#container-product').removeClass('d-none');
@@ -452,11 +467,12 @@
                 $('#detail-pr').find('#container-form').addClass('col-7');
                 $('#button-tambah-produk').text('Kembali');
             } else {
-                $('#detail-pr').find('#container-product').addClass('d-none');
                 $('#detail-pr').find('#container-product').removeClass('col-5');
+                $('#detail-pr').find('#container-product').addClass('d-none');
                 $('#detail-pr').find('#container-form').addClass('col-12');
                 $('#detail-pr').find('#container-form').removeClass('col-7');
                 $('#button-tambah-produk').text('Tambah Item Detail');
+                clearForm();
             }
         }
 
@@ -505,7 +521,7 @@
                 $('#pcode').prop("disabled", true);
                 $('#button-check').prop("disabled", true);
                 $.ajax({
-                    url: '/materials?type=' + ptype + '&kode=' + pcode,
+                    url: "{{ url('materials?type=') }}" + ptype + '&kode=' + pcode,
                     type: "GET",
                     data: {
                         "format": "json"
@@ -542,7 +558,6 @@
         }
 
         function clearForm() {
-            $('#pr_id').val("");
             $('#pname').val("");
             $('#stock').val("");
             $('#spek').val("");
@@ -551,27 +566,48 @@
             $('#waktu').val("");
             $('#pcode').val("");
             $('#material_kode').val("");
+            $('#lampiran').val("");
             // $('#form').hide();
         }
 
         function PRupdate() {
             const id = $('#pr_id').val()
-            $.ajax({
-                url: '/products/update_purchase_request_detail/',
-                type: "POST",
-                dataType: "json",
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    "id_pr": id,
-                    "kode_material": $('#material_kode').val(),
-                    "uraian": $('#pname').val(),
-                    "stock": $('#stock').val(),
-                    "spek": $('#spek').val(),
-                    "satuan": $('#satuan').val(),
-                    "waktu": $('#waktu').val(),
-                    "keterangan": $('#keterangan').val(),
 
-                },
+            var inputFile = $("#lampiran")[0].files[0];
+            var formData = new FormData();
+            formData.append('lampiran', inputFile);
+            formData.append('_token', '{{ csrf_token() }}');
+            formData.append('id_pr', id);
+            formData.append('id_proyek', $('#proyek_id_val').val());
+            formData.append('kode_material', $('#material_kode').val());
+            formData.append('uraian', $('#pname').val());
+            formData.append('stock', $('#stock').val());
+            formData.append('spek', $('#spek').val());
+            formData.append('satuan', $('#satuan').val());
+            formData.append('waktu', $('#waktu').val());
+            formData.append('keterangan', $('#keterangan').val());
+
+            if ($('#waktu').val() == null || $('#waktu').val() == "") {
+                toastr.error("Waktu Penyelesaian belum diisi!");
+                return
+            }
+
+            if (inputFile == null) {
+                toastr.error("Lampiran belum diisi!");
+                return
+            }
+
+            if (inputFile.type != "application/pdf") {
+                toastr.error("Lampiran harus berupa file PDF!");
+                return
+            }
+
+            $.ajax({
+                url: "{{ url('products/update_purchase_request_detail') }}" + "/",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
                 beforeSend: function() {
                     $('#button-update-pr').html('<i class="fas fa-spinner fa-spin"></i> Loading...');
                     $('#button-update-pr').attr('disabled', true);
@@ -592,7 +628,7 @@
                     clearForm();
                     if (data.pr.details.length == 0) {
                         $('#table-pr').append(
-                            '<tr><td colspan="10" class="text-center">Tidak ada produk</td></tr>');
+                            '<tr><td colspan="15" class="text-center">Tidak ada produk</td></tr>');
                     } else {
                         $('#table-pr').empty();
                         $.each(data.pr.details, function(key, value) {
@@ -608,30 +644,62 @@
                             } else {
                                 po = value.no_po
                             }
-
-                            //0 = Lakukan SPPH, 1 = Lakukan PO, 2 = Completed, 3 = Negosiasi, 4 = Justifikasi
-                            if (value.status == 0 || !value.status) {
-                                status = 'Lakukan SPPH';
-                            } else if (value.status == 1) {
-                                status = 'Lakukan PO';
-                            } else if (value.status == 2) {
-                                status = 'COMPLETED';
-                            } else if (value.status == 3) {
-                                status = 'NEGOSIASI';
-                            } else if (value.status == 4) {
-                                status = 'JUSTIFIKASI';
+                            var lampiran = null;
+                            if (value.lampiran == null) {
+                                lampiran = '-';
+                            } else {
+                                lampiran = '<a href="/lampiran/' + value.lampiran +
+                                    '"><i class="fa fa-eye"></i> Lihat</a>';
                             }
+                            //0 = Lakukan SPPH, 1 = Lakukan PO, 2 = Completed, 3 = Negosiasi, 4 = Justifikasi
+                            // if (value.status == 0 || !value.status) {
+                            //     status = 'Lakukan SPPH';
+                            // } else if (value.status == 1) {
+                            //     status = 'Lakukan PO';
+                            // } else if (value.status == 2) {
+                            //     status = 'COMPLETED';
+                            // } else if (value.status == 3) {
+                            //     status = 'NEGOSIASI';
+                            // } else if (value.status == 4) {
+                            //     status = 'JUSTIFIKASI';
+                            // }
+
+                            // if (!value.id_spph) {
+                            //     status = 'Lakukan SPPH';
+                            // } else if (value.id_spph && !value.no_sph) {
+                            //     status = 'Lakukan SPH';
+                            // } else if (value.id_spph && value.no_sph && !value.no_just) {
+                            //     status = 'Lakukan Justifikasi';
+                            // } else if (value.id_spph && value.no_sph && value.no_just && !value.id_po) {
+                            //     status = 'Lakukan Nego/PO';
+                            // } else if (value.id_spph && value.no_sph && value
+                            //     .id_po) {
+                            //     status = 'COMPLETED';
+                            // }
+
+                            if (!value.id_spph && !value.nomor_spph) {
+                                status = 'Lakukan SPPH';
+                            } else if (value.id_spph && value.nomor_spph && !value.id_po) {
+                                status = 'PROSES PO';
+                            } else if (value.id_spph && value.nomor_spph && value
+                                .id_po && value.no_po) {
+                                status = 'COMPLETED';
+                            }
+
 
                             $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
                                 .kode_material + '</td><td>' + value.uraian + '</td><td>' +
                                 value
                                 .spek + '</td><td>' + value.qty + '</td><td>' + value
                                 .satuan +
-                                '</td><td>' + value.waktu + '</td><td>' + value.keterangan +
-                                '</td><td>' + spph + '</td><td>' + value.sph +
-                                '</td><td>' + po +
-                                '</td><td><b>' +
-                                status + '</b></td></tr>'
+                                '</td><td>' + value.waktu + '</td><td>' +
+                                lampiran +
+                                '</td><td>' + value.keterangan + '</td><td>' + status +
+                                '</td></tr>'
+                                // + <td>' + spph + '</td><td>' + value.sph +
+                                // '</td><td>' + po +
+                                // '</td><td>' +
+                                // status + '</td> +
                             );
                         });
                     }
@@ -653,19 +721,28 @@
             $('#modal-title').text("Detail Request");
             $('#button-save').text("Cetak");
             resetForm();
+            $('#button-tambah-produk').text('Tambah Item Detail');
             $('#id').val(data.id);
             $('#no_surat').text(data.no_pr);
             $('#tgl_surat').text(data.tanggal);
             $('#proyek').text(data.proyek);
+            $('#proyek_id_val').val(data.proyek_id);
             $('#pr_id').val(data.id);
             $('#table-pr').empty();
 
+            //#button-tambah-produk disabled when editable is false
+            if (data.editable == 0) {
+                $('#button-tambah-produk').attr('disabled', true);
+            } else {
+                $('#button-tambah-produk').attr('disabled', false);
+            }
+
             $.ajax({
-                url: '/products/purchase_request_detail/' + data.id,
+                url: "{{ url('products/purchase_request_detail')}}"+ "/" + data.id,
                 type: "GET",
                 dataType: "json",
                 beforeSend: function() {
-                    $('#table-pr').append('<tr><td colspan="16" class="text-center">Loading...</td></tr>');
+                    $('#table-pr').append('<tr><td colspan="15" class="text-center">Loading...</td></tr>');
                     $('#button-cetak-pr').html('<i class="fas fa-spinner fa-spin"></i> Loading...');
                     $('#button-cetak-pr').attr('disabled', true);
                 },
@@ -682,12 +759,10 @@
                     if (data.pr.details.length == 0) {
                         $('#table-pr').empty();
                         $('#table-pr').append(
-                            '<tr><td colspan="10" class="text-center">Tidak ada produk</td></tr>');
+                            '<tr><td colspan="15" class="text-center">Tidak ada produk</td></tr>');
                     } else {
                         $('#table-pr').empty();
                         $.each(data.pr.details, function(key, value) {
-
-                            var id = value.id;
                             var status, spph, po;
                             if (!value.id_spph) {
                                 spph = '-';
@@ -701,9 +776,26 @@
                                 po = value.no_po
                             }
 
-                            // alert(value.no_sph)
+                            var lampiran = null;
+                            if (value.lampiran == null) {
+                                lampiran = '-';
+                            } else {
+                                lampiran = '<a href="/lampiran/' + value.lampiran +
+                                    '"><i class="fa fa-eye"></i> Lihat</a>';
+                            }
 
                             //0 = Lakukan SPPH, 1 = Lakukan PO, 2 = Completed
+                            // if (value.status == 0 || !value.status) {
+                            //     status = 'Lakukan SPPH';
+                            // } else if (value.status == 1) {
+                            //     status = 'Lakukan PO';
+                            // } else if (value.status == 2) {
+                            //     status = 'COMPLETED';
+                            // } else if (value.status == 3) {
+                            //     status = 'NEGOSIASI';
+                            // } else if (value.status == 4) {
+                            //     status = 'JUSTIFIKASI';
+                            // }
                             // if (!value.id_spph) {
                             //     status = 'Lakukan SPPH';
                             // } else if (value.id_spph && !value.no_sph) {
@@ -716,6 +808,7 @@
                             //     .id_po) {
                             //     status = 'COMPLETED';
                             // }
+
                             if (!value.id_spph && !value.nomor_spph) {
                                 status = 'Lakukan SPPH';
                             } else if (value.id_spph && value.nomor_spph && !value.id_po) {
@@ -725,24 +818,17 @@
                                 status = 'COMPLETED';
                             }
 
-                            var date;
-                            var msg = '';
-
-                            if (value.batas_akhir == null) {
-                                date = '-';
-                                msg = '-';
-                            } else {
-                                msg = 'batas penerimaan barang : ';
-                                date = value.batas_akhir;
-                            }
-
                             $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
                                 .kode_material + '</td><td>' + value.uraian + '</td><td>' +
                                 value
                                 .spek + '</td><td>' + value.qty + '</td><td>' + value
-                                .satuan + '</td><td>' + value.waktu + '</td><td>' + value
-                                .keterangan +
-                                '</td>' + '<td><b>' + status + '</b><br><br><b>'+ msg +date +'</b></td>' + '</tr>'
+                                .satuan + '</td><td>' + value.waktu + '</td><td>' +
+                                lampiran + '</td><td>' + value.keterangan + '</td><td><b>' +
+                                status +
+                                '</b></td></tr>'
+
+                                // + <td>' + spph +
+                                // '</td><td>' + po + '</td><td>' + status + '</td> +
 
                             );
                         });
@@ -753,181 +839,6 @@
             });
         }
 
-        //action edit_po_save
-        $(document).on('click', '#edit_pr_save', function() {
-            console.log('called')
-            var id = $(this).data('id');
-            //get the batas{id} input
-            var sph = $('#sph' + id).val();
-            var tanggal_sph = $('#tgl_sph' + id).val();
-            var no_just = $('#just' + id).val();
-            var tanggal_just = $('#tgl_just' + id).val();
-            var no_nego1 = $('#neg1' + id).val();
-            var tanggal_nego1 = $('#tgl_nego1' + id).val();
-            var batas_nego1 = $('#bts_nego1' + id).val();
-            var no_nego2 = $('#neg2' + id).val();
-            var tanggal_nego2 = $('#tgl_nego2' + id).val();
-            var batas_nego2 = $('#bts_nego2' + id).val();
-
-
-            var form = {
-                id: id,
-                id_pr: $('#id').val(),
-                no_sph: sph,
-                tanggal_sph: tanggal_sph,
-                no_just: no_just,
-                tanggal_just: tanggal_just,
-                no_nego1: no_nego1,
-                tanggal_nego1: tanggal_nego1,
-                batas_nego1: batas_nego1,
-                no_nego2: no_nego2,
-                tanggal_nego2: tanggal_nego2,
-                batas_nego2: batas_nego2,
-            };
-
-            console.table(form);
-
-            $('#tabel-po').empty();
-
-            //ajax post to products/detail_pr_save
-
-            $.ajax({
-                url: "{{ route('detail_pr_save') }}",
-                type: "POST",
-                data: {
-                    ...form,
-                    _token: '{{ csrf_token() }}'
-                },
-                dataType: "json",
-                beforeSend: function() {
-                    $('#tabel-po').append(
-                        '<tr><td colspan="16" class="text-center">Loading...</td></tr>');
-                    $('#button-cetak-pr').html('<i class="fas fa-spinner fa-spin"></i> Loading...');
-                    $('#button-cetak-pr').attr('disabled', true);
-                },
-                success: function(data) {
-                    $('#button-cetak-pr').html('<i class="fas fa-print"></i> Cetak');
-                    $('#button-cetak-pr').attr('disabled', false);
-                    var no = 1;
-
-                    if (data.pr.details.length == 0) {
-                        $('#table-pr').empty();
-                        $('#table-pr').append(
-                            '<tr><td colspan="16" class="text-center">Tidak ada produk</td></tr>');
-                    } else {
-                        $('#table-pr').empty();
-                        $.each(data.pr.details, function(key, value) {
-                            var id = value.id;
-
-                            var no_sph = value.no_sph;
-                            var tanggal_sph = value.tanggal_sph;
-                            var no_just = value.no_just;
-                            var tanggal_just = value.tanggal_just;
-                            var no_nego1 = value.no_nego1;
-                            var tanggal_nego1 = value.tanggal_nego1;
-                            var batas_nego1 = value.batas_nego1;
-                            var no_nego2 = value.no_nego2;
-                            var tanggal_nego2 = value.tanggal_nego2;
-                            var batas_nego2 = value.batas_nego2;
-
-                            const form = {
-                                no_sph: no_sph,
-                                tanggal_sph: tanggal_sph,
-                                no_just: no_just,
-                                tanggal_just: tanggal_just,
-                                no_nego1: no_nego1,
-                                tanggal_nego1: tanggal_nego1,
-                                batas_nego1: batas_nego1,
-                                no_nego2: no_nego2,
-                                tanggal_nego2: tanggal_nego2,
-                                batas_nego2: batas_nego2,
-                            };
-
-                            console.log(value.no_sph)
-                            console.table(form);
-
-                            var status, spph, po;
-                            if (!value.id_spph) {
-                                spph = '-';
-                            } else {
-                                spph = value.nomor_spph
-                            }
-
-                            if (!value.id_po) {
-                                po = '-';
-                            } else {
-                                po = value.no_po
-                            }
-
-                            //0 = Lakukan SPPH, 1 = Lakukan PO, 2 = Completed
-                            if (!value.id_spph) {
-                                status = 'Lakukan SPPH';
-                            } else if (value.id_spph && !value.no_sph) {
-                                status = 'Lakukan SPH';
-                            } else if (value.id_spph && value.no_sph && !value.no_just) {
-                                status = 'Lakukan Justifikasi';
-                            } else if (value.id_spph && value.no_sph && value.no_just && !value
-                                .id_po) {
-                                status = 'Lakukan Nego/PO';
-                            } else if (value.id_spph && value.no_sph && value
-                                .id_po) {
-                                status = 'COMPLETED';
-                            }
-
-                            $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
-                                .kode_material + '</td><td>' + value.uraian + '</td><td>' +
-                                value
-                                .spek + '</td><td>' + value.qty + '</td><td>' + value
-                                .satuan + '</td><td>' + value.waktu + '</td><td>' + value
-                                .keterangan +
-                                '</td><td>' + spph +
-                                '</td><td><input type="text" class="form-control" style="width:200px;" placeholder="No SPH" id="sph' +
-                                id + '" name="sph' + id + '" value="' + value.no_sph +
-                                '">' +
-                                '<input type="date" class="form-control mt-2" style="width:200px;" id="tgl_sph' +
-                                id + '" name="tgl_sph' + id + '" value="' + value
-                                .tanggal_sph + '">' +
-                                '</td><td><input type="text"  class="form-control" style="width:200px;" placeholder="No Justifikasi" id="just' +
-                                id + '" name="just' + id + '" value="' + value.no_just +
-                                '">' +
-                                '<input type="date"  class="form-control mt-2" style="width:200px;" id="tgl_just' +
-                                id + '" name="tgl_just' + id + '" value="' + value
-                                .tanggal_just + '">' +
-                                '</td><td><input type="text"  class="form-control" style="width:200px;" placeholder="No Nego 1" id="neg1' +
-                                id + '" name="neg1' + id + '" value="' + value.no_nego1 +
-                                '">' +
-                                '<p class="mt-2 mb-0">Tanggal Nego 1</p><input type="date"  class="form-control" style="width:200px;" id="tgl_nego1' +
-                                id +
-                                '" name="tgl_nego1' + id + '" value="' + value
-                                .tanggal_nego1 + '">' +
-                                '<p class="mt-2 mb-0">Batas Nego 1</p><input type="date"  class="form-control" style="width:200px;" id="bts_nego1' +
-                                id +
-                                '" name="bts_nego1' + id + '" value="' + value.batas_nego1 +
-                                '">' +
-                                '</td><td><input type="text" value="' + value.no_nego2 +
-                                '" class="form-control" style="width:200px;" placeholder="No Nego 2" id="neg2' +
-                                id + '" name="neg2' + id + '">' +
-                                '<p class="mt-2 mb-0">Tanggal Nego 2</p><input type="date"  class="form-control" style="width:200px;" id="tgl_nego2' +
-                                id +
-                                '" name="tgl_nego2' + id + '" value="' + value
-                                .tanggal_nego2 + '">' +
-                                '<p class="mt-2 mb-0">Batas Nego 2</p><input type="date"  class="form-control" style="width:200px;" id="bts_nego2' +
-                                id +
-                                '" name="bts_nego2' + id + '" value="' + value.batas_nego2 +
-                                '">' +
-                                '</td><td>' + po + '</td><td><b>' + status + '</b></td>' +
-                                '<td><button id="edit_pr_save" data-id="' + id +
-                                '" type="button" class="btn btn-success btn-xs"' +
-                                '><i class="fas fa-save"></i></button>' + '</td>' + '</tr>'
-
-                            );
-                        });
-                    }
-                }
-            });
-
-        });
-
         function detailPR(data) {
             $('#modal-title').text("Edit Request");
             $('#button-save').text("Simpan");
@@ -935,9 +846,11 @@
             $('#save_id').val(data.id);
             $('#no_pr').val(data.no_pr);
             $('#tgl_pr').val(data.tgl_pr);
-            $('#proyek_id').val(data.proyek);
+            $('#proyek_id').val(data.proyek_id);
             $('#dasar_pr').val(data.dasar_pr);
+            // alert(proyek_id)
         }
+
 
         function barcode(code) {
             $("#pcode_print").val(code);
