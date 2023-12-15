@@ -644,7 +644,7 @@
 
         function getProyek(val) {
             $.ajax({
-                url: '/products/keproyekan',
+                url: "{{ url('products/keproyekan') }}",
                 type: "GET",
                 data: {
                     "format": "json"
@@ -670,7 +670,7 @@
         function getShelf(pid = null) {
             var type = $('#type').val();
             $.ajax({
-                url: '/products/shelf',
+                url: "{{ url('/products/shelf') }}",
                 type: "GET",
                 data: {
                     "format": "json",
@@ -721,7 +721,7 @@
                 $('#pcode').prop("disabled", true);
                 $('#button-check').prop("disabled", true);
                 $.ajax({
-                    url: '/products/check/' + pcode,
+                    url: "{{ url('/products/check/') }}" + "/" + pcode,
                     type: "GET",
                     data: {
                         "format": "json"
@@ -775,7 +775,7 @@
             }
 
             $.ajax({
-                url: '/products/stockUpdate',
+                url: "{{ url('/products/stockUpdate') }}",
                 type: "post",
                 data: JSON.stringify(data),
                 dataType: "json",

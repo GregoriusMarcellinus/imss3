@@ -197,3 +197,4 @@ Route::post('registrasi-barang', [App\Http\Controllers\PurchaseRequestController
 Route::put('edit-registrasi-barang', [App\Http\Controllers\PurchaseRequestController::class, 'edit_registrasi_barang'])->name('registrasi_barang.edit');
 
 Route::get('lppb', [App\Http\Controllers\PurchaseRequestController::class, 'lppb'])->name('lppb');
+Route::post('save-lppb', [App\Http\Controllers\PurchaseRequestController::class, 'tambah_lppb'])->name('lppb.save');
