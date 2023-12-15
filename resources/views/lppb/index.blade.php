@@ -14,6 +14,8 @@
         <div class="container-fluid">
             <div class="card">
                 <div class="card-header">
+                    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#add-po"
+                        onclick="addPo()"><i class="fas fa-print"></i> Cetak LPPB</button>
                     <div class="card-tools">
                         <form>
                             <div class="input-group input-group">

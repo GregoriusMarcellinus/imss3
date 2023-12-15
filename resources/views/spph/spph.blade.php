@@ -814,7 +814,7 @@
                 $('#proyek_code').prop("disabled", true);
                 $('#button-check').prop("disabled", true);
                 $.ajax({
-                    url: "{{ url('products/products_pr?proyek=') }}" + "/" + proyek_name,
+                    url: "{{ url('products/products_pr?proyek=') }}" + proyek_name,
                     type: "GET",
                     data: {
                         "format": "json"
