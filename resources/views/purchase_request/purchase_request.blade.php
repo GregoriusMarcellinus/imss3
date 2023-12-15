@@ -604,7 +604,7 @@
             }
 
             $.ajax({
-                url: "{{ url('products/update_purchase_request_detail') }}" + "/",
+                url: "{{ url('products/update_purchase_request_detail') }}",
                 type: "POST",
                 data: formData,
                 contentType: false,
@@ -633,6 +633,7 @@
                     } else {
                         $('#table-pr').empty();
                         $.each(data.pr.details, function(key, value) {
+                            var urlLampiran = "{{ asset('lampiran') }}";
                             var status, spph, po;
                             if (!value.id_spph) {
                                 spph = '-';
@@ -649,7 +650,7 @@
                             if (value.lampiran == null) {
                                 lampiran = '-';
                             } else {
-                                lampiran = '<a href="/lampiran/' + value.lampiran +
+                                lampiran = '<a href="' + urlLampiran + '/' + value.lampiran +
                                     '"><i class="fa fa-eye"></i> Lihat</a>';
                             }
                             //0 = Lakukan SPPH, 1 = Lakukan PO, 2 = Completed, 3 = Negosiasi, 4 = Justifikasi
@@ -739,7 +740,7 @@
             }
 
             $.ajax({
-                url: "{{ url('products/purchase_request_detail')}}"+ "/" + data.id,
+                url: "{{ url('products/purchase_request_detail') }}" + "/" + data.id,
                 type: "GET",
                 dataType: "json",
                 beforeSend: function() {
@@ -765,6 +766,7 @@
                         $('#table-pr').empty();
                         $.each(data.pr.details, function(key, value) {
                             var status, spph, po;
+                            var urlLampiran = "{{ asset('lampiran') }}";
                             if (!value.id_spph) {
                                 spph = '-';
                             } else {
@@ -781,7 +783,7 @@
                             if (value.lampiran == null) {
                                 lampiran = '-';
                             } else {
-                                lampiran = '<a href="/lampiran/' + value.lampiran +
+                                lampiran = '<a href="' + urlLampiran + '/' + value.lampiran +
                                     '"><i class="fa fa-eye"></i> Lihat</a>';
                             }
 

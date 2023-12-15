@@ -774,8 +774,8 @@
                             if (qc) {
                                 //append the qc.penerimaan, qc.hasil_ok, qc.hasil_nok, qc.tanggal_qc
                                 content = `<p class="mt-2 mb-0">Penerimaan : ${qc.penerimaan}</p>
-                                <p class="mt-2 mb-0">Hasil OK : ${qc.hasil_ok}</p>
-                                <p class="mt-2 mb-0">Hasil NOK : ${qc.hasil_nok}</p>
+                                <p class="mt-2 mb-0">OK : ${qc.hasil_ok}</p>
+                                <p class="mt-2 mb-0">NOK : ${qc.hasil_nok}</p>
                                 <p class="mt-2 mb-0">${qc.tanggal_qc}</p>`
                             } else {
                                 content = '-'
