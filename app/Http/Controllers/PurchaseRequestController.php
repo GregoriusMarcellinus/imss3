@@ -235,6 +235,7 @@ class PurchaseRequestController extends Controller
                 'no_pr' => $request->no_pr,
                 'dasar_pr' => $request->dasar_pr,
                 'tgl_pr' => $request->tgl_pr,
+                'id_user' => auth()->user()->id,
             ]);
 
             return redirect()->route('purchase_request.index')->with('success', 'Purchase Request berhasil ditambahkan');
@@ -258,6 +259,17 @@ class PurchaseRequestController extends Controller
         $id = $request->id;
         $pr = PurchaseRequest::where('purchase_request.id', $id)
             ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_request.proyek_id')->first();
+
+        $pr->pic = User::where('id', $pr->id_user)->first()->name ?? '-';
+        //if no_pr contain WIL1 then wilayah = wil1 else wil2
+        $detect_wil = strpos($pr->no_pr, 'WIL1');
+        if ($detect_wil !== false) {
+            $pr->role = "Wilayah 1";
+            $pr->kadiv = "HARTONO";
+        } else {
+            $pr->role = "Wilayah 2";
+            $pr->kadiv = 'EKO';
+        }
         $pr->purchases = DetailPR::select('detail_pr.*', 'purchase_request.*')
             ->leftjoin('purchase_request', 'purchase_request.id', '=', 'detail_pr.id_pr')
             ->where('purchase_request.id', $id)
