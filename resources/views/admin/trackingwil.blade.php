@@ -244,6 +244,8 @@
                                                 <th>{{ __('NEGO 2') }}</th>
                                                 <th>{{ __('PO') }}</th> --}}
                                                 <th>{{ __('STATUS') }}</th>
+                                                <th>{{ __('Ekspedisi') }}</th>
+                                                <th>{{ __('QC') }}</th>
                                                 {{-- <th>{{ __('AKSI') }}</th> --}}
                                             </thead>
                                             <tbody id="table-pr">
@@ -498,7 +500,7 @@
                 $('#pcode').prop("disabled", true);
                 $('#button-check').prop("disabled", true);
                 $.ajax({
-                    url: '/materials?type=' + ptype + '&kode=' + pcode,
+                    url: "{{ url('/materials?type=') }}" + ptype + '&kode=' + pcode,
                     type: "GET",
                     data: {
                         "format": "json"
@@ -550,7 +552,7 @@
         function PRupdate() {
             const id = $('#pr_id').val()
             $.ajax({
-                url: '/products/update_purchase_request_detail/',
+                url: "{{ url('/products/update_purchase_request_detail') }}",
                 type: "POST",
                 dataType: "json",
                 data: {
@@ -654,7 +656,7 @@
             $('#table-pr').empty();
 
             $.ajax({
-                url: '/products/purchase_request_detail/' + data.id,
+                url: "{{ url('/products/purchase_request_detail') }}" + "/" + data.id,
                 type: "GET",
                 dataType: "json",
                 beforeSend: function() {
@@ -730,14 +732,32 @@
                                 date = value.batas_akhir;
                             }
 
+                            const ekspedisi = value.ekspedisi ? value.ekspedisi : '-';
+
+                            const qc = value?.qc
+
+                            let content = ''
+
+                            if (qc) {
+                                //append the qc.penerimaan, qc.hasil_ok, qc.hasil_nok, qc.tanggal_qc
+                                content = `<p class="mt-2 mb-0">Penerimaan : ${qc.penerimaan}</p>
+                                <p class="mt-2 mb-0">OK : ${qc.hasil_ok}</p>
+                                <p class="mt-2 mb-0">NOK : ${qc.hasil_nok}</p>
+                                <p class="mt-2 mb-0">${qc.tanggal_qc}</p>`
+                            } else {
+                                content = '-'
+                            }
+
                             $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
                                 .kode_material + '</td><td>' + value.uraian + '</td><td>' +
                                 value
                                 .spek + '</td><td>' + value.qty + '</td><td>' + value
                                 .satuan + '</td><td>' + value.waktu + '</td><td>' + value
                                 .keterangan +
-                                '</td>' + '<td><b>' + status + '</b><br><br><b>'+ msg 
-                                    + date +'</b></td>' + '</tr>'
+                                '</td>' + '<td><b>' + status + '</b><br><br><b>' + msg +
+                                date + '</b></td><td style="min-width:200px">' + ekspedisi +
+                                '</td><td style="min-width:200px">' + content +
+                                '</td>' + '</tr>'
 
                                 //'td' spph +
                                 // '</td><td><input type="text" class="form-control" style="width:200px;" placeholder="No SPH" id="sph' +
@@ -987,30 +1007,6 @@
 
         function deletePR(data) {
             $('#delete_id').val(data.id);
-        }
-
-        $("#download-template").click(function() {
-            $.ajax({
-                url: '/downloads/template_import_product.xls',
-                type: "GET",
-                xhrFields: {
-                    responseType: 'blob'
-                },
-                success: function(data) {
-                    var a = document.createElement('a');
-                    var url = window.URL.createObjectURL(data);
-                    a.href = url;
-                    a.download = "template_import_product.xls";
-                    document.body.append(a);
-                    a.click();
-                    a.remove();
-                    window.URL.revokeObjectURL(url);
-                }
-            });
-        });
-
-        function download(type) {
-            window.location.href = "{{ route('products') }}?search={{ Request::get('search') }}&dl=" + type;
         }
     </script>
     @if (Session::has('success'))

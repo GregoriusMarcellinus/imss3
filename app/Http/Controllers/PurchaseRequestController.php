@@ -265,10 +265,10 @@ class PurchaseRequestController extends Controller
         $detect_wil = strpos($pr->no_pr, 'WIL1');
         if ($detect_wil !== false) {
             $pr->role = "Wilayah 1";
-            $pr->kadiv = "HARTONO";
+            $pr->kadiv = "EKO PRASETYO";
         } else {
             $pr->role = "Wilayah 2";
-            $pr->kadiv = 'EKO';
+            $pr->kadiv = 'HARTONO';
         }
         $pr->purchases = DetailPR::select('detail_pr.*', 'purchase_request.*')
             ->leftjoin('purchase_request', 'purchase_request.id', '=', 'detail_pr.id_pr')
