@@ -9,12 +9,12 @@
         </div>
     </div>
     <section class="content">
-        <div class="container">
-            <div class="col-12">
-                <h2 class="font-weight-bold">Tracking Purchase Request</h2>
-            </div>
+        <div class="container-fluid">
             <div class="card">
                 <div class="card-header">
+                    <div class="col-12">
+                        <h3 class="font-weight-bold">Tracking Purchase Request</h3>
+                    </div>
                     {{-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-pr"
                         onclick="addPR()"><i class="fas fa-plus"></i> Add Purchase Request</button> --}}
                     <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#import-product" onclick="importProduct()"><i class="fas fa-file-excel"></i> Import Product (Excel)</button> -->
@@ -58,6 +58,7 @@
                                                 'tanggal' => date('d/m/Y', strtotime($d->tgl_pr)),
                                                 'dasar_pr' => $d->dasar_pr,
                                                 'proyek_id' => $d->proyek_id,
+                                                'waktu' => date('d/m/Y', strtotime($d->waktu)),
                                                 'id' => $d->id,
                                             ];
                                         @endphp
@@ -66,7 +67,7 @@
                                             <td class="text-center">{{ $data['no'] }}</td>
                                             <td class="text-center">{{ $data['no_pr'] }}</td>
                                             <td class="text-center">{{ $data['proyek'] }}</td>
-                                            <td class="text-center">{{ $data['tanggal'] }}</td>
+                                            <td class="text-center">{{ $data['tanggal'] }}</span></td>
                                             <td class="text-center">{{ $data['dasar_pr'] }}</td>
                                             <td class="text-center">
                                                 {{-- @if (Auth::user()->role == 0 || Auth::user()->role == 2 || Auth::user()->role == 3)
@@ -198,8 +199,8 @@
                                     <input type="hidden" name="id" id="id">
                                 </form>
                                 <div class="col-12" id="container-form">
-                                    <button id="button-cetak-pr" type="button" class="btn btn-primary"
-                                        onclick="document.getElementById('cetak-pr').submit();">{{ __('Cetak') }}</button>
+                                    {{-- <button id="button-cetak-pr" type="button" class="btn btn-primary"
+                                        onclick="document.getElementById('cetak-pr').submit();">{{ __('Cetak') }}</button> --}}
                                     <table class="align-top w-100">
                                         <tr>
                                             <td style="width: 3%;"><b>No PR</b></td>
@@ -236,15 +237,13 @@
                                                 <th>{{ __('QTY') }}</th>
                                                 <th>{{ __('SAT') }}</th>
                                                 <th>{{ __('Waktu Penyelesaian') }}</th>
+                                                <th>{{ __('Countdown') }}</th>
                                                 <th>{{ __('Keterangan') }}</th>
-                                                {{-- <th>{{ __('SPPH') }}</th>
-                                                <th>{{ __('SPH') }}</th>
-                                                <th>{{ __('JUST') }}</th>
-                                                <th>{{ __('NEGO 1') }}</th>
-                                                <th>{{ __('NEGO 2') }}</th>
-                                                <th>{{ __('PO') }}</th> --}}
+                                                <th>{{ __('SPPH') }}</th>
+                                                <th>{{ __('PO') }}</th>
                                                 <th>{{ __('STATUS') }}</th>
-                                                {{-- <th>{{ __('AKSI') }}</th> --}}
+                                                <th>{{ __('EKSPEDISI') }}</th>
+                                                <th>{{ __('QC') }}</th>
                                             </thead>
                                             <tbody id="table-pr">
                                             </tbody>
@@ -340,6 +339,15 @@
                                                             name="waktu">
                                                     </div>
                                                 </div>
+                                                <div class="form-group row">
+                                                    <label for="countdown"
+                                                        class="col-sm-4 col-form-label">{{ __('Countdown') }}</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="date" class="form-control" id="countdown"
+                                                            name="countdown">
+                                                    </div>
+                                                </div>
+
                                                 <div class="form-group row">
                                                     <label for="keterangan"
                                                         class="col-sm-4 col-form-label">{{ __('Keterangan') }}</label>
@@ -498,7 +506,7 @@
                 $('#pcode').prop("disabled", true);
                 $('#button-check').prop("disabled", true);
                 $.ajax({
-                    url: '/materials?type=' + ptype + '&kode=' + pcode,
+                    url: "{{ url('materials?type=') }}" + ptype + '&kode=' + pcode,
                     type: "GET",
                     data: {
                         "format": "json"
@@ -541,6 +549,7 @@
             $('#spek').val("");
             $('#satuan').val("");
             $('#keterangan').val("");
+            $('#countdown').val("");
             $('#waktu').val("");
             $('#pcode').val("");
             $('#material_kode').val("");
@@ -550,7 +559,7 @@
         function PRupdate() {
             const id = $('#pr_id').val()
             $.ajax({
-                url: '/products/update_purchase_request_detail/',
+                url: "{{ url('products/update_purchase_request_detail') }}" + "/",
                 type: "POST",
                 dataType: "json",
                 data: {
@@ -562,6 +571,7 @@
                     "spek": $('#spek').val(),
                     "satuan": $('#satuan').val(),
                     "waktu": $('#waktu').val(),
+                    "countdown": $('#countdown').val(),
                     "keterangan": $('#keterangan').val(),
 
                 },
@@ -585,7 +595,7 @@
                     clearForm();
                     if (data.pr.details.length == 0) {
                         $('#table-pr').append(
-                            '<tr><td colspan="10" class="text-center">Tidak ada produk</td></tr>');
+                            '<tr><td colspan="19" class="text-center">Tidak ada produk</td></tr>');
                     } else {
                         $('#table-pr').empty();
                         $.each(data.pr.details, function(key, value) {
@@ -603,6 +613,8 @@
                             }
 
                             //0 = Lakukan SPPH, 1 = Lakukan PO, 2 = Completed, 3 = Negosiasi, 4 = Justifikasi
+
+                            //optional
                             if (value.status == 0 || !value.status) {
                                 status = 'Lakukan SPPH';
                             } else if (value.status == 1) {
@@ -617,14 +629,11 @@
 
                             $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
                                 .kode_material + '</td><td>' + value.uraian + '</td><td>' +
-                                value
-                                .spek + '</td><td>' + value.qty + '</td><td>' + value
-                                .satuan +
-                                '</td><td>' + value.waktu + '</td><td>' + value.keterangan +
-                                '</td><td>' + spph + '</td><td>' + value.sph +
-                                '</td><td>' + po +
-                                '</td><td><b>' +
-                                status + '</b></td></tr>'
+                                value.spek + '</td><td>' + value.qty + '</td><td>' + value
+                                .satuan + '</td><td>' + value.waktu + '</td><td>' + value
+                                .countdown + '</td><td>' + value.keterangan +
+                                '</td><td>' + spph + '</td><td>' + value.sph + '</td><td>' + po +
+                                '</td><td><b>' + status + '</b></td></tr>'
                             );
                         });
                     }
@@ -654,11 +663,11 @@
             $('#table-pr').empty();
 
             $.ajax({
-                url: '/products/purchase_request_detail/' + data.id,
+                url: "{{ url('products/purchase_request_detail') }}" + "/" + data.id,
                 type: "GET",
                 dataType: "json",
                 beforeSend: function() {
-                    $('#table-pr').append('<tr><td colspan="16" class="text-center">Loading...</td></tr>');
+                    $('#table-pr').append('<tr><td colspan="19" class="text-center">Loading...</td></tr>');
                     $('#button-cetak-pr').html('<i class="fas fa-spinner fa-spin"></i> Loading...');
                     $('#button-cetak-pr').attr('disabled', true);
                 },
@@ -675,9 +684,10 @@
                     if (data.pr.details.length == 0) {
                         $('#table-pr').empty();
                         $('#table-pr').append(
-                            '<tr><td colspan="10" class="text-center">Tidak ada produk</td></tr>');
+                            '<tr><td colspan="19" class="text-center">Tidak ada produk</td></tr>');
                     } else {
                         $('#table-pr').empty();
+
                         $.each(data.pr.details, function(key, value) {
 
                             var id = value.id;
@@ -695,21 +705,23 @@
                             }
 
                             // alert(value.no_sph)
+                            var hasSPPH = data.pr.details.some(function(item) {
+                                return item.id_spph !== null;
+                            });
+
+                            if (value.batas_akhir == null) {
+                                value.batas_akhir = '-';
+                            } else {
+                                value.batas_akhir = value.batas_akhir;
+                            }
+
+                            if (hasSPPH) {
+                                $('#edit_pr_save').prop('disabled', false);
+                            } else {
+                                $('#edit_pr_save').prop('disabled', true);
+                            }
 
                             //0 = Lakukan SPPH, 1 = Lakukan PO, 2 = Completed
-                            // if (!value.id_spph) {
-                            //     status = 'Lakukan SPPH';
-                            // } else if (value.id_spph && !value.no_sph) {
-                            //     status = 'Lakukan SPH';
-                            // } else if (value.id_spph && value.no_sph && !value.no_just) {
-                            //     status = 'Lakukan Justifikasi';
-                            // } else if (value.id_spph && value.no_sph && value.no_just && !value.id_po) {
-                            //     status = 'Lakukan Nego/PO';
-                            // } else if (value.id_spph && value.no_sph && value
-                            //     .id_po) {
-                            //     status = 'COMPLETED';
-                            // }
-
                             if (!value.id_spph && !value.nomor_spph) {
                                 status = 'Lakukan SPPH';
                             } else if (value.id_spph && value.nomor_spph && !value.id_po) {
@@ -718,6 +730,20 @@
                                 .id_po && value.no_po) {
                                 status = 'COMPLETED';
                             }
+
+                            // STATUS LAMA
+
+                            // else if (value.id_spph && !value.no_sph) {
+                            //     status = 'Lakukan SPH';
+                            // } else if (value.id_spph && value.no_sph && !value.no_just) {
+                            //     status = 'Lakukan Justifikasi';
+                            // } else if (value.id_spph && value.no_sph && value.no_just && !value.id_po) {
+                            //     status = 'Lakukan Nego/PO';
+                            // }
+                            //  else if (value.id_spph && value.no_sph && value
+                            //     .id_po) {
+                            //     status = 'COMPLETED';
+                            // }
 
                             var date;
                             var msg = '';
@@ -730,55 +756,43 @@
                                 date = value.batas_akhir;
                             }
 
+                            // var userRole = data.role;
+                            // alert(userRole)
+                            // if (userRole === 'wil1' || userRole === 'wil2') {
+                            //     $('input[id^="sph"], input[id^="tgl_sph"], input[id^="just"], input[id^="tgl_just"], input[id^="neg1"], input[id^="tgl_nego1"], input[id^="bts_nego1"], input[id^="neg2"], input[id^="tgl_nego2"], input[id^="bts_nego2"]')
+                            //         .prop('disabled', true);
+                            // }
+
+                            const ekspedisi = value.ekspedisi ? value.ekspedisi : '-';
+
+                            const qc = value?.qc
+
+                            let content = ''
+
+                            if (qc) {
+                                //append the qc.penerimaan, qc.hasil_ok, qc.hasil_nok, qc.tanggal_qc
+                                content = `<p class="mt-2 mb-0">Penerimaan : ${qc.penerimaan}</p>
+                                <p class="mt-2 mb-0">OK : ${qc.hasil_ok}</p>
+                                <p class="mt-2 mb-0">NOK : ${qc.hasil_nok}</p>
+                                <p class="mt-2 mb-0">${qc.tanggal_qc}</p>`
+                            } else {
+                                content = '-'
+                            }
+
                             $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
                                 .kode_material + '</td><td>' + value.uraian + '</td><td>' +
                                 value
                                 .spek + '</td><td>' + value.qty + '</td><td>' + value
-                                .satuan + '</td><td>' + value.waktu + '</td><td>' + value
+                                .satuan + '</td><td>' + value.waktu + '</td><td style="color:' +
+                                value.backgroundcolor + '">' + value
+                                .countdown + '</td><td>' + value
                                 .keterangan +
-                                '</td>' + '<td><b>' + status + '</b><br><br><b>'+ msg 
-                                    + date +'</b></td>' + '</tr>'
+                                '</td><td>' + spph + '</td><td>' + po + '</td><td><b>' + status + '</b><br><br><b>' +
+                                msg + date + '</b>' + '</b></td>' +
+                                '<td style="min-width:200px">' + ekspedisi + '</td>' +
+                                '<td style="min-width:200px">' + content + '</td>' +
+                                '</tr>'
 
-                                //'td' spph +
-                                // '</td><td><input type="text" class="form-control" style="width:200px;" placeholder="No SPH" id="sph' +
-                                // id + '" name="sph' + id + '" value="' + value.no_sph +
-                                // '">' +
-                                // '<input type="date" class="form-control mt-2" style="width:200px;" id="tgl_sph' +
-                                // id + '" name="tgl_sph' + id + '" value="' + value
-                                // .tanggal_sph + '">' +
-                                // '</td><td><input type="text"  class="form-control" style="width:200px;" placeholder="No Justifikasi" id="just' +
-                                // id + '" name="just' + id + '" value="' + value.no_just +
-                                // '">' +
-                                // '<input type="date"  class="form-control mt-2" style="width:200px;" id="tgl_just' +
-                                // id + '" name="tgl_just' + id + '" value="' + value
-                                // .tanggal_just + '">' +
-                                // '</td><td><input type="text"  class="form-control" style="width:200px;" placeholder="No Nego 1" id="neg1' +
-                                // id + '" name="neg1' + id + '" value="' + value.no_nego1 +
-                                // '">' +
-                                // '<p class="mt-2 mb-0">Tanggal Nego 1</p><input type="date"  class="form-control" style="width:200px;" id="tgl_nego1' +
-                                // id +
-                                // '" name="tgl_nego1' + id + '" value="' + value
-                                // .tanggal_nego1 + '">' +
-                                // '<p class="mt-2 mb-0">Batas Nego 1</p><input type="date"  class="form-control" style="width:200px;" id="bts_nego1' +
-                                // id +
-                                // '" name="bts_nego1' + id + '" value="' + value.batas_nego1 +
-                                // '">' +
-                                // '</td><td><input type="text" value="' + value.no_nego2 +
-                                // '" class="form-control" style="width:200px;" placeholder="No Nego 2" id="neg2' +
-                                // id + '" name="neg2' + id + '">' +
-                                // '<p class="mt-2 mb-0">Tanggal Nego 2</p><input type="date"  class="form-control" style="width:200px;" id="tgl_nego2' +
-                                // id +
-                                // '" name="tgl_nego2' + id + '" value="' + value
-                                // .tanggal_nego2 + '">' +
-                                // '<p class="mt-2 mb-0">Batas Nego 2</p><input type="date"  class="form-control" style="width:200px;" id="bts_nego2' +
-                                // id +
-                                // '" name="bts_nego2' + id + '" value="' + value.batas_nego2 +
-                                // '">' +
-                                // '</td><td>' + po + '</td>'
-                                // +
-                                // '<td><button id="edit_pr_save" data-id="' + id +
-                                // '" type="button" class="btn btn-success btn-xs"' +
-                                // '><i class="fas fa-save"></i></button>' + '</td>'
                             );
                         });
                     }
@@ -836,7 +850,7 @@
                 dataType: "json",
                 beforeSend: function() {
                     $('#tabel-po').append(
-                        '<tr><td colspan="16" class="text-center">Loading...</td></tr>');
+                        '<tr><td colspan="19" class="text-center">Loading...</td></tr>');
                     $('#button-cetak-pr').html('<i class="fas fa-spinner fa-spin"></i> Loading...');
                     $('#button-cetak-pr').attr('disabled', true);
                 },
@@ -845,10 +859,21 @@
                     $('#button-cetak-pr').attr('disabled', false);
                     var no = 1;
 
+                    var hasSPPH = false;
+                    var hasSPPH = data.pr.details.some(function(item) {
+                        return item.id_spph !== null;
+                    });
+
+                    if (hasSPPH) {
+                        $('#edit_pr_save').prop('disabled', false);
+                    } else {
+                        $('#edit_pr_save').prop('disabled', true);
+                    }
+
                     if (data.pr.details.length == 0) {
                         $('#table-pr').empty();
                         $('#table-pr').append(
-                            '<tr><td colspan="16" class="text-center">Tidak ada produk</td></tr>');
+                            '<tr><td colspan="17" class="text-center">Tidak ada produk</td></tr>');
                     } else {
                         $('#table-pr').empty();
                         $.each(data.pr.details, function(key, value) {
@@ -895,65 +920,54 @@
                             }
 
                             //0 = Lakukan SPPH, 1 = Lakukan PO, 2 = Completed
-                            if (!value.id_spph) {
+                            if (!value.id_spph && !value.nomor_spph) {
                                 status = 'Lakukan SPPH';
-                            } else if (value.id_spph && !value.no_sph) {
-                                status = 'Lakukan SPH';
-                            } else if (value.id_spph && value.no_sph && !value.no_just) {
-                                status = 'Lakukan Justifikasi';
-                            } else if (value.id_spph && value.no_sph && value.no_just && !value
-                                .id_po) {
-                                status = 'Lakukan Nego/PO';
-                            } else if (value.id_spph && value.no_sph && value
-                                .id_po) {
+                            } else if (value.id_spph && value.nomor_spph && !value.id_po) {
+                                status = 'PROSES PO';
+                            } else if (value.id_spph && value.nomor_spph && value
+                                .id_po && value.no_po) {
                                 status = 'COMPLETED';
+                            }
+
+                            // STATUS LAMA
+                            // if (!value.id_spph) {
+                            //     status = 'Lakukan SPPH';
+                            // } else if (value.id_spph && !value.no_sph) {
+                            //     status = 'Lakukan SPH';
+                            // } else if (value.id_spph && value.no_sph && !value.no_just) {
+                            //     status = 'Lakukan Justifikasi';
+                            // } else if (value.id_spph && value.no_sph && value.no_just && !value
+                            //     .id_po) {
+                            //     status = 'Lakukan Nego/PO';
+                            // } else if (value.id_spph && value.no_sph && value
+                            //     .id_po) {
+                            //     status = 'COMPLETED';
+                            // }
+
+                            var date;
+                            var msg = '';
+
+                            if (value.batas_akhir == null) {
+                                date = '-';
+                                msg = '-';
+                            } else {
+                                msg = 'batas penerimaan barang : ';
+                                date = value.batas_akhir;
                             }
 
                             $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
                                 .kode_material + '</td><td>' + value.uraian + '</td><td>' +
                                 value
                                 .spek + '</td><td>' + value.qty + '</td><td>' + value
-                                .satuan + '</td><td>' + value.waktu + '</td><td>' + value
+                                .satuan + '</td><td>' + value.waktu +
+                                '</td><td style="color:' + value.backgroundcolor + '">' +
+                                value
+                                .countdown + '</td><td>' + value
                                 .keterangan +
                                 '</td><td>' + spph +
-                                '</td><td><input type="text" class="form-control" style="width:200px;" placeholder="No SPH" id="sph' +
-                                id + '" name="sph' + id + '" value="' + value.no_sph +
-                                '">' +
-                                '<input type="date" class="form-control mt-2" style="width:200px;" id="tgl_sph' +
-                                id + '" name="tgl_sph' + id + '" value="' + value
-                                .tanggal_sph + '">' +
-                                '</td><td><input type="text"  class="form-control" style="width:200px;" placeholder="No Justifikasi" id="just' +
-                                id + '" name="just' + id + '" value="' + value.no_just +
-                                '">' +
-                                '<input type="date"  class="form-control mt-2" style="width:200px;" id="tgl_just' +
-                                id + '" name="tgl_just' + id + '" value="' + value
-                                .tanggal_just + '">' +
-                                '</td><td><input type="text"  class="form-control" style="width:200px;" placeholder="No Nego 1" id="neg1' +
-                                id + '" name="neg1' + id + '" value="' + value.no_nego1 +
-                                '">' +
-                                '<p class="mt-2 mb-0">Tanggal Nego 1</p><input type="date"  class="form-control" style="width:200px;" id="tgl_nego1' +
-                                id +
-                                '" name="tgl_nego1' + id + '" value="' + value
-                                .tanggal_nego1 + '">' +
-                                '<p class="mt-2 mb-0">Batas Nego 1</p><input type="date"  class="form-control" style="width:200px;" id="bts_nego1' +
-                                id +
-                                '" name="bts_nego1' + id + '" value="' + value.batas_nego1 +
-                                '">' +
-                                '</td><td><input type="text" value="' + value.no_nego2 +
-                                '" class="form-control" style="width:200px;" placeholder="No Nego 2" id="neg2' +
-                                id + '" name="neg2' + id + '">' +
-                                '<p class="mt-2 mb-0">Tanggal Nego 2</p><input type="date"  class="form-control" style="width:200px;" id="tgl_nego2' +
-                                id +
-                                '" name="tgl_nego2' + id + '" value="' + value
-                                .tanggal_nego2 + '">' +
-                                '<p class="mt-2 mb-0">Batas Nego 2</p><input type="date"  class="form-control" style="width:200px;" id="bts_nego2' +
-                                id +
-                                '" name="bts_nego2' + id + '" value="' + value.batas_nego2 +
-                                '">' +
-                                '</td><td>' + po + '</td><td><b>' + status + '</b></td>' +
-                                '<td><button id="edit_pr_save" data-id="' + id +
-                                '" type="button" class="btn btn-success btn-xs"' +
-                                '><i class="fas fa-save"></i></button>' + '</td>' + '</tr>'
+                                '</td><td>' + po + '</td><td><b>' + status +
+                                '</b><br><br><b>' + msg + date + '</b>' + '</b></td>' +
+                                '<td><button id="edit_pr_save" data-id="' + id + '</tr>'
 
                             );
                         });
