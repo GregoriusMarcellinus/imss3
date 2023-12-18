@@ -1,9 +1,6 @@
 @extends('layouts.home')
 @section('title', __('SPPH'))
 @section('custom-css')
-    <link rel="stylesheet" href="/plugins/toastr/toastr.min.css">
-    <link rel="stylesheet" href="/plugins/select2/css/select2.min.css">
-    <link rel="stylesheet" href="/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
     <style>
         /* Important part */
         .modal-dialog {
@@ -18,24 +15,17 @@
 @endsection
 @section('content')
     <div class="content-header">
-        <div class="container-fluid">
+        <div class="container">
             <div class="row mb-2">
             </div>
         </div>
     </div>
     <section class="content">
         <div class="container">
-            <div class="row my-5">
-                <div class="col-12">
-                    <h2 class="font-weight-bold">SPPH</h2>
-                </div>
-            </div>
             <div class="card">
                 <div class="card-header">
-                    @if (Auth::user() )
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-SPPH"
                         onclick="addSPPH()"><i class="fas fa-plus"></i> Add New SPPH</button>
-                    @endif
                     <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#import-product" onclick="importProduct()"><i class="fas fa-file-excel"></i> Import Product (Excel)</button> -->
                     <!-- <button type="button" class="btn btn-primary" onclick="download('xls')"><i class="fas fa-file-excel"></i> Export Product (XLS)</button> -->
                     {{-- <div class="card-tools">
@@ -64,27 +54,29 @@
                                     <th>{{ __('Perihal') }}</th>
                                     <th>{{ __('Tanggal SPPH') }}</th>
                                     <th>{{ __('Batas SPPH') }}</th>
-                                    <th>{{ __('Penerima') }}</th>
-                                    @if (Auth::user() )
+                                    <th>{{ __('Vendor') }}</th>
+                                    {{-- <th>{{ __('Penerima') }}</th> --}}
                                     <th></th>
-                                    @endif
                                 </tr>
                             </thead>
                             <tbody>
                                 @if (count($spphes) > 0)
                                     @foreach ($spphes as $key => $d)
                                         @php
-                                            $penerima = $d->penerima;
-                                            $penerima = json_decode($penerima);
-                                            $penerima = implode(', ', $penerima);
+                                            // $penerima = $d->penerima;
+                                            // $penerima = json_decode($penerima);
+                                            // $penerima = implode(', ', $penerima);
+                                            $vendor = $d->vendor;
                                             $data = [
                                                 'no' => $spphes->firstItem() + $key,
                                                 'nomor_spph' => $d->nomor_spph,
                                                 'lampiran' => $d->lampiran,
+                                                'vendor_id' => $d->vendor_id,
+                                                'vendor' => $vendor,
                                                 'perihal' => $d->perihal,
                                                 'tanggal' => date('d/m/Y', strtotime($d->tanggal_spph)),
                                                 'batas' => date('d/m/Y', strtotime($d->batas_spph)),
-                                                'penerima' => $penerima,
+                                                'penerima' => $d->penerima,
                                                 'alamat' => $d->alamat,
                                                 'id' => $d->id,
                                                 'penerima_asli' => $d->penerima,
@@ -99,8 +91,8 @@
                                             <td class="text-center">{{ $data['perihal'] }}</td>
                                             <td class="text-center">{{ $data['tanggal'] }}</td>
                                             <td class="text-center">{{ $data['batas'] }}</td>
-                                            <td class="text-center">{{ $data['penerima'] }}</td>
-                                            @if (Auth::user() )
+                                            <td class="text-center">{{ $data['vendor'] }}</td>
+                                            {{-- <td class="text-center">{{ $data['penerima'] }}</td> --}}
                                             <td class="text-center">
                                                 <button title="Edit SPPH" type="button" class="btn btn-success btn-xs"
                                                     data-toggle="modal" data-target="#add-SPPH"
@@ -111,19 +103,18 @@
                                                     data-target="#detail-spph" class="btn-lihat btn btn-info btn-xs"
                                                     data-detail="{{ json_encode($data) }}"><i
                                                         class="fas fa-list"></i></button>
-                                                        @if (Auth::user() && Auth::user()->role == 0)
+                                                @if (Auth::user()->role == 0 || Auth::user()->role == 1)
                                                     <button title="Hapus SPPH" type="button" class="btn btn-danger btn-xs"
                                                         data-toggle="modal" data-target="#delete-spph"
                                                         onclick="deletespph({{ json_encode($data) }})"><i
                                                             class="fas fa-trash"></i></button>
                                                 @endif
                                             </td>
-                                            @endif
                                         </tr>
                                     @endforeach
                                 @else
                                     <tr class="text-center">
-                                        <td colspan="8">{{ __('No data.') }}</td>
+                                        <td colspan="9">{{ __('No data.') }}</td>
                                     </tr>
                                 @endif
                             </tbody>
@@ -147,7 +138,8 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form role="form" id="save" action="{{ route('spph.store') }}" method="post">
+                        <form role="form" id="save" action="{{ route('spph.store') }}" method="post"
+                            enctype="multipart/form-data">
                             @csrf
                             <input type="hidden" id="save_id" name="id">
                             <div class="form-group row">
@@ -156,14 +148,26 @@
                                     <input type="text" class="form-control" id="nomor_spph" name="nomor_spph">
                                 </div>
                             </div>
-                            <div class="form-group row">
+                            {{-- <div class="form-group row">
                                 <label for="lampiran" class="col-sm-4 col-form-label">{{ __('Lampiran') }}
                                 </label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="lampiran" name="lampiran">
                                 </div>
-                            </div>
-
+                            </div> --}}
+                            {{-- <div class="form-group row">
+                                <label for="vendor_id" class="col-sm-4 col-form-label">{{ __('Vendor') }} </label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="vendor_id" name="vendor_id">
+                                    <select class="form-control" id=
+                                    "vendor_id" name="vendor_id">
+                                        <option value="">Pilih Vendor</option>
+                                        @foreach ($vendors as $vendor)
+                                            <option value="{{ $vendor->id }}">{{ $vendor->nama }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div> --}}
                             <div class="form-group row">
                                 <label for="perihal" class="col-sm-4 col-form-label">{{ __('Perihal') }}
                                 </label>
@@ -186,14 +190,30 @@
                                 </div>
                             </div>
 
-                            <h6>Penerima -- </h6>
+                            {{-- <h6>Penerima -- </h6>
 
                             <div id="penerima-row">
 
                             </div>
 
-                            <a id="tambah" style="cursor: pointer">Tambah Penerima</a>
+                            <a id="tambah" style="cursor: pointer">Tambah Penerima</a> --}}
 
+                            <h6>Lampiran -- </h6>
+
+                            <div id="lampiran-row">
+
+                            </div>
+
+                            <a id="tambah-lampiran" style="cursor: pointer">Tambah Lampiran</a>
+                            <hr>
+
+                            <h6>Vendor -- </h6>
+
+                            <div id="vendor-row">
+
+                            </div>
+
+                            <a id="tambah" style="cursor: pointer">Tambah vendor</a>
 
                         </form>
                     </div>
@@ -247,7 +267,8 @@
                                         </tr>
                                         <tr>
                                             <td colspan="3">
-                                                <button id="button-tambah-produk" type="button" class="btn btn-info"
+                                                <button id="button-tambah-produk" type="button"
+                                                    class="btn btn-info mb-3"
                                                     onclick="showAddProduct()">{{ __('Tambah Produk') }}</button>
                                             </td>
                                         </tr>
@@ -292,6 +313,20 @@
                                     </div>
                                     <div id="form" class="card">
                                         <div class="card-body">
+                                            <button type="button" class="btn btn-primary mb-3"
+                                                onclick="addToDetails()"></i>Tambah Pilihan</button>
+                                            <div class="input-group input-group-lg">
+                                                <input type="text" class="form-control" id="proyek_name"
+                                                    name="proyek_name" placeholder="Search By Proyek">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-primary" id="check-proyek"
+                                                        onclick="productCheck()">
+                                                        <i class="fas fa-search"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="table-responsive card-body">
                                             <table class="table table-bordered">
                                                 <thead>
                                                     <tr>
@@ -300,6 +335,10 @@
                                                         <th>Spesifikasi</th>
                                                         <th>QTY</th>
                                                         <th>Sat</th>
+                                                        <th>NO PR</th>
+                                                        <th>No SPPH</th>
+                                                        <th>Proyek</th>
+                                                        <th>Pilih</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody id='detail-material'>
@@ -348,9 +387,6 @@
 
 {{-- custom Js --}}
 @section('custom-js')
-    <script src="/plugins/toastr/toastr.min.js"></script>
-    <script src="/plugins/select2/js/select2.full.min.js"></script>
-    <script src="/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
     <script>
         $(function() {
             bsCustomFileInput.init();
@@ -392,9 +428,118 @@
             resetForm();
         }
 
-        function generateNamaAlamat(data) {
+        //fungsi generate alamat
+
+        // function generateNamaAlamat(data) {
+        //     if (data) {
+        //         $('#penerima-row').empty();
+        //         var length = data.length;
+
+        //         data.map((item, index) => {
+        //             const counter = index + 1
+        //             var formGroup =
+        //                 '<div class="group">' +
+        //                 '<div class="form-group row">' +
+        //                 '<label for="penerima' + counter + '" class="col-sm-4 col-form-label">Penerima ' + counter +
+        //                 '</label>' +
+        //                 '<div class="col-sm-8 d-flex align-items-center">' +
+        //                 '<input type="text" class="form-control" id="penerima' + counter +
+        //                 '" name="penerima[]" value="' + item.penerima + '">' +
+        //                 //remove button
+        //                 '<button type="button" class="ml-2 btn btn-danger btn-sm" onclick="removeNamaAlamat(' +
+        //                 counter +
+        //                 ')"><i class="fas fa-trash"></i></button>' +
+        //                 '</div>' +
+        //                 '</div>' +
+        //                 '<div class="form-group row">' +
+        //                 '<label for="alamat' + counter + '" class="col-sm-4 col-form-label">Alamat ' + counter +
+        //                 '</label>' +
+        //                 '<div class="col-sm-8">' +
+        //                 '<textarea class="form-control" id="alamat' + counter +
+        //                 '" name="alamat[]" rows="3">' + item.alamat + '</textarea>' +
+        //                 '</div>' +
+        //                 '</div>' +
+        //                 '<hr/>' +
+        //                 '</div>';
+        //             $("#penerima-row").append(formGroup);
+        //         })
+        //     } else {
+        //         var length = $("#penerima-row").children().length;
+        //         var counter = length + 1;
+
+        //         var formGroup =
+        //             '<div class="group">' +
+        //             '<div class="form-group row">' +
+        //             '<label for="penerima' + counter + '" class="col-sm-4 col-form-label">Penerima ' + counter +
+        //             '</label>' +
+        //             '<div class="col-sm-8 d-flex align-items-center">' +
+        //             '<input type="text" class="form-control" id="penerima' + counter + '" name="penerima[]">' +
+        //             //remove button
+        //             '<button type="button" class="ml-2 btn btn-danger btn-sm" onclick="removeNamaAlamat(' + counter +
+        //             ')"><i class="fas fa-trash"></i></button>' +
+        //             '</div>' +
+        //             '</div>' +
+        //             '<div class="form-group row">' +
+        //             '<label for="alamat' + counter + '" class="col-sm-4 col-form-label">Alamat ' + counter + '</label>' +
+        //             '<div class="col-sm-8">' +
+        //             '<textarea class="form-control" id="alamat' + counter + '" name="alamat[]"></textarea>' +
+        //             '</div>' +
+        //             '</div>' +
+        //             '<hr/>' +
+        //             '</div>';
+        //         $("#penerima-row").append(formGroup);
+        //     }
+        // }
+
+        function generateLampiranList(data) {
             if (data) {
-                $('#penerima-row').empty();
+                $('#lampiran-row').empty();
+                var length = data.length;
+
+                data.map((item, index) => {
+                    const counter = index + 1
+                    var formGroup =
+                        '<div class="group">' +
+                        '<div class="form-group custom-file row">' +
+                        '<label for="lampiran' + counter + '" class="col-sm-4 col-form-label">Lampiran ' + counter +
+                        '</label>' +
+                        '<div class="col-sm-8 d-flex align-items-center ">' +
+                        '<input type="file" class="form-control custom-file-input" id="lampiran' + counter +
+                        '" name="lampiran[]" value="' + item + '">' +
+                        '<button type="button" class="ml-2 btn btn-danger btn-sm" onclick="removeLampiran(' +
+                        counter + ')"><i class="fas fa-trash"></i></button>' +
+                        '</div>' +
+                        '</div>' +
+                        // '<hr/>' +
+                        '</div>';
+                    $("#lampiran-row").append(formGroup);
+                })
+            } else {
+                var length = $("#lampiran-row").children().length;
+                var counter = length + 1;
+
+                var formGroup =
+                    '<div class="group">' +
+                    '<div class="form-group row">' +
+                    '<label for="lampiran' + counter + '" class="col-sm-4 col-form-label">Lampiran ' + counter +
+                    '</label>' +
+                    '<div class="col-sm-8 d-flex align-items-center">' +
+                    '<input type="file" class="form-control" id="lampiran' + counter + '" name="lampiran[]">' +
+                    //remove button
+                    '<button type="button" class="ml-2 btn btn-danger btn-sm" onclick="removeLampiran(' + counter +
+                    ')"><i class="fas fa-trash"></i></button>' +
+                    '</div>' +
+                    '</div>' +
+                    // '<hr/>' +
+                    '</div>';
+                $("#lampiran-row").append(formGroup);
+            }
+        }
+
+
+        function generateVendorList(data) {
+            if (data) {
+                $('#vendor-row').empty();
                 var length = data.length;
 
                 data.map((item, index) => {
@@ -402,64 +547,69 @@
                     var formGroup =
                         '<div class="group">' +
                         '<div class="form-group row">' +
-                        '<label for="penerima' + counter + '" class="col-sm-4 col-form-label">Penerima ' + counter +
+                        '<label for="vendor' + counter + '" class="col-sm-4 col-form-label">Vendor ' + counter +
                         '</label>' +
                         '<div class="col-sm-8 d-flex align-items-center">' +
-                        '<input type="text" class="form-control" id="penerima' + counter +
-                        '" name="penerima[]" value="' + item.penerima + '">' +
+                        '<select class="form-control" id="vendor' + counter + '" name="vendor[]">' +
+                        '<option value="">Pilih Vendor</option>' +
+                        '@foreach ($vendors as $vendor)' +
+                        '<option value="{{ $vendor->id }}">{{ $vendor->nama }}</option>' +
+                        '@endforeach' +
+                        '</select>' +
                         //remove button
                         '<button type="button" class="ml-2 btn btn-danger btn-sm" onclick="removeNamaAlamat(' +
-                        counter +
-                        ')"><i class="fas fa-trash"></i></button>' +
+                        counter + ')"><i class="fas fa-trash"></i></button>' +
                         '</div>' +
                         '</div>' +
-                        '<div class="form-group row">' +
-                        '<label for="alamat' + counter + '" class="col-sm-4 col-form-label">Alamat ' + counter +
-                        '</label>' +
-                        '<div class="col-sm-8">' +
-                        '<textarea class="form-control" id="alamat' + counter +
-                        '" name="alamat[]" rows="3">' + item.alamat + '</textarea>' +
-                        '</div>' +
-                        '</div>' +
-                        '<hr/>' +
+                        // '<hr/>' +
                         '</div>';
-                    $("#penerima-row").append(formGroup);
+                    $("#vendor-row").append(formGroup);
                 })
             } else {
-                var length = $("#penerima-row").children().length;
+                var length = $("#vendor-row").children().length;
                 var counter = length + 1;
 
                 var formGroup =
-                    '<div class="group">' +
+                    '<div class="group"' +
                     '<div class="form-group row">' +
-                    '<label for="penerima' + counter + '" class="col-sm-4 col-form-label">Penerima ' + counter +
-                    '</label>' +
+                    '<label for="vendor' + counter + '" class="col-sm-4 col-form-label">Vendor ' + counter + '</label>' +
                     '<div class="col-sm-8 d-flex align-items-center">' +
-                    '<input type="text" class="form-control" id="penerima' + counter + '" name="penerima[]">' +
+                    '<select class="form-control" id="vendor' + counter + '" name="vendor[]">' +
+                    '<option value="">Pilih Vendor</option>' +
+                    '@foreach ($vendors as $vendor)' +
+                    '<option value="{{ $vendor->id }}">{{ $vendor->nama }}</option>' +
+                    '@endforeach' +
+                    '</select>' +
                     //remove button
                     '<button type="button" class="ml-2 btn btn-danger btn-sm" onclick="removeNamaAlamat(' + counter +
                     ')"><i class="fas fa-trash"></i></button>' +
                     '</div>' +
                     '</div>' +
-                    '<div class="form-group row">' +
-                    '<label for="alamat' + counter + '" class="col-sm-4 col-form-label">Alamat ' + counter + '</label>' +
-                    '<div class="col-sm-8">' +
-                    '<textarea class="form-control" id="alamat' + counter + '" name="alamat[]"></textarea>' +
-                    '</div>' +
-                    '</div>' +
-                    '<hr/>' +
+                    // '<hr/>' +
                     '</div>';
-                $("#penerima-row").append(formGroup);
+                $("#vendor-row").append(formGroup);
+
             }
         }
 
         function removeNamaAlamat(counter) {
-            $('#penerima' + counter).closest('.group').remove();
+            // $('#penerima' + counter).closest('.group').remove();
+            $('#vendor' + counter).closest('.group').remove();
+        }
+
+        function removeLampiran(counter) {
+            $('#lampiran' + counter).closest('.group').remove();
         }
 
         $(document).ready(function() {
             $("#tambah").click(function() {
-                generateNamaAlamat(null);
+                // generateNamaAlamat(null);
+                generateVendorList(null);
+            });
+        });
+        $(document).ready(function() {
+            $("#tambah-lampiran").click(function() {
+                generateLampiranList(null);
             });
         });
 
@@ -541,7 +691,7 @@
             loader();
             $('#button-check').prop("disabled", true);
             $.ajax({
-                url: '/products/products_pr/',
+                url: "{{ url('products/products_pr/') }}",
                 type: "GET",
                 data: {
                     "format": "json"
@@ -557,12 +707,37 @@
                     //append to #detail-material
                     $('#detail-material').empty();
                     $.each(data.products, function(key, value) {
+                        // console.log(value);
+                        var no_spph
+                        if (!value.id_spph) {
+                            no_spph = '-'
+                        } else {
+                            no_spph = value.nomor_spph
+                        }
+
+                        var no_pr
+                        if (!value.pr_no) {
+                            no_pr = '-'
+                        } else {
+                            no_pr = value.pr_no
+                        }
+
+                        var checkbox;
+                        if (!value.id_spph) {
+                            checkbox = '<input type="checkbox" id="addToDetails" value="' + value.id +
+                                '" onclick="addToDetailsJs(' + value.id + ')">'
+                        } else {
+                            checkbox = '<input type="checkbox" id="addToDetails" value="' + value.id +
+                                '" onclick="addToDetailsJs(' + value.id + ')" disabled>'
+                        }
+
                         $('#detail-material').append(
                             '<tr><td>' + (key + 1) + '</td><td>' + value.uraian +
                             '</td><td>' + value.spek + '</td><td>' + value.qty + '</td><td>' + value
-                            .satuan +
-                            '</td><td><button class="btn btn-info" onclick="addToDetails(' + value
-                            .id + ')">Tambah</button></td></tr>'
+                            .satuan + '</td><td>' + no_pr + '</td><td>' + no_spph + '</td><td>' +
+                            value.nama_proyek +
+                            '</td><td>' + checkbox +
+                            '</td></tr>'
                         );
                     });
                 },
@@ -573,6 +748,18 @@
             });
         }
 
+        let selected = [];
+
+        function addToDetailsJs(id) {
+            if (selected.includes(id)) {
+                selected = selected.filter(item => item !== id)
+            } else {
+                selected.push(id)
+            }
+
+            console.log(selected);
+        }
+
         function clearForm() {
             $('#product_id').val("");
             $('#pname').val("");
@@ -581,13 +768,13 @@
             $('#form').hide();
         }
 
-        function addToDetails(id) {
+        function addToDetails() {
             $.ajax({
-                url: '/products/tambah_spph_detail',
+                url: "{{ url('products/tambah_spph_detail') }}",
                 type: "POST",
                 data: {
                     "_token": "{{ csrf_token() }}",
-                    "product_id": id,
+                    "selected_id": selected,
                     "spph_id": $('#spph_id').val(),
                 },
                 dataType: "json",
@@ -598,14 +785,19 @@
                 success: function(data) {
                     loader(0);
                     $('#form').show();
+                    getSpphDetail();
+
+                    if (!data.success) {
+                        toastr.error(data?.message);
+                        return
+                    }
+
                     //append to #detail-material
                     $('#table-spph').empty();
                     $.each(data.spph.details, function(key, value) {
                         $('#table-spph').append('<tr><td>' + (key + 1) + '</td><td>' + value
                             .uraian + '</td><td>' + value.spek + '</td><td>' + value.qty +
-                            '</td><td>' + value
-                            .satuan +
-                            '</td></tr>');
+                            '</td><td>' + value.satuan + '</td></tr>');
                     });
                 },
                 error: function() {
@@ -615,10 +807,88 @@
             });
         }
 
+        function productCheck() {
+            var proyek_name = $('#proyek_name').val();
+            if (proyek_name.length > 0) {
+                loader();
+                $('#proyek_code').prop("disabled", true);
+                $('#button-check').prop("disabled", true);
+                $.ajax({
+                    url: "{{ url('products/products_pr?proyek=') }}" + "/" + proyek_name,
+                    type: "GET",
+                    data: {
+                        "format": "json"
+                    },
+                    dataType: "json",
+                    beforeSend: function() {
+                        $('#loader').show();
+                        $('#form').hide();
+
+                    },
+                    success: function(data) {
+                        loader(0);
+                        $('#form').show();
+                        //append to #detail-material
+                        $('#detail-material').empty();
+                        $.each(data.products, function(key, value) {
+                            console.table('a', value)
+                            var no_spph
+                            if (!value.id_spph) {
+                                no_spph = '-'
+                            } else {
+                                no_spph = value.nomor_spph
+                            }
+
+                            var no_pr
+                            if (!value.id_pr) {
+                                no_pr = '-'
+                            } else {
+                                no_pr = value.pr_no
+                            }
+
+                            var no_po
+                            if (!value.id_po) {
+                                no_po = '-'
+                            } else {
+                                no_po = value.po_no
+                            }
+
+                            var checkbox;
+                            if (!value.id_spph) {
+                                checkbox = '<input type="checkbox" id="addToDetails" value="' + value
+                                    .id +
+                                    '" onclick="addToDetailsJs(' + value.id + ')">'
+                            } else {
+                                checkbox = '<input type="checkbox" id="addToDetails" value="' + value
+                                    .id +
+                                    '" onclick="addToDetailsJs(' + value.id + ')" disabled>'
+                            }
+
+                            $('#detail-material').append(
+
+                                '<tr><td>' + (key + 1) + '</td><td>' + value.uraian +
+                                '</td><td>' + value.spek + '</td><td>' + value.qty + '</td><td>' +
+                                value
+                                .satuan + '</td><td>' + value.nama_proyek + '</td><td>' + no_spph +
+                                '</td><td>' + no_pr + '</td><td>' +
+                                no_po + '</td><td>' + checkbox + '</td></tr>'
+                            );
+                        });
+                    },
+                    error: function() {
+                        $('#pcode').prop("disabled", false);
+                        $('#button-check').prop("disabled", false);
+                    }
+                });
+            } else {
+                toastr.error("Nama Proyek tidak ditemukan");
+            }
+        }
+
         function sjnProductUpdate() {
             const id = $('#product_id').val();
             $.ajax({
-                url: '/products/update_detail_sjn/',
+                url: "{{ url('products/update_detail_sjn/') }}",
                 type: "POST",
                 dataType: "json",
                 data: {
@@ -680,7 +950,7 @@
             $('#tgl_spph').text(data.tanggal);
             $('#table-spph').empty();
             $.ajax({
-                url: '/products/spph_detail/' + data.id,
+                url: "{{ url('products/spph_detail') }}" + "/" + data.id,
                 type: "GET",
                 dataType: "json",
                 beforeSend: function() {
@@ -735,30 +1005,6 @@
 
         function deletespph(data) {
             $('#delete_id').val(data.id);
-        }
-
-        $("#download-template").click(function() {
-            $.ajax({
-                url: '/downloads/template_import_product.xls',
-                type: "GET",
-                xhrFields: {
-                    responseType: 'blob'
-                },
-                success: function(data) {
-                    var a = document.createElement('a');
-                    var url = window.URL.createObjectURL(data);
-                    a.href = url;
-                    a.download = "template_import_product.xls";
-                    document.body.append(a);
-                    a.click();
-                    a.remove();
-                    window.URL.revokeObjectURL(url);
-                }
-            });
-        });
-
-        function download(type) {
-            window.location.href = "{{ route('products') }}?search={{ Request::get('search') }}&dl=" + type;
         }
     </script>
     @if (Session::has('success'))
