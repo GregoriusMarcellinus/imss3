@@ -1001,6 +1001,7 @@
                 $('#detail-po').find('#container-form').addClass('col-12');
                 $('#detail-po').find('#container-form').removeClass('col-7');
                 $('#button-tambah-detail').text('Tambah Item Detail');
+                $('#proyek_name').val("");
             }
 
             getPODetail();
@@ -1260,6 +1261,8 @@
                                 no_po + '</td><td>' + checkbox + '</td></tr>'
                             );
                         });
+                        $('#detail-material').append(
+                            '<tr><td colspan="8" class="text-center">Tidak ada produk</td></tr>');
                     },
                     error: function() {
                         $('#pcode').prop("disabled", false);

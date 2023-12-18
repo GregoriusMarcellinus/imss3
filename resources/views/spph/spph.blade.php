@@ -633,6 +633,7 @@
                 $('#container-product').removeClass('col-6');
                 $('#container-product').addClass('col-0');
                 $('#container-product').addClass('d-none');
+                $('#proyek_name').val("");
             }
 
             getSpphDetail();
@@ -823,7 +824,6 @@
                     beforeSend: function() {
                         $('#loader').show();
                         $('#form').hide();
-
                     },
                     success: function(data) {
                         loader(0);
@@ -874,6 +874,9 @@
                                 no_po + '</td><td>' + checkbox + '</td></tr>'
                             );
                         });
+
+                        $('#detail-material').append(
+                            '<tr><td colspan="8" class="text-center">Tidak ada produk</td></tr>');
                     },
                     error: function() {
                         $('#pcode').prop("disabled", false);
