@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 
 <head>
-    <title>Purchase Request-{{$pr->no_pr}}</title>
+    <title>Purchase Request-{{ $pr->no_pr }}</title>
     <style>
         @page {
             margin: 0cm;
@@ -96,12 +96,16 @@
             /* height: 5.5cm; */
             /* margin-bottom: 400px; */
         }
+
         .table {
             width: 100%;
             border: 1px solid black;
             text-align: center;
         }
-        .table tr, .table td, .table th {
+
+        .table tr,
+        .table td,
+        .table th {
             border: 1px solid black;
             /* padding: 5px; */
         }
@@ -138,13 +142,13 @@
 
                     <td align="center">
                         <br><br>
-                        <strong>Nomor* : <span>{{$pr->no_pr}}</span></strong><br>
-                        <strong>Tanggal* : <span>{{$pr->tgl_pr}}</span></strong><br>
+                        <strong>Nomor* : <span>{{ $pr->no_pr }}</span></strong><br>
+                        <strong>Tanggal* : <span>{{ $pr->tgl_pr }}</span></strong><br>
                     </td>
 
                     <td align="left" style="width: 35%;">
                         <br><br>
-                        <strong>Proyek : <span>{{$pr->nama_proyek}}</span></strong><br>
+                        <strong>Proyek : <span>{{ $pr->nama_proyek }}</span></strong><br>
                     </td>
                 </tr>
             </table>
@@ -181,9 +185,9 @@
                     <td style="text-align: left">{{ $item->keterangan }}</td>
                 </tr>
             @empty
-            <tr>
-                <td colspan="8" class="text-center" style="text-align: center">Tidak ada data</td>
-            </tr>
+                <tr>
+                    <td colspan="8" class="text-center" style="text-align: center">Tidak ada data</td>
+                </tr>
             @endforelse
         </tbody>
     </table>
@@ -194,20 +198,20 @@
                 <tr>
                     <td align="center" style="width: 25%;">
                         Menyetujui,<br>
-                        Kadiv. {{ Auth::user()->name }}
+                        Kadiv. {{ $pr->role }}
                         <br><br><br><br>
-                        <strong>HARTONO</strong><br>
+                        <strong>{{ $pr->kadiv }}</strong><br>
                     </td>
                     <td align="center" style="width: 25%;">
                         Diperiksa Oleh<br>
-                        Kadep. Rendal {{ Auth::user()->name }}
+                        Kadep. Rendal {{ $pr->role }}
                         <br><br><br><br><br>
                     </td>
                     <td align="center" style="width: 25%;">
                         Dibuat Oleh,<br>
-                        Rendal {{ Auth::user()->name }}
+                        Rendal {{ $pr->role }}
                         <br><br><br><br>
-                        <strong>FAVA WIRA</strong><br>
+                        <strong>{{ $pr->pic }}</strong><br>
                     </td>
                 </tr>
             </table>
@@ -219,7 +223,7 @@
         <tr>
             <td>
                 <strong><u>DASAR PR :</u></strong><br>
-                <span>{!!  nl2br($pr->dasar_pr) !!}</span>
+                <span>{!! nl2br($pr->dasar_pr) !!}</span>
 
             </td>
         </tr>

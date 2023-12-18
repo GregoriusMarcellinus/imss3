@@ -13,7 +13,7 @@
         }
 
         body {
-            margin-top: 9cm;
+            margin-top: 4cm;
             margin-left: 0cm;
             margin-right: 0cm;
             margin-bottom: 0.5cm;
@@ -163,7 +163,7 @@
             </tr>
         </table>
     </header>
-    Diterima dari : <br>PEMBELIAN LANGSUNG <br> Dunia Terpal <br>
+    Diterima dari : <br>PEMBELIAN LANGSUNG <br> Dunia Terpal <br><br><br><br><br>
     Barang-barang dengan kualitas dan kuantitas seperti tersebut dibawah
     <table class="table" style="width: 100%">
         <thead>

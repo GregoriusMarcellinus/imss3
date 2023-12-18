@@ -13,6 +13,7 @@ class PurchaseRequest extends Model
         'proyek_id',
         'no_pr',
         'tgl_pr',
-        'dasar_pr'
+        'dasar_pr',
+        'id_user'
     ];
 }
