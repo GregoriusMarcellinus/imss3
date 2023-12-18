@@ -239,8 +239,6 @@
                                                 <th>{{ __('Waktu Penyelesaian') }}</th>
                                                 <th>{{ __('Countdown') }}</th>
                                                 <th>{{ __('Keterangan') }}</th>
-                                                <th>{{ __('SPPH') }}</th>
-                                                <th>{{ __('PO') }}</th>
                                                 <th>{{ __('STATUS') }}</th>
                                                 <th>{{ __('Ekspedisi') }}</th>
                                                 <th>{{ __('QC') }}</th>
