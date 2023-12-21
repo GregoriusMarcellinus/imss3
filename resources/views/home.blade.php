@@ -308,7 +308,7 @@
                         </a>
                     </div>
                     <div class="col-lg-3 col-6">
-                        <a href="{{ route('product.justifikasi') }}">
+                        <a href="{{ route('aset.index', ['type' => 1]) }}">
                             <div class="small-box bg-primary">
                                 {{-- <div class="inner" style="background-color: #afc124"> --}}
                                 <div class="inner" style="background-color: #607274">
@@ -322,7 +322,7 @@
                         </a>
                     </div>
                     <div class="col-lg-3 col-6">
-                        <a href="{{ route('product.justifikasi') }}">
+                        <a href="{{ route('aset.index', ['type' => 2]) }}">
                             <div class="small-box bg-primary">
                                 {{-- <div class="inner" style="background-color: #afc124"> --}}
                                 <div class="inner" style="background-color: #607274">
@@ -336,7 +336,7 @@
                         </a>
                     </div>
                     <div class="col-lg-3 col-6">
-                        <a href="{{ route('product.justifikasi') }}">
+                        <a href="{{ route('penghapusan_aset.index') }}">
                             <div class="small-box bg-primary">
                                 {{-- <div class="inner" style="background-color: #afc124"> --}}
                                 <div class="inner" style="background-color: #607274">

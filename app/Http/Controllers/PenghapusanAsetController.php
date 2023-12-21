@@ -2,11 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\KodeAset;
-use App\Models\SuratKeluar;
+use App\Models\PenghapusanAset;
 use Illuminate\Http\Request;
 
-class KodeAsetController extends Controller
+class PenghapusanAsetController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -15,9 +14,11 @@ class KodeAsetController extends Controller
      */
     public function index()
     {
-        $items = KodeAset::paginate(10);
+        $items = PenghapusanAset::leftjoin('kode_aset', 'kode_aset.id', '=', 'penghapusan_aset.kode_aset_id')
+            ->select('penghapusan_aset.*', 'kode_aset.kode', 'kode_aset.keterangan')
+            ->paginate(10);
 
-        return view('aset_inventaris.kode_aset.index', compact('items'));
+        return view('aset_inventaris.penghapusan_aset.index', compact('items',));
     }
 
     /**
@@ -25,27 +26,9 @@ class KodeAsetController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create()
     {
-        $kode = $request->kode_aset_id;
-        $request->validate([
-            'kode' => 'required',
-            'keterangan' => 'required',
-        ]);
-
-        $data = $request->all();
-        $data['id_user'] = auth()->user()->id;
-
-        if ($kode == null) {
-            KodeAset::create($data);
-            return redirect()->route('kode_aset.index')->with('success', 'Kode Aset berhasil ditambahkan');
-        } else {
-            $update = KodeAset::findOrFail($kode);
-            $data['kode'] = $data['kode'] ? $data['kode'] : $update->kode;
-            $data['keterangan'] = $data['keterangan'] ? $data['keterangan'] : $update->keterangan;
-            $update->update($data);
-            return redirect()->route('kode_aset.index')->with('success', 'Kode Aset berhasil diupdate');
-        }
+        //
     }
 
     /**
@@ -99,12 +82,8 @@ class KodeAsetController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy($id)
     {
-        $id = $request->delete_id;
-
-        KodeAset::where('id', $id)->delete();
-
-        return redirect()->route('kode_aset.index')->with('success', 'Kode aset berhasil dihapus');
+        //
     }
 }

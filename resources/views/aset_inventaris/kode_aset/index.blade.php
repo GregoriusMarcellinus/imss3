@@ -53,7 +53,7 @@
                                     <td>{{ $d->kode }}</td>
                                     <td>{{ $d->keterangan }}</td>
                                     <td class="text-center">
-                                        @if (Auth::user()->role == 0 || Auth::user()->role == 6)
+                                        @if (Auth::user()->role == 0 || Auth::user()->role == 7)
                                             <button title="Edit Shelf" type="button" class="btn btn-success btn-xs"
                                                 data-toggle="modal" data-target="#add-kode-aset"
                                                 onclick="editKodeAset({{ json_encode($data) }})"><i
@@ -80,7 +80,7 @@
         </div>
         @auth
 
-            @if (Auth::user()->role == 0)
+            @if (Auth::user()->role == 0 || Auth::user()->role == 7)
                 <div class="modal fade" id="add-kode-aset">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -128,7 +128,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form role="form" id="delete" action="{{ route('surat_keluar.delete') }}"
+                                <form role="form" id="delete" action="{{ route('kode_aset.delete') }}"
                                     method="post">
                                     @csrf
                                     @method('delete')
@@ -177,7 +177,7 @@
             resetForm();
             $('#modal-title').text("Edit Kode Aset");
             $('#button-save').text("Simpan");
-            $('#kode_aser_id').val(data.id);
+            $('#kode_aset_id').val(data.id);
             $('#kode').val(data.kode);
             $('#keterangan').val(data.keterangan);
 
