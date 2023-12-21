@@ -294,6 +294,20 @@
                         </a>
                     </div>
                     <div class="col-lg-3 col-6">
+                        <a href="{{ route('kode_aset.index') }}">
+                            <div class="small-box bg-primary">
+                                {{-- <div class="inner" style="background-color: #afc124"> --}}
+                                <div class="inner" style="background-color: #607274">
+                                    <p>Manajemen</p>
+                                    <h3>Kode Aset</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-folder-open"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-6">
                         <a href="{{ route('product.justifikasi') }}">
                             <div class="small-box bg-primary">
                                 {{-- <div class="inner" style="background-color: #afc124"> --}}
