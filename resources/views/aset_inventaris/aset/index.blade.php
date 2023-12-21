@@ -131,12 +131,12 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="form-group row">
+                                    {{-- <div class="form-group row">
                                         <label for="nomor_aset" class="col-sm-4 col-form-label">{{ __('Nomor Aset') }}</label>
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control" id="nomor_aset" name="nomor_aset">
                                         </div>
-                                    </div>
+                                    </div> --}}
                                     <div class="form-group row">
                                         <label for="jenis_aset" class="col-sm-4 col-form-label">{{ __('Jenis Aset') }}</label>
                                         <div class="col-sm-8">
