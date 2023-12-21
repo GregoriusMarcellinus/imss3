@@ -15,10 +15,10 @@
             <div class="card">
                 <div class="card-header">
                     @auth
-                        @if (Auth::user()->role == 0 || Auth::user()->role == 6)
-                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-suratkeluar"
-                                onclick="addSuratKeluar()"><i class="fas fa-plus"></i> Add New Surat Keluar</button>
-                        @endif
+                        {{-- @if (Auth::user()->role == 0 || Auth::user()->role == 6) --}}
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-suratkeluar"
+                            onclick="addSuratKeluar()"><i class="fas fa-plus"></i> Add New Surat Keluar</button>
+                        {{-- @endif --}}
                     @endauth
                     <div class="card-tools">
                         <form>
@@ -97,7 +97,8 @@
                                     </td>
                                     <td class="text-center">{{ $data['pic'] }}</td>
                                     <td class="text-center">
-                                        @if (Auth::user()->role == 0 || Auth::user()->role == 6)
+                                        {{-- @if (Auth::user()->role == 0 || Auth::user()->role == 6) --}}
+                                        @if (Auth::user()->id == $data['id_user'])
                                             <button title="Edit Shelf" type="button" class="btn btn-success btn-xs"
                                                 data-toggle="modal" data-target="#add-suratkeluar"
                                                 onclick="editSuratKeluar({{ json_encode($data) }})"><i
@@ -124,108 +125,105 @@
         </div>
         @auth
 
-            @if (Auth::user()->role == 0 || Auth::user()->role == 6)
-                <div class="modal fade" id="add-suratkeluar">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 id="modal-title" class="modal-title">{{ __('Add New Surat Keluar') }}</h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
-                            </div>
-                            <div class="modal-body">
-                                <form role="form" id="save" action="{{ route('surat_keluar.save') }}" method="post"
-                                    enctype="multipart/form-data" autocomplete="off">
-                                    @csrf
-                                    <input type="hidden" id="surat_keluar_id" name="surat_keluar_id">
-                                    <div class="form-group row">
-                                        <label for="tanggal" class="col-sm-4 col-form-label">{{ __('Tanggal') }}</label>
-                                        <div class="col-sm-8">
-                                            <input type="date" class="form-control" id="tanggal" name="tanggal">
-                                        </div>
+            {{-- @if (Auth::user()->role == 0 || Auth::user()->role == 6) --}}
+            <div class="modal fade" id="add-suratkeluar">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 id="modal-title" class="modal-title">{{ __('Add New Surat Keluar') }}</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form role="form" id="save" action="{{ route('surat_keluar.save') }}" method="post"
+                                enctype="multipart/form-data" autocomplete="off">
+                                @csrf
+                                <input type="hidden" id="surat_keluar_id" name="surat_keluar_id">
+                                <div class="form-group row">
+                                    <label for="tanggal" class="col-sm-4 col-form-label">{{ __('Tanggal') }}</label>
+                                    <div class="col-sm-8">
+                                        <input type="date" class="form-control" id="tanggal" name="tanggal">
                                     </div>
-                                    {{-- select option --}}
-                                    <div class="form-group row">
-                                        <label for="direksi" class="col-sm-4 col-form-label">{{ __('Direksi') }}</label>
-                                        <div class="col-sm-8">
-                                            <select class="form-control" id="direksi" name="direksi">
-                                                <option value="d1">D1</option>
-                                                <option value="d2">D2</option>
-                                                <option value="d3">D3</option>
-                                            </select>
-                                        </div>
+                                </div>
+                                {{-- select option --}}
+                                <div class="form-group row">
+                                    <label for="direksi" class="col-sm-4 col-form-label">{{ __('Direksi') }}</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" id="direksi" name="direksi">
+                                            <option value="d1">D1</option>
+                                            <option value="d2">D2</option>
+                                            <option value="d3">D3</option>
+                                        </select>
                                     </div>
-                                    <div class="form-group row">
-                                        <label for="type" class="col-sm-4 col-form-label">{{ __('Jenis Surat') }}</label>
-                                        <div class="col-sm-8">
-                                            <select class="form-control" id="type" name="type">
-                                                <option value="0">Surat Kuasa</option>
-                                                <option value="1">Pakta Integritas</option>
-                                                <option value="2">Memo</option>
-                                            </select>
-                                        </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="type" class="col-sm-4 col-form-label">{{ __('Jenis Surat') }}</label>
+                                    <div class="col-sm-8">
+                                        <select class="form-control" id="type" name="type">
+                                            <option value="0">Surat Kuasa</option>
+                                            <option value="1">Pakta Integritas</option>
+                                            <option value="2">Memo</option>
+                                        </select>
                                     </div>
-                                    <div class="form-group row">
-                                        <label for="tujuan" class="col-sm-4 col-form-label">{{ __('Tujuan') }}</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="tujuan" name="tujuan">
-                                        </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="tujuan" class="col-sm-4 col-form-label">{{ __('Tujuan') }}</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="tujuan" name="tujuan">
                                     </div>
-                                    <div class="form-group row">
-                                        <label for="uraian" class="col-sm-4 col-form-label">{{ __('Keterangan') }}</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="uraian" name="uraian">
-                                        </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="uraian" class="col-sm-4 col-form-label">{{ __('Keterangan') }}</label>
+                                    <div class="col-sm-8">
+                                        <input type="text" class="form-control" id="uraian" name="uraian">
                                     </div>
-                                    {{-- <div class="form-group row">
+                                </div>
+                                {{-- <div class="form-group row">
                                         <label for="file" class="col-sm-4 col-form-label">{{ __('File') }}</label>
                                         <div class="col-sm-8">
                                             <input type="file" class="" id="file" name="file">
                                         </div>
                                     </div> --}}
-                                </form>
-                            </div>
-                            <div class="modal-footer justify-content-between">
-                                <button type="button" class="btn btn-default"
-                                    data-dismiss="modal">{{ __('Cancel') }}</button>
-                                <button id="button-save" type="button" class="btn btn-primary"
-                                    onclick="$('#save').submit();">{{ __('Add') }}</button>
-                            </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">{{ __('Cancel') }}</button>
+                            <button id="button-save" type="button" class="btn btn-primary"
+                                onclick="$('#save').submit();">{{ __('Add') }}</button>
                         </div>
                     </div>
                 </div>
-                <div class="modal fade" id="delete-suratkeluar">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h4 id="modal-title" class="modal-title">{{ __('Delete Surat Keluar') }}</h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                    <span aria-hidden="true">&times;</span>
-                                </button>
+            </div>
+            <div class="modal fade" id="delete-suratkeluar">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 id="modal-title" class="modal-title">{{ __('Delete Surat Keluar') }}</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <form role="form" id="delete" action="{{ route('surat_keluar.delete') }}" method="post">
+                                @csrf
+                                @method('delete')
+                                <input type="hidden" id="delete_id" name="delete_id">
+                            </form>
+                            <div>
+                                <p>Anda yakin ingin menghapus surat keluar nomor <span id="delete_name"
+                                        class="font-weight-bold"></span>?</p>
                             </div>
-                            <div class="modal-body">
-                                <form role="form" id="delete" action="{{ route('surat_keluar.delete') }}"
-                                    method="post">
-                                    @csrf
-                                    @method('delete')
-                                    <input type="hidden" id="delete_id" name="delete_id">
-                                </form>
-                                <div>
-                                    <p>Anda yakin ingin menghapus surat keluar nomor <span id="delete_name"
-                                            class="font-weight-bold"></span>?</p>
-                                </div>
-                            </div>
-                            <div class="modal-footer justify-content-between">
-                                <button type="button" class="btn btn-default"
-                                    data-dismiss="modal">{{ __('Batal') }}</button>
-                                <button id="button-save" type="button" class="btn btn-danger"
-                                    onclick="$('#delete').submit();">{{ __('Ya, hapus') }}</button>
-                            </div>
+                        </div>
+                        <div class="modal-footer justify-content-between">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">{{ __('Batal') }}</button>
+                            <button id="button-save" type="button" class="btn btn-danger"
+                                onclick="$('#delete').submit();">{{ __('Ya, hapus') }}</button>
                         </div>
                     </div>
                 </div>
-            @endif
+            </div>
+            {{-- @endif --}}
         @endauth
     </section>
 @endsection

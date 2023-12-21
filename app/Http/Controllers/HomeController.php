@@ -84,13 +84,13 @@ class HomeController extends Controller
                 'bgcolor' => 'green',
                 'icon' => 'envelope'
             ],
-            [
-                'name' => 'Peraturan Direksi',
-                // 'route' => 'apps/spph',
-                'route' => 'apps/peraturan-direksi',
-                'bgcolor' => 'violet',
-                'icon' => 'gavel'
-            ],
+            // [
+            //     'name' => 'Peraturan Direksi',
+            //     // 'route' => 'apps/spph',
+            //     'route' => 'apps/peraturan-direksi',
+            //     'bgcolor' => 'violet',
+            //     'icon' => 'gavel'
+            // ],
         ];
 
         return view('home.dashboard', compact('menus', 'menus2'));

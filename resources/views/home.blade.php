@@ -262,10 +262,10 @@
                             </div>
                         </a>
                     </div>
-                    <div class="col-lg-3 col-6">
+                    {{-- <div class="col-lg-3 col-6">
                         <a href="{{ route('product.justifikasi') }}">
                             <div class="small-box bg-primary">
-                                {{-- <div class="inner" style="background-color: #e44b4b"> --}}
+
                                 <div class="inner" style="background-color: #607274">
                                     <p>Function</p>
                                     <h3>Control</h3>
@@ -275,14 +275,13 @@
                                 </div>
                             </div>
                         </a>
-                    </div>
+                    </div> --}}
                 @endif
 
                 @if (Auth::user()->role == 0 || Auth::user()->role == 7)
-                    <div class="col-lg-3 col-6">
+                    {{-- <div class="col-lg-3 col-6">
                         <a href="{{ route('product.drawing.schematic') }}">
                             <div class="small-box bg-primary">
-                                {{-- <div class="inner" style="background-color: #c8cd21"> --}}
                                 <div class="inner" style="background-color: #607274">
                                     <p>Data</p>
                                     <h3>Karyawan</h3>
@@ -292,7 +291,7 @@
                                 </div>
                             </div>
                         </a>
-                    </div>
+                    </div> --}}
                     <div class="col-lg-3 col-6">
                         <a href="{{ route('kode_aset.index') }}">
                             <div class="small-box bg-primary">
