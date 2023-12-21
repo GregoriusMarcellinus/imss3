@@ -38,6 +38,8 @@ Route::get('unauthorized', [App\Http\Controllers\HomeController::class, 'unautho
 Route::get('surat-keluar', [App\Http\Controllers\SuratKeluarController::class, 'index'])->name('surat_keluar.index');
 Route::post('surat-keluar', [App\Http\Controllers\SuratKeluarController::class, 'create'])->name('surat_keluar.save');
 Route::delete('surat-keluar', [App\Http\Controllers\SuratKeluarController::class, 'delete'])->name('surat_keluar.delete');
+Route::get('kode-aset', [App\Http\Controllers\KodeAsetController::class, 'index'])->name('kode_aset.index');
+Route::post('kode-aset', [App\Http\Controllers\KodeAsetController::class, 'create'])->name('kode_aset.save');
 
 Route::prefix('products')->group(function () {
     Route::get('', [App\Http\Controllers\ProductController::class, 'products'])->name('products');
@@ -151,6 +153,7 @@ Route::prefix('products')->group(function () {
     // engineering edit pr
     Route::get('showEditPr', [App\Http\Controllers\PurchaseRequestController::class, 'showEditPr'])->name('eng.purchase_request');
     Route::post('edit_purchase_request', [App\Http\Controllers\PurchaseRequestController::class, 'editPrEng'])->name('edit_purchase_request');
+
 });
 
 Route::prefix('users')->group(function () {
