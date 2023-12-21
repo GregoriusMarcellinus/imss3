@@ -210,9 +210,9 @@ class PurchaseRequestController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request) 
     {
-        //
+        //Store untuk menambah data
         $purchase_request = $request->id;
         $request->validate(
             [
