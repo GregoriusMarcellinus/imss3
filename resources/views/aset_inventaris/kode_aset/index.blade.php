@@ -15,7 +15,7 @@
             <div class="card">
                 <div class="card-header">
                     @auth
-                        @if (Auth::user()->role == 0 )
+                        @if (Auth::user()->role == 0 || Auth::user()->role == 7)
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-kode-aset"
                                 onclick="addKodeAset()"><i class="fas fa-plus"></i> Add New Kode Aset</button>
                         @endif
