@@ -50,11 +50,10 @@ class AsetController extends Controller
     public function store(Request $request)
     {
         $id = $request->id;
-        $tipe = $request->type;
+        $tipe = $request->tipe;
 
         $request->validate([
             'aset_id' => 'required',
-            'nomor_aset' => 'required',
             'jenis_aset' => 'required',
             'merek' => 'nullable',
             'no_seri' => 'nullable',
@@ -68,13 +67,30 @@ class AsetController extends Controller
         $data = $request->all();
 
         if ($id == null) {
+            $this_year = date('Y', strtotime($request->tanggal_perolehan));
+            $count = Aset::where('aset_id', $request->aset_id)->where('tipe', $tipe);
+            // dd($count->count(), $request->aset_id, $tipe);
+            if ($count->count() == 0) {
+                $count = 1;
+            } else {
+                //get the last id then add 1
+                $count = $count->latest()->first()->nomor_aset;
+                $count = explode('/', $count)[0];
+                $count = $count + 1;
+            }
+
+            //add 00 in count example 001, 002 with str_pad
+            $count = str_pad($count, 3, '0', STR_PAD_LEFT);
+
+            $kode_aset = KodeAset::where('id', $request->aset_id)->first();
+            $data['nomor_aset'] = $count . '/' . $kode_aset->kode . '/UMUM/' . $this_year;
             Aset::create($data);
             return redirect()->back()->with('success', 'Aset/inventaris berhasil ditambahkan');
         } else {
             $update = Aset::findOrFail($id);
             $data['aset_id'] = $data['aset_id'] ? $data['aset_id'] : $update->aset_id;
             $data['tipe'] = $data['tipe'] ? $data['tipe'] : $update->tipe;
-            $data['nomor_aset'] = $data['nomor_aset'] ? $data['nomor_aset'] : $update->nomor_aset;
+            $data['nomor_aset'] = $update->nomor_aset;
             $data['jenis_aset'] = $data['jenis_aset'] ? $data['jenis_aset'] : $update->jenis_aset;
             $data['merek'] = $data['merek'] ? $data['merek'] : $update->merek;
             $data['no_seri'] = $data['no_seri'] ? $data['no_seri'] : $update->no_seri;
