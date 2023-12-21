@@ -239,10 +239,8 @@
                                                 <th>{{ __('Waktu Penyelesaian') }}</th>
                                                 <th>{{ __('Countdown') }}</th>
                                                 <th>{{ __('Keterangan') }}</th>
-                                                <th>{{ __('SPPH') }}</th>
-                                                <th>{{ __('PO') }}</th>
                                                 <th>{{ __('STATUS') }}</th>
-                                                <th>{{ __('EKSPEDISI') }}</th>
+                                                <th>{{ __('Ekspedisi') }}</th>
                                                 <th>{{ __('QC') }}</th>
                                             </thead>
                                             <tbody id="table-pr">
@@ -559,7 +557,7 @@
         function PRupdate() {
             const id = $('#pr_id').val()
             $.ajax({
-                url: "{{ url('products/update_purchase_request_detail') }}" + "/",
+                url: "{{ url('/products/update_purchase_request_detail') }}",
                 type: "POST",
                 dataType: "json",
                 data: {
@@ -663,7 +661,7 @@
             $('#table-pr').empty();
 
             $.ajax({
-                url: "{{ url('products/purchase_request_detail') }}" + "/" + data.id,
+                url: "{{ url('/products/purchase_request_detail') }}" + "/" + data.id,
                 type: "GET",
                 dataType: "json",
                 beforeSend: function() {
@@ -784,15 +782,11 @@
                                 value
                                 .spek + '</td><td>' + value.qty + '</td><td>' + value
                                 .satuan + '</td><td>' + value.waktu + '</td><td style="color:' +
-                                value.backgroundcolor + '">' + value
-                                .countdown + '</td><td>' + value
-                                .keterangan +
-                                '</td><td>' + spph + '</td><td>' + po + '</td><td><b>' + status + '</b><br><br><b>' +
-                                msg + date + '</b>' + '</b></td>' +
-                                '<td style="min-width:200px">' + ekspedisi + '</td>' +
-                                '<td style="min-width:200px">' + content + '</td>' +
-                                '</tr>'
-
+                                value.backgroundcolor + '">' + value.countdown + '</td><td>' + value
+                                .keterangan + '</td>' + '<td><b>' + status + '</b><br><br><b>' +
+                                msg + date + '</b></td><td style="min-width:200px">' + ekspedisi +
+                                '</td><td style="min-width:200px">' + content +
+                                '</td></tr>'
                             );
                         });
                     }
@@ -1001,30 +995,6 @@
 
         function deletePR(data) {
             $('#delete_id').val(data.id);
-        }
-
-        $("#download-template").click(function() {
-            $.ajax({
-                url: '/downloads/template_import_product.xls',
-                type: "GET",
-                xhrFields: {
-                    responseType: 'blob'
-                },
-                success: function(data) {
-                    var a = document.createElement('a');
-                    var url = window.URL.createObjectURL(data);
-                    a.href = url;
-                    a.download = "template_import_product.xls";
-                    document.body.append(a);
-                    a.click();
-                    a.remove();
-                    window.URL.revokeObjectURL(url);
-                }
-            });
-        });
-
-        function download(type) {
-            window.location.href = "{{ route('products') }}?search={{ Request::get('search') }}&dl=" + type;
         }
     </script>
     @if (Session::has('success'))
