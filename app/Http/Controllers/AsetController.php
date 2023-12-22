@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\AsetImport;
 use App\Models\Aset;
 use App\Models\KodeAset;
 use App\Models\PenghapusanAset;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AsetController extends Controller
 {
@@ -136,6 +138,25 @@ class AsetController extends Controller
     public function update(Request $request, $id)
     {
         //
+    }
+
+    public function import(Request $request)
+    {
+
+        $this->validate($request, [
+            'file' => 'required|mimes:xls,xlsx'
+        ]);
+
+        $file = $request->file('file');
+
+        $nama_file = rand() . $file->getClientOriginalName();
+
+        $file->move(public_path('temp'), $nama_file);
+
+        // $file = public_path('karyawan.xlsx');
+        Excel::import(new AsetImport,public_path('temp/' . $nama_file));
+
+        return redirect()->back()->with('success','berhasil di import');
     }
 
     /**

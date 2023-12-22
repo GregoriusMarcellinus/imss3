@@ -13,7 +13,7 @@ class AsetImport implements ToCollection
      */
     public function collection(Collection $rows)
     {
-        // return $collection;
+        // unset($rows[0]);
         dd($rows);  
         foreach ($rows as $row) 
         {
