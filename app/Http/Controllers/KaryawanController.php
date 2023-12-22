@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\KaryawanExport;
 use App\Imports\KaryawanImport;
+use App\Models\Karyawan;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
 
@@ -15,7 +17,8 @@ class KaryawanController extends Controller
      */
     public function index()
     {
-        //
+        $items = Karyawan::paginate(10);
+    return view('karyawan.index', compact('items'));
     }
 
     /**
@@ -85,9 +88,27 @@ class KaryawanController extends Controller
     }
 
 
-    public function import()
+    public function import(Request $request)
     {
-        $file = public_path('karyawan.xlsx');
-        Excel::import(new KaryawanImport,$file);
+
+        $this->validate($request, [
+            'file' => 'required|mimes:xls,xlsx'
+        ]);
+
+        $file = $request->file('file');
+
+        $nama_file = rand() . $file->getClientOriginalName();
+
+        $file->move(public_path('temp'), $nama_file);
+
+        // $file = public_path('karyawan.xlsx');
+        Excel::import(new KaryawanImport,public_path('temp/' . $nama_file));
+
+        return redirect()->back()->with('success','berhasil di import');
+    }
+    public function export() 
+    {
+        $nama_file = rand() . '.xlsx';
+        return Excel::download(new KaryawanExport, $nama_file);
     }
 }

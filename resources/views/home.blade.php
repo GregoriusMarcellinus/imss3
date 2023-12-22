@@ -348,6 +348,20 @@
                             </div>
                         </a>
                     </div>
+                    <div class="col-lg-3 col-6">
+                        <a href="{{ route('karyawan.index') }}">
+                            <div class="small-box bg-primary">
+                                {{-- <div class="inner" style="background-color: #afc124"> --}}
+                                <div class="inner" style="background-color: #8709db">
+                                    <p>Data</p>
+                                    <h3>Karyawan</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-folder-open"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
                 @endif
 
                 @if (Auth::user()->role == 0 || Auth::user()->role == 8)

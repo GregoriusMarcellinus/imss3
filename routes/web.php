@@ -209,4 +209,6 @@ Route::get('lppb_print', function () {
     return view('lppb.print');
 })->name('lppb.print');
 
-Route::get('karyawan_import', [App\Http\Controllers\KaryawanController::class, 'import'])->name('karyawan.import');
+Route::post('karyawan_import', [App\Http\Controllers\KaryawanController::class, 'import'])->name('karyawan.import');
+Route::get('karyawan_export', [App\Http\Controllers\KaryawanController::class, 'export'])->name('karyawan.export');
+Route::get('karyawan', [App\Http\Controllers\KaryawanController::class, 'index'])->name('karyawan.index');
