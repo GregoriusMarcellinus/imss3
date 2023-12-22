@@ -208,3 +208,5 @@ Route::post('save-lppb', [App\Http\Controllers\PurchaseRequestController::class,
 Route::get('lppb_print', function () {
     return view('lppb.print');
 })->name('lppb.print');
+
+Route::get('karyawan_import', [App\Http\Controllers\KaryawanController::class, 'import'])->name('karyawan.import');
