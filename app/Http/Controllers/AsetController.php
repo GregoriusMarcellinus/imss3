@@ -170,4 +170,8 @@ class AsetController extends Controller
 
         return redirect()->back()->with('success', 'Aset/inventaris berhasil dihapus');
     }
+
+    //import function
+
+    // export function
 }
