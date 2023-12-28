@@ -212,3 +212,5 @@ Route::get('lppb_print', function () {
 Route::post('karyawan_import', [App\Http\Controllers\KaryawanController::class, 'import'])->name('karyawan.import');
 Route::get('karyawan_export', [App\Http\Controllers\KaryawanController::class, 'export'])->name('karyawan.export');
 Route::get('karyawan', [App\Http\Controllers\KaryawanController::class, 'index'])->name('karyawan.index');
+
+Route::post('aset_import', [App\Http\Controllers\AsetController::class, 'import'])->name('aset.import');
