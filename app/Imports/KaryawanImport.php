@@ -34,20 +34,24 @@ class KaryawanImport implements ToCollection
         foreach ($rows as $row) {
 
             if ($row[1] != null) {
+                $tanggal_masuk = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['7'])->format('Y-m-d');
+                $tanggal_pengangkatan_atau_akhir_kontrak =  \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['12'])->format('Y-m-d');
+                $tanggal_lahir =  \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['25'])->format('Y-m-d');
+                $pensiun =  \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['57'])->format('Y-m-d');
                 $karyawan = Karyawan::where('nip', $row[2])->count();
                 if ($karyawan == 0) {
 
                     Karyawan::create([
                         'nip' => $row[2],
                         'nama' => $row[1],
-                        'tanggal_masuk' => $row[7],
+                        'tanggal_masuk' => $tanggal_masuk,
                         'status_pegawai' => $this->classifyEmployee($row[2]),
                         'rekrutmen' => $row[5],
                         'domisili' => $row[6],
                         'rekening_mandiri' => $row[3],
                         'rekening_bsi' => $row[4] ?? '',
                         'sk_pengangkatan_atau_kontrak' => $row[11] ?? '',
-                        'tanggal_pengangkatan_atau_akhir_kontrak' => $row[12] ?? '',
+                        'tanggal_pengangkatan_atau_akhir_kontrak' => $tanggal_pengangkatan_atau_akhir_kontrak,
                         'jabatan_inka' => $row[13] ?? '',
                         'jabatan_imss' => $row[14] ?? '',
                         'administrasi_atau_teknisi' => $row[15] ?? '',
@@ -60,7 +64,7 @@ class KaryawanImport implements ToCollection
                         'surat_peringatan' => $row[22] ?? '',
                         'jenis_kelamin' => $row[23] ?? '',
                         'tempat_lahir' => $row[24] ?? '',
-                        'tanggal_lahir' => $row[25] ?? '',
+                        'tanggal_lahir' => $tanggal_lahir,
                         'nomor_ktp' => $row[27] ?? '',
                         'alamat' => $row[28] ?? '',
                         'nomor_hp' => $row[29] ?? '',
@@ -90,7 +94,7 @@ class KaryawanImport implements ToCollection
                         'almamater_terakhir' => $row[54] ?? '',
                         'tahun_lulus_terakhir' => $row[55] ?? '',
                         'mpp' => $row[56] ?? '',
-                        'pensiun' => $row[57] ?? '',
+                        'pensiun' => $row['57'] ? $pensiun : NULL,
                         'ukuran_baju' => $row[58] ?? '',
                         'ukuran_celana' => $row[59] ?? '',
                         'ukuran_sepatu' => $row[60] ?? '',
@@ -107,14 +111,14 @@ class KaryawanImport implements ToCollection
                         ->update([
                             'nip' => $row[2],
                             'nama' => $row[1],
-                            'tanggal_masuk' => $row[7],
+                            'tanggal_masuk' => $tanggal_masuk,
                             'status_pegawai' => $this->classifyEmployee($row[2]),
                             'rekrutmen' => $row[5],
                             'domisili' => $row[6],
                             'rekening_mandiri' => $row[3],
                             'rekening_bsi' => $row[4] ?? '',
                             'sk_pengangkatan_atau_kontrak' => $row[11] ?? '',
-                            'tanggal_pengangkatan_atau_akhir_kontrak' => $row[12] ?? '',
+                            'tanggal_pengangkatan_atau_akhir_kontrak' => $tanggal_pengangkatan_atau_akhir_kontrak,
                             'jabatan_inka' => $row[13] ?? '',
                             'jabatan_imss' => $row[14] ?? '',
                             'administrasi_atau_teknisi' => $row[15] ?? '',
@@ -127,7 +131,7 @@ class KaryawanImport implements ToCollection
                             'surat_peringatan' => $row[22] ?? '',
                             'jenis_kelamin' => $row[23] ?? '',
                             'tempat_lahir' => $row[24] ?? '',
-                            'tanggal_lahir' => $row[25] ?? '',
+                            'tanggal_lahir' => $tanggal_lahir,
                             'nomor_ktp' => $row[27] ?? '',
                             'alamat' => $row[28] ?? '',
                             'nomor_hp' => $row[29] ?? '',
@@ -157,7 +161,7 @@ class KaryawanImport implements ToCollection
                             'almamater_terakhir' => $row[54] ?? '',
                             'tahun_lulus_terakhir' => $row[55] ?? '',
                             'mpp' => $row[56] ?? '',
-                            'pensiun' => $row[57] ?? '',
+                            'pensiun' => $row['57'] ? $pensiun : NULL,
                             'ukuran_baju' => $row[58] ?? '',
                             'ukuran_celana' => $row[59] ?? '',
                             'ukuran_sepatu' => $row[60] ?? '',
