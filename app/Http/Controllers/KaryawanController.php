@@ -16,9 +16,11 @@ class KaryawanController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $items = Karyawan::paginate(10);
+        $q = $request->q;
+        $items = Karyawan::where('nama', 'LIKE', "%$q%")
+        ->paginate(10);
 
         foreach ($items as $item) {
            
@@ -72,7 +74,40 @@ class KaryawanController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $id = $request->id;  
+        $request->validate([
+            'nip' => 'required',
+            'nama' => 'required',
+            'tanggal_masuk' => 'required',
+            'status_pegawai' => 'nullable',
+
+        ], [
+            'nip.required' => 'NIP harus diisi',
+            'nama.required' => 'Nama harus diisi',
+            'tanggal_masuk.required' => 'Tanggal Masuk harus diisi',
+            // 'status_pegawai.required' => 'Status Pegawai harus diisi',
+            
+        ]);
+
+        $data = $request->all();
+
+        if (empty($id)) {
+            $add = Karyawan::create($data);
+
+            if ($add) {
+                return redirect()->route('karyawan.index')->with('success', 'Data berhasil ditambahkan');
+            } else {
+                return redirect()->route('karyawan.index')->with('error', 'Data gagal ditambahkan');
+            }
+        } else {
+            $update = Karyawan::where('id', $id)->update($data);
+
+            if ($update) {
+                return redirect()->route('karyawan.index')->with('success', 'Data berhasil diubah');
+            } else {
+                return redirect()->route('karyawan.index')->with('error', 'Data gagal diubah');
+            }
+        }
     }
 
     /**
@@ -115,9 +150,13 @@ class KaryawanController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request)
     {
-        //
+        $id = $request->delete_id;
+
+        Karyawan::where('id', $id)->delete();
+
+        return redirect()->route('karyawan.index')->with('success', 'karyawan berhasil dihapus');
     }
 
 

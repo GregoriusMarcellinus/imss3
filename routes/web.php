@@ -212,5 +212,9 @@ Route::get('lppb_print', function () {
 Route::post('karyawan_import', [App\Http\Controllers\KaryawanController::class, 'import'])->name('karyawan.import');
 Route::get('karyawan_export', [App\Http\Controllers\KaryawanController::class, 'export'])->name('karyawan.export');
 Route::get('karyawan', [App\Http\Controllers\KaryawanController::class, 'index'])->name('karyawan.index');
+Route::post('karyawan', [App\Http\Controllers\KaryawanController::class, 'store'])->name('karyawan.store');
+Route::delete('karyawan', [App\Http\Controllers\KaryawanController::class, 'destroy'])->name('karyawan.destroy');
 
 Route::post('aset_import', [App\Http\Controllers\AsetController::class, 'import'])->name('aset.import');
+
+Route::get('master_gaji', [App\Http\Controllers\MasterGajiPokokController::class, 'index'])->name('master.gaji.index');

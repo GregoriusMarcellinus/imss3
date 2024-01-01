@@ -183,11 +183,11 @@
                                             @if (Auth::user()->role == 0 || Auth::user()->role == 7)
                                                 <button title="Edit Shelf" type="button" class="btn btn-success btn-xs"
                                                     data-toggle="modal" data-target="#add-kode-aset"
-                                                    onclick="editAset({{ json_encode($data) }})"><i
+                                                    onclick="editKaryawan({{ json_encode($data) }})"><i
                                                         class="fas fa-edit"></i></button>
                                                 <button title="Hapus Produk" type="button" class="btn btn-danger btn-xs"
                                                     data-toggle="modal" data-target="#delete-suratkeluar"
-                                                    onclick="deleteAset({{ json_encode($data) }})"><i
+                                                    onclick="deletekaryawan({{ json_encode($data) }})"><i
                                                         class="fas fa-trash"></i></button>
                                             @endif
                                         </td>
@@ -219,7 +219,7 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form role="form" id="save" action="{{ route('aset.save') }}" method="post"
+                                <form role="form" id="save" action="{{ route('karyawan.store') }}" method="post"
                                     enctype="multipart/form-data" autocomplete="off">
                                     @csrf
                                     <input type="hidden" id="id" name="id">
@@ -683,13 +683,13 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form role="form" id="delete" action="{{ route('aset.delete') }}" method="post">
+                                <form role="form" id="delete" action="{{ route('karyawan.destroy') }}" method="post">
                                     @csrf
                                     @method('delete')
                                     <input type="hidden" id="delete_id" name="delete_id">
                                 </form>
                                 <div>
-                                    <p>Anda yakin ingin menghapus aset/inventaris nomor <span id="delete_name"
+                                    <p>Anda yakin ingin menghapus karyawan <span id="delete_name"
                                             class="font-weight-bold"></span>?</p>
                                 </div>
                             </div>
@@ -743,7 +743,7 @@
 <script>
     $(document).ready(function() {
         // Fungsi untuk menghitung umur dan tanggal pensiun
-        function hitungUmurDanPensiun() {
+        function hitungUmur() {
             // Ambil nilai tanggal lahir dari input
             var tanggalLahir = $('#tanggal_lahir').val();
     
@@ -760,14 +760,14 @@
             $('#umur').val(age + ' Tahun ' + months + ' Bulan');
     
             // Hitung tanggal pensiun (tambah 56 tahun)
-            var mppDate = new Date(birthDate);
-            mppDate.setFullYear(mppDate.getFullYear() + 55);
-            mppDate.setMonth(mppDate.getMonth() + 9);
-            mppDate.setDate(mppDate.getDate() + 20);
-            var pensiunDate = new Date(birthDate);
-            pensiunDate.setFullYear(pensiunDate.getFullYear() + 56);
-            pensiunDate.setMonth(pensiunDate.getMonth() + 9);
-            pensiunDate.setDate(pensiunDate.getDate() + 20);
+            // var mppDate = new Date(birthDate);
+            // mppDate.setFullYear(mppDate.getFullYear() + 55);
+            // mppDate.setMonth(mppDate.getMonth() + 9);
+            // mppDate.setDate(mppDate.getDate() + 20);
+            // var pensiunDate = new Date(birthDate);
+            // pensiunDate.setFullYear(pensiunDate.getFullYear() + 56);
+            // pensiunDate.setMonth(pensiunDate.getMonth() + 9);
+            // pensiunDate.setDate(pensiunDate.getDate() + 20);
     
             // Tampilkan tanggal pensiun
             $('#mpp').val(mppDate.toISOString().split('T')[0]);
@@ -776,7 +776,7 @@
     
         // Panggil fungsi saat input tanggal lahir berubah
         $('#tanggal_lahir').on('change', function() {
-            // hitungUmurDanPensiun();
+            hitungUmur();
         });
     });
     </script>
@@ -800,29 +800,21 @@
             $('#button-save').text("Add");
         }
 
-        function editAset(data) {
+        function editKaryawan(data) {
             console.log(data)
             var title = "karyawan"
             resetForm();
             $('#modal-title').text("Edit " + title);
             $('#button-save').text("Simpan");
             $('#id').val(data.id);
-            $('#aset_id').val(data.aset_id);
-            $('#nomor_aset').val(data.nomor_aset);
-            $('#jenis_aset').val(data.jenis_aset);
-            $('#merek').val(data.merek);
-            $('#no_seri').val(data.no_seri);
-            $('#kondisi').val(data.kondisi);
-            $('#lokasi').val(data.lokasi);
-            $('#pengguna').val(data.pengguna);
-            $('#tanggal_perolehan').val(data.tanggal_perolehan);
-            $('#keterangan').val(data.keterangan);
+            $('#nip').val(data.nip);
+
 
         }
 
-        function deleteAset(data) {
+        function deletekaryawan(data) {
             $('#delete_id').val(data.id);
-            $('#delete_name').text(data.nomor_aset);
+            $('#delete_name').text(data.nama);
         }
     </script>
     <script src="/plugins/toastr/toastr.min.js"></script>
