@@ -37,7 +37,11 @@ class KaryawanImport implements ToCollection
                 $tanggal_masuk = \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['7'])->format('Y-m-d');
                 $tanggal_pengangkatan_atau_akhir_kontrak =  \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['12'])->format('Y-m-d');
                 $tanggal_lahir =  \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['25'])->format('Y-m-d');
+                $mpp =  \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['56'])->format('Y-m-d');
                 $pensiun =  \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['57'])->format('Y-m-d');
+                $vaksin_1 =  \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['61'])->format('Y-m-d');
+                $vaksin_2 =  \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['62'])->format('Y-m-d');
+                $vaksin_3 =  \PhpOffice\PhpSpreadsheet\Shared\Date::excelToDateTimeObject($row['63'])->format('Y-m-d');
                 $karyawan = Karyawan::where('nip', $row[2])->count();
                 if ($karyawan == 0) {
 
@@ -93,14 +97,14 @@ class KaryawanImport implements ToCollection
                         'jurusan_terakhir' => $row[53] ?? '',
                         'almamater_terakhir' => $row[54] ?? '',
                         'tahun_lulus_terakhir' => $row[55] ?? '',
-                        'mpp' => $row[56] ?? '',
+                        'mpp' => $row['56'] ? $mpp : NULL,
                         'pensiun' => $row['57'] ? $pensiun : NULL,
                         'ukuran_baju' => $row[58] ?? '',
                         'ukuran_celana' => $row[59] ?? '',
                         'ukuran_sepatu' => $row[60] ?? '',
-                        'vaksin_1' => $row[61] ?? '',
-                        'vaksin_2' => $row[62] ?? '',
-                        'vaksin_3' => $row[63] ?? '',
+                        'vaksin_1' => $row['61'] ? $vaksin_1 : NULL,
+                        'vaksin_2' => $row['62'] ? $vaksin_2 : NULL,
+                        'vaksin_3' => $row['63'] ? $vaksin_3 : NULL,
 
 
                     ]);
@@ -160,14 +164,14 @@ class KaryawanImport implements ToCollection
                             'jurusan_terakhir' => $row[53] ?? '',
                             'almamater_terakhir' => $row[54] ?? '',
                             'tahun_lulus_terakhir' => $row[55] ?? '',
-                            'mpp' => $row[56] ?? '',
+                            'mpp' => $row['56'] ? $mpp : NULL,
                             'pensiun' => $row['57'] ? $pensiun : NULL,
                             'ukuran_baju' => $row[58] ?? '',
                             'ukuran_celana' => $row[59] ?? '',
                             'ukuran_sepatu' => $row[60] ?? '',
-                            'vaksin_1' => $row[61] ?? '',
-                            'vaksin_2' => $row[62] ?? '',
-                            'vaksin_3' => $row[63] ?? '',
+                            'vaksin_1' => $row['61'] ? $vaksin_1 : NULL,
+                            'vaksin_2' => $row['62'] ? $vaksin_2 : NULL,
+                            'vaksin_3' => $row['63'] ? $vaksin_3 : NULL,
 
                         ]);
                 }

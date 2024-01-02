@@ -115,6 +115,7 @@
                                     @php
                                         $data = $d->toArray();
                                     @endphp
+                                    
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td>{{ $d->nip }}</td>
@@ -343,9 +344,9 @@
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="departemen_subproyek" class="col-sm-4 col-form-label">{{ __('Departemen / Subproyek') }}</label>
+                                        <label for="departemen_atau_subproyek" class="col-sm-4 col-form-label">{{ __('Departemen / Subproyek') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="departemen_subproyek" name="departemen_subproyek">
+                                            <input type="text" class="form-control" id="departemen_atau_subproyek" name="departemen_atau_subproyek">
                                         </div>
                                     </div>
 
@@ -402,12 +403,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group row">
-                                        <label for="umur" class="col-sm-4 col-form-label">{{ __('Umur') }}</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="umur">
-                                        </div>
-                                    </div>
+                                    
 
                                     <div class="form-group row">
                                         <label for="nomor_ktp" class="col-sm-4 col-form-label">{{ __('Nomor KTP') }}</label>
@@ -808,6 +804,64 @@
             $('#button-save').text("Simpan");
             $('#id').val(data.id);
             $('#nip').val(data.nip);
+            $('#nama').val(data.nama);
+            $('#tanggal_masuk').val(data.tanggal_masuk);
+            $('#status_pegawai').val(data.status_pegawai);
+            $('#rekrutmen').val(data.rekrutmen);
+            $('#domisili').val(data.domisili);
+            $('#rekening_mandiri').val(data.rekening_mandiri);
+            $('#rekening_bsi').val(data.rekening_bsi);
+            $('#sk_pengangkatan_atau_kontrak').val(data.sk_pengangkatan_atau_kontrak);
+            $('#tanggal_pengangkatan_atau_akhir_kontrak').val(data.tanggal_pengangkatan_atau_akhir_kontrak);
+            $('#jabatan_inka').val(data.jabatan_inka);
+            $('#jabatan_imss').val(data.jabatan_imss);
+            $('#administrasi_atau_teknisi').val(data.administrasi_atau_teknisi);
+            $('#lokasi_kerja').val(data.lokasi_kerja);
+            $('#bagian_atau_proyek').val(data.bagian_atau_proyek);
+            $('#departemen_atau_subproyek').val(data.departemen_atau_subproyek);
+            $('#divisi').val(data.divisi);
+            $('#direktorat').val(data.direktorat);
+            $('#sertifikat').val(data.sertifikat);
+            $('#surat_peringatan').val(data.surat_peringatan);
+            $('#jenis_kelamin').val(data.jenis_kelamin);
+            $('#tempat_lahir').val(data.tempat_lahir);
+            $('#tanggal_lahir').val(data.tanggal_lahir);
+            $('#nomor_ktp').val(data.nomor_ktp);
+            $('#alamat').val(data.alamat);
+            $('#nomor_hp').val(data.nomor_hp);
+            $('#email').val(data.email);
+            $('#bpjs_kesehatan').val(data.bpjs_kesehatan);
+            $('#bpjs_ketenagakerjaan').val(data.bpjs_ketenagakerjaan);
+            $('#status_pernikahan').val(data.status_pernikahan);
+            $('#suami_atau_istri').val(data.suami_atau_istri);
+            $('#anak_ke_1').val(data.anak_ke_1);
+            $('#anak_ke_2').val(data.anak_ke_2);
+            $('#anak_ke_3').val(data.anak_ke_3);
+            $('#tambahan').val(data.tambahan);
+            $('#ayah_kandung').val(data.ayah_kandung);
+            $('#ibu_kandung').val(data.ibu_kandung);
+            $('#ayah_mertua').val(data.ayah_mertua);
+            $('#ibu_mertua').val(data.ibu_mertua);
+            $('#jumlah_tanggungan').val(data.jumlah_tanggungan);
+            $('#status_pajak').val(data.status_pajak);
+            $('#npwp').val(data.npwp);
+            $('#agama').val(data.agama);
+            $('#pendidikan_diakui').val(data.pendidikan_diakui);
+            $('#jurusan').val(data.jurusan);
+            $('#almamater').val(data.almamater);
+            $('#tahun_lulus').val(data.tahun_lulus);
+            $('#pendidikan_terakhir').val(data.pendidikan_terakhir);
+            $('#jurusan_terakhir').val(data.jurusan_terakhir);
+            $('#almamater_terakhir').val(data.almamater_terakhir);
+            $('#tahun_lulus_terakhir').val(data.tahun_lulus_terakhir);
+            $('#mpp').val(data.mpp);
+            $('#pensiun').val(data.pensiun);
+            $('#ukuran_baju').val(data.ukuran_baju);
+            $('#ukuran_celana').val(data.ukuran_celana);
+            $('#ukuran_sepatu').val(data.ukuran_sepatu);
+            $('#vaksin_1').val(data.vaksin_1);
+            $('#vaksin_2').val(data.vaksin_2);
+            $('#vaksin_3').val(data.vaksin_3);
 
 
         }

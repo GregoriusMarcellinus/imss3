@@ -16,7 +16,7 @@ class Karyawan extends Model
         'tanggal_pengangkatan_atau_akhir_kontrak', 'jabatan_inka', 'jabatan_imss',
         'administrasi_atau_teknisi', 'lokasi_kerja', 'bagian_atau_proyek',
         'departemen_atau_subproyek', 'divisi', 'direktorat', 'sertifikat',
-        'surat_peringatan', 'jenis_kelamin', 'tempat_lahir', 'tanggal_lahir',
+        'surat_peringatan', 'jenis_kelamin', 'tempat_lahir', 'tanggal_lahir', 
         'nomor_ktp', 'alamat', 'nomor_hp', 'email', 'bpjs_kesehatan',
         'bpjs_ketenagakerjaan', 'status_pernikahan', 'suami_atau_istri',
         'anak_ke_1', 'anak_ke_2', 'anak_ke_3', 'tambahan', 'ayah_kandung',
