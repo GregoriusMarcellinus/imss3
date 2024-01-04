@@ -56,11 +56,26 @@
                                             $data = [
                                                 'no' => $requests->firstItem() + $key,
                                                 'nomor' => $d->nomor,
-                                                'proyek' => $d->proyek,
+                                                'proyek_name' => $d->proyek_name,
                                                 'tanggal' => date('d/m/Y', strtotime($d->tanggal)),
+                                                'kode_material' => $d->kode_material,
+                                                'deskripsi_material' => $d->deskripsi_material,
+                                                'spesifikasi' => $d->spesifikasi,
+                                                'p1' => $d->p1,
+                                                'p3' => $d->p3,
+                                                'p6' => $d->p6,
+                                                'p12' => $d->p12,
+                                                'p24' => $d->p24,
+                                                'p36' => $d->p36,
+                                                'p48' => $d->p48,
+                                                'p60' => $d->p60,
+                                                'p72' => $d->p72,
+                                                'protective_part' => $d->protective_part,
+                                                'satuan' => $d->satuan,
+                                                'keterangan' => $d->keterangan,
                                                 // 'dasar_pr' => $d->dasar_pr,
-                                                // 'proyek_id' => $d->proyek_id,
-                                                // 'id' => $d->id,
+                                                'proyek_id' => $d->proyek_id,
+                                                'id' => $d->id,
                                                 // 'status' => $d->status,
                                                 'editable' => $d->editable,
                                             ];
@@ -69,7 +84,7 @@
                                         <tr>
                                             <td class="text-center">{{ $data['no'] }}</td>
                                             <td class="text-center">{{ $data['nomor'] }}</td>
-                                            <td class="text-center">{{ $data['proyek'] }}</td>
+                                            <td class="text-center">{{ $data['proyek_name'] }}</td>
                                             <td class="text-center">{{ $data['tanggal'] }}</td>
                                             {{-- <td class="text-center">{{ $data['dasar_pr'] }}</td> --}}
                                             <td class="text-center">

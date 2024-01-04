@@ -38,7 +38,7 @@ class BomController extends Controller
         }
 
         $requests = Bom::select('bom.*', 'proyek.nama_proyek as proyek_name')
-            ->join('proyek', 'proyek.id', '=', 'bom.proyek_id')
+            ->leftjoin('proyek', 'proyek.id', '=', 'bom.proyek_id')
             ->orderBy('bom.id', 'asc')
             ->paginate(50);
 
@@ -50,7 +50,7 @@ class BomController extends Controller
         }
 
         if ($request->format == "json") {
-            $requests = PurchaseRequest::where("warehouse_id", $warehouse_id)->get();
+            $requests = Bom::where("warehouse_id", $warehouse_id)->get();
 
             return response()->json($requests);
         } else {
@@ -83,6 +83,7 @@ class BomController extends Controller
             return view('bom.index', compact('requests', 'proyeks'));
         }
     }
+    
 
     /**
      * Show the form for creating a new resource.
@@ -109,7 +110,7 @@ class BomController extends Controller
                 'proyek_id' => 'nullable',
                 'nomor' => 'nullable',
                 'proyek'=> 'nullable',
-                'tanggal'=> 'nullable',
+                'tanggal'=> 'required|date',
                 'kode_material'=> 'nullable',
                 'deskripsi_material'=> 'nullable',
                 'spesifikasi'=> 'nullable',
