@@ -75,6 +75,13 @@ class HomeController extends Controller
                 'bgcolor' => 'violet',
                 'icon' => 'wrench'
             ],
+            [
+                'name' => 'Proyek KA',
+                // 'route' => 'apps/purchase_request',
+                'route' => 'div/proyek',
+                'bgcolor' => 'black',
+                'icon' => 'train'
+            ],
         ];
 
         $menus2 = [

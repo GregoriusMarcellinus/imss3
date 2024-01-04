@@ -215,6 +215,14 @@ Route::get('karyawan', [App\Http\Controllers\KaryawanController::class, 'index']
 Route::post('karyawan', [App\Http\Controllers\KaryawanController::class, 'store'])->name('karyawan.store');
 Route::delete('karyawan', [App\Http\Controllers\KaryawanController::class, 'destroy'])->name('karyawan.destroy');
 
+Route::get('proyek', [App\Http\Controllers\ProyekController::class, 'index'])->name('proyek.index');
+Route::post('proyek', [App\Http\Controllers\ProyekController::class, 'store'])->name('proyek.store');
+Route::delete('proyek', [App\Http\Controllers\ProyekController::class, 'destroy'])->name('proyek.destroy');
+
+Route::get('bom', [App\Http\Controllers\BomController::class, 'index'])->name('bom.index');
+Route::post('bom', [App\Http\Controllers\BomController::class, 'store'])->name('bom.store');
+
+
 Route::post('aset_import', [App\Http\Controllers\AsetController::class, 'import'])->name('aset.import');
 
 Route::get('master_gaji', [App\Http\Controllers\MasterGajiPokokController::class, 'index'])->name('master.gaji.index');

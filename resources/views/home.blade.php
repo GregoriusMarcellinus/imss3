@@ -262,6 +262,20 @@
                             </div>
                         </a>
                     </div>
+                    <div class="col-lg-3 col-6">
+                        <a href="{{ route('bom.index') }}">
+                            <div class="small-box bg-primary">
+                                {{-- <div class="inner" style="background-color: #afc124"> --}}
+                                <div class="inner" style="background-color: #607274">
+                                    <p>Menu</p>
+                                    <h3>Bill Of Material</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-folder-open"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
                     {{-- <div class="col-lg-3 col-6">
                         <a href="{{ route('product.justifikasi') }}">
                             <div class="small-box bg-primary">
@@ -358,6 +372,20 @@
                                 </div>
                                 <div class="icon">
                                     <i class="fas fa-folder-open"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        <a href="{{ route('proyek.index') }}">
+                            <div class="small-box bg-primary">
+                                {{-- <div class="inner" style="background-color: #afc124"> --}}
+                                <div class="inner" style="background-color: #ff0000">
+                                    <p>Proyek</p>
+                                    <h3>Kereta Api</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-train"></i>
                                 </div>
                             </div>
                         </a>

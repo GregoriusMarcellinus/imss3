@@ -115,7 +115,7 @@
                                     @php
                                         $data = $d->toArray();
                                     @endphp
-                                    
+                                     
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td>{{ $d->nip }}</td>
