@@ -18,9 +18,10 @@
                         @if (Auth::user()->role == 0 || Auth::user()->role == 7)
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-kode-aset"
                                 onclick="addKodeAset()"><i class="fas fa-plus"></i> Add New Karyawan</button>
-                                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#import-karyawan"
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#import-karyawan"
                                 onclick="importKaryawan()"><i class="fas fa-file-excel"></i> Import Karyawan (Excel)</button>
-                                <a type="button" class="btn btn-primary" href="{{route('karyawan.export')}}" ><i class="fas fa-file-excel"></i> Export Karyawan (Excel)</a>
+                            <a type="button" class="btn btn-primary" href="{{ route('karyawan.export') }}"><i
+                                    class="fas fa-file-excel"></i> Export Karyawan (Excel)</a>
                         @endif
                     @endauth
                     <div class="card-tools">
@@ -115,14 +116,14 @@
                                     @php
                                         $data = $d->toArray();
                                     @endphp
-                                     
+                                    
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td>{{ $d->nip }}</td>
                                         <td>{{ $d->nama }}</td>
                                         <td>{{ $d->tanggal_masuk }}</td>
-                                        <td>{{ $d->lama_bekerja_tahun  }}</td>
-                                        <td>{{ $d->lama_bekerja_bulan  }}</td>
+                                        <td>{{ $d->lama_bekerja_tahun }}</td>
+                                        <td>{{ $d->lama_bekerja_bulan }}</td>
                                         <td>{{ $d->status_pegawai }}</td>
                                         <td>{{ $d->rekrutmen }}</td>
                                         <td>{{ $d->domisili }}</td>
@@ -245,9 +246,11 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="tanggal_masuk" class="col-sm-4 col-form-label">{{ __('Tanggal Masuk') }}</label>
+                                        <label for="tanggal_masuk"
+                                            class="col-sm-4 col-form-label">{{ __('Tanggal Masuk') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="date" class="form-control" id="tanggal_masuk" name="tanggal_masuk">
+                                            <input type="date" class="form-control" id="tanggal_masuk"
+                                                name="tanggal_masuk">
                                         </div>
                                     </div>
                                     {{-- <div class="form-group row">
@@ -261,9 +264,11 @@
                                         </div>
                                     </div> --}}
                                     <div class="form-group row">
-                                        <label for="status_pegawai" class="col-sm-4 col-form-label">{{ __('Status Pegawai') }}</label>
+                                        <label for="status_pegawai"
+                                            class="col-sm-4 col-form-label">{{ __('Status Pegawai') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="status_pegawai" name="status_pegawai">
+                                            <input type="text" class="form-control" id="status_pegawai"
+                                                name="status_pegawai">
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -281,72 +286,93 @@
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="rekening_mandiri" class="col-sm-4 col-form-label">{{ __('Rekening Mandiri') }}</label>
+                                        <label for="rekening_mandiri"
+                                            class="col-sm-4 col-form-label">{{ __('Rekening Mandiri') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="rekening_mandiri" name="rekening_mandiri">
+                                            <input type="text" class="form-control" id="rekening_mandiri"
+                                                name="rekening_mandiri">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="rekening_bsi" class="col-sm-4 col-form-label">{{ __('Rekening BSI') }}</label>
+                                        <label for="rekening_bsi"
+                                            class="col-sm-4 col-form-label">{{ __('Rekening BSI') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="rekening_bsi" name="rekening_bsi">
+                                            <input type="text" class="form-control" id="rekening_bsi"
+                                                name="rekening_bsi">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="sk_pengangkatan_atau_kontrak" class="col-sm-4 col-form-label">{{ __('SK Pengangkatan / Kontrak') }}</label>
+                                        <label for="sk_pengangkatan_atau_kontrak"
+                                            class="col-sm-4 col-form-label">{{ __('SK Pengangkatan / Kontrak') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="sk_pengangkatan_atau_kontrak" name="sk_pengangkatan_atau_kontrak">
+                                            <input type="text" class="form-control" id="sk_pengangkatan_atau_kontrak"
+                                                name="sk_pengangkatan_atau_kontrak">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="tanggal_pengangkatan_atau_akhir_kontrak" class="col-sm-4 col-form-label">{{ __('Tanggal Pengangkatan / Akhir Kontrak') }}</label>
+                                        <label for="tanggal_pengangkatan_atau_akhir_kontrak"
+                                            class="col-sm-4 col-form-label">{{ __('Tanggal Pengangkatan / Akhir Kontrak') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="date" class="form-control" id="tanggal_pengangkatan_atau_akhir_kontrak" name="tanggal_pengangkatan_atau_akhir_kontrak">
+                                            <input type="date" class="form-control"
+                                                id="tanggal_pengangkatan_atau_akhir_kontrak"
+                                                name="tanggal_pengangkatan_atau_akhir_kontrak">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="jabatan_inka" class="col-sm-4 col-form-label">{{ __('Jabatan INKA') }}</label>
+                                        <label for="jabatan_inka"
+                                            class="col-sm-4 col-form-label">{{ __('Jabatan INKA') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="jabatan_inka" name="jabatan_inka">
+                                            <input type="text" class="form-control" id="jabatan_inka"
+                                                name="jabatan_inka">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="jabatan_imss" class="col-sm-4 col-form-label">{{ __('Jabatan IMSS') }}</label>
+                                        <label for="jabatan_imss"
+                                            class="col-sm-4 col-form-label">{{ __('Jabatan IMSS') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="jabatan_imss" name="jabatan_imss">
+                                            <input type="text" class="form-control" id="jabatan_imss"
+                                                name="jabatan_imss">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="administrasi_atau_teknisi" class="col-sm-4 col-form-label">{{ __('Administrasi / Teknisi') }}</label>
+                                        <label for="administrasi_atau_teknisi"
+                                            class="col-sm-4 col-form-label">{{ __('Administrasi / Teknisi') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="administrasi_atau_teknisi" name="administrasi_atau_teknisi">
+                                            <input type="text" class="form-control" id="administrasi_atau_teknisi"
+                                                name="administrasi_atau_teknisi">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="lokasi_kerja" class="col-sm-4 col-form-label">{{ __('Lokasi Kerja') }}</label>
+                                        <label for="lokasi_kerja"
+                                            class="col-sm-4 col-form-label">{{ __('Lokasi Kerja') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="lokasi_kerja" name="lokasi_kerja">
+                                            <input type="text" class="form-control" id="lokasi_kerja"
+                                                name="lokasi_kerja">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="bagian_atau_proyek" class="col-sm-4 col-form-label">{{ __('Bagian / Proyek') }}</label>
+                                        <label for="bagian_atau_proyek"
+                                            class="col-sm-4 col-form-label">{{ __('Bagian / Proyek') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="bagian_atau_proyek" name="bagian_atau_proyek">
+                                            <input type="text" class="form-control" id="bagian_atau_proyek"
+                                                name="bagian_atau_proyek">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="departemen_atau_subproyek" class="col-sm-4 col-form-label">{{ __('Departemen / Subproyek') }}</label>
+                                        <label for="departemen_atau_subproyek"
+                                            class="col-sm-4 col-form-label">{{ __('Departemen / Subproyek') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="departemen_atau_subproyek" name="departemen_atau_subproyek">
+                                            <input type="text" class="form-control" id="departemen_atau_subproyek"
+                                                name="departemen_atau_subproyek">
                                         </div>
                                     </div>
 
@@ -358,28 +384,33 @@
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="direktorat" class="col-sm-4 col-form-label">{{ __('Direktorat') }}</label>
+                                        <label for="direktorat"
+                                            class="col-sm-4 col-form-label">{{ __('Direktorat') }}</label>
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control" id="direktorat" name="direktorat">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="sertifikat" class="col-sm-4 col-form-label">{{ __('Sertifikat') }}</label>
+                                        <label for="sertifikat"
+                                            class="col-sm-4 col-form-label">{{ __('Sertifikat') }}</label>
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control" id="sertifikat" name="sertifikat">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="surat_peringatan" class="col-sm-4 col-form-label">{{ __('Surat Peringatan') }}</label>
+                                        <label for="surat_peringatan"
+                                            class="col-sm-4 col-form-label">{{ __('Surat Peringatan') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="surat_peringatan" name="surat_peringatan">
+                                            <input type="text" class="form-control" id="surat_peringatan"
+                                                name="surat_peringatan">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="jenis_kelamin" class="col-sm-4 col-form-label">{{ __('Jenis Kelamin') }} </label>
+                                        <label for="jenis_kelamin" class="col-sm-4 col-form-label">{{ __('Jenis Kelamin') }}
+                                        </label>
                                         <div class="col-sm-8">
                                             <select class="form-control" id="jenis_kelamin" name="jenis_kelamin">
                                                 <option value="-">-</option>
@@ -390,20 +421,24 @@
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="tempat_lahir" class="col-sm-4 col-form-label">{{ __('Tempat Lahir') }}</label>
+                                        <label for="tempat_lahir"
+                                            class="col-sm-4 col-form-label">{{ __('Tempat Lahir') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="tempat_lahir" name="tempat_lahir">
+                                            <input type="text" class="form-control" id="tempat_lahir"
+                                                name="tempat_lahir">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="tanggal_lahir" class="col-sm-4 col-form-label">{{ __('Tanggal Lahir') }}</label>
+                                        <label for="tanggal_lahir"
+                                            class="col-sm-4 col-form-label">{{ __('Tanggal Lahir') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="date" class="form-control" id="tanggal_lahir" name="tanggal_lahir">
+                                            <input type="date" class="form-control" id="tanggal_lahir"
+                                                name="tanggal_lahir">
                                         </div>
                                     </div>
 
-                                    
+
 
                                     <div class="form-group row">
                                         <label for="nomor_ktp" class="col-sm-4 col-form-label">{{ __('Nomor KTP') }}</label>
@@ -434,30 +469,38 @@
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="bpjs_kesehatan" class="col-sm-4 col-form-label">{{ __('BPJS Kesehatan') }}</label>
+                                        <label for="bpjs_kesehatan"
+                                            class="col-sm-4 col-form-label">{{ __('BPJS Kesehatan') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="bpjs_kesehatan" name="bpjs_kesehatan">
+                                            <input type="text" class="form-control" id="bpjs_kesehatan"
+                                                name="bpjs_kesehatan">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="bpjs_ketenagakerjaan" class="col-sm-4 col-form-label">{{ __('BPJS Ketenagakerjaan') }}</label>
+                                        <label for="bpjs_ketenagakerjaan"
+                                            class="col-sm-4 col-form-label">{{ __('BPJS Ketenagakerjaan') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="bpjs_ketenagakerjaan" name="bpjs_ketenagakerjaan">
+                                            <input type="text" class="form-control" id="bpjs_ketenagakerjaan"
+                                                name="bpjs_ketenagakerjaan">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="status_pernikahan" class="col-sm-4 col-form-label">{{ __('Status Pernikahan') }}</label>
+                                        <label for="status_pernikahan"
+                                            class="col-sm-4 col-form-label">{{ __('Status Pernikahan') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="status_pernikahan" name="status_pernikahan">
+                                            <input type="text" class="form-control" id="status_pernikahan"
+                                                name="status_pernikahan">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="suami_atau_istri" class="col-sm-4 col-form-label">{{ __('Suami / Istri') }}</label>
+                                        <label for="suami_atau_istri"
+                                            class="col-sm-4 col-form-label">{{ __('Suami / Istri') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="suami_atau_istri" name="suami_atau_istri">
+                                            <input type="text" class="form-control" id="suami_atau_istri"
+                                                name="suami_atau_istri">
                                         </div>
                                     </div>
 
@@ -490,44 +533,53 @@
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="ayah_kandung" class="col-sm-4 col-form-label">{{ __('Ayah Kandung') }}</label>
+                                        <label for="ayah_kandung"
+                                            class="col-sm-4 col-form-label">{{ __('Ayah Kandung') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="ayah_kandung" name="ayah_kandung">
+                                            <input type="text" class="form-control" id="ayah_kandung"
+                                                name="ayah_kandung">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="ibu_kandung" class="col-sm-4 col-form-label">{{ __('Ibu Kandung') }}</label>
+                                        <label for="ibu_kandung"
+                                            class="col-sm-4 col-form-label">{{ __('Ibu Kandung') }}</label>
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control" id="ibu_kandung" name="ibu_kandung">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="ayah_mertua" class="col-sm-4 col-form-label">{{ __('Ayah Mertua') }}</label>
+                                        <label for="ayah_mertua"
+                                            class="col-sm-4 col-form-label">{{ __('Ayah Mertua') }}</label>
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control" id="ayah_mertua" name="ayah_mertua">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="ibu_mertua" class="col-sm-4 col-form-label">{{ __('Ibu Mertua') }}</label>
+                                        <label for="ibu_mertua"
+                                            class="col-sm-4 col-form-label">{{ __('Ibu Mertua') }}</label>
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control" id="ibu_mertua" name="ibu_mertua">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="jumlah_tanggungan" class="col-sm-4 col-form-label">{{ __('Jumlah Tanggungan') }}</label>
+                                        <label for="jumlah_tanggungan"
+                                            class="col-sm-4 col-form-label">{{ __('Jumlah Tanggungan') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="jumlah_tanggungan" name="jumlah_tanggungan">
+                                            <input type="text" class="form-control" id="jumlah_tanggungan"
+                                                name="jumlah_tanggungan">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="status_pajak" class="col-sm-4 col-form-label">{{ __('Status Pajak') }}</label>
+                                        <label for="status_pajak"
+                                            class="col-sm-4 col-form-label">{{ __('Status Pajak') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="status_pajak" name="status_pajak">
+                                            <input type="text" class="form-control" id="status_pajak"
+                                                name="status_pajak">
                                         </div>
                                     </div>
 
@@ -546,9 +598,11 @@
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="pendidikan_diakui" class="col-sm-4 col-form-label">{{ __('Pendidikan Diakui') }}</label>
+                                        <label for="pendidikan_diakui"
+                                            class="col-sm-4 col-form-label">{{ __('Pendidikan Diakui') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="pendidikan_diakui" name="pendidikan_diakui">
+                                            <input type="text" class="form-control" id="pendidikan_diakui"
+                                                name="pendidikan_diakui">
                                         </div>
                                     </div>
 
@@ -567,37 +621,46 @@
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="tahun_lulus" class="col-sm-4 col-form-label">{{ __('Tahun Lulus') }}</label>
+                                        <label for="tahun_lulus"
+                                            class="col-sm-4 col-form-label">{{ __('Tahun Lulus') }}</label>
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control" id="tahun_lulus" name="tahun_lulus">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="pendidikan_terakhir" class="col-sm-4 col-form-label">{{ __('Pendidikan Terakhir') }}</label>
+                                        <label for="pendidikan_terakhir"
+                                            class="col-sm-4 col-form-label">{{ __('Pendidikan Terakhir') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="pendidikan_terakhir" name="pendidikan_terakhir">
+                                            <input type="text" class="form-control" id="pendidikan_terakhir"
+                                                name="pendidikan_terakhir">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="jurusan_terakhir" class="col-sm-4 col-form-label">{{ __('Jurusan Terakhir') }}</label>
+                                        <label for="jurusan_terakhir"
+                                            class="col-sm-4 col-form-label">{{ __('Jurusan Terakhir') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="jurusan_terakhir" name="jurusan_terakhir">
+                                            <input type="text" class="form-control" id="jurusan_terakhir"
+                                                name="jurusan_terakhir">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="almamater_terakhir" class="col-sm-4 col-form-label">{{ __('Almamater Terakhir') }}</label>
+                                        <label for="almamater_terakhir"
+                                            class="col-sm-4 col-form-label">{{ __('Almamater Terakhir') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="almamater_terakhir" name="almamater_terakhir">
+                                            <input type="text" class="form-control" id="almamater_terakhir"
+                                                name="almamater_terakhir">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="tahun_lulus_terakhir" class="col-sm-4 col-form-label">{{ __('Tahun Lulus Terakhir') }}</label>
+                                        <label for="tahun_lulus_terakhir"
+                                            class="col-sm-4 col-form-label">{{ __('Tahun Lulus Terakhir') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="tahun_lulus_terakhir" name="tahun_lulus_terakhir">
+                                            <input type="text" class="form-control" id="tahun_lulus_terakhir"
+                                                name="tahun_lulus_terakhir">
                                         </div>
                                     </div>
 
@@ -616,48 +679,56 @@
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="ukuran_baju" class="col-sm-4 col-form-label">{{ __('Ukuran Baju') }}</label>
+                                        <label for="ukuran_baju"
+                                            class="col-sm-4 col-form-label">{{ __('Ukuran Baju') }}</label>
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control" id="ukuran_baju" name="ukuran_baju">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="ukuran_celana" class="col-sm-4 col-form-label">{{ __('Ukuran Celana') }}</label>
+                                        <label for="ukuran_celana"
+                                            class="col-sm-4 col-form-label">{{ __('Ukuran Celana') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="ukuran_celana" name="ukuran_celana">
+                                            <input type="text" class="form-control" id="ukuran_celana"
+                                                name="ukuran_celana">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="ukuran_sepatu" class="col-sm-4 col-form-label">{{ __('Ukuran Sepatu') }}</label>
+                                        <label for="ukuran_sepatu"
+                                            class="col-sm-4 col-form-label">{{ __('Ukuran Sepatu') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="ukuran_sepatu" name="ukuran_sepatu">
+                                            <input type="text" class="form-control" id="ukuran_sepatu"
+                                                name="ukuran_sepatu">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="vaksin_1" class="col-sm-4 col-form-label">{{ __('Vaksin ke-1') }}</label>
+                                        <label for="vaksin_1"
+                                            class="col-sm-4 col-form-label">{{ __('Vaksin ke-1') }}</label>
                                         <div class="col-sm-8">
                                             <input type="date" class="form-control" id="vaksin_1" name="vaksin_1">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="vaksin_2" class="col-sm-4 col-form-label">{{ __('Vaksin ke-2') }}</label>
+                                        <label for="vaksin_2"
+                                            class="col-sm-4 col-form-label">{{ __('Vaksin ke-2') }}</label>
                                         <div class="col-sm-8">
                                             <input type="date" class="form-control" id="vaksin_2" name="vaksin_2">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="vaksin_3" class="col-sm-4 col-form-label">{{ __('Vaksin ke-3') }}</label>
+                                        <label for="vaksin_3"
+                                            class="col-sm-4 col-form-label">{{ __('Vaksin ke-3') }}</label>
                                         <div class="col-sm-8">
                                             <input type="date" class="form-control" id="vaksin_3" name="vaksin_3">
                                         </div>
                                     </div>
-                                    
-                                    
+
+
                                 </form>
                             </div>
                             <div class="modal-footer justify-content-between">
@@ -679,7 +750,8 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form role="form" id="delete" action="{{ route('karyawan.destroy') }}" method="post">
+                                <form role="form" id="delete" action="{{ route('karyawan.destroy') }}"
+                                    method="post">
                                     @csrf
                                     @method('delete')
                                     <input type="hidden" id="delete_id" name="delete_id">
@@ -720,7 +792,8 @@
                                 </form>
                             </div>
                             <div class="modal-footer justify-content-between">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">{{ __('Batal') }}</button>
+                                <button type="button" class="btn btn-default"
+                                    data-dismiss="modal">{{ __('Batal') }}</button>
                                 {{-- <button type="button" class="btn btn-default"
                                     id="download-template">{{ __('Download Template') }}</button> --}}
                                 <button type="button" class="btn btn-primary"
@@ -735,46 +808,46 @@
 @endsection
 @section('custom-js')
 
-{{-- menghitung umur, pensiun , dan mpp --}}
-<script>
-    $(document).ready(function() {
-        // Fungsi untuk menghitung umur dan tanggal pensiun
-        function hitungUmur() {
-            // Ambil nilai tanggal lahir dari input
-            var tanggalLahir = $('#tanggal_lahir').val();
-    
-            // Hitung umur
-            var today = new Date();
-            var birthDate = new Date(tanggalLahir);
-            var age = today.getFullYear() - birthDate.getFullYear();
-            var months = today.getMonth() - birthDate.getMonth();
-            if (months < 0 || (months === 0 && today.getDate() < birthDate.getDate())) {
-                age--;
+    {{-- menghitung umur, pensiun , dan mpp --}}
+    <script>
+        $(document).ready(function() {
+            // Fungsi untuk menghitung umur dan tanggal pensiun
+            function hitungUmur() {
+                // Ambil nilai tanggal lahir dari input
+                var tanggalLahir = $('#tanggal_lahir').val();
+
+                // Hitung umur
+                var today = new Date();
+                var birthDate = new Date(tanggalLahir);
+                var age = today.getFullYear() - birthDate.getFullYear();
+                var months = today.getMonth() - birthDate.getMonth();
+                if (months < 0 || (months === 0 && today.getDate() < birthDate.getDate())) {
+                    age--;
+                }
+
+                // Tampilkan umur
+                $('#umur').val(age + ' Tahun ' + months + ' Bulan');
+
+                // Hitung tanggal pensiun (tambah 56 tahun)
+                // var mppDate = new Date(birthDate);
+                // mppDate.setFullYear(mppDate.getFullYear() + 55);
+                // mppDate.setMonth(mppDate.getMonth() + 9);
+                // mppDate.setDate(mppDate.getDate() + 20);
+                // var pensiunDate = new Date(birthDate);
+                // pensiunDate.setFullYear(pensiunDate.getFullYear() + 56);
+                // pensiunDate.setMonth(pensiunDate.getMonth() + 9);
+                // pensiunDate.setDate(pensiunDate.getDate() + 20);
+
+                // Tampilkan tanggal pensiun
+                $('#mpp').val(mppDate.toISOString().split('T')[0]);
+                $('#pensiun').val(pensiunDate.toISOString().split('T')[0]);
             }
-    
-            // Tampilkan umur
-            $('#umur').val(age + ' Tahun ' + months + ' Bulan');
-    
-            // Hitung tanggal pensiun (tambah 56 tahun)
-            // var mppDate = new Date(birthDate);
-            // mppDate.setFullYear(mppDate.getFullYear() + 55);
-            // mppDate.setMonth(mppDate.getMonth() + 9);
-            // mppDate.setDate(mppDate.getDate() + 20);
-            // var pensiunDate = new Date(birthDate);
-            // pensiunDate.setFullYear(pensiunDate.getFullYear() + 56);
-            // pensiunDate.setMonth(pensiunDate.getMonth() + 9);
-            // pensiunDate.setDate(pensiunDate.getDate() + 20);
-    
-            // Tampilkan tanggal pensiun
-            $('#mpp').val(mppDate.toISOString().split('T')[0]);
-            $('#pensiun').val(pensiunDate.toISOString().split('T')[0]);
-        }
-    
-        // Panggil fungsi saat input tanggal lahir berubah
-        $('#tanggal_lahir').on('change', function() {
-            hitungUmur();
+
+            // Panggil fungsi saat input tanggal lahir berubah
+            $('#tanggal_lahir').on('change', function() {
+                hitungUmur();
+            });
         });
-    });
     </script>
 
     <script>
@@ -805,14 +878,14 @@
             $('#id').val(data.id);
             $('#nip').val(data.nip);
             $('#nama').val(data.nama);
-            $('#tanggal_masuk').val(data.tanggal_masuk);
+            $('#tanggal_masuk').val(data.tanggal_masuk_asli);
             $('#status_pegawai').val(data.status_pegawai);
             $('#rekrutmen').val(data.rekrutmen);
             $('#domisili').val(data.domisili);
             $('#rekening_mandiri').val(data.rekening_mandiri);
             $('#rekening_bsi').val(data.rekening_bsi);
             $('#sk_pengangkatan_atau_kontrak').val(data.sk_pengangkatan_atau_kontrak);
-            $('#tanggal_pengangkatan_atau_akhir_kontrak').val(data.tanggal_pengangkatan_atau_akhir_kontrak);
+            $('#tanggal_pengangkatan_atau_akhir_kontrak').val(data.tanggal_pengangkatan_atau_akhir_kontrak_asli);
             $('#jabatan_inka').val(data.jabatan_inka);
             $('#jabatan_imss').val(data.jabatan_imss);
             $('#administrasi_atau_teknisi').val(data.administrasi_atau_teknisi);
@@ -825,7 +898,7 @@
             $('#surat_peringatan').val(data.surat_peringatan);
             $('#jenis_kelamin').val(data.jenis_kelamin);
             $('#tempat_lahir').val(data.tempat_lahir);
-            $('#tanggal_lahir').val(data.tanggal_lahir);
+            $('#tanggal_lahir').val(data.tanggal_lahir_asli);
             $('#nomor_ktp').val(data.nomor_ktp);
             $('#alamat').val(data.alamat);
             $('#nomor_hp').val(data.nomor_hp);
@@ -854,14 +927,14 @@
             $('#jurusan_terakhir').val(data.jurusan_terakhir);
             $('#almamater_terakhir').val(data.almamater_terakhir);
             $('#tahun_lulus_terakhir').val(data.tahun_lulus_terakhir);
-            $('#mpp').val(data.mpp);
-            $('#pensiun').val(data.pensiun);
+            $('#mpp').val(data.mpp_asli);
+            $('#pensiun').val(data.pensiun_asli);
             $('#ukuran_baju').val(data.ukuran_baju);
             $('#ukuran_celana').val(data.ukuran_celana);
             $('#ukuran_sepatu').val(data.ukuran_sepatu);
-            $('#vaksin_1').val(data.vaksin_1);
-            $('#vaksin_2').val(data.vaksin_2);
-            $('#vaksin_3').val(data.vaksin_3);
+            $('#vaksin_1').val(data.vaksin_1_asli);
+            $('#vaksin_2').val(data.vaksin_2_asli);
+            $('#vaksin_3').val(data.vaksin_3_asli);
 
 
         }

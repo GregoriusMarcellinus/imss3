@@ -26,7 +26,7 @@ class KaryawanController extends Controller
 
             // Convert the tanggal_masuk to a Carbon instance
             $tanggalMasuk = Carbon::parse($item->tanggal_masuk);
-            
+
 
             // Calculate the difference in years and months
             $difference = $tanggalMasuk->diff(Carbon::now());
@@ -42,6 +42,15 @@ class KaryawanController extends Controller
             $usiaBulan = $differenceLahir->m;
             $usia = "$usiaTahun tahun $usiaBulan bulan";
 
+            $item->tanggal_masuk_asli = $item->tanggal_masuk;
+            $item->tanggal_pengangkatan_atau_akhir_kontrak_asli = $item->tanggal_pengangkatan_atau_akhir_kontrak;
+            $item->tanggal_lahir_asli = $item->tanggal_lahir;
+            $item->vaksin_1_asli = $item->vaksin_1;
+            $item->vaksin_2_asli = $item->vaksin_2;
+            $item->vaksin_3_asli = $item->vaksin_3;
+            $item->mpp_asli = $item->mpp;
+            $item->pensiun_asli = $item->pensiun;
+
             // Add the calculated values to the item
             $item->tanggal_masuk = Carbon::parse($item->tanggal_masuk)->isoFormat('D MMMM Y');
             $item->tanggal_pengangkatan_atau_akhir_kontrak = Carbon::parse($item->tanggal_pengangkatan_atau_akhir_kontrak)->isoFormat('D MMMM Y');
@@ -50,7 +59,6 @@ class KaryawanController extends Controller
             $item->vaksin_2 =  $item->vaksin_2 ? Carbon::parse($item->vaksin_2)->isoFormat('D MMMM Y') : "";
             $item->vaksin_3 =  $item->vaksin_3 ? Carbon::parse($item->vaksin_3)->isoFormat('D MMMM Y') : "";
             $item->mpp =  $item->mpp ? Carbon::parse($item->mpp)->isoFormat('D MMMM Y') : "";
-            
 
             //jika item berbeda menggunakan tanda tanya(?) lalu titik dua (:) trus else / isi nya
             $item->pensiun =  $item->pensiun ? Carbon::parse($item->pensiun)->isoFormat('D MMMM Y') : "";
@@ -147,7 +155,7 @@ class KaryawanController extends Controller
             'nama.required' => 'Nama harus diisi',
             'tanggal_masuk.required' => 'Tanggal Masuk harus diisi',
             'status_pegawai.required' => 'Status Pegawai harus diisi',
-            
+
 
         ]);
 
@@ -155,7 +163,7 @@ class KaryawanController extends Controller
 
         if (empty($id)) {
             $add = Karyawan::create($data);
-            
+
 
             if ($add) {
                 return redirect()->route('karyawan.index')->with('success', 'Data berhasil ditambahkan');
