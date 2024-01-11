@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Proyek;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 class ProyekController extends Controller
 {
@@ -16,7 +17,7 @@ class ProyekController extends Controller
     {
         $q = $request->q;
         $items = Proyek::where('nama_proyek', 'LIKE', "%$q%")
-        ->paginate(10);
+            ->paginate(10);
 
         return view('proyek.index', compact('items'));
     }
@@ -50,22 +51,57 @@ class ProyekController extends Controller
             'proyek_status' => 'nullable',
             'trainset_kode' => 'nullable',
             'trainset_nama' => 'nullable',
-            
+            'file' => 'required|file|mimes:jpeg,png,pdf',
+
 
         ], [
             'kode_tempat.required' => 'Kode Tempat harus diisi',
             'nama_tempat.required' => 'Nama Tempat harus diisi',
             'lokasi.required' => 'Lokasi Masuk harus diisi',
             'nama_proyek.required' => 'Nama Proyek harus diisi',
-            
+            'file.required' => 'File harus diisi',
+
 
         ]);
 
-        $data = $request->all();
+        // $file = $request->file('file');
+        // $randomName = Str::random(20) . '.' . $file->getClientOriginalExtension();
+        // $file->storeAs('photo', $randomName, 'public');
+
+        // $upload = new Proyek([
+        //     'kode_tempat' => $request->input('kode_tempat'),
+        //     'file' => $randomName,
+        //     'nama_tempat' => $request->input('nama_tempat'),
+        //     'lokasi' => $request->input('lokasi'),
+        //     'nama_proyek' => $request->input('nama_proyek'),
+        //     'proyek_mulai' => $request->input('proyek_mulai'),
+        //     'proyek_selesai' => $request->input('proyek_selesai'),
+        //     'proyek_status' => $request->input('proyek_status'),
+        //     'trainset_kode' => $request->input('trainset_kode'),
+        //     'trainset_nama' => $request->input('trainset_nama'),
+        // ]);
+        // $upload->save();
+
+        $file = $request->file('file');
+        $randomName = Str::random(20) . '.' . $file->getClientOriginalExtension();
+        $file->storeAs('photo', $randomName, 'public');
+
+        // $data = $request->all();
+        $data = [
+            'kode_tempat' => $request->kode_tempat,
+            'nama_tempat' => $request->nama_tempat,
+            'lokasi' => $request->lokasi,
+            'nama_proyek' => $request->nama_proyek,
+            'proyek_mulai' => $request->proyek_mulai,
+            'proyek_selesai' => $request->proyek_selesai,
+            'proyek_status' => $request->proyek_status,
+            'trainset_kode' => $request->trainset_kode,
+            'trainset_nama' => $request->trainset_nama,
+            'file' => $randomName,
+        ];
 
         if (empty($id)) {
             $add = Proyek::create($data);
-            
 
             if ($add) {
                 return redirect()->route('proyek.index')->with('success', 'Data berhasil ditambahkan');
@@ -75,11 +111,11 @@ class ProyekController extends Controller
         } else {
             // $update = Karyawan::where('id', $id)->update($data);
 
-            // if ($update) {
-            //     return redirect()->route('karyawan.index')->with('success', 'Data berhasil diubah');
-            // } else {
-            //     return redirect()->route('karyawan.index')->with('error', 'Data gagal diubah');
-            // }
+            //     // if ($update) {
+            //     //     return redirect()->route('karyawan.index')->with('success', 'Data berhasil diubah');
+            //     // } else {
+            //     //     return redirect()->route('karyawan.index')->with('error', 'Data gagal diubah');
+            //     // }
 
             $update = Proyek::findOrFail($id);
             $data['kode_tempat'] = $data['kode_tempat'] ? $data['kode_tempat'] : $update->kode_tempat;
@@ -91,10 +127,11 @@ class ProyekController extends Controller
             $data['proyek_status'] = $data['proyek_status'] ? $data['proyek_status'] : $update->proyek_status;
             $data['trainset_kode'] = $data['trainset_kode'] ? $data['trainset_kode'] : $update->trainset_kode;
             $data['trainset_nama'] = $data['trainset_nama'] ? $data['trainset_nama'] : $update->trainset_nama;
-            
+            $data['file'] = $data['file'] ? $data['file'] : $update->file;
+
             $update->update($data);
-            return redirect()->route('proyek.index')->with('success', 'Karyawan berhasil diupdate');
         }
+        return redirect()->route('proyek.index')->with('success', 'Proyek berhasil diupdate');
     }
 
     /**
@@ -126,9 +163,46 @@ class ProyekController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        // $id = $request->id;
+        // $kode_tempat = $request->kode_tempat;
+        // $nama_tempat = $request->nama_tempat;
+        // $lokasi = $request->lokasi;
+        // $nama_proyek = $request->nama_proyek;
+        // $proyek_mulai = $request->proyek_mulai;
+        // $proyek_selesai = $request->proyek_selesai;
+        // $proyek_status = $request->proyek_status;
+        // $trainset_kode = $request->trainset_kode;
+        // $trainset_nama = $request->trainset_nama;
+
+        // $photo = Proyek::where('id', $id)->first();
+
+        // if ($request->file('file')) {
+        //     $file = $request->file('file');
+        //     $randomName = Str::random(20) . '.' . $file->getClientOriginalExtension();
+        //     $file->storeAs('photo', $randomName, 'public');
+        // } else {
+        //     $randomName = $photo->file;
+        // }
+
+        // // dd($randomName);
+
+        // Proyek::where('id', $id)->update([
+        //     'kode_tempat' => $kode_tempat,
+        //     'file' => $randomName,
+        //     'nama_tempat' => $nama_tempat,
+        //     'lokasi' => $lokasi,
+        //     'nama_proyek' => $nama_proyek,
+        //     'proyek_mulai' => $proyek_mulai,
+        //     'proyek_selesai' => $proyek_selesai,
+        //     'proyek_status' => $proyek_status,
+        //     'trainset_kode' => $trainset_kode,
+        //     'trainset_nama' => $trainset_nama,
+        // ]);
+
+
+        // return redirect()->route('proyek.index')->with('success', 'File uploaded successfully');
     }
 
     /**

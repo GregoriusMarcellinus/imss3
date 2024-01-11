@@ -20,6 +20,7 @@ class Proyek extends Model
         'proyek_status',
         'trainset_kode',
         'trainset_nama',
+        'file',
     ];
     
     // Format tanggal

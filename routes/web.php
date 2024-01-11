@@ -218,9 +218,11 @@ Route::delete('karyawan', [App\Http\Controllers\KaryawanController::class, 'dest
 Route::get('proyek', [App\Http\Controllers\ProyekController::class, 'index'])->name('proyek.index');
 Route::post('proyek', [App\Http\Controllers\ProyekController::class, 'store'])->name('proyek.store');
 Route::delete('proyek', [App\Http\Controllers\ProyekController::class, 'destroy'])->name('proyek.destroy');
+Route::put('proyek', [App\Http\Controllers\ProyekController::class, 'update'])->name('proyek.update');
 
 Route::get('bom', [App\Http\Controllers\BomController::class, 'index'])->name('bom.index');
 Route::post('bom', [App\Http\Controllers\BomController::class, 'store'])->name('bom.store');
+Route::get('bom_detail/{id}', [App\Http\Controllers\BomController::class, 'getDetailBom'])->name('bom_detail');
 
 
 Route::post('aset_import', [App\Http\Controllers\AsetController::class, 'import'])->name('aset.import');

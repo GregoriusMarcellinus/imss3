@@ -165,14 +165,14 @@
                                         min="{{ date('Y-m-d', strtotime('-7 days')) }}">
                                 </div>
                             </div>
-                            
-                            
+
+
                             {{-- <div class="form-group row">
                                 <label for="dasar_pr" class="col-sm-4 col-form-label">{{ __('Dasar Proyek') }}
                                 </label>
                                 <div class="col-sm-8">
                                     {{-- <input type="text" class="form-control" id="dasar" name="dasar"> --}}
-                                    {{-- <textarea class="form-control" name="dasar_pr" id="dasar_pr" rows="3"></textarea>
+                            {{-- <textarea class="form-control" name="dasar_pr" id="dasar_pr" rows="3"></textarea>
                                 </div>
                             </div> --}}
                             {{-- @if (Auth::user()->role == 0 || Auth::user()->role == 1)
@@ -235,7 +235,7 @@
                                         <tr>
                                             <td><b>Proyek</b></td>
                                             <td>:</td>
-                                            <td><span id="proyek"></span></td>
+                                            <td><span id="proyek_name"></span></td>
                                         </tr>
                                         <tr>
                                             <td><b>Produk</b></td>
@@ -253,16 +253,28 @@
                                             <thead style="text-align: center">
                                                 <th>{{ __('NO') }}</th>
                                                 <th>{{ __('Kode Material') }}</th>
-                                                <th>{{ __('Uraian Barang/Jasa') }}</th>
+                                                <th>{{ __('Deskripsi Material') }}</th>
                                                 <th>{{ __('Spesifikasi') }}</th>
-                                                <th>{{ __('QTY') }}</th>
+                                                <th>{{ __('P1') }}</th>
+                                                <th>{{ __('P3') }}</th>
+                                                <th>{{ __('P6') }}</th>
+                                                <th>{{ __('P12') }}</th>
+                                                <th>{{ __('P24') }}</th>
+                                                <th>{{ __('P36') }}</th>
+                                                <th>{{ __('P48') }}</th>
+                                                <th>{{ __('P60') }}</th>
+                                                <th>{{ __('P72') }}</th>
+                                                <th>{{ __('Protective Part') }}</th>
+                                                <th>{{ __('Satuan') }}</th>
+                                                <th>{{ __('Keterangan') }}</th>
+                                                {{-- <th>{{ __('QTY') }}</th>
                                                 <th>{{ __('SAT') }}</th>
                                                 <th>{{ __('Waktu Penyelesaian') }}</th>
                                                 <th>{{ __('Nota Pembelian') }}</th>
-                                                <th>{{ __('Keterangan') }}</th>
+                                                <th>{{ __('Keterangan') }}</th> --}}
                                                 {{-- <th>{{ __('SPPH') }}</th>
                                                 <th>{{ __('PO') }}</th> --}}
-                                                <th>{{ __('STATUS') }}</th>
+                                                {{-- <th>{{ __('STATUS') }}</th> --}}
                                             </thead>
                                             <tbody id="table-pr">
                                             </tbody>
@@ -519,7 +531,7 @@
             $('#table-pr').empty();
             $('#no_surat').text("");
             $('#tgl_surat').text("");
-            $('proyek').text("");
+            $('proyek_name').text("");
         }
 
         function loader(status = 1) {
@@ -743,9 +755,11 @@
             resetForm();
             $('#button-tambah-produk').text('Tambah Item Detail');
             $('#id').val(data.id);
-            $('#no_surat').text(data.no_pr);
+            $('#no_surat').text(data.nomor);
+            $('#proyek_name').text(data.proyek_name);
             $('#tgl_surat').text(data.tanggal);
-            $('#proyek').text(data.proyek);
+            $('#kode_material').text(data.kode_material);
+            $('#deskripsi_material').text(data.deskripsi_material);
             $('#proyek_id_val').val(data.proyek_id);
             $('#pr_id').val(data.id);
             $('#table-pr').empty();
@@ -758,7 +772,7 @@
             }
 
             $.ajax({
-                url: "{{ url('products/purchase_request_detail') }}" + "/" + data.id,
+                url: "{{ url('/bom_detail') }}" + "/" + data.id,
                 type: "GET",
                 dataType: "json",
                 beforeSend: function() {
@@ -769,9 +783,11 @@
                 success: function(data) {
                     console.log(data);
                     $('#id').val(data.pr.id);
-                    $('#no_surat').text(data.pr.no_pr);
+                    $('#no_surat').text(data.pr.nomor);
                     $('#tgl_surat').text(data.pr.tanggal);
-                    $('#proyek').text(data.pr.proyek);
+                    $('#kode_material').text(data.pr.kode_material);
+                    $('#deskripsi_material').text(data.pr.deskripsi_material);
+                    $('#proyek_name').text(data.pr.proyek_name);
                     $('#button-cetak-pr').html('<i class="fas fa-print"></i> Cetak');
                     $('#button-cetak-pr').attr('disabled', false);
                     var no = 1;
@@ -840,13 +856,20 @@
                             }
 
                             $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
-                                .kode_material + '</td><td>' + value.uraian + '</td><td>' +
-                                value
-                                .spek + '</td><td>' + value.qty + '</td><td>' + value
-                                .satuan + '</td><td>' + value.waktu + '</td><td>' +
-                                lampiran + '</td><td>' + value.keterangan + '</td><td><b>' +
-                                status +
-                                '</b></td></tr>'
+                                .kode_material + '</td><td>' + value.deskripsi_material +
+                                '</td><td>' +
+                                value.spesifikasi + '</td><td>' + value.p1 + '</td><td>' + value
+                                .p3 + '</td><td>' + value.p6 + '</td><td>' +
+                                value.p12 + '</td><td>' + value.p24 +
+                                '</td><td>' + value.p36 + '</td><td>' + value.p48 + '</td><td>' +
+                                value.p60 + '</td><td>' + value.p72 + '</td><td>' + value
+                                .protective_part + '</td><td>' +
+                                value.satuan + '</td><td>'+ value.keterangan +'</td>'
+
+
+
+
+
 
                                 // + <td>' + spph +
                                 // '</td><td>' + po + '</td><td>' + status + '</td> +

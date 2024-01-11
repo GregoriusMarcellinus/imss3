@@ -24,6 +24,7 @@ class CreateProyekTable extends Migration
             $table->string('proyek_status');
             $table->string('trainset_kode');
             $table->string('trainset_nama');
+            $table->string('file');
             $table->timestamps();
         });
     }

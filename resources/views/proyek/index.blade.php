@@ -18,7 +18,7 @@
                         @if (Auth::user()->role == 0 || Auth::user()->role == 7)
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-kode-aset"
                                 onclick="addKodeAset()"><i class="fas fa-plus"></i> Add New Proyek</button>
-                                {{-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#import-karyawan"
+                            {{-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#import-karyawan"
                                 onclick="importKaryawan()"><i class="fas fa-file-excel"></i> Import Karyawan (Excel)</button>
                                 <a type="button" class="btn btn-primary" href="{{route('karyawan.export')}}" ><i class="fas fa-file-excel"></i> Export Karyawan (Excel)</a> --}}
                         @endif
@@ -54,7 +54,8 @@
                                     <th>Proyek Status</th>
                                     <th>Trainset Kode</th>
                                     <th>Trainset Nama</th>
-                                    
+                                    <th>File</th>
+
                                     <th>{{ __('Aksi') }}</th>
                                 </tr>
                             </thead>
@@ -63,19 +64,21 @@
                                     @php
                                         $data = $d->toArray();
                                     @endphp
-                                     
+
                                     <tr>
                                         <td>{{ $key + 1 }}</td>
                                         <td>{{ $d->kode_tempat }}</td>
                                         <td>{{ $d->nama_tempat }}</td>
                                         <td>{{ $d->lokasi }}</td>
-                                        <td>{{ $d->nama_proyek  }}</td>
-                                        <td>{{ $d->proyek_mulai  }}</td>
+                                        <td>{{ $d->nama_proyek }}</td>
+                                        <td>{{ $d->proyek_mulai }}</td>
                                         <td>{{ $d->proyek_selesai }}</td>
                                         <td>{{ $d->proyek_status }}</td>
                                         <td>{{ $d->trainset_kode }}</td>
                                         <td>{{ $d->trainset_nama }}</td>
-                                        
+                                        <td><img src="{{ asset('/storage/photo/' . $d->file) }}" alt=""
+                                                height="100px" width="100px"> </td>
+
                                         <td class="text-center">
                                             @if (Auth::user()->role == 0 || Auth::user()->role == 7)
                                                 <button title="Edit Shelf" type="button" class="btn btn-success btn-xs"
@@ -119,6 +122,7 @@
                                 <form role="form" id="save" action="{{ route('proyek.store') }}" method="post"
                                     enctype="multipart/form-data" autocomplete="off">
                                     @csrf
+                                    {{-- @method('put') --}}
                                     <input type="hidden" id="id" name="id">
 
 
@@ -129,13 +133,15 @@
                                         </div>
                                     </div> --}}
                                     <div class="form-group row">
-                                        <label for="kode_tempat" class="col-sm-4 col-form-label">{{ __('Kode Tempat') }}</label>
+                                        <label for="kode_tempat"
+                                            class="col-sm-4 col-form-label">{{ __('Kode Tempat') }}</label>
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control" id="kode_tempat" name="kode_tempat">
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="nama_tempat" class="col-sm-4 col-form-label">{{ __('Nama Tempat') }}</label>
+                                        <label for="nama_tempat"
+                                            class="col-sm-4 col-form-label">{{ __('Nama Tempat') }}</label>
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control" id="nama_tempat" name="nama_tempat">
                                         </div>
@@ -157,54 +163,70 @@
                                         </div>
                                     </div> --}}
                                     <div class="form-group row">
-                                        <label for="nama_proyek" class="col-sm-4 col-form-label">{{ __('Nama Proyek') }}</label>
+                                        <label for="nama_proyek"
+                                            class="col-sm-4 col-form-label">{{ __('Nama Proyek') }}</label>
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control" id="nama_proyek" name="nama_proyek">
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="proyek_mulai" class="col-sm-4 col-form-label">{{ __('Proyek Mulai') }}</label>
+                                        <label for="proyek_mulai"
+                                            class="col-sm-4 col-form-label">{{ __('Proyek Mulai') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="date" class="form-control" id="proyek_mulai" name="proyek_mulai">
+                                            <input type="date" class="form-control" id="proyek_mulai"
+                                                name="proyek_mulai">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="proyek_selesai" class="col-sm-4 col-form-label">{{ __('Proyek Selesai') }}</label>
+                                        <label for="proyek_selesai"
+                                            class="col-sm-4 col-form-label">{{ __('Proyek Selesai') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="date" class="form-control" id="proyek_selesai" name="proyek_selesai">
+                                            <input type="date" class="form-control" id="proyek_selesai"
+                                                name="proyek_selesai">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="proyek_status" class="col-sm-4 col-form-label">{{ __('Proyek Status') }} </label>
+                                        <label for="proyek_status" class="col-sm-4 col-form-label">{{ __('Proyek Status') }}
+                                        </label>
                                         <div class="col-sm-8">
                                             <select class="form-control" id="proyek_status" name="proyek_status">
                                                 <option value=""></option>
                                                 <option value="Open">Open</option>
                                                 <option value="Close">Close</option>
-                                                
+
                                             </select>
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="trainset_kode" class="col-sm-4 col-form-label">{{ __('Trainset Kode') }}</label>
+                                        <label for="trainset_kode"
+                                            class="col-sm-4 col-form-label">{{ __('Trainset Kode') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="trainset_kode" name="trainset_kode">
+                                            <input type="text" class="form-control" id="trainset_kode"
+                                                name="trainset_kode">
                                         </div>
                                     </div>
 
                                     <div class="form-group row">
-                                        <label for="trainset_nama" class="col-sm-4 col-form-label">{{ __('Trainset Nama') }}</label>
+                                        <label for="trainset_nama"
+                                            class="col-sm-4 col-form-label">{{ __('Trainset Nama') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="trainset_nama" name="trainset_nama">
+                                            <input type="text" class="form-control" id="trainset_nama"
+                                                name="trainset_nama">
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="file" class="col-sm-4 col-form-label">{{ __('File') }}</label>
+                                        <div class="col-sm-8">
+                                            <input type="file" class="form-control" id="file" name="file">
                                         </div>
                                     </div>
 
-                                    
-                                    
-                                    
+
+
+
                                 </form>
                             </div>
                             <div class="modal-footer justify-content-between">
@@ -216,6 +238,12 @@
                         </div>
                     </div>
                 </div>
+
+                {{-- editProyek --}}
+                
+                {{-- endproyek --}}
+
+
                 <div class="modal fade" id="delete-suratkeluar">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -267,7 +295,8 @@
                                 </form>
                             </div>
                             <div class="modal-footer justify-content-between">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">{{ __('Batal') }}</button>
+                                <button type="button" class="btn btn-default"
+                                    data-dismiss="modal">{{ __('Batal') }}</button>
                                 {{-- <button type="button" class="btn btn-default"
                                     id="download-template">{{ __('Download Template') }}</button> --}}
                                 <button type="button" class="btn btn-primary"
@@ -282,46 +311,46 @@
 @endsection
 @section('custom-js')
 
-{{-- menghitung umur, pensiun , dan mpp --}}
-<script>
-    $(document).ready(function() {
-        // Fungsi untuk menghitung umur dan tanggal pensiun
-        function hitungUmur() {
-            // Ambil nilai tanggal lahir dari input
-            var tanggalLahir = $('#tanggal_lahir').val();
-    
-            // Hitung umur
-            var today = new Date();
-            var birthDate = new Date(tanggalLahir);
-            var age = today.getFullYear() - birthDate.getFullYear();
-            var months = today.getMonth() - birthDate.getMonth();
-            if (months < 0 || (months === 0 && today.getDate() < birthDate.getDate())) {
-                age--;
+    {{-- menghitung umur, pensiun , dan mpp --}}
+    <script>
+        $(document).ready(function() {
+            // Fungsi untuk menghitung umur dan tanggal pensiun
+            function hitungUmur() {
+                // Ambil nilai tanggal lahir dari input
+                var tanggalLahir = $('#tanggal_lahir').val();
+
+                // Hitung umur
+                var today = new Date();
+                var birthDate = new Date(tanggalLahir);
+                var age = today.getFullYear() - birthDate.getFullYear();
+                var months = today.getMonth() - birthDate.getMonth();
+                if (months < 0 || (months === 0 && today.getDate() < birthDate.getDate())) {
+                    age--;
+                }
+
+                // Tampilkan umur
+                $('#umur').val(age + ' Tahun ' + months + ' Bulan');
+
+                // Hitung tanggal pensiun (tambah 56 tahun)
+                // var mppDate = new Date(birthDate);
+                // mppDate.setFullYear(mppDate.getFullYear() + 55);
+                // mppDate.setMonth(mppDate.getMonth() + 9);
+                // mppDate.setDate(mppDate.getDate() + 20);
+                // var pensiunDate = new Date(birthDate);
+                // pensiunDate.setFullYear(pensiunDate.getFullYear() + 56);
+                // pensiunDate.setMonth(pensiunDate.getMonth() + 9);
+                // pensiunDate.setDate(pensiunDate.getDate() + 20);
+
+                // Tampilkan tanggal pensiun
+                $('#mpp').val(mppDate.toISOString().split('T')[0]);
+                $('#pensiun').val(pensiunDate.toISOString().split('T')[0]);
             }
-    
-            // Tampilkan umur
-            $('#umur').val(age + ' Tahun ' + months + ' Bulan');
-    
-            // Hitung tanggal pensiun (tambah 56 tahun)
-            // var mppDate = new Date(birthDate);
-            // mppDate.setFullYear(mppDate.getFullYear() + 55);
-            // mppDate.setMonth(mppDate.getMonth() + 9);
-            // mppDate.setDate(mppDate.getDate() + 20);
-            // var pensiunDate = new Date(birthDate);
-            // pensiunDate.setFullYear(pensiunDate.getFullYear() + 56);
-            // pensiunDate.setMonth(pensiunDate.getMonth() + 9);
-            // pensiunDate.setDate(pensiunDate.getDate() + 20);
-    
-            // Tampilkan tanggal pensiun
-            $('#mpp').val(mppDate.toISOString().split('T')[0]);
-            $('#pensiun').val(pensiunDate.toISOString().split('T')[0]);
-        }
-    
-        // Panggil fungsi saat input tanggal lahir berubah
-        $('#tanggal_lahir').on('change', function() {
-            hitungUmur();
+
+            // Panggil fungsi saat input tanggal lahir berubah
+            $('#tanggal_lahir').on('change', function() {
+                hitungUmur();
+            });
         });
-    });
     </script>
 
     <script>
@@ -345,7 +374,7 @@
 
         function editProyek(data) {
             console.log(data)
-            var title = "proyek"
+            var title = "Proyek"
             resetForm();
             $('#modal-title').text("Edit " + title);
             $('#button-save').text("Simpan");
@@ -359,7 +388,9 @@
             $('#proyek_status').val(data.proyek_status);
             $('#trainset_kode').val(data.trainset_kode);
             $('#trainset_nama').val(data.trainset_nama);
-            
+            $('#file').val(data.file);
+            // $('#update-kode-aset').modal('show');
+
 
 
         }

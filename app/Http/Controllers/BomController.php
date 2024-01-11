@@ -38,7 +38,7 @@ class BomController extends Controller
         }
 
         $requests = Bom::select('bom.*', 'proyek.nama_proyek as proyek_name')
-            ->leftjoin('proyek', 'proyek.id', '=', 'bom.proyek_id')
+            ->leftjoin('proyek', 'proyek.id', '=', 'bom.proyek')
             ->orderBy('bom.id', 'asc')
             ->paginate(50);
 
@@ -57,7 +57,7 @@ class BomController extends Controller
 
             //looping the paginate
             foreach ($requests as $request) {
-                $detail_pr = DetailPR::where('id_pr', $request->id)->get();
+                $detail_pr = Bom::where('id', $request->id)->get();
                 //if detail_pr empty then editable true
                 if ($detail_pr->isEmpty()) {
                     $request->editable = TRUE;
@@ -84,6 +84,142 @@ class BomController extends Controller
         }
     }
     
+    public function indexApps(Request $request)
+    {
+        $search = $request->q;
+
+        if (Session::has('selected_warehouse_id')) {
+            $warehouse_id = Session::get('selected_warehouse_id');
+        } else {
+            $warehouse_id = DB::table('warehouse')->first()->warehouse_id;
+        }
+
+        $requests = Bom::select('bom.*', 'proyek.nama_proyek as proyek_name')
+            ->join('proyek', 'proyek.id', '=', 'bom.proyek_id')
+            ->paginate(50);
+
+        $proyeks = DB::table('proyek')->get();
+
+        if ($search) {
+            $requests = Bom::where('nama_proyek', 'LIKE', "%$search%")->paginate(50);
+        }
+
+        if ($request->format == "json") {
+            $requests = Bom::where("warehouse_id", $warehouse_id)->get();
+
+            return response()->json($requests);
+        } else {
+            return view('bom.index', compact('requests', 'proyeks'));
+        }
+    }
+
+
+
+    public function getDetailBom(Request $request)
+    {
+        $id = $request->id;
+        $pr = Bom::select('bom.*', 'proyek.nama_proyek as nama_proyek')
+            ->leftjoin('proyek', 'proyek.id', '=', 'bom.proyek_id')
+            ->where('bom.id', $id)
+            ->first();
+        $pr->details = Bom::where('id', $id)->get();
+        // $pr->details = DetailPR::where('id_pr', $id)->leftJoin('kode_material', 'kode_material.id', '=', 'detail_pr.kode_material_id')->get();
+        $pr->details = $pr->details->map(function ($item) {
+            $item->nomor = $item->nomor ? $item->nomor : '';
+            $item->tanggal = $item->tanggal ? $item->tanggal : '';
+            $item->proyek = $item->proyek ? $item->proyek : '';
+            $item->kode_material = $item->kode_material ? $item->kode_material : '';
+            $item->deskripsi_material = $item->deskripsi_material ? $item->deskripsi_material : '';
+            $item->spesifikasi = $item->spesifikasi ? $item->spesifikasi : '';
+            $item->p1 = $item->p1 ? $item->p1 : '';
+            $item->p3 = $item->p3 ? $item->p3 : '';
+            $item->p6 = $item->p6 ? $item->p6 : '';
+            $item->p12 = $item->p6 ? $item->p6 : '';
+            $item->p24 = $item->p24 ? $item->p24 : '';
+            $item->p36 = $item->p36 ? $item->p36 : '';
+            $item->p48 = $item->p48 ? $item->p48 : '';
+            $item->p60 = $item->p60 ? $item->p60 : '';
+            $item->p72 = $item->p72 ? $item->p72 : '';
+            $item->protective_part = $item->protective_part ? $item->protective_part : '';
+            $item->satuan = $item->satuan ? $item->satuan : '';
+            $item->keterangan = $item->keterangan ? $item->keterangan : '';
+            // $item->nomor_spph = Spph::where('id', $item->id_spph)->first()->nomor_spph ?? '';
+            // $item->no_po = Purchase_Order::where('id', $item->id_po)->first()->no_po ?? '';
+            // $item->userRole = User::where('id', $item->user_id)->first()->role ?? '';
+            // $item->no_sph = $item->no_sph ? $item->no_sph : '';
+            // $item->tanggal_sph = $item->tanggal_sph ? $item->tanggal_sph : '';
+            // $item->no_just = $item->no_just ? $item->no_just : '';
+            // $item->tanggal_just = $item->tanggal_just ? $item->tanggal_just : '';
+            // $item->no_nego1 = $item->no_nego1 ? $item->no_nego1 : '';
+            // $item->tanggal_nego1 = $item->tanggal_nego1 ? $item->tanggal_nego1 : '';
+            // $item->batas_nego1 = $item->batas_nego1 ? $item->batas_nego1 : '';
+            // $item->no_nego2 = $item->no_nego2 ? $item->no_nego2 : '';
+            // $item->tanggal_nego2 = $item->tanggal_nego2 ? $item->tanggal_nego2 : '';
+            // $item->batas_nego2 = $item->batas_nego2 ? $item->batas_nego2 : '';
+            // $item->batas_akhir = Purchase_Order::leftjoin('detail_po', 'detail_po.id_po', '=', 'purchase_order.id')->where('detail_po.id_detail_pr', $item->id)->first()->batas_akhir ?? '-';
+
+            // $ekspedisi = RegistrasiBarang::where('id_barang', $item->id)->first();
+            // if ($ekspedisi) {
+            //     $keterangan = $ekspedisi->keterangan;
+            //     $tanggal = $ekspedisi->created_at;
+            //     $tanggal = Carbon::parse($tanggal)->isoFormat('D MMMM Y');
+            //     $keterangan = $keterangan . ', ' . $tanggal;
+            // } else {
+            //     $keterangan = null;
+            // }
+            // $item->ekspedisi = $keterangan;
+
+            // //qc
+            // if ($ekspedisi) {
+            //     $qc = Lppb::where('id_registrasi_barang', $ekspedisi->id)->first();
+            // } else {
+            //     $qc = null;
+            // }
+
+            // if ($qc) {
+            //     $penerimaan = $qc->penerimaan;
+            //     $hasil_ok = $qc->hasil_ok;
+            //     $hasil_nok = $qc->hasil_nok;
+            //     $tanggal_qc = $qc->created_at;
+            //     $tanggal_qc = Carbon::parse($qc->created_at)->isoFormat('D MMMM Y');
+            //     $qc = new stdClass();
+            //     $qc->penerimaan = $penerimaan;
+            //     $qc->hasil_ok = $hasil_ok;
+            //     $qc->hasil_nok = $hasil_nok;
+            //     $qc->tanggal_qc = $tanggal_qc;
+            // } else {
+            //     $penerimaan = null;
+            //     $hasil_ok = null;
+            //     $hasil_nok = null;
+            //     $tanggal_qc = null;
+            //     $qc = null;
+            // }
+
+            // $item->qc = $qc;
+
+            //countdown = waktu - date now
+            $targetDate = Carbon::parse($item->waktu);
+            $currentDate = Carbon::now();
+            $diff = $currentDate->diff($targetDate);
+            $remainingDays = $diff->days;
+
+            $referenceDate = Carbon::parse($item->waktu); // Change this to your desired reference date
+
+            if ($currentDate->lessThan($referenceDate)) {
+                // If the current date is before the reference date
+                $item->countdown = "$remainingDays  Hari Sebelum Waktu Penyelesaian";
+                $item->backgroundcolor = "#FF0000"; // Red background
+            } elseif ($currentDate->greaterThanOrEqualTo($referenceDate)) {
+                // If the current date is on or after the reference date
+                $item->countdown = "$remainingDays Hari Setelah Waktu Penyelesaian";
+                $item->backgroundcolor = "#008000"; // Green background
+            }
+            return $item;
+        });
+        return response()->json([
+            'pr' => $pr
+        ]);
+    }
 
     /**
      * Show the form for creating a new resource.
