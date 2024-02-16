@@ -17,7 +17,7 @@
             <div class="card">
                 <div class="card-header">
                     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-pr"
-                        onclick="addPR()"><i class="fas fa-plus"></i> Add BOM</button>
+                        onclick="addPR()"><i class="fas fa-plus"></i> Add Service Record</button>
                     <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#import-product" onclick="importProduct()"><i class="fas fa-file-excel"></i> Import Product (Excel)</button> -->
                     <!-- <button type="button" class="btn btn-primary" onclick="download('xls')"><i class="fas fa-file-excel"></i> Export Product (XLS)</button> -->
                     <div class="card-tools">
@@ -41,7 +41,7 @@
                             <thead>
                                 <tr class="text-center">
                                     <th>No.</th>
-                                    <th>{{ __('Nomor BOM') }}</th>
+                                    {{-- <th>{{ __('Nomor BOM') }}</th> --}}
                                     {{-- <th>{{ __('Tanggal') }}</th> --}}
                                     <th>{{ __('Proyek') }}</th>
                                     <th>{{ __('Tanggal') }}</th>
@@ -61,16 +61,11 @@
                                                 'kode_material' => $d->kode_material,
                                                 'deskripsi_material' => $d->deskripsi_material,
                                                 'spesifikasi' => $d->spesifikasi,
-                                                'p1' => $d->p1,
-                                                'p3' => $d->p3,
-                                                'p6' => $d->p6,
-                                                'p12' => $d->p12,
-                                                'p24' => $d->p24,
-                                                'p36' => $d->p36,
-                                                'p48' => $d->p48,
-                                                'p60' => $d->p60,
-                                                'p72' => $d->p72,
-                                                'protective_part' => $d->protective_part,
+                                                'jenis_perawatan' => $d->jenis_perawatan,
+                                                'trainset' => $d->trainset,
+                                                'car' => $d->car,
+                                                'corrective_part' => $d->corrective_part,
+                                                'jumlah' => $d->jumlah,
                                                 'satuan' => $d->satuan,
                                                 'keterangan' => $d->keterangan,
                                                 // 'dasar_pr' => $d->dasar_pr,
@@ -83,7 +78,7 @@
 
                                         <tr>
                                             <td class="text-center">{{ $data['no'] }}</td>
-                                            <td class="text-center">{{ $data['nomor'] }}</td>
+                                            {{-- <td class="text-center">{{ $data['nomor'] }}</td> --}}
                                             <td class="text-center">{{ $data['proyek_name'] }}</td>
                                             <td class="text-center">{{ $data['tanggal'] }}</td>
                                             {{-- <td class="text-center">{{ $data['dasar_pr'] }}</td> --}}
@@ -128,7 +123,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 id="modal-title" class="modal-title">{{ __('Add BOM') }}</h4>
+                        <h4 id="modal-title" class="modal-title">{{ __('Add Service Record') }}</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -137,12 +132,12 @@
                         <form role="form" id="save" action="{{ route('bom.store') }}" method="post">
                             @csrf
                             <input type="hidden" id="save_id" name="id">
-                            <div class="form-group row">
+                            {{-- <div class="form-group row">
                                 <label for="nomor" class="col-sm-4 col-form-label">{{ __('Nomor BOM') }} </label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="nomor" name="nomor">
                                 </div>
-                            </div>
+                            </div> --}}
                             <div class="form-group
                                         row">
                                 <label for="proyek" class="col-sm-4 col-form-label">{{ __('Proyek') }}
@@ -207,7 +202,7 @@
             <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 id="modal-title" class="modal-title">{{ __('Detail Purchase Request') }}</h4>
+                        <h4 id="modal-title" class="modal-title">{{ __('Detail Service Record') }}</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -253,18 +248,14 @@
                                             <thead style="text-align: center">
                                                 <th>{{ __('NO') }}</th>
                                                 <th>{{ __('Kode Material') }}</th>
-                                                <th>{{ __('Deskripsi Material') }}</th>
+                                                <th>{{ __('Komponen Diganti') }}</th>
                                                 <th>{{ __('Spesifikasi') }}</th>
-                                                <th>{{ __('P1') }}</th>
-                                                <th>{{ __('P3') }}</th>
-                                                <th>{{ __('P6') }}</th>
-                                                <th>{{ __('P12') }}</th>
-                                                <th>{{ __('P24') }}</th>
-                                                <th>{{ __('P36') }}</th>
-                                                <th>{{ __('P48') }}</th>
-                                                <th>{{ __('P60') }}</th>
-                                                <th>{{ __('P72') }}</th>
-                                                <th>{{ __('Protective Part') }}</th>
+                                                <th>{{ __('Tanggal') }}</th>
+                                                <th>{{ __('Jenis Perawatan') }}</th>
+                                                <th>{{ __('Trainset') }}</th>
+                                                <th>{{ __('Car') }}</th>
+                                                <th>{{ __('Corrective Part') }}</th>
+                                                <th>{{ __('Jumlah') }}</th>
                                                 <th>{{ __('Satuan') }}</th>
                                                 <th>{{ __('Keterangan') }}</th>
                                                 {{-- <th>{{ __('QTY') }}</th>
@@ -326,34 +317,84 @@
                                                 <input type="hidden" id="type" name="type">
                                                 <input type="hidden" id="proyek_id_val" name="proyek_id_val">
                                                 <div class="form-group row">
-                                                    <label for="material_kode"
+                                                    <label for="kode_material"
                                                         class="col-sm-4 col-form-label">{{ __('Kode Material') }}</label>
                                                     <div class="col-sm-8">
-                                                        <input type="text" class="form-control" id="material_kode">
-                                                        <input type="hidden" class="form-control" id="pr_id"
+                                                        <input type="text" class="form-control" id="kode_material">
+                                                        <input type="hidden" class="form-control" id="kode_material"
                                                             disabled>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label for="pname"
-                                                        class="col-sm-4 col-form-label">{{ __('Nama Barang') }}</label>
+                                                        class="col-sm-4 col-form-label">{{ __('Komponen Diganti') }}</label>
                                                     <div class="col-sm-8">
-                                                        <input type="text" class="form-control" id="pname">
+                                                        <input type="text" class="form-control" id="deskripsi_material">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label for="spek"
                                                         class="col-sm-4 col-form-label">{{ __('Spesifikasi') }}</label>
                                                     <div class="col-sm-8">
-                                                        <input type="text" class="form-control" id="spek">
+                                                        <input type="text" class="form-control" id="spesifikasi">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
                                                     <label for="no_nota"
-                                                        class="col-sm-4 col-form-label">{{ __('QTY') }}</label>
+                                                        class="col-sm-4 col-form-label">{{ __('Tanggal') }}</label>
                                                     <div class="col-sm-8">
-                                                        <input type="text" class="form-control" id="stock"
-                                                            name="stock">
+                                                        <input type="date" class="form-control" id="tanggal"
+                                                            name="tanggal">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="jenis_perawatan" class="col-sm-4 col-form-label">{{ __('Jenis Perawatan') }}
+                                                    </label>
+                                                    <div class="col-sm-8">
+                                                        <select class="form-control" name="jenis_perawatan" id="jenis_perawatan">
+                                                            <option value="0">Pilih Status</option>
+                                                            <option value="1">P1</option>
+                                                            <option value="2">P3</option>
+                                                            <option value="3">P6</option>
+                                                            <option value="4">P12</option>
+                                                            <option value="5">P24</option>
+                                                            <option value="6">P36</option>
+                                                            <option value="7">P48</option>
+                                                            <option value="8">P60</option>
+                                                            <option value="9">P72</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="trainset"
+                                                        class="col-sm-4 col-form-label">{{ __('Trainset') }}</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="trainset"
+                                                            name="trainset">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="car"
+                                                        class="col-sm-4 col-form-label">{{ __('Car') }}</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="car"
+                                                            name="car">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="corrective_part"
+                                                        class="col-sm-4 col-form-label">{{ __('Corrective Part') }}</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="corrective_part"
+                                                            name="corrective_part">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="jumlah"
+                                                        class="col-sm-4 col-form-label">{{ __('Jumlah') }}</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="jumlah"
+                                                            name="jumlah">
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
@@ -365,14 +406,6 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label for="waktu"
-                                                        class="col-sm-4 col-form-label">{{ __('Waktu Penyelesaian') }}</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="date" class="form-control" id="waktu"
-                                                            name="waktu">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
                                                     <label for="keterangan"
                                                         class="col-sm-4 col-form-label">{{ __('Keterangan') }}</label>
                                                     <div class="col-sm-8">
@@ -380,15 +413,24 @@
                                                             name="keterangan">
                                                     </div>
                                                 </div>
+                                                {{-- <div class="form-group row">
+                                                    <label for="waktu"
+                                                        class="col-sm-4 col-form-label">{{ __('Waktu Penyelesaian') }}</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="date" class="form-control" id="waktu"
+                                                            name="waktu">
+                                                    </div>
+                                                </div> --}}
+                
 
-                                                <div class="form-group row">
+                                                {{-- <div class="form-group row">
                                                     <label for="lampiran"
                                                         class="col-sm-4 col-form-label">{{ __('Nota Pembelian') }}</label>
                                                     <div class="col-sm-8">
                                                         <input type="file" class="form-control" id="lampiran"
                                                             name="lampiran" />
                                                     </div>
-                                                </div>
+                                                </div> --}}
 
                                             </form>
                                             <button id="button-update-pr" type="button" class="btn btn-primary w-100"
@@ -602,26 +644,31 @@
         }
 
         function PRupdate() {
-            const id = $('#pr_id').val()
+            const id = $('#kode_material').val()
 
-            var inputFile = $("#lampiran")[0].files[0];
+            // var inputFile = $("#lampiran")[0].files[0];
             var formData = new FormData();
-            formData.append('lampiran', inputFile);
+            // formData.append('lampiran', inputFile);
             formData.append('_token', '{{ csrf_token() }}');
-            formData.append('id_pr', id);
-            formData.append('id_proyek', $('#proyek_id_val').val());
-            formData.append('kode_material', $('#material_kode').val());
-            formData.append('uraian', $('#pname').val());
-            formData.append('stock', $('#stock').val());
-            formData.append('spek', $('#spek').val());
+            formData.append('id', id);
+            formData.append('proyek_id_val', $('#proyek_id_val').val());
+            formData.append('kode_material', $('#kode_material').val());
+            formData.append('deskripsi_material', $('#deskripsi_material').val());
+            formData.append('tanggal', $('#tanggal').val());
+            formData.append('jenis_perawatan', $('#jenis_perawatan').val());
+            formData.append('trainset', $('#trainset').val());
+            formData.append('car', $('#car').val());
+            formData.append('corrective_part', $('#corrective_part').val());
+            formData.append('jumlah', $('#jumlah').val());
+            formData.append('spesifikasi', $('#spesifikasi').val());
             formData.append('satuan', $('#satuan').val());
-            formData.append('waktu', $('#waktu').val());
+            // formData.append('waktu', $('#waktu').val());
             formData.append('keterangan', $('#keterangan').val());
 
-            if ($('#waktu').val() == null || $('#waktu').val() == "") {
-                toastr.error("Waktu Penyelesaian belum diisi!");
-                return
-            }
+            // if ($('#waktu').val() == null || $('#waktu').val() == "") {
+            //     toastr.error("Waktu Penyelesaian belum diisi!");
+            //     return
+            // }
 
             if (inputFile == null) {
                 toastr.error("Lampiran belum diisi!");
@@ -634,7 +681,7 @@
             }
 
             $.ajax({
-                url: "{{ url('products/update_purchase_request_detail') }}",
+                url: "{{ url('/bom_detail.update') }}",
                 type: "POST",
                 data: formData,
                 contentType: false,
@@ -651,8 +698,8 @@
                         return
                     }
                     $('#id').val(data.pr.id);
-                    $('#no_surat').text(data.pr.no_pr);
-                    $('#tgl_surat').text(data.pr.tanggal);
+                    $('#kode_material').text(data.pr.kode_material);
+                    $('#deskripsi_material').text(data.pr.deskripsi_material);
                     $('#proyek').text(data.pr.proyek);
                     $('#button-update-pr').html('Tambahkan');
                     $('#button-update-pr').attr('disabled', false);
@@ -720,14 +767,27 @@
 
 
                             $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
-                                .kode_material + '</td><td>' + value.uraian + '</td><td>' +
-                                value
-                                .spek + '</td><td>' + value.qty + '</td><td>' + value
-                                .satuan +
-                                '</td><td>' + value.waktu + '</td><td>' +
-                                lampiran +
-                                '</td><td>' + value.keterangan + '</td><td>' + status +
-                                '</td></tr>'
+                                .kode_material + '</td><td>' + value.deskripsi_material +
+                                '</td><td>' +
+                                value.spesifikasi + '</td><td>' + value.tanggal + '</td><td>' + value
+                                .jenis_perawatan + '</td><td>' + value.trainset + '</td><td>' +
+                                value.car + '</td><td>' + value.corrective_part +
+                                '</td><td>' + value.jumlah + '</td><td>' +
+                                value.satuan + '</td><td>'+ value.keterangan +'</td>'
+
+
+                            // $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
+                            //     .kode_material + '</td><td>' + value.uraian + '</td><td>' +
+                            //     value
+                            //     .spek + '</td><td>' + value.qty + '</td><td>' + value
+                            //     .satuan +
+                            //     '</td><td>' + value.waktu + '</td><td>' +
+                            //     lampiran +
+                            //     '</td><td>' + value.keterangan + '</td><td>' + status +
+                            //     '</td></tr>'
+                               
+                               
+                               
                                 // + <td>' + spph + '</td><td>' + value.sph +
                                 // '</td><td>' + po +
                                 // '</td><td>' +
@@ -858,12 +918,10 @@
                             $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
                                 .kode_material + '</td><td>' + value.deskripsi_material +
                                 '</td><td>' +
-                                value.spesifikasi + '</td><td>' + value.p1 + '</td><td>' + value
-                                .p3 + '</td><td>' + value.p6 + '</td><td>' +
-                                value.p12 + '</td><td>' + value.p24 +
-                                '</td><td>' + value.p36 + '</td><td>' + value.p48 + '</td><td>' +
-                                value.p60 + '</td><td>' + value.p72 + '</td><td>' + value
-                                .protective_part + '</td><td>' +
+                                value.spesifikasi + '</td><td>' + value.tanggal + '</td><td>' + value
+                                .jenis_perawatan + '</td><td>' + value.trainset + '</td><td>' +
+                                value.car + '</td><td>' + value.corrective_part +
+                                '</td><td>' + value.jumlah + '</td><td>' +
                                 value.satuan + '</td><td>'+ value.keterangan +'</td>'
 
 

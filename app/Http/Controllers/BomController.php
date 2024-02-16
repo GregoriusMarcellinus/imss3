@@ -37,12 +37,7 @@ class BomController extends Controller
             $warehouse_id = DB::table('warehouse')->first()->warehouse_id;
         }
 
-        $requests = Bom::select('bom.*', 'proyek.nama_proyek as proyek_name')
-            ->leftjoin('proyek', 'proyek.id', '=', 'bom.proyek')
-            ->orderBy('bom.id', 'asc')
-            ->paginate(50);
-
-        $proyeks = DB::table('proyek')->get();
+        
         //  dd($requests);
 
         if ($search) {
@@ -125,22 +120,17 @@ class BomController extends Controller
         $pr->details = Bom::where('id', $id)->get();
         // $pr->details = DetailPR::where('id_pr', $id)->leftJoin('kode_material', 'kode_material.id', '=', 'detail_pr.kode_material_id')->get();
         $pr->details = $pr->details->map(function ($item) {
-            $item->nomor = $item->nomor ? $item->nomor : '';
+            // $item->nomor = $item->nomor ? $item->nomor : '';
             $item->tanggal = $item->tanggal ? $item->tanggal : '';
             $item->proyek = $item->proyek ? $item->proyek : '';
             $item->kode_material = $item->kode_material ? $item->kode_material : '';
             $item->deskripsi_material = $item->deskripsi_material ? $item->deskripsi_material : '';
             $item->spesifikasi = $item->spesifikasi ? $item->spesifikasi : '';
-            $item->p1 = $item->p1 ? $item->p1 : '';
-            $item->p3 = $item->p3 ? $item->p3 : '';
-            $item->p6 = $item->p6 ? $item->p6 : '';
-            $item->p12 = $item->p6 ? $item->p6 : '';
-            $item->p24 = $item->p24 ? $item->p24 : '';
-            $item->p36 = $item->p36 ? $item->p36 : '';
-            $item->p48 = $item->p48 ? $item->p48 : '';
-            $item->p60 = $item->p60 ? $item->p60 : '';
-            $item->p72 = $item->p72 ? $item->p72 : '';
-            $item->protective_part = $item->protective_part ? $item->protective_part : '';
+            $item->jenis_perawatan = $item->jenis_perawatan ? $item->jenis_perawatan : '';
+            $item->trainset = $item->trainset ? $item->trainset : '';
+            $item->car = $item->car ? $item->car : '';            
+            $item->corrective_part = $item->corrective_part ? $item->corrective_part : '';
+            $item->jumlah = $item->jumlah ? $item->jumlah : '';
             $item->satuan = $item->satuan ? $item->satuan : '';
             $item->keterangan = $item->keterangan ? $item->keterangan : '';
             // $item->nomor_spph = Spph::where('id', $item->id_spph)->first()->nomor_spph ?? '';
@@ -221,6 +211,74 @@ class BomController extends Controller
         ]);
     }
 
+
+    public function updateDetailBom(Request $request)
+    {
+        if (!$request->stock) {
+            return response()->json([
+                'success' => false,
+                'message' => 'QTY tidak boleh kosong'
+            ]);
+        }
+        $request->validate([
+            'lampiran' => 'nullable|file|mimes:pdf|max:500',
+        ]);
+
+        $file = $request->file('lampiran');
+        // dd($file);
+        $fileName = rand() . '.' . $file->getClientOriginalExtension();
+        // dd($fileName);
+        $file->move(public_path('lampiran'), $fileName);
+
+        $insert = DetailPR::create([
+            'proyek_id' => $request->proyek_id,
+            'proyek' => $request->proyek,
+            'tanggal' => $request->tanggal,
+            'kode_material' => $request->kode_material,
+            'deskripsi_material' => $request->deskripsi_material,
+            'spesifikasi' => $request->spesifikasi,
+            'jenis_perawatan' => $request->jenis_perawatan,
+            'trainset' => $request->trainset,
+            'car' => $request->car,
+            'corrective_part' => $request->corrective_part,
+            'jumlah' => $request->jumlah,
+            'satuan' => $request->satuan,
+            'keterangan' => $request->keterangan,
+            // 'lampiran' => $fileName,
+        ]);
+
+        if (!$insert) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menambahkan Service Record'
+            ]);
+        }
+
+        $pr = DB::table('bom')->where('id', $request->id)->first();
+        $pr->details = DetailPR::where('id', $request->id)->get();
+        $pr->details = $pr->details->map(function ($item) {
+            $item->tanggal = $item->tanggal ? $item->tanggal : '';
+            $item->proyek = $item->proyek ? $item->proyek : '';
+            $item->kode_material = $item->kode_material ? $item->kode_material : '';
+            $item->deskripsi_material = $item->deskripsi_material ? $item->deskripsi_material : '';
+            $item->spesifikasi = $item->spesifikasi ? $item->spesifikasi : '';
+            $item->jenis_perawatan = $item->jenis_perawatan ? $item->jenis_perawatan : '';
+            $item->trainset = $item->trainset ? $item->trainset : '';
+            $item->car = $item->car ? $item->car : '';            
+            $item->corrective_part = $item->corrective_part ? $item->corrective_part : '';
+            $item->jumlah = $item->jumlah ? $item->jumlah : '';
+            $item->satuan = $item->satuan ? $item->satuan : '';
+            $item->keterangan = $item->keterangan ? $item->keterangan : '';
+            return $item;
+        });
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Berhasil menambahkan detail PR',
+            'pr' => $pr
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
@@ -244,28 +302,23 @@ class BomController extends Controller
         $request->validate(
             [
                 'proyek_id' => 'nullable',
-                'nomor' => 'nullable',
+                // 'nomor' => 'nullable',
                 'proyek'=> 'nullable',
                 'tanggal'=> 'required|date',
                 'kode_material'=> 'nullable',
                 'deskripsi_material'=> 'nullable',
                 'spesifikasi'=> 'nullable',
-                'p1'=> 'nullable',
-                'p3'=> 'nullable',
-                'p6'=> 'nullable',
-                'p12'=> 'nullable',
-                'p24'=> 'nullable',
-                'p36'=> 'nullable',
-                'p48'=> 'nullable',
-                'p60'=> 'nullable',
-                'p72'=> 'nullable',
-                'protective_part'=> 'nullable',
+                'jenis_perawatan'=> 'nullable',
+                'trainset'=> 'nullable',
+                'car'=> 'nullable',
+                'corrective_part'=> 'nullable',
+                'jumlah'=> 'nullable',
                 'satuan'=> 'nullable',
                 'keterangan'=> 'nullable',
             ],
             [
                 'proyek_id.required' => 'Proyek harus diisi',
-                'nomor.required' => 'No PR harus diisi',
+                // 'nomor.required' => 'No PR harus diisi',
                 'tanggal.required' => 'Dasar PR harus diisi',
                 
             ]
@@ -274,22 +327,17 @@ class BomController extends Controller
         if (empty($bom)) {
             DB::table('bom')->insert([
                 'proyek_id' => $request->proyek_id,
-                'nomor' => $request->nomor,
+                // 'nomor' => $request->nomor,
                 'proyek' => $request->proyek,
                 'tanggal' => $request->tanggal,
                 'kode_material' => $request->kode_material,
                 'deskripsi_material' => $request->deskripsi_material,
                 'spesifikasi' => $request->spesifikasi,
-                'p1' => $request->p1,
-                'p3' => $request->p3,
-                'p6' => $request->p6,
-                'p12' => $request->p12,
-                'p24' => $request->p24,
-                'p36' => $request->p36,
-                'p48' => $request->p48,
-                'p60' => $request->p60,
-                'p72' => $request->p72,
-                'protective_part' => $request->protective_part,
+                'jenis_perawatan' => $request->jenis_perawatan,
+                'trainset' => $request->trainset,
+                'car' => $request->car,
+                'corrective_part' => $request->corrective_part,
+                'jumlah' => $request->jumlah,
                 'satuan' => $request->satuan,
                 'keterangan' => $request->keterangan,
                 // 'id_user' => auth()->user()->id,
@@ -299,22 +347,17 @@ class BomController extends Controller
         } else {
             DB::table('bom')->where('id', $bom)->update([
                 'proyek_id' => $request->proyek_id,
-                'nomor' => $request->nomor,
+                // 'nomor' => $request->nomor,
                 'proyek' => $request->proyek,
                 'tanggal' => $request->tanggal,
                 'kode_material' => $request->kode_material,
                 'deskripsi_material' => $request->deskripsi_material,
                 'spesifikasi' => $request->spesifikasi,
-                'p1' => $request->p1,
-                'p3' => $request->p3,
-                'p6' => $request->p6,
-                'p12' => $request->p12,
-                'p24' => $request->p24,
-                'p36' => $request->p36,
-                'p48' => $request->p48,
-                'p60' => $request->p60,
-                'p72' => $request->p72,
-                'protective_part' => $request->protective_part,
+                'jenis_perawatan' => $request->jenis_perawatan,
+                'trainset' => $request->trainset,
+                'car' => $request->car,
+                'corrective_part' => $request->corrective_part,
+                'jumlah' => $request->jumlah,
                 'satuan' => $request->satuan,
                 'keterangan' => $request->keterangan,
             ]);

@@ -390,6 +390,34 @@
                             </div>
                         </a>
                     </div>
+                    <div class="col-lg-3 col-6">
+                        <a href="{{ route('trainset.index') }}">
+                            <div class="small-box bg-primary">
+                                {{-- <div class="inner" style="background-color: #afc124"> --}}
+                                <div class="inner" style="background-color: #9d0769">
+                                    <p>Master Data</p>
+                                    <h3>Trainset</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-train"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        <a href="{{ route('service.index') }}">
+                            <div class="small-box bg-primary">
+                                {{-- <div class="inner" style="background-color: #afc124"> --}}
+                                <div class="inner" style="background-color: #08faf6">
+                                    <p>Service</p>
+                                    <h3>Record</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-train"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
                 @endif
 
                 @if (Auth::user()->role == 0 || Auth::user()->role == 8)

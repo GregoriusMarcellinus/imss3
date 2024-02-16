@@ -220,9 +220,20 @@ Route::post('proyek', [App\Http\Controllers\ProyekController::class, 'store'])->
 Route::delete('proyek', [App\Http\Controllers\ProyekController::class, 'destroy'])->name('proyek.destroy');
 Route::put('proyek', [App\Http\Controllers\ProyekController::class, 'update'])->name('proyek.update');
 
+Route::get('service', [App\Http\Controllers\ServiceController::class, 'index'])->name('service.index');
+Route::post('service', [App\Http\Controllers\ServiceController::class, 'store'])->name('service.store');
+Route::delete('service', [App\Http\Controllers\ServiceController::class, 'destroy'])->name('service.destroy');
+Route::put('service', [App\Http\Controllers\ServiceController::class, 'update'])->name('service.update');
+
+Route::get('trainset', [App\Http\Controllers\TrainsetController::class, 'index'])->name('trainset.index');
+Route::post('trainset', [App\Http\Controllers\TrainsetController::class, 'store'])->name('trainset.store');
+Route::delete('trainset', [App\Http\Controllers\TrainsetController::class, 'destroy'])->name('trainset.destroy');
+Route::put('trainset', [App\Http\Controllers\TrainsetController::class, 'update'])->name('trainset.update');
+
 Route::get('bom', [App\Http\Controllers\BomController::class, 'index'])->name('bom.index');
 Route::post('bom', [App\Http\Controllers\BomController::class, 'store'])->name('bom.store');
 Route::get('bom_detail/{id}', [App\Http\Controllers\BomController::class, 'getDetailBom'])->name('bom_detail');
+Route::post('update_bom_detail', [App\Http\Controllers\BomController::class, 'updateDetailBom'])->name('bom_detail.update');
 
 
 Route::post('aset_import', [App\Http\Controllers\AsetController::class, 'import'])->name('aset.import');
