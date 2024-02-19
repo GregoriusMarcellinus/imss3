@@ -107,7 +107,7 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 id="modal-title" class="modal-title">{{ __('Add New Proyek') }}</h4>
+                                <h4 id="modal-title" class="modal-title">{{ __('Add New Trainset') }}</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -339,7 +339,7 @@
 
         function editProyek(data) {
             console.log(data)
-            var title = "Proyek"
+            var title = "Trainset"
             resetForm();
             $('#modal-title').text("Edit " + title);
             $('#button-save').text("Simpan");

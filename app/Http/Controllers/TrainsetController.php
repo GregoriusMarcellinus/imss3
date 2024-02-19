@@ -108,9 +108,9 @@ class TrainsetController extends Controller
             $data['nama_proyek'] = $data['nama_proyek'] ? $data['nama_proyek'] : $update->nama_proyek;
             $data['proyek'] = $data['proyek'] ? $data['proyek'] : $update->proyek;
             $data['trainset_kode'] = $data['trainset_kode'] ? $data['trainset_kode'] : $update->trainset_kode;
-            $data['trainset_nama'] = $data['trainset_nama'] ? $data['trainset_kode'] : $update->trainset_kode;
+            $data['trainset_nama'] = $data['trainset_nama'] ? $data['trainset_nama'] : $update->trainset_nama;
             $data['car_nomor'] = $data['car_nomor'] ? $data['car_nomor'] : $update->car_nomor;
-            $data['car_nama'] = $data['car_nama'] ? $data['car_nomor'] : $update->car_nomor;
+            $data['car_nama'] = $data['car_nama'] ? $data['car_nama'] : $update->car_nama;
             
 
             $update->update($data);
