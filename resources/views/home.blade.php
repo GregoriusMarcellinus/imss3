@@ -418,6 +418,20 @@
                             </div>
                         </a>
                     </div>
+                    <div class="col-lg-3 col-6">
+                        <a href="{{ route('jadwal.index') }}">
+                            <div class="small-box bg-primary">
+                                {{-- <div class="inner" style="background-color: #afc124"> --}}
+                                <div class="inner" style="background-color: #08faf6">
+                                    <p>Master Data</p>
+                                    <h3>Jadwal Perawatan</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-train"></i>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
                 @endif
 
                 @if (Auth::user()->role == 0 || Auth::user()->role == 8)

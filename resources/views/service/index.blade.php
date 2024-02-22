@@ -74,7 +74,7 @@
                                         <td>{{ $d->nama_proyek }}</td>
                                         <td>{{ $d->trainset }}</td>
                                         <td>{{ $d->car }}</td>
-                                        <td>{{ $d->perawatan }}</td>
+                                        <td>{{ $d->kode_perawatan }}</td>
                                         <td>{{ $d->perawatan_mulai }}</td>
                                         <td>{{ $d->perawatan_selesai }}</td>
                                         <td>{{ $d->komponen_diganti }}</td>
@@ -90,6 +90,12 @@
                                                     data-toggle="modal" data-target="#add-kode-aset"
                                                     onclick="editProyek({{ json_encode($data) }})"><i
                                                         class="fas fa-edit"></i></button>
+
+                                                <button title="Lihat Detail" type="button" data-toggle="modal"
+                                                    data-target="#detail-spph" class="btn-lihat btn btn-info btn-xs"
+                                                    data-detail="{{ json_encode($data) }}"><i
+                                                        class="fas fa-list"></i></button>
+
                                                 <button title="Hapus Produk" type="button" class="btn btn-danger btn-xs"
                                                     data-toggle="modal" data-target="#delete-suratkeluar"
                                                     onclick="deleteproyek({{ json_encode($data) }})"><i
@@ -111,6 +117,124 @@
                 {{ $items->links('pagination::bootstrap-4') }}
             </div>
         </div>
+
+        {{-- modal detail --}}
+        {{-- <div class="modal fade" id="detail-spph">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 id="modal-title" class="modal-title">{{ __('Detail Service') }}</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <div class="row">
+                                <form id="cetak-spph" method="GET" action="{{ route('spph.print') }}"
+                                    target="_blank">
+                                    <input type="hidden" name="spph_id" id="spph_id">
+                                </form>
+                                <div class="col-12" id="container-form">
+                                    <button id="button-cetak-spph" type="button" class="btn btn-primary"
+                                        onclick="document.getElementById('cetak-spph').submit();">{{ __('Cetak') }}</button>
+                                    <table class="align-top w-100">
+                                        <tr>
+                                            <td style="width: 3%;"><b>No SPPH</b></td>
+                                            <td style="width:2%">:</td>
+                                            <td style="width: 55%"><span id="no_surat"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Nama Proyek</b></td>
+                                            <td>:</td>
+                                            <td><span id="nama_proyek"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>tanggal</b></td>
+                                            <td>:</td>
+                                            <td><span id="tgl_spph"></span></td>
+                                        </tr>
+                                        <tr>
+                                            <td><b>Produk</b></td>
+                                        </tr>
+                                        <tr>
+                                            <td colspan="3">
+                                                <button id="button-tambah-produk" type="button"
+                                                    class="btn btn-info mb-3"
+                                                    onclick="showAddProduct()">{{ __('Tambah Produk') }}</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead>
+                                                <th>NO</th>
+                                                <th>Nama Barang</th>
+                                                <th>Spesifikasi</th>
+                                                <th>QTY</th>
+                                                <th>SAT</th>
+                                            </thead>
+
+                                            <tbody id="table-spph">
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                <div class="col-0 d-none" id="container-product">
+                                    
+                                    <div id="loader" class="card">
+                                        <div class="card-body text-center">
+                                            <div class="spinner-border text-danger" style="width: 3rem; height: 3rem;"
+                                                role="status">
+                                                <span class="sr-only">Loading...</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="form" class="card">
+                                        <div class="card-body">
+                                            <button type="button" class="btn btn-primary mb-3"
+                                                onclick="addToDetails()"></i>Tambah Pilihan</button>
+                                            <div class="input-group input-group-lg">
+                                                <input type="text" class="form-control" id="proyek_name"
+                                                    name="proyek_name" placeholder="Search By Proyek">
+                                                <div class="input-group-append">
+                                                    <button class="btn btn-primary" id="check-proyek"
+                                                        onclick="productCheck()">
+                                                        <i class="fas fa-search"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="table-responsive card-body">
+                                            <table class="table table-bordered">
+                                                <thead>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>Deskripsi</th>
+                                                        <th>Spesifikasi</th>
+                                                        <th>QTY</th>
+                                                        <th>Sat</th>
+                                                        <th>NO PR</th>
+                                                        <th>No SPPH</th>
+                                                        <th>Proyek</th>
+                                                        <th>Pilih</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody id='detail-material'>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> --}}
+
+
+
         @auth
 
             @if (Auth::user()->role == 0 || Auth::user()->role == 7)
@@ -118,7 +242,7 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 id="modal-title" class="modal-title">{{ __('Add New Proyek') }}</h4>
+                                <h4 id="modal-title" class="modal-title">{{ __('Add New Service') }}</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -137,12 +261,17 @@
                                             <input type="text" class="form-control" id="nomor_aset" name="nomor_aset">
                                         </div>
                                     </div> --}}
-                                    
+
                                     <div class="form-group row">
                                         <label for="nama_tempat"
                                             class="col-sm-4 col-form-label">{{ __('Nama Tempat') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="nama_tempat" name="nama_tempat">
+                                            <select class="form-control" name="nama_tempat" id="nama_tempat">
+                                                <option value="">Pilih Tempat</option>
+                                                @foreach ($tempats as $tempat)
+                                                    <option value="{{ $tempat->id }}">{{ $tempat->nama_tempat }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -151,42 +280,40 @@
                                             <input type="text" class="form-control" id="lokasi" name="lokasi">
                                         </div>
                                     </div>
-                                    {{-- <div class="form-group row">
-                                        <label for="kondisi" class="col-sm-4 col-form-label">{{ __('Kondisi') }} </label>
-                                        <div class="col-sm-8">
-                                            <select class="form-control" id="kondisi" name="kondisi">
-                                                <option value="Baik">Baik</option>
-                                                <option value="Rusak">Rusak</option>
-                                                <option value="Hilang">Hilang</option>
-                                            </select>
-                                        </div>
-                                    </div> --}}
+                                    
                                     <div class="form-group row">
                                         <label for="nama_proyek"
                                             class="col-sm-4 col-form-label">{{ __('Nama Proyek') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="nama_proyek" name="nama_proyek">
+                                            <select class="form-control" name="nama_proyek" id="nama_proyek">
+                                                <option value="">Pilih Proyek</option>
+                                                @foreach ($tempats as $tempat)
+                                                    <option value="{{ $tempat->id }}">{{ $tempat->nama_proyek }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="trainset"
-                                            class="col-sm-4 col-form-label">{{ __('Trainset') }}</label>
+                                        <label for="trainset" class="col-sm-4 col-form-label">{{ __('Trainset') }}</label>
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control" id="trainset" name="trainset">
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="car"
-                                            class="col-sm-4 col-form-label">{{ __('Car') }}</label>
+                                        <label for="car" class="col-sm-4 col-form-label">{{ __('Car') }}</label>
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control" id="car" name="car">
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="perawatan"
-                                            class="col-sm-4 col-form-label">{{ __('Perawatan') }}</label>
+                                        <label for="perawatan" class="col-sm-4 col-form-label">{{ __('Perawatan') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="perawatan" name="perawatan">
+                                            <select class="form-control" name="perawatan" id="perawatan">
+                                                <option value="">Pilih Perawatan</option>
+                                                @foreach ($proyeks as $proyek)
+                                                    <option value="{{ $proyek->id }}">{{ $proyek->kode_perawatan }}</option>
+                                                @endforeach
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -207,19 +334,6 @@
                                         </div>
                                     </div>
 
-                                    {{-- <div class="form-group row">
-                                        <label for="proyek_status" class="col-sm-4 col-form-label">{{ __('Proyek Status') }}
-                                        </label>
-                                        <div class="col-sm-8">
-                                            <select class="form-control" id="proyek_status" name="proyek_status">
-                                                <option value=""></option>
-                                                <option value="Open">Open</option>
-                                                <option value="Close">Close</option>
-
-                                            </select>
-                                        </div>
-                                    </div> --}}
-
                                     <div class="form-group row">
                                         <label for="komponen_diganti"
                                             class="col-sm-4 col-form-label">{{ __('Komponen Yang diganti') }}</label>
@@ -238,19 +352,16 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="pic"
-                                            class="col-sm-4 col-form-label">{{ __('PIC') }}</label>
+                                        <label for="pic" class="col-sm-4 col-form-label">{{ __('PIC') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="pic"
-                                                name="pic">
+                                            <input type="text" class="form-control" id="pic" name="pic">
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label for="keterangan"
                                             class="col-sm-4 col-form-label">{{ __('Keterangan') }}</label>
                                         <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="keterangan"
-                                                name="keterangan">
+                                            <input type="text" class="form-control" id="keterangan" name="keterangan">
                                         </div>
                                     </div>
                                     {{-- <div class="form-group row">
@@ -276,7 +387,7 @@
                 </div>
 
                 {{-- editProyek --}}
-                
+
                 {{-- endproyek --}}
 
 
@@ -290,13 +401,13 @@
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form role="form" id="delete" action="{{ route('proyek.destroy') }}" method="post">
+                                <form role="form" id="delete" action="{{ route('service.destroy') }}" method="post">
                                     @csrf
                                     @method('delete')
                                     <input type="hidden" id="delete_id" name="delete_id">
                                 </form>
                                 <div>
-                                    <p>Anda yakin ingin menghapus proyek <span id="delete_name"
+                                    <p>Anda yakin ingin menghapus service <span id="delete_name"
                                             class="font-weight-bold"></span>?</p>
                                 </div>
                             </div>
@@ -410,7 +521,7 @@
 
         function editProyek(data) {
             console.log(data)
-            var title = "Proyek"
+            var title = "Service"
             resetForm();
             $('#modal-title').text("Edit " + title);
             $('#button-save').text("Simpan");

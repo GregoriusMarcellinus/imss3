@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Service;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class ServiceController extends Controller
@@ -19,7 +21,16 @@ class ServiceController extends Controller
         $items = Service::where('nama_proyek', 'LIKE', "%$q%")
             ->paginate(10);
 
-        return view('service.index', compact('items'));
+            $items = Service::select('service.*', 'jadwal.kode_perawatan','proyek.nama_tempat','proyek.nama_proyek')
+            ->leftjoin('jadwal', 'jadwal.id', '=', 'service.perawatan')
+            ->leftjoin('proyek', 'proyek.id', '=', 'service.nama_tempat','service.nama_proyek')
+            ->orderBy('service.id', 'asc')
+            ->paginate(50);
+
+        $proyeks = DB::table('jadwal')->get();
+        $tempats = DB::table('proyek')->get();
+
+        return view('service.index', compact('items','proyeks','tempats'));
     }
 
     /**
@@ -44,7 +55,7 @@ class ServiceController extends Controller
         $request->validate([
             'nama_tempat' => 'required',
             'lokasi' => 'required',
-            'nama_proyek' => 'required',
+            'nama_proyek' => 'nullable',
             'trainset' => 'nullable',
             'car' => 'nullable',
             'perawatan' => 'nullable',
@@ -60,35 +71,13 @@ class ServiceController extends Controller
         ], [
             'nama_tempat.required' => 'Nama Tempat harus diisi',
             'lokasi.required' => 'Lokasi Masuk harus diisi',
-            'nama_proyek.required' => 'Nama Proyek harus diisi',
+            
             
 
 
         ]);
 
-        // $file = $request->file('file');
-        // $randomName = Str::random(20) . '.' . $file->getClientOriginalExtension();
-        // $file->storeAs('photo', $randomName, 'public');
-
-        // $upload = new Proyek([
-        //     'kode_tempat' => $request->input('kode_tempat'),
-        //     'file' => $randomName,
-        //     'nama_tempat' => $request->input('nama_tempat'),
-        //     'lokasi' => $request->input('lokasi'),
-        //     'nama_proyek' => $request->input('nama_proyek'),
-        //     'proyek_mulai' => $request->input('proyek_mulai'),
-        //     'proyek_selesai' => $request->input('proyek_selesai'),
-        //     'proyek_status' => $request->input('proyek_status'),
-        //     'trainset_kode' => $request->input('trainset_kode'),
-        //     'trainset_nama' => $request->input('trainset_nama'),
-        // ]);
-        // $upload->save();
-
-        // $file = $request->file('file');
-        // $randomName = Str::random(20) . '.' . $file->getClientOriginalExtension();
-        // $file->storeAs('photo', $randomName, 'public');
-
-        // $data = $request->all();
+       
         $data = [
             'nama_tempat' => $request->nama_tempat,
             'lokasi' => $request->lokasi,
@@ -181,6 +170,58 @@ class ServiceController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+
+     public function getDetailService(Request $request)
+    {
+        $id = $request->id;
+        $service = Service::select('service.*', 'proyek.nama_proyek as nama_proyek')
+            ->leftjoin('proyek', 'proyek.id', '=', 'service.proyek')
+            ->where('service.id', $id)
+            ->first();
+        $service->details = Service::where('id', $id)->get();
+        // $pr->details = DetailPR::where('id_pr', $id)->leftJoin('kode_material', 'kode_material.id', '=', 'detail_pr.kode_material_id')->get();
+        $service->details = $service->details->map(function ($item) {
+            // $item->nomor = $item->nomor ? $item->nomor : '';
+            $item->nama_tempat = $item->nama_tempat ? $item->nama_tempat : '';
+            $item->lokasi = $item->lokasi ? $item->lokasi : '';
+            $item->nama_proyek = $item->nama_proyek ? $item->nama_proyek : '';
+            $item->trainset = $item->trainset ? $item->trainset : '';
+            $item->car = $item->car ? $item->car : '';
+            $item->perawatan = $item->perawatan ? $item->perawatan : '';
+            $item->perawatan_mulai = $item->perawatan_mulai ? $item->perawatan_mulai : '';
+            $item->perawatan_selesai = $item->perawatan_selesai ? $item->perawatan_selesai : '';            
+            $item->komponen_diganti = $item->komponen_diganti ? $item->komponen_diganti : '';
+            $item->tanggal_komponen = $item->tanggal_komponen ? $item->tanggal_komponen : '';
+            $item->pic = $item->pic ? $item->pic : '';
+            $item->keterangan = $item->keterangan ? $item->keterangan : '';
+            
+            $targetDate = Carbon::parse($item->waktu);
+            $currentDate = Carbon::now();
+            $diff = $currentDate->diff($targetDate);
+            $remainingDays = $diff->days;
+
+            $referenceDate = Carbon::parse($item->waktu); // Change this to your desired reference date
+
+            if ($currentDate->lessThan($referenceDate)) {
+                // If the current date is before the reference date
+                $item->countdown = "$remainingDays  Hari Sebelum Waktu Penyelesaian";
+                $item->backgroundcolor = "#FF0000"; // Red background
+            } elseif ($currentDate->greaterThanOrEqualTo($referenceDate)) {
+                // If the current date is on or after the reference date
+                $item->countdown = "$remainingDays Hari Setelah Waktu Penyelesaian";
+                $item->backgroundcolor = "#008000"; // Green background
+            }
+            return $item;
+        });
+        return response()->json([
+            'service' => $service
+        ]);
+    }
+
+
+
+
     public function destroy(Request $request)
     {
         $id = $request->delete_id;

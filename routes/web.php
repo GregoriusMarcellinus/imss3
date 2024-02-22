@@ -224,6 +224,14 @@ Route::get('service', [App\Http\Controllers\ServiceController::class, 'index'])-
 Route::post('service', [App\Http\Controllers\ServiceController::class, 'store'])->name('service.store');
 Route::delete('service', [App\Http\Controllers\ServiceController::class, 'destroy'])->name('service.destroy');
 Route::put('service', [App\Http\Controllers\ServiceController::class, 'update'])->name('service.update');
+Route::put('service_detail', [App\Http\Controllers\ServiceController::class, 'getDetailService'])->name('service_detail');
+
+Route::get('jadwal', [App\Http\Controllers\JadwalController::class, 'index'])->name('jadwal.index');
+Route::post('jadwal', [App\Http\Controllers\JadwalController::class, 'store'])->name('jadwal.store');
+Route::delete('jadwal', [App\Http\Controllers\JadwalController::class, 'destroy'])->name('jadwal.destroy');
+Route::put('jadwal', [App\Http\Controllers\JadwalController::class, 'update'])->name('jadwal.update');
+
+
 
 Route::get('trainset', [App\Http\Controllers\TrainsetController::class, 'index'])->name('trainset.index');
 Route::post('trainset', [App\Http\Controllers\TrainsetController::class, 'store'])->name('trainset.store');
