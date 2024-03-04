@@ -15,6 +15,7 @@ class CreateBomTable extends Migration
     {
         Schema::create('bom', function (Blueprint $table) {
             $table->id();
+            $table->integer('id_service');
             $table->integer('proyek_id');
             // $table->string('nomor');
             $table->string('proyek');

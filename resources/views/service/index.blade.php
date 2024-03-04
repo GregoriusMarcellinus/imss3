@@ -53,8 +53,8 @@
                                     <th>Perawatan</th>
                                     <th>Perawatan Mulai</th>
                                     <th>Perawatan Selesai</th>
-                                    <th>Komponen Yang Diganti</th>
-                                    <th>Tanggal Komponen</th>
+                                    {{-- <th>Komponen Yang Diganti</th> --}}
+                                    {{-- <th>Tanggal Komponen</th> --}}
                                     <th>Pic</th>
                                     <th>Keterangan</th>
 
@@ -74,11 +74,11 @@
                                         <td>{{ $d->nama_proyek }}</td>
                                         <td>{{ $d->trainset }}</td>
                                         <td>{{ $d->car }}</td>
-                                        <td>{{ $d->kode_perawatan }}</td>
+                                        <td>{{ $d->perawatan }}</td>
                                         <td>{{ $d->perawatan_mulai }}</td>
                                         <td>{{ $d->perawatan_selesai }}</td>
-                                        <td>{{ $d->komponen_diganti }}</td>
-                                        <td>{{ $d->tanggal_komponen }}</td>
+                                        {{-- <td>{{ $d->komponen_diganti }}</td> --}}
+                                        {{-- <td>{{ $d->tanggal_komponen }}</td> --}}
                                         <td>{{ $d->pic }}</td>
                                         <td>{{ $d->keterangan }}</td>
                                         {{-- <td><img src="{{ asset('/storage/photo/' . $d->file) }}" alt=""
@@ -92,7 +92,7 @@
                                                         class="fas fa-edit"></i></button>
 
                                                 <button title="Lihat Detail" type="button" data-toggle="modal"
-                                                    data-target="#detail-spph" class="btn-lihat btn btn-info btn-xs"
+                                                    data-target="#detail-pr" class="btn-lihat btn btn-info btn-xs"
                                                     data-detail="{{ json_encode($data) }}"><i
                                                         class="fas fa-list"></i></button>
 
@@ -119,11 +119,11 @@
         </div>
 
         {{-- modal detail --}}
-        {{-- <div class="modal fade" id="detail-spph">
-            <div class="modal-dialog modal-lg">
+        <div class="modal fade" id="detail-pr">
+            <div class="modal-dialog modal-xl">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h4 id="modal-title" class="modal-title">{{ __('Detail Service') }}</h4>
+                        <h4 id="modal-title" class="modal-title">{{ __('Detail Penggantian Komponen') }}</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -131,28 +131,27 @@
                     <div class="modal-body">
                         <div class="mb-3">
                             <div class="row">
-                                <form id="cetak-spph" method="GET" action="{{ route('spph.print') }}"
-                                    target="_blank">
-                                    <input type="hidden" name="spph_id" id="spph_id">
+                                <form id="cetak-pr" method="GET" action="{{ route('cetak_pr') }}" target="_blank">
+                                    <input type="hidden" name="id" id="id">
                                 </form>
                                 <div class="col-12" id="container-form">
-                                    <button id="button-cetak-spph" type="button" class="btn btn-primary"
-                                        onclick="document.getElementById('cetak-spph').submit();">{{ __('Cetak') }}</button>
+                                    <button id="button-cetak-pr" type="button" class="btn btn-primary"
+                                        onclick="document.getElementById('cetak-pr').submit();">{{ __('Cetak') }}</button>
                                     <table class="align-top w-100">
                                         <tr>
-                                            <td style="width: 3%;"><b>No SPPH</b></td>
+                                            <td style="width: 3%;"><b>No PR</b></td>
                                             <td style="width:2%">:</td>
                                             <td style="width: 55%"><span id="no_surat"></span></td>
                                         </tr>
                                         <tr>
-                                            <td><b>Nama Proyek</b></td>
+                                            <td><b>Tanggal</b></td>
                                             <td>:</td>
-                                            <td><span id="nama_proyek"></span></td>
+                                            <td><span id="tgl_surat"></span></td>
                                         </tr>
                                         <tr>
-                                            <td><b>tanggal</b></td>
+                                            <td><b>Proyek</b></td>
                                             <td>:</td>
-                                            <td><span id="tgl_spph"></span></td>
+                                            <td><span id="proyek"></span></td>
                                         </tr>
                                         <tr>
                                             <td><b>Produk</b></td>
@@ -161,68 +160,131 @@
                                             <td colspan="3">
                                                 <button id="button-tambah-produk" type="button"
                                                     class="btn btn-info mb-3"
-                                                    onclick="showAddProduct()">{{ __('Tambah Produk') }}</button>
+                                                    onclick="showAddProduct()">{{ __('Tambah Item Detail') }}</button>
                                             </td>
                                         </tr>
                                     </table>
                                     <div class="table-responsive">
                                         <table class="table table-bordered">
-                                            <thead>
-                                                <th>NO</th>
-                                                <th>Nama Barang</th>
-                                                <th>Spesifikasi</th>
-                                                <th>QTY</th>
-                                                <th>SAT</th>
+                                            <thead style="text-align: center">
+                                                <th>{{ __('NO') }}</th>
+                                                <th>{{ __('Komponen Yang Diganti') }}</th>
+                                                <th>{{ __('Tanggal Penggantian Komponen') }}</th>
+                                                <th>{{ __('QTY') }}</th>
+                                                <th>{{ __('SAT') }}</th>
+                                                <th>{{ __('Keterangan') }}</th>
+                                                
                                             </thead>
-
-                                            <tbody id="table-spph">
+                                            <tbody id="table-pr">
                                             </tbody>
                                         </table>
                                     </div>
                                 </div>
                                 <div class="col-0 d-none" id="container-product">
-                                    
-                                    <div id="loader" class="card">
-                                        <div class="card-body text-center">
-                                            <div class="spinner-border text-danger" style="width: 3rem; height: 3rem;"
-                                                role="status">
-                                                <span class="sr-only">Loading...</span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div id="form" class="card">
+                                    <div class="card">
                                         <div class="card-body">
-                                            <button type="button" class="btn btn-primary mb-3"
-                                                onclick="addToDetails()"></i>Tambah Pilihan</button>
+                                            {{-- //radio button with label INKA or IMSS option --}}
+                                            {{-- <div class="custom-control custom-radio">
+                                                <input type="radio" id="customRadio1" name="ptype"
+                                                    class="custom-control-input" checked value="inka">
+                                                <label class="custom-control-label" for="customRadio1">INKA</label>
+                                            </div>
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" id="customRadio2" name="ptype"
+                                                    class="custom-control-input" value="imss">
+                                                <label class="custom-control-label" for="customRadio2">IMSS</label>
+                                            </div> --}}
+
                                             <div class="input-group input-group-lg">
-                                                <input type="text" class="form-control" id="proyek_name"
-                                                    name="proyek_name" placeholder="Search By Proyek">
+
+                                                <input type="text" class="form-control" id="pcode" name="pcode"
+                                                    min="0" placeholder="Product Code">
                                                 <div class="input-group-append">
-                                                    <button class="btn btn-primary" id="check-proyek"
+                                                    <button class="btn btn-primary" id="button-check"
                                                         onclick="productCheck()">
                                                         <i class="fas fa-search"></i>
                                                     </button>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="table-responsive card-body">
-                                            <table class="table table-bordered">
-                                                <thead>
-                                                    <tr>
-                                                        <th>No</th>
-                                                        <th>Deskripsi</th>
-                                                        <th>Spesifikasi</th>
-                                                        <th>QTY</th>
-                                                        <th>Sat</th>
-                                                        <th>NO PR</th>
-                                                        <th>No SPPH</th>
-                                                        <th>Proyek</th>
-                                                        <th>Pilih</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody id='detail-material'>
-                                                </tbody>
-                                            </table>
+                                    </div>
+                                    {{-- <div id="loader" class="card">
+                                        <div class="card-body text-center">
+                                            <div class="spinner-border text-danger" style="width: 3rem; height: 3rem;"
+                                                role="status">
+                                                <span class="sr-only">Loading...</span>
+                                            </div>
+                                        </div>
+                                    </div> --}}
+                                    <div id="form" class="card">
+                                        <div class="card-body">
+                                            <form role="form" id="stock-update" method="post"
+                                                enctype="multipart/form-data">
+                                                @csrf
+                                                <input type="hidden" id="pid" name="pid">
+                                                <input type="hidden" id="type" name="type">
+                                                <input type="hidden" id="proyek_id_val" name="proyek_id_val">
+                                                <div class="form-group row">
+                                                    <label for="deskripsi_material"
+                                                        class="col-sm-4 col-form-label">{{ __('Komponen Diganti') }}</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="deskripsi_material">
+                                                        <input type="hidden" class="form-control" id="pr_id"
+                                                            disabled>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="spesifikasi"
+                                                        class="col-sm-4 col-form-label">{{ __('Tanggal Komponen') }}</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="spesifikasi">
+                                                    </div>
+                                                </div>
+                                                {{-- <div class="form-group row">
+                                                    <label for="spek"
+                                                        class="col-sm-4 col-form-label">{{ __('Spesifikasi') }}</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="spek">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="no_nota"
+                                                        class="col-sm-4 col-form-label">{{ __('QTY') }}</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="stock"
+                                                            name="stock">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="satuan"
+                                                        class="col-sm-4 col-form-label">{{ __('Satuan') }}</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="satuan"
+                                                            name="satuan">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="waktu"
+                                                        class="col-sm-4 col-form-label">{{ __('Waktu Penyelesaian') }}</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="date" class="form-control" id="waktu"
+                                                            name="waktu">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="keterangan"
+                                                        class="col-sm-4 col-form-label">{{ __('Keterangan') }}</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="keterangan"
+                                                            name="keterangan">
+                                                    </div>
+                                                </div> --}}
+
+                                                
+
+                                            </form>
+                                            <button id="button-update-pr" type="button" class="btn btn-primary w-100"
+                                                onclick="PRupdate()">{{ __('Tambahkan') }}</button>
                                         </div>
                                     </div>
                                 </div>
@@ -231,7 +293,8 @@
                     </div>
                 </div>
             </div>
-        </div> --}}
+        </div>
+        {{-- end modal detail --}}
 
 
 
@@ -269,7 +332,7 @@
                                             <select class="form-control" name="nama_tempat" id="nama_tempat">
                                                 <option value="">Pilih Tempat</option>
                                                 @foreach ($tempats as $tempat)
-                                                    <option value="{{ $tempat->id }}">{{ $tempat->nama_tempat }}</option>
+                                                    <option value="{{ $tempat->nama_tempat }}">{{ $tempat->nama_tempat }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -288,7 +351,7 @@
                                             <select class="form-control" name="nama_proyek" id="nama_proyek">
                                                 <option value="">Pilih Proyek</option>
                                                 @foreach ($tempats as $tempat)
-                                                    <option value="{{ $tempat->id }}">{{ $tempat->nama_proyek }}</option>
+                                                    <option value="{{ $tempat->nama_proyek }}">{{ $tempat->nama_proyek }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -311,7 +374,7 @@
                                             <select class="form-control" name="perawatan" id="perawatan">
                                                 <option value="">Pilih Perawatan</option>
                                                 @foreach ($proyeks as $proyek)
-                                                    <option value="{{ $proyek->id }}">{{ $proyek->kode_perawatan }}</option>
+                                                    <option value="{{ $proyek->kode_perawatan }}">{{ $proyek->kode_perawatan }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -334,23 +397,24 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group row">
+                                    {{-- <div class="form-group row">
                                         <label for="komponen_diganti"
                                             class="col-sm-4 col-form-label">{{ __('Komponen Yang diganti') }}</label>
                                         <div class="col-sm-8">
                                             <input type="text" class="form-control" id="komponen_diganti"
                                                 name="komponen_diganti">
                                         </div>
-                                    </div>
+                                    </div> --}}
 
-                                    <div class="form-group row">
+                                    {{-- <div class="form-group row">
                                         <label for="tanggal_komponen"
                                             class="col-sm-4 col-form-label">{{ __('Tanggal Komponen') }}</label>
                                         <div class="col-sm-8">
                                             <input type="date" class="form-control" id="tanggal_komponen"
                                                 name="tanggal_komponen">
                                         </div>
-                                    </div>
+                                    </div> --}}
+
                                     <div class="form-group row">
                                         <label for="pic" class="col-sm-4 col-form-label">{{ __('PIC') }}</label>
                                         <div class="col-sm-8">
@@ -544,6 +608,171 @@
 
 
         }
+
+        function showAddProduct() {
+            if ($('#detail-pr').find('#container-product').hasClass('d-none')) {
+                $('#detail-pr').find('#container-product').removeClass('d-none');
+                $('#detail-pr').find('#container-product').addClass('col-5');
+                $('#detail-pr').find('#container-form').removeClass('col-12');
+                $('#detail-pr').find('#container-form').addClass('col-7');
+                $('#button-tambah-produk').text('Kembali');
+            } else {
+                $('#detail-pr').find('#container-product').removeClass('col-5');
+                $('#detail-pr').find('#container-product').addClass('d-none');
+                $('#detail-pr').find('#container-form').addClass('col-12');
+                $('#detail-pr').find('#container-form').removeClass('col-7');
+                $('#button-tambah-produk').text('Tambah Item Detail');
+                clearForm();
+            }
+        }
+
+        function clearForm() {
+            $('#komponen_diganti').val("");
+            $('#tanggal_komponen').val("");
+        }
+
+        
+        function PRupdate() {
+            const id = $('#pr_id').val()
+
+            var inputFile = $("#lampiran")[0].files[0];
+            var formData = new FormData();
+            formData.append('lampiran', inputFile);
+            formData.append('_token', '{{ csrf_token() }}');
+            formData.append('id_service', id);
+            // formData.append('id_proyek', $('#proyek_id_val').val());
+            formData.append('deskripsi_material', $('#deskripsi_material').val());
+            formData.append('spesifikasi', $('#spesifikasi').val());
+            // formData.append('stock', $('#stock').val());
+            // formData.append('spek', $('#spek').val());
+            // formData.append('satuan', $('#satuan').val());
+            // formData.append('waktu', $('#waktu').val());
+            // formData.append('keterangan', $('#keterangan').val());
+
+            // if ($('#waktu').val() == null || $('#waktu').val() == "") {
+            //     toastr.error("Waktu Penyelesaian belum diisi!");
+            //     return
+            // }
+
+            // if (inputFile == null) {
+            //     toastr.error("Lampiran belum diisi!");
+            //     return
+            // }
+
+            // if (inputFile.type != "application/pdf") {
+            //     toastr.error("Lampiran harus berupa file PDF!");
+            //     return
+            // }
+
+            $.ajax({
+                url: "{{ url('update_service_detail') }}",
+                type: "POST",
+                data: formData,
+                contentType: false,
+                processData: false,
+                beforeSend: function() {
+                    $('#button-update-pr').html('<i class="fas fa-spinner fa-spin"></i> Loading...');
+                    $('#button-update-pr').attr('disabled', true);
+                },
+                success: function(data) {
+                    if (!data.success) {
+                        toastr.error(data.message);
+                        $('#button-update-pr').html('Tambahkan');
+                        $('#button-update-pr').attr('disabled', false);
+                        return
+                    }
+                    $('#id').val(data.service.id);
+                    $('#no_surat').text(data.pr.no_pr);
+                    $('#tgl_surat').text(data.pr.tanggal);
+                    $('#proyek').text(data.pr.proyek);
+                    $('#button-update-pr').html('Tambahkan');
+                    $('#button-update-pr').attr('disabled', false);
+                    clearForm();
+                    if (data.service.details.length == 0) {
+                        $('#table-pr').append(
+                            '<tr><td colspan="15" class="text-center">Tidak ada produk</td></tr>');
+                    } else {
+                        $('#table-pr').empty();
+                        $.each(data.service.details, function(key, value) {
+                            var urlLampiran = "{{ asset('lampiran') }}";
+                            var status, spph, po;
+                            if (!value.id_spph) {
+                                spph = '-';
+                            } else {
+                                spph = value.nomor_spph
+                            }
+
+                            if (!value.id_po) {
+                                po = '-';
+                            } else {
+                                po = value.no_po
+                            }
+                            var lampiran = null;
+                            if (value.lampiran == null) {
+                                lampiran = '-';
+                            } else {
+                                lampiran = '<a href="' + urlLampiran + '/' + value.lampiran +
+                                    '"><i class="fa fa-eye"></i> Lihat</a>';
+                            }
+                            //0 = Lakukan SPPH, 1 = Lakukan PO, 2 = Completed, 3 = Negosiasi, 4 = Justifikasi
+                            // if (value.status == 0 || !value.status) {
+                            //     status = 'Lakukan SPPH';
+                            // } else if (value.status == 1) {
+                            //     status = 'Lakukan PO';
+                            // } else if (value.status == 2) {
+                            //     status = 'COMPLETED';
+                            // } else if (value.status == 3) {
+                            //     status = 'NEGOSIASI';
+                            // } else if (value.status == 4) {
+                            //     status = 'JUSTIFIKASI';
+                            // }
+
+                            // if (!value.id_spph) {
+                            //     status = 'Lakukan SPPH';
+                            // } else if (value.id_spph && !value.no_sph) {
+                            //     status = 'Lakukan SPH';
+                            // } else if (value.id_spph && value.no_sph && !value.no_just) {
+                            //     status = 'Lakukan Justifikasi';
+                            // } else if (value.id_spph && value.no_sph && value.no_just && !value.id_po) {
+                            //     status = 'Lakukan Nego/PO';
+                            // } else if (value.id_spph && value.no_sph && value
+                            //     .id_po) {
+                            //     status = 'COMPLETED';
+                            // }
+
+                            // if (!value.id_spph && !value.nomor_spph) {
+                            //     status = 'Lakukan SPPH';
+                            // } else if (value.id_spph && value.nomor_spph && !value.id_po) {
+                            //     status = 'PROSES PO';
+                            // } else if (value.id_spph && value.nomor_spph && value
+                            //     .id_po && value.no_po) {
+                            //     status = 'COMPLETED';
+                            // }
+
+
+                            $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
+                                .deskripsi_material + '</td><td>' + value.spesifikasi + '</td><td>' 
+                                    // +
+                                // value
+                                // .spek + '</td><td>' + value.qty + '</td><td>' + value
+                                // .satuan +
+                                // '</td><td>' + value.waktu + '</td><td>' +
+                                // lampiran +
+                                // '</td><td>' + value.keterangan + '</td><td>' + status +
+                                // '</td></tr>'
+                                // + <td>' + spph + '</td><td>' + value.sph +
+                                // '</td><td>' + po +
+                                // '</td><td>' +
+                                // status + '</td> +
+                            );
+                        });
+                    }
+                }
+            });
+        }
+        
+
+        
 
         function deleteproyek(data) {
             $('#delete_id').val(data.id);

@@ -2,6 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Bom;
+use App\Models\Jadwal;
+use App\Models\Proyek;
 use App\Models\Service;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -21,14 +24,17 @@ class ServiceController extends Controller
         $items = Service::where('nama_proyek', 'LIKE', "%$q%")
             ->paginate(10);
 
-            $items = Service::select('service.*', 'jadwal.kode_perawatan','proyek.nama_tempat','proyek.nama_proyek')
-            ->leftjoin('jadwal', 'jadwal.id', '=', 'service.perawatan')
-            ->leftjoin('proyek', 'proyek.id', '=', 'service.nama_tempat','service.nama_proyek')
-            ->orderBy('service.id', 'asc')
-            ->paginate(50);
+        //     $items = Service::select('service.*', 'jadwal.kode_perawatan','proyek.nama_tempat','proyek.nama_proyek')
+        //     ->leftjoin('jadwal', 'jadwal.id', '=', 'service.perawatan')
+        //     ->leftjoin('proyek', 'proyek.id', '=', 'service.nama_tempat','service.nama_proyek')
+        //     ->orderBy('service.id', 'asc')
+        //     ->paginate(50);
 
-        $proyeks = DB::table('jadwal')->get();
-        $tempats = DB::table('proyek')->get();
+        // $proyeks = DB::table('jadwal')->get();
+        // $tempats = DB::table('proyek')->get();
+
+        $proyeks = Jadwal::all();
+        $tempats = Proyek::all();
 
         return view('service.index', compact('items','proyeks','tempats'));
     }
@@ -219,6 +225,59 @@ class ServiceController extends Controller
         ]);
     }
 
+    public function updateDetailService(Request $request)
+    {
+        if (!$request->stock) {
+            return response()->json([
+                'success' => false,
+                'message' => 'QTY tidak boleh kosong'
+            ]);
+        }
+        $request->validate([
+            'lampiran' => 'nullable|file|mimes:pdf|max:500',
+        ]);
+
+        
+
+        $insert = Bom::create([
+            'deskripsi_material' => $request->deskripsi_material,
+            'spesifikasi' => $request->spesifikasi,
+            // 'kode_material' => $request->kode_material,
+            // 'uraian' => $request->uraian,
+            // 'spek' => $request->spek,
+            // 'satuan' => $request->satuan,
+            // 'qty' => $request->stock,
+            // 'waktu' => $request->waktu,
+            // 'keterangan' => $request->keterangan,
+            // 'lampiran' => $fileName,
+        ]);
+
+        if (!$insert) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menambahkan detail PR'
+            ]);
+        }
+
+        $service = DB::table('service')->where('id', $request->id_service)->first();
+        $service->details = Bom::where('id_service', $request->id_service)->get();
+        $service->details = $service->details->map(function ($item) {
+            $item->deskripsi_material = $item->deskripsi_material ? $item->deskripsi_material : '';
+            $item->spesifikasi = $item->spesifikasi ? $item->spesifikasi : '';
+            // $item->kode_material = $item->kode_material ? $item->kode_material : '';
+            // $item->nomor_spph = Spph::where('id', $item->id_spph)->first()->nomor_spph ?? '';
+            // $item->no_po = Purchase_Order::where('id', $item->id_po)->first()->no_po ?? '';
+            // $item->lampiran = $item->lampiran ? $item->lampiran : '';
+            return $item;
+        });
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Berhasil menambahkan detail PR',
+            'service' => $service
+        ]);
+    }
+
 
 
 
@@ -229,5 +288,60 @@ class ServiceController extends Controller
         Service::where('id', $id)->delete();
 
         return redirect()->route('service.index')->with('success', 'service berhasil dihapus');
+    }
+
+    public function detailPrSave(Request $request)
+    {
+        $id_service = $request->id;
+        $id = $request->id_service;
+        $deskripsi_material = $request->deskripsi_material;
+        $spesifikasi = $request->spesifikasi;
+        // $no_just = $request->no_just;
+        // $tanggal_just = $request->tanggal_just;
+        // $no_nego1 = $request->no_nego1;
+        // $tanggal_nego1 = $request->tanggal_nego1;
+        // $batas_nego1 = $request->batas_nego1;
+        // $no_nego2 = $request->no_nego2;
+        // $tanggal_nego2 = $request->tanggal_nego2;
+        // $batas_nego2 = $request->batas_nego2;
+
+        Bom::where('id', $id_service)->update([
+            'deskripsi_material' => $deskripsi_material,
+            'spesifikasi' => $spesifikasi,
+            // 'no_just' => $no_just,
+            // 'tanggal_just' => $tanggal_just,
+            // 'no_nego1' => $no_nego1,
+            // 'tanggal_nego1' => $tanggal_nego1,
+            // 'batas_nego1' => $batas_nego1,
+            // 'no_nego2' => $no_nego2,
+            // 'tanggal_nego2' => $tanggal_nego2,
+            // 'batas_nego2' => $batas_nego2,
+        ]);
+
+        $service = Service::where('id', $id)->first();
+        $service->details = Bom::where('id_service', $service->id)->get();
+        // $pr->details = DetailPR::where('id_pr', $id)->leftJoin('kode_material', 'kode_material.id', '=', 'detail_pr.kode_material_id')->get();
+        $service->details = $service->details->map(function ($item) {
+            $item->deskripsi_material = $item->deskripsi_material ? $item->deskripsi_material : '';
+            $item->spesifikasi = $item->spesifikasi ? $item->spesifikasi : '';
+            // $item->kode_material = $item->kode_material ? $item->kode_material : '';
+            // $item->nomor_spph = Spph::where('id', $item->id_spph)->first()->nomor_spph ?? '';
+            // $item->no_po = Purchase_Order::where('id', $item->id_po)->first()->no_po ?? '';
+
+            // $item->no_sph = $item->no_sph ?? '';
+            // $item->tanggal_sph = $item->tanggal_sph ?? '';
+            // $item->no_just = $item->no_just ?? '';
+            // $item->tanggal_just = $item->tanggal_just ?? '';
+            // $item->no_nego1 = $item->no_nego1 ?? '';
+            // $item->tanggal_nego1 = $item->tanggal_nego1 ?? '';
+            // $item->batas_nego1 = $item->batas_nego1 ?? '';
+            // $item->no_nego2 = $item->no_nego2 ?? '';
+            // $item->tanggal_nego2 = $item->tanggal_nego2 ?? '';
+            // $item->batas_nego2 = $item->batas_nego2 ?? '';
+            return $item;
+        });
+        return response()->json([
+            'service' => $service
+        ]);
     }
 }
