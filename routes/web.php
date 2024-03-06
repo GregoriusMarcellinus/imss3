@@ -224,8 +224,9 @@ Route::get('service', [App\Http\Controllers\ServiceController::class, 'index'])-
 Route::post('service', [App\Http\Controllers\ServiceController::class, 'store'])->name('service.store');
 Route::delete('service', [App\Http\Controllers\ServiceController::class, 'destroy'])->name('service.destroy');
 Route::put('service', [App\Http\Controllers\ServiceController::class, 'update'])->name('service.update');
-Route::put('service_detail', [App\Http\Controllers\ServiceController::class, 'getDetailService'])->name('service_detail');
+Route::get('service_detail', [App\Http\Controllers\ServiceController::class, 'getDetailService'])->name('service_detail');
 Route::post('update_service_detail', [App\Http\Controllers\ServiceController::class, 'updateDetailService'])->name('service_detail.update');
+Route::post('detail_service_save', [App\Http\Controllers\ServiceController::class, 'detailServiceSave'])->name('detail_service_save');
 
 Route::get('jadwal', [App\Http\Controllers\JadwalController::class, 'index'])->name('jadwal.index');
 Route::post('jadwal', [App\Http\Controllers\JadwalController::class, 'store'])->name('jadwal.store');

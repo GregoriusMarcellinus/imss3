@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bom;
+use App\Models\Detailservice;
 use App\Models\Jadwal;
 use App\Models\Proyek;
 use App\Models\Service;
@@ -185,22 +186,22 @@ class ServiceController extends Controller
             ->leftjoin('proyek', 'proyek.id', '=', 'service.proyek')
             ->where('service.id', $id)
             ->first();
-        $service->details = Service::where('id', $id)->get();
+        $service->details = Detailservice::where('id_service', $id)->get();
         // $pr->details = DetailPR::where('id_pr', $id)->leftJoin('kode_material', 'kode_material.id', '=', 'detail_pr.kode_material_id')->get();
         $service->details = $service->details->map(function ($item) {
             // $item->nomor = $item->nomor ? $item->nomor : '';
-            $item->nama_tempat = $item->nama_tempat ? $item->nama_tempat : '';
-            $item->lokasi = $item->lokasi ? $item->lokasi : '';
-            $item->nama_proyek = $item->nama_proyek ? $item->nama_proyek : '';
-            $item->trainset = $item->trainset ? $item->trainset : '';
-            $item->car = $item->car ? $item->car : '';
-            $item->perawatan = $item->perawatan ? $item->perawatan : '';
-            $item->perawatan_mulai = $item->perawatan_mulai ? $item->perawatan_mulai : '';
-            $item->perawatan_selesai = $item->perawatan_selesai ? $item->perawatan_selesai : '';            
-            $item->komponen_diganti = $item->komponen_diganti ? $item->komponen_diganti : '';
-            $item->tanggal_komponen = $item->tanggal_komponen ? $item->tanggal_komponen : '';
-            $item->pic = $item->pic ? $item->pic : '';
-            $item->keterangan = $item->keterangan ? $item->keterangan : '';
+            $item->kode_material = $item->kode_material ? $item->kode_material : '';
+            $item->nama_barang = $item->nama_barang ? $item->nama_barang : '';
+            $item->spesifikasi = $item->spesifikasi ? $item->spesifikasi : '';
+            // $item->trainset = $item->trainset ? $item->trainset : '';
+            // $item->car = $item->car ? $item->car : '';
+            // $item->perawatan = $item->perawatan ? $item->perawatan : '';
+            // $item->perawatan_mulai = $item->perawatan_mulai ? $item->perawatan_mulai : '';
+            // $item->perawatan_selesai = $item->perawatan_selesai ? $item->perawatan_selesai : '';            
+            // $item->komponen_diganti = $item->komponen_diganti ? $item->komponen_diganti : '';
+            // $item->tanggal_komponen = $item->tanggal_komponen ? $item->tanggal_komponen : '';
+            // $item->pic = $item->pic ? $item->pic : '';
+            // $item->keterangan = $item->keterangan ? $item->keterangan : '';
             
             $targetDate = Carbon::parse($item->waktu);
             $currentDate = Carbon::now();
@@ -239,8 +240,10 @@ class ServiceController extends Controller
 
         
 
-        $insert = Bom::create([
-            'deskripsi_material' => $request->deskripsi_material,
+        $insert = Detailservice::create([
+            'id_service' => $request->id_service,
+            'kode_material' => $request->kode_material,
+            'nama_barang' => $request->nama_barang,
             'spesifikasi' => $request->spesifikasi,
             // 'kode_material' => $request->kode_material,
             // 'uraian' => $request->uraian,
@@ -260,9 +263,10 @@ class ServiceController extends Controller
         }
 
         $service = DB::table('service')->where('id', $request->id_service)->first();
-        $service->details = Bom::where('id_service', $request->id_service)->get();
+        $service->details = Detailservice::where('id_service', $request->id_service)->get();
         $service->details = $service->details->map(function ($item) {
-            $item->deskripsi_material = $item->deskripsi_material ? $item->deskripsi_material : '';
+            $item->kode_material = $item->kode_material ? $item->kode_material : '';
+            $item->nama_barang = $item->nama_barang ? $item->nama_barang : '';
             $item->spesifikasi = $item->spesifikasi ? $item->spesifikasi : '';
             // $item->kode_material = $item->kode_material ? $item->kode_material : '';
             // $item->nomor_spph = Spph::where('id', $item->id_spph)->first()->nomor_spph ?? '';
@@ -290,11 +294,12 @@ class ServiceController extends Controller
         return redirect()->route('service.index')->with('success', 'service berhasil dihapus');
     }
 
-    public function detailPrSave(Request $request)
+    public function detailServiceSave(Request $request)
     {
         $id_service = $request->id;
         $id = $request->id_service;
-        $deskripsi_material = $request->deskripsi_material;
+        $kode_material = $request->kode_material;
+        $nama_barang = $request->nama_barang;
         $spesifikasi = $request->spesifikasi;
         // $no_just = $request->no_just;
         // $tanggal_just = $request->tanggal_just;
@@ -305,8 +310,9 @@ class ServiceController extends Controller
         // $tanggal_nego2 = $request->tanggal_nego2;
         // $batas_nego2 = $request->batas_nego2;
 
-        Bom::where('id', $id_service)->update([
-            'deskripsi_material' => $deskripsi_material,
+        Detailservice::where('id', $id_service)->update([
+            'kode_material' => $kode_material,
+            'nama_barang' => $nama_barang,
             'spesifikasi' => $spesifikasi,
             // 'no_just' => $no_just,
             // 'tanggal_just' => $tanggal_just,
@@ -319,10 +325,11 @@ class ServiceController extends Controller
         ]);
 
         $service = Service::where('id', $id)->first();
-        $service->details = Bom::where('id_service', $service->id)->get();
+        $service->details = Detailservice::where('id_service', $service->id)->get();
         // $pr->details = DetailPR::where('id_pr', $id)->leftJoin('kode_material', 'kode_material.id', '=', 'detail_pr.kode_material_id')->get();
         $service->details = $service->details->map(function ($item) {
-            $item->deskripsi_material = $item->deskripsi_material ? $item->deskripsi_material : '';
+            $item->kode_material = $item->kode_material ? $item->kode_material : '';
+            $item->nama_barang = $item->nama_barang ? $item->nama_barang : '';
             $item->spesifikasi = $item->spesifikasi ? $item->spesifikasi : '';
             // $item->kode_material = $item->kode_material ? $item->kode_material : '';
             // $item->nomor_spph = Spph::where('id', $item->id_spph)->first()->nomor_spph ?? '';

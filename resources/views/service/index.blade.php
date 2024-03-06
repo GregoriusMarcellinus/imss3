@@ -139,19 +139,19 @@
                                         onclick="document.getElementById('cetak-pr').submit();">{{ __('Cetak') }}</button>
                                     <table class="align-top w-100">
                                         <tr>
-                                            <td style="width: 3%;"><b>No PR</b></td>
+                                            <td style="width: 3%;"><b>Nama Tempat</b></td>
                                             <td style="width:2%">:</td>
-                                            <td style="width: 55%"><span id="no_surat"></span></td>
+                                            <td style="width: 55%"><span id="nama_tempat"></span></td>
                                         </tr>
                                         <tr>
-                                            <td><b>Tanggal</b></td>
+                                            <td><b>Lokasi</b></td>
                                             <td>:</td>
-                                            <td><span id="tgl_surat"></span></td>
+                                            <td><span id="lokasi"></span></td>
                                         </tr>
                                         <tr>
-                                            <td><b>Proyek</b></td>
+                                            <td><b>Nama Proyek</b></td>
                                             <td>:</td>
-                                            <td><span id="proyek"></span></td>
+                                            <td><span id="nama_proyek"></span></td>
                                         </tr>
                                         <tr>
                                             <td><b>Produk</b></td>
@@ -168,11 +168,12 @@
                                         <table class="table table-bordered">
                                             <thead style="text-align: center">
                                                 <th>{{ __('NO') }}</th>
-                                                <th>{{ __('Komponen Yang Diganti') }}</th>
-                                                <th>{{ __('Tanggal Penggantian Komponen') }}</th>
-                                                <th>{{ __('QTY') }}</th>
+                                                <th>{{ __('Kode Material') }}</th>
+                                                <th>{{ __('Nama Barang') }}</th>
+                                                <th>{{ __('Spesifikasi') }}</th>
+                                                {{-- <th>{{ __('QTY') }}</th>
                                                 <th>{{ __('SAT') }}</th>
-                                                <th>{{ __('Keterangan') }}</th>
+                                                <th>{{ __('Keterangan') }}</th> --}}
                                                 
                                             </thead>
                                             <tbody id="table-pr">
@@ -225,17 +226,24 @@
                                                 <input type="hidden" id="type" name="type">
                                                 <input type="hidden" id="proyek_id_val" name="proyek_id_val">
                                                 <div class="form-group row">
-                                                    <label for="deskripsi_material"
-                                                        class="col-sm-4 col-form-label">{{ __('Komponen Diganti') }}</label>
+                                                    <label for="kode_material"
+                                                        class="col-sm-4 col-form-label">{{ __('Kode Material') }}</label>
                                                     <div class="col-sm-8">
-                                                        <input type="text" class="form-control" id="deskripsi_material">
+                                                        <input type="text" class="form-control" id="kode_material">
                                                         <input type="hidden" class="form-control" id="pr_id"
                                                             disabled>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
+                                                    <label for="nama_barang"
+                                                        class="col-sm-4 col-form-label">{{ __('Nama Barang') }}</label>
+                                                    <div class="col-sm-8">
+                                                        <input type="text" class="form-control" id="nama_barang">
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
                                                     <label for="spesifikasi"
-                                                        class="col-sm-4 col-form-label">{{ __('Tanggal Komponen') }}</label>
+                                                        class="col-sm-4 col-form-label">{{ __('Spesifikasi') }}</label>
                                                     <div class="col-sm-8">
                                                         <input type="text" class="form-control" id="spesifikasi">
                                                     </div>
@@ -627,8 +635,9 @@
         }
 
         function clearForm() {
-            $('#komponen_diganti').val("");
-            $('#tanggal_komponen').val("");
+            $('#kode_material').val("");
+            $('#nama_barang').val("");
+            $('#spesifikasi').val("");
         }
 
         
@@ -641,7 +650,8 @@
             formData.append('_token', '{{ csrf_token() }}');
             formData.append('id_service', id);
             // formData.append('id_proyek', $('#proyek_id_val').val());
-            formData.append('deskripsi_material', $('#deskripsi_material').val());
+            formData.append('kode_material', $('#kode_material').val());
+            formData.append('nama_barang', $('#nama_barang').val());
             formData.append('spesifikasi', $('#spesifikasi').val());
             // formData.append('stock', $('#stock').val());
             // formData.append('spek', $('#spek').val());
@@ -682,9 +692,9 @@
                         return
                     }
                     $('#id').val(data.service.id);
-                    $('#no_surat').text(data.pr.no_pr);
-                    $('#tgl_surat').text(data.pr.tanggal);
-                    $('#proyek').text(data.pr.proyek);
+                    $('#nama_tempat').text(data.service.nama_tempat);
+                    $('#lokasi').text(data.service.lokasi);
+                    $('#nama_proyek').text(data.service.nama_proyek);
                     $('#button-update-pr').html('Tambahkan');
                     $('#button-update-pr').attr('disabled', false);
                     clearForm();
@@ -751,9 +761,8 @@
 
 
                             $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
-                                .deskripsi_material + '</td><td>' + value.spesifikasi + '</td><td>' 
-                                    // +
-                                // value
+                                .kode_material + '</td><td>' + value.nama_barang + '</td><td>' +
+                                value.spesifikasi + '</td><td>'
                                 // .spek + '</td><td>' + value.qty + '</td><td>' + value
                                 // .satuan +
                                 // '</td><td>' + value.waktu + '</td><td>' +
@@ -770,7 +779,144 @@
                 }
             });
         }
+
+        function lihatPR(data) {
+            emptyTableProducts();
+            clearForm()
+            $('#modal-title').text("Detail Request");
+            $('#button-save').text("Cetak");
+            resetForm();
+            $('#button-tambah-produk').text('Tambah Item Detail');
+            $('#id').val(data.id);
+            $('#nama_tempat').text(data.nama_tempat);
+            $('#nama_proyek').text(data.nama_proyek);
+            $('#lokasi').text(data.lokasi);
+            // $('#proyek_id_val').val(data.proyek_id);
+            $('#pr_id').val(data.id);
+            $('#table-pr').empty();
+
+            //#button-tambah-produk disabled when editable is false
+            if (data.editable == 0) {
+                $('#button-tambah-produk').attr('disabled', true);
+            } else {
+                $('#button-tambah-produk').attr('disabled', false);
+            }
+
+            $.ajax({
+                url: "{{ url('service_detail') }}" + "/" + data.id,
+                type: "GET",
+                dataType: "json",
+                beforeSend: function() {
+                    $('#table-pr').append('<tr><td colspan="15" class="text-center">Loading...</td></tr>');
+                    $('#button-cetak-pr').html('<i class="fas fa-spinner fa-spin"></i> Loading...');
+                    $('#button-cetak-pr').attr('disabled', true);
+                },
+                success: function(data) {
+                    console.log(data);
+                    $('#id').val(data.pr.id);
+                    $('#nama_tempat').text(data.service.nama_tempat);
+                    $('#lokasi').text(data.service.lokasi);
+                    $('#nama_proyek').text(data.service.nama_proyek);
+                    $('#button-cetak-pr').html('<i class="fas fa-print"></i> Cetak');
+                    $('#button-cetak-pr').attr('disabled', false);
+                    var no = 1;
+
+                    if (data.service.details.length == 0) {
+                        $('#table-pr').empty();
+                        $('#table-pr').append(
+                            '<tr><td colspan="15" class="text-center">Tidak ada produk</td></tr>');
+                    } else {
+                        $('#table-pr').empty();
+                        $.each(data.service.details, function(key, value) {
+                            var status, spph, po;
+                            var urlLampiran = "{{ asset('lampiran') }}";
+                            if (!value.id_spph) {
+                                spph = '-';
+                            } else {
+                                spph = value.nomor_spph
+                            }
+
+                            if (!value.id_po) {
+                                po = '-';
+                            } else {
+                                po = value.no_po
+                            }
+
+                            var lampiran = null;
+                            if (value.lampiran == null) {
+                                lampiran = '-';
+                            } else {
+                                lampiran = '<a href="' + urlLampiran + '/' + value.lampiran +
+                                    '"><i class="fa fa-eye"></i> Lihat</a>';
+                            }
+
+                            //0 = Lakukan SPPH, 1 = Lakukan PO, 2 = Completed
+                            // if (value.status == 0 || !value.status) {
+                            //     status = 'Lakukan SPPH';
+                            // } else if (value.status == 1) {
+                            //     status = 'Lakukan PO';
+                            // } else if (value.status == 2) {
+                            //     status = 'COMPLETED';
+                            // } else if (value.status == 3) {
+                            //     status = 'NEGOSIASI';
+                            // } else if (value.status == 4) {
+                            //     status = 'JUSTIFIKASI';
+                            // }
+                            // if (!value.id_spph) {
+                            //     status = 'Lakukan SPPH';
+                            // } else if (value.id_spph && !value.no_sph) {
+                            //     status = 'Lakukan SPH';
+                            // } else if (value.id_spph && value.no_sph && !value.no_just) {
+                            //     status = 'Lakukan Justifikasi';
+                            // } else if (value.id_spph && value.no_sph && value.no_just && !value.id_po) {
+                            //     status = 'Lakukan Nego/PO';
+                            // } else if (value.id_spph && value.no_sph && value
+                            //     .id_po) {
+                            //     status = 'COMPLETED';
+                            // }
+
+                            if (!value.id_spph && !value.nomor_spph) {
+                                status = 'Lakukan SPPH';
+                            } else if (value.id_spph && value.nomor_spph && !value.id_po) {
+                                status = 'PROSES PO';
+                            } else if (value.id_spph && value.nomor_spph && value
+                                .id_po && value.no_po) {
+                                status = 'COMPLETED';
+                            }
+
+                            $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
+                                .kode_material + '</td><td>' + value.uraian + '</td><td>' +
+                                value
+                                .spek + '</td><td>' + value.qty + '</td><td>' + value
+                                .satuan + '</td><td>' + value.waktu + '</td><td>' +
+                                lampiran + '</td><td>' + value.keterangan + '</td><td><b>' +
+                                status +
+                                '</b></td></tr>'
+
+                                // + <td>' + spph +
+                                // '</td><td>' + po + '</td><td>' + status + '</td> +
+
+                            );
+                        });
+                    }
+                    //remove loading
+                    // $('#table-pr').find('tr:first').remove();
+                }
+            });
+        }
+
         
+        function detailPR(data) {
+            $('#modal-title').text("Edit Request");
+            $('#button-save').text("Simpan");
+            resetForm();
+            $('#save_id').val(data.id);
+            $('#nama_tempat').val(data.nama_tempat);
+            $('#nama_barang').val(data.nama_barang);
+            $('#spesifikasi').val(data.spesifikasi);
+            // $('#dasar_pr').val(data.dasar_pr);
+            // alert(proyek_id)
+        }
 
         
 
