@@ -22,7 +22,7 @@
                         <thead>
                             <tr class="text-center">
                                 <th>No.</th>
-                                <th>{{ __('Fullname') }}</th>
+                                <th>{{ __('Nama Pengguna') }}</th>
                                 <th>{{ __('Username') }}</th>
                                 <th>{{ __('Role') }}</th>
                                 <th></th>
@@ -41,8 +41,22 @@
                                             $role = 'Wilayah 1';
                                         } elseif ($d->role == 3) {
                                             $role = 'Wilayah 2';
-                                        } else {
+                                        } elseif ($d->role == 4) {
                                             $role = 'Gudang';
+                                        } elseif ($d->role == 5) {
+                                            $role = 'Engineering';
+                                        } elseif ($d->role == 6) {
+                                            $role = 'Sdm';
+                                        } elseif ($d->role == 7) {
+                                            $role = 'Admin_log';
+                                        } elseif ($d->role == 8) {
+                                            $role = 'Admin_wil1';
+                                        } elseif ($d->role == 9) {
+                                            $role = 'Admin_wil2';
+                                        } elseif ($d->role == 10) {
+                                            $role = 'Ekspedisi';
+                                        } elseif ($d->role == 11) {
+                                            $role = 'Qc';
                                         }
                                     @endphp
                                     <tr>
@@ -86,17 +100,18 @@
                             @csrf
                             <input type="hidden" id="user_id" name="user_id">
                             <div class="form-group row">
+                                <label for="fullname" class="col-sm-4 col-form-label">{{ __('Nama Pengguna') }}</label>
+                                <div class="col-sm-8">
+                                    <input type="text" class="form-control" id="fullname" name="fullname">
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <label for="username" class="col-sm-4 col-form-label">{{ __('Username') }}</label>
                                 <div class="col-sm-8">
                                     <input type="text" class="form-control" id="username" name="username">
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <label for="fullname" class="col-sm-4 col-form-label">{{ __('Name') }}</label>
-                                <div class="col-sm-8">
-                                    <input type="text" class="form-control" id="fullname" name="fullname">
-                                </div>
-                            </div>
+                            
                             <div class="form-group row">
                                 <label for="password" class="col-sm-4 col-form-label">{{ __('Password') }}</label>
                                 <div class="col-sm-8">
@@ -113,11 +128,17 @@
                                         <option value="2">Wilayah 1</option>
                                         <option value="3">Wilayah 2</option>
                                         <option value="4">Gudang</option>
-                                        <option value="5">Keuangan</option>
-                                        <option value="6">Engineer</option>
+                                        <option value="5">Engineering</option>
+                                        <option value="6">Sdm</option>
+                                        <option value="7">Admin Logistik</option>
+                                        <option value="8">Admin Wilayah1</option>
+                                        <option value="9">Admin Wilayah2</option>
+                                        <option value="10">Ekspedisi</option>
+                                        <option value="11">Qc</option>
+                                        {{-- <option value="6">Keuangan</option>
                                         <option value="7">SDM</option>
                                         <option value="8">Ekspedisi</option>
-                                        <option value="9">QC</option>
+                                        <option value="9">QC</option> --}}
                                     </select>
                                 </div>
                             </div>

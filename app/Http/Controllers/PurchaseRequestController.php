@@ -7,6 +7,7 @@ use App\Models\DetailPR;
 use App\Models\DetailSpph;
 use App\Models\Keproyekan;
 use App\Models\Lppb;
+use App\Models\Vendor;
 use App\Models\Purchase_Order;
 use App\Models\PurchaseRequest;
 use App\Models\RegistrasiBarang;
@@ -17,6 +18,7 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Response;
 use stdClass;
 
 class PurchaseRequestController extends Controller
@@ -204,13 +206,26 @@ class PurchaseRequestController extends Controller
         ]);
     }
 
+    public function getDetailBarang(Request $request)
+    {
+        $id = $request->id;
+        $pr = PurchaseRequest::select('purchase_request.*', 'keproyekan.nama_proyek as nama_proyek')
+            ->join('keproyekan', 'keproyekan.id', '=', 'purchase_request.proyek_id')
+            ->where('purchase_request.id', $id)
+            ->first();
+        $pr->details = DetailPR::where('id_pr', $id)->get();
+        return response()->json([
+            'pr' => $pr
+        ]);
+    }
+
     /**
      * Store a newly created resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request) 
+    public function store(Request $request)
     {
         //Store untuk menambah data
         $purchase_request = $request->id;
@@ -253,6 +268,40 @@ class PurchaseRequestController extends Controller
         // return redirect()->route('purchase_request.index')->with('success', 'Purchase Request berhasil disimpan');
 
     }
+    // Cetak PR Defaultnya
+    // public function cetakPr(Request $request)
+    // {
+    //     $id = $request->id;
+    //     $pr = PurchaseRequest::where('purchase_request.id', $id)
+    //         ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_request.proyek_id')->first();
+
+    //     $pr->pic = User::where('id', $pr->id_user)->first()->name ?? '-';
+    //     //if no_pr contain WIL1 then wilayah = wil1 else wil2
+    //     $detect_wil = strpos($pr->no_pr, 'WIL1');
+    //     if ($detect_wil !== false) {
+    //         $pr->role = "Wilayah 1";
+    //         $pr->kadiv = "EKO PRASETYO";
+    //     } else {
+    //         $pr->role = "Wilayah 2";
+    //         $pr->kadiv = 'HARI SUBEKTI';
+    //     }
+    //     $pr->purchases = DetailPR::select('detail_pr.*', 'purchase_request.*')
+    //         ->leftjoin('purchase_request', 'purchase_request.id', '=', 'detail_pr.id_pr')
+    //         ->where('purchase_request.id', $id)
+    //         ->get();
+
+    //     // return response()->json([
+    //     //     'pr' => $pr
+    //     // ]);
+    //     // dd($po);
+    //     // $po->batas_po = Carbon::parse($po->batas_po)->isoFormat('D MMMM Y');
+    //     // $po->tanggal_po = Carbon::parse($po->tanggal_po)->isoFormat('D MMMM Y');
+
+    //     $pdf = Pdf::loadview('purchase_request.pr_print', compact('pr'));
+    //     $pdf->setPaper('A4', 'landscape');
+    //     $no = $pr->no_pr;
+    //     return $pdf->stream('PR-' . $no . '.pdf');
+    // }
 
     public function cetakPr(Request $request)
     {
@@ -261,26 +310,20 @@ class PurchaseRequestController extends Controller
             ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_request.proyek_id')->first();
 
         $pr->pic = User::where('id', $pr->id_user)->first()->name ?? '-';
-        //if no_pr contain WIL1 then wilayah = wil1 else wil2
-        $detect_wil = strpos($pr->no_pr, 'WIL1');
-        if ($detect_wil !== false) {
+
+        // Deteksi wilayah berdasarkan no_pr dengan regex dan case-insensitive
+        if (preg_match('/wil1|wilayah1/i', $pr->no_pr)) {
             $pr->role = "Wilayah 1";
             $pr->kadiv = "EKO PRASETYO";
         } else {
             $pr->role = "Wilayah 2";
-            $pr->kadiv = 'HARTONO';
+            $pr->kadiv = 'HARI SUBEKTI';
         }
+
         $pr->purchases = DetailPR::select('detail_pr.*', 'purchase_request.*')
             ->leftjoin('purchase_request', 'purchase_request.id', '=', 'detail_pr.id_pr')
             ->where('purchase_request.id', $id)
             ->get();
-
-        // return response()->json([
-        //     'pr' => $pr
-        // ]);
-        // dd($po);
-        // $po->batas_po = Carbon::parse($po->batas_po)->isoFormat('D MMMM Y');
-        // $po->tanggal_po = Carbon::parse($po->tanggal_po)->isoFormat('D MMMM Y');
 
         $pdf = Pdf::loadview('purchase_request.pr_print', compact('pr'));
         $pdf->setPaper('A4', 'landscape');
@@ -300,6 +343,17 @@ class PurchaseRequestController extends Controller
         //
     }
 
+    // Hapus Multiple CheckBox
+    public function hapusMultiplePr(Request $request)
+    {
+        if ($request->has('ids')) {
+            PurchaseRequest::whereIn('id', $request->input('ids'))->delete();
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
+
     /**
      * Update the specified resource in storage.
      *
@@ -307,6 +361,86 @@ class PurchaseRequestController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+
+    //edit detail
+    public function editDetail(Request $request)
+    {
+        if (!$request->stock) {
+            return response()->json([
+                'success' => false,
+                'message' => 'QTY tidak boleh kosong'
+            ]);
+        }
+        $request->validate([
+            'lampiran' => 'nullable',
+            // 'lampiran' => 'nullable|file|mimes:pdf|max:500',
+        ]);
+
+        if ($request->file('lampiran')) {
+            $file = $request->file('lampiran');
+            // dd($file);
+            $fileName = rand() . '.' . $file->getClientOriginalExtension();
+            // dd($fileName);
+            $file->move(public_path('lampiran'), $fileName);
+        } else {
+            $fileName = null;
+        }
+        // Validasi data yang diterima dari request
+        $request->validate([
+            'id_pr' => 'required', // Pastikan id_sr wajib ada
+            // 'id' => 'required',
+            'kode_material' => 'nullable',
+            'uraian' => 'required',
+            'spek' => 'required',
+            'qty' => 'nullable',
+            'satuan' => 'nullable',
+            'waktu' => 'nullable',
+            'keterangan' => 'nullable',
+            'lampiran' => 'nullable',
+        ]);
+
+
+        $id = $request->id;
+
+
+        // Cek apakah id_sr yang diberikan valid
+
+        // dd($detailSR);
+        if (!$id) {
+            // Alihkan ke fungsi createDetailSr jika detail SR tidak ditemukan
+            return $this->updateDetailPr($request);
+            dd($request->all());
+        }
+        $detailPR = DetailPR::where('id', $id)->first();
+        // Update data detail SR
+        $detailPR->update([
+            'id_pr' => $request->id_pr,
+            'id_proyek' => $request->id_proyek,
+            'kode_material' => $request->kode_material,
+            'uraian' => $request->uraian,
+            'spek' => $request->spek,
+            'satuan' => $request->satuan,
+            'qty' => $request->stock,
+            'waktu' => $request->waktu,
+            'keterangan' => $request->keterangan,
+            'lampiran' => $fileName,
+        ]);
+
+        $pr = DB::table('purchase_request')->where('id', $request->id_pr)->first();
+        $pr->details = DetailPR::where('id_pr', $request->id_pr)->get();
+        return response()->json([
+            'success' => true,
+            'message' => 'Data detail SR berhasil diupdate.',
+            'pr' => $pr // Mengembalikan data detail SR yang telah diupdate
+        ]);
+    }
+    //end edit detail
+
+
+
+
+
     public function updateDetailPr(Request $request)
     {
         if (!$request->stock) {
@@ -316,14 +450,19 @@ class PurchaseRequestController extends Controller
             ]);
         }
         $request->validate([
-            'lampiran' => 'nullable|file|mimes:pdf|max:500',
+            'lampiran' => 'nullable',
+            // 'lampiran' => 'nullable|file|mimes:pdf|max:500',
         ]);
 
-        $file = $request->file('lampiran');
-        // dd($file);
-        $fileName = rand() . '.' . $file->getClientOriginalExtension();
-        // dd($fileName);
-        $file->move(public_path('lampiran'), $fileName);
+        if ($request->file('lampiran')) {
+            $file = $request->file('lampiran');
+            // dd($file);
+            $fileName = rand() . '.' . $file->getClientOriginalExtension();
+            // dd($fileName);
+            $file->move(public_path('lampiran'), $fileName);
+        } else {
+            $fileName = null;
+        }
 
         $insert = DetailPR::create([
             'id_pr' => $request->id_pr,
@@ -347,15 +486,6 @@ class PurchaseRequestController extends Controller
 
         $pr = DB::table('purchase_request')->where('id', $request->id_pr)->first();
         $pr->details = DetailPR::where('id_pr', $request->id_pr)->get();
-        $pr->details = $pr->details->map(function ($item) {
-            $item->spek = $item->spek ? $item->spek : '';
-            $item->keterangan = $item->keterangan ? $item->keterangan : '';
-            $item->kode_material = $item->kode_material ? $item->kode_material : '';
-            $item->nomor_spph = Spph::where('id', $item->id_spph)->first()->nomor_spph ?? '';
-            $item->no_po = Purchase_Order::where('id', $item->id_po)->first()->no_po ?? '';
-            $item->lampiran = $item->lampiran ? $item->lampiran : '';
-            return $item;
-        });
 
         return response()->json([
             'success' => true,
@@ -388,6 +518,34 @@ class PurchaseRequestController extends Controller
 
         return redirect()->route('purchase_request.index');
     }
+
+
+    public function hapusDetail(Request $request, $id)
+    {
+        // Mendapatkan nilai id_pr sebelum menghapus data
+        $id_pr = DetailPR::where('id', $id)->value('id_pr');
+
+        // Menghapus data purchase request dan detailnya
+        $delete_detail_pr = DetailPR::where('id', $id)->delete();
+
+        // Periksa apakah permintaan utama berhasil dihapus dan kembalikan respons yang sesuai
+        if ($delete_detail_pr) {
+            return response()->json(['success' => 'Data Request berhasil dihapus', 'deletedId' => $id, 'id_pr' => $id_pr]);
+        } else {
+            return response()->json(['error' => 'Data Request gagal dihapus'], 500);
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
 
     public function detailPrSave(Request $request)
     {
@@ -563,12 +721,13 @@ class PurchaseRequestController extends Controller
 
     public function penerimaan_barang()
     {
-        $items = DetailPR::select('detail_pr.*', 'purchase_request.no_pr', 'purchase_order.no_po', 'purchase_order.tipe', 'keproyekan.nama_proyek')
-            ->leftjoin('purchase_request', 'purchase_request.id', '=', 'detail_pr.id_pr')
-            ->leftjoin('purchase_order', 'purchase_order.id', '=', 'detail_pr.id_po')
-            ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_request.proyek_id')
-            ->whereNotNull('detail_pr.id_po')
-            ->paginate(10);
+        // $items = PurchaseRequest::select()
+        // ->paginate(10);
+        $items = PurchaseRequest::with(['detailPr' => function ($query) {
+            $query->join('purchase_order', 'detail_pr.id_po', '=', 'purchase_order.id')
+                ->select('detail_pr.*', 'purchase_order.no_po');
+        }])->paginate(10);
+
 
         foreach ($items as $item) {
             $item->tipe = $item->tipe == 0 ? 'PO' : 'PO/PL';
@@ -587,6 +746,7 @@ class PurchaseRequestController extends Controller
         ], [
             'keterangan.required' => 'Keterangan harus diisi',
         ]);
+        // dd($request->all());
 
         $id = $request->id_barang;
         $keterangan = $request->keterangan;
@@ -621,20 +781,48 @@ class PurchaseRequestController extends Controller
 
     public function lppb()
     {
-        $items = RegistrasiBarang::select('detail_pr.*', 'purchase_request.no_pr', 'purchase_order.no_po', 'purchase_order.tipe', 'keproyekan.nama_proyek', 'registrasi_barang.created_at as diterima_ekspedisi', 'registrasi_barang.id as id_registrasi_barang')
-            ->leftjoin('detail_pr', 'detail_pr.id', '=', 'registrasi_barang.id_barang')
-            ->leftjoin('purchase_request', 'purchase_request.id', '=', 'detail_pr.id_pr')
+        // $items = RegistrasiBarang::select('detail_pr.*', 'purchase_request.no_pr', 'purchase_order.no_po', 'purchase_order.tipe', 'keproyekan.nama_proyek', 'registrasi_barang.created_at as diterima_ekspedisi', 'registrasi_barang.id as id_registrasi_barang')
+        //     ->leftjoin('detail_pr', 'detail_pr.id', '=', 'registrasi_barang.id_barang')
+        //     ->leftjoin('purchase_request', 'purchase_request.id', '=', 'detail_pr.id_pr')
+        //     ->leftjoin('purchase_order', 'purchase_order.id', '=', 'detail_pr.id_po')
+        //     ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_request.proyek_id')
+        //     ->whereNotNull('detail_pr.id_po')
+        //     ->paginate(10);
+
+        $items = RegistrasiBarang::select(
+            'purchase_request.*',
+            'purchase_request.no_pr',
+            'purchase_order.no_po',
+            'purchase_order.tipe',
+            'keproyekan.nama_proyek',
+            'registrasi_barang.created_at as diterima_ekspedisi',
+            'registrasi_barang.id as id_registrasi_barang'
+        )
+            ->leftjoin('purchase_request', 'purchase_request.id', '=', 'registrasi_barang.id_barang')
+            ->leftjoin(DB::raw('(SELECT * FROM detail_pr GROUP BY id_pr) as detail_pr'), 'detail_pr.id_pr', '=', 'purchase_request.id')
             ->leftjoin('purchase_order', 'purchase_order.id', '=', 'detail_pr.id_po')
             ->leftjoin('keproyekan', 'keproyekan.id', '=', 'purchase_request.proyek_id')
             ->whereNotNull('detail_pr.id_po')
             ->paginate(10);
 
+
+
+        // $items = RegistrasiBarang::with(['purchase_request' => function ($query) {
+        //     $query->join('purchase_order', 'detail_pr.id_po', '=', 'purchase_order.id')
+        //         ->select('detail_pr.*', 'purchase_order.no_po');
+        // }])->paginate(10);
+
+        // $items = PurchaseRequest::with(['detailPr' => function ($query) {
+        //     $query->join('purchase_order', 'detail_pr.id_po', '=', 'purchase_order.id')
+        //         ->select('detail_pr.*', 'purchase_order.no_po');
+        // }])->paginate(10);
+
         foreach ($items as $item) {
             $item->tipe = $item->tipe == 0 ? 'PO' : 'PO/PL';
-            $item->diterima = Lppb::where('id_registrasi_barang', $item->id_registrasi_barang)->first() ? 1 : 0;
-            $keterangan = Lppb::where('id_registrasi_barang', $item->id)->first() ? Lppb::where('id_registrasi_barang', $item->id)->first()->keterangan : '';
-            $item->keterangan = Lppb::where('id_registrasi_barang', $item->id)->first() ? Lppb::where('id_registrasi_barang', $item->id)->first()->keterangan : '';
-            $item->diterima_ekspedisi = Carbon::parse($item->diterima_ekspedisi)->isoFormat('D MMMM Y');
+            // $item->diterima = Lppb::where('id_registrasi_barang', $item->id_registrasi_barang)->first() ? 1 : 0;
+            // $keterangan = Lppb::where('id_registrasi_barang', $item->id)->first() ? Lppb::where('id_registrasi_barang', $item->id)->first()->keterangan : '';
+            // $item->keterangan = Lppb::where('id_registrasi_barang', $item->id)->first() ? Lppb::where('id_registrasi_barang', $item->id)->first()->keterangan : '';
+            // $item->diterima_ekspedisi = Carbon::parse($item->diterima_ekspedisi)->isoFormat('D MMMM Y');
         }
 
         return view('lppb.index', compact('items'));
@@ -670,5 +858,160 @@ class PurchaseRequestController extends Controller
         ]);
 
         return redirect()->route('lppb')->with('success', 'Berhasil menerima barang');
+    }
+
+    public function getPurchaseRequestDetail($id)
+    {
+        $detail = PurchaseRequest::find($id);
+        return response()->json($detail);
+    }
+
+    public function updatePurchaseRequestDetail(Request $request)
+    {
+        $detail = PurchaseRequest::find($request->id);
+        $detail->kode_material = $request->kode_material;
+        $detail->uraian = $request->uraian;
+        $detail->spek = $request->spek;
+        $detail->qty = $request->qty;
+        $detail->satuan = $request->satuan;
+        $detail->waktu = $request->waktu;
+        $detail->keterangan = $request->keterangan;
+        $detail->save();
+
+        return response()->json(['message' => 'Item updated successfully']);
+    }
+
+    public function deleteDetail(Request $request)
+    {
+        try {
+            $detail = PurchaseRequest::findOrFail($request->id);
+            $detail->delete();
+
+            return Response::json(['message' => 'Detail berhasil dihapus'], 200);
+        } catch (\Exception $e) {
+            return Response::json(['message' => 'Gagal menghapus detail', 'error' => $e->getMessage()], 500);
+        }
+    }
+
+    public function cetakLPPB(Request $request)
+    {
+        $id = $request->id;
+        $data = PurchaseRequest::find($id);
+        if ($data) {
+            // Mengambil data dari model Keproyekan berdasarkan proyek_id dari model PurchaseRequest
+            $proyek = Keproyekan::find($data->proyek_id)->nama_proyek;
+
+            // Mengambil semua data dari model Keproyekan berdasarkan id_pr dari model PurchaseRequest
+            $detailpr = DetailPR::where('id_pr', $data->id)->get();
+
+            // Mengambil data no_po dan vendor_id dari model PurchaseOrder berdasarkan id_po dari model DetailPr
+            $purchaseOrders = Purchase_Order::whereIn('id', $detailpr->pluck('id_po'))->get(['no_po', 'vendor_id']);
+
+            // Memisahkan data no_po dan vendor_id ke dalam array terpisah
+            $poNumbers = $purchaseOrders->pluck('no_po');
+            $vendorIds = $purchaseOrders->pluck('vendor_id');
+
+            // Mengambil semua data dari model Vendor berdasarkan vendor_id
+            $vendors = Vendor::whereIn('id', $vendorIds)->get();
+
+            $pdf = Pdf::loadview('lppb.lppb_print', compact('data', 'proyek', 'detailpr', 'poNumbers', 'vendors'));
+            $pdf->setPaper('A4', 'landscape');
+            return $pdf->stream('LPPB-' . '.pdf');
+        } else {
+            return response()->json([
+                'message' => 'LPPB not found'
+            ], 404);
+        }
+    }
+
+
+
+    public function editlppb(Request $request)
+    {
+        // dd($request->all());
+        // Validasi data yang diterima dari request
+        $request->validate([
+            'id_detail' => 'required',
+            'penerimaan' => 'nullable',
+            'ok' => 'nullable',
+            'nok' => 'nullable',
+            'sdh_qc' => 'nullable',
+            'blm' => 'nullable',
+            'tgld' => 'required',
+        ]);
+        $id = $request->id_detail;
+        $detailPR = DetailPR::where('id', $id)->first();
+        $detailPR->update([
+            'penerimaan' => $request->penerimaan,
+            'hasil_ok' => $request->ok,
+            'hasil_nok' => $request->nok,
+            'diterima_qc' => $request->sdh_qc,
+            'belum_diterima_qc' => $request->blm,
+            'tgl_diterima' => $request->tgld,
+        ]);
+
+        $pr = DB::table('purchase_request')->where('id', $request->id_pr)->first();
+        $pr->details = DetailPR::where('id_pr', $request->id_pr)->get();
+        return response()->json([
+            'success' => true,
+            'no_po' => $request->no_po,
+            'nama_proyek' => $request->nama_proyek,
+            'message' => 'LPPB berhasil diupdate.',
+            'pr' => $pr // Mengembalikan data detail SR yang telah diupdate
+        ]);
+    }
+
+
+    public function editpenerimaan(Request $request)
+    {
+        // dd($request->all());
+        // Validasi data yang diterima dari request
+        $request->validate([
+            'id' => 'required',
+            'penerimaan' => 'nullable',
+            'sdh' => 'nullable',
+            'blm_sdh' => 'nullable',
+        ]);
+        $id = $request->id;
+        $detailPR = DetailPR::where('id', $id)->first();
+        $detailPR->update([
+            'penerimaan' => $request->penerimaan,
+            'diterima_eks' => $request->sdh,
+            'belum_diterima_eks' => $request->blm_sdh,
+        ]);
+
+        $pr = DB::table('purchase_request')->where('id', $request->id_pr)->first();
+        $pr->details = DetailPR::where('id_pr', $request->id_pr)->get();
+        return response()->json([
+            'success' => true,
+            'no_po' => $request->no_po,
+            'nama_proyek' => $request->nama_proyek,
+            'message' => 'LPPB berhasil diupdate.',
+            'pr' => $pr // Mengembalikan data detail SR yang telah diupdate
+        ]);
+    }
+    public function edit_nomor_lppb(Request $request)
+    {
+        // dd($request->all());
+        $request->validate([
+            'id_prr' => 'required',
+            'nomor_lppb' => 'required',
+            'tanggal_lppb' => 'required',
+        ], [
+            'id_prr.required' => 'ID harus diisi',
+            'nomor_lppb.required' => 'Nomor LPPB harus diisi',
+            'tanggal_lppb.required' => 'Tanggal LPPB harus diisi',
+        ]);
+
+        $id = $request->id_prr;
+        // $nomor_lppb = $request->nomor_lppb;
+        // $tanggal_lppb = $request->tanggal_lppb;
+        $edit = PurchaseRequest::where('id', $id)->first();
+        $edit->update([
+            'nomor_lppb' => $request->nomor_lppb,
+            'tanggal_lppb' => $request->tanggal_lppb,
+        ]);
+
+        return redirect()->route('lppb')->with('success', 'Berhasil mengubah Nomor & Tanggal LPPB');
     }
 }

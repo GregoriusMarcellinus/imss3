@@ -140,7 +140,7 @@ class PurchaseOrderController extends Controller
         return response()->json([
             'po' => $po
         ]);
-        dd($po);
+        // dd($po);
     }
 
     public function detailPrSave(Request $request)
@@ -175,13 +175,16 @@ class PurchaseOrderController extends Controller
 
     public function destroyDetailPo(Request $request)
     {
+        // dd($request->all());
         $id = $request->id;
         $id_po = $request->id_po;
 
         $delete_detail_po = DetailPo::where('id', $id)->delete();
-        $delete_detail_pr = DetailPR::where('detail_pr.id_po', $id_po)->update([
+        $id_detailpr = $request->id_detail_pr;
+        $delete_detail_pr = DetailPR::where('id', $id_detailpr)->update([
             'id_po' => null
         ]);
+        
 
         if ($delete_detail_po && $delete_detail_pr) {
             $po = Purchase_Order::select('purchase_order.*', 'vendor.nama as nama_vendor', 'keproyekan.nama_proyek as nama_proyek')
@@ -384,7 +387,7 @@ class PurchaseOrderController extends Controller
                 'tanggal_po' => 'required',
                 'batas_po' => 'required',
                 'incoterm' => 'required',
-                // 'pr_id' => 'required',
+                'pr_id' => 'required',
                 'term_pay' => 'required',
                 'proyek_id' => 'required',
 
@@ -395,7 +398,7 @@ class PurchaseOrderController extends Controller
                 'tanggal_po.required' => 'Tanggal PO harus diisi',
                 'batas_po.required' => 'Batas Akhir PO harus diisi',
                 'incoterm.required' => 'Incoterm harus diisi',
-                // 'pr_id.required' => 'PR harus diisi',
+                'pr_id.required' => 'PR harus diisi',
                 'term_pay.required' => 'Termin Pembayaran harus diisi',
                 'proyek_id.required' => 'Proyek harus diisi',
             ]
@@ -421,16 +424,16 @@ class PurchaseOrderController extends Controller
                 'catatan_vendor' => $request->catatan_vendor
             ]);
 
-            $prs = DetailPR::where('id_pr', $request->pr_id)->get();
+            // $prs = DetailPR::where('id_pr', $request->pr_id)->get();
 
 
-            foreach ($prs as $pr) {
-                DetailPo::insert([
-                    'id_po' => $po,
-                    'id_pr' => $request->pr_id,
-                    'id_detail_pr' => $pr->id,
-                ]);
-            }
+            // foreach ($prs as $pr) {
+            //     DetailPo::insert([
+            //         'id_po' => $po,
+            //         'id_pr' => $request->pr_id,
+            //         'id_detail_pr' => $pr->id,
+            //     ]);
+            // }
 
             return redirect()->route('purchase_order.index')->with('success', 'Data PO berhasil ditambahkan');
         } else {
@@ -620,6 +623,41 @@ class PurchaseOrderController extends Controller
 
         return redirect()->route('product.showPOPL');
     }
+
+    // Hapus Multiple CheckBox
+    public function hapusMultiplePo(Request $request)
+    {
+        if ($request->has('ids')) {
+            Purchase_Order::whereIn('id', $request->input('ids'))->delete();
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
+
+    // Hapus Multiple CheckBox
+    public function hapusMultiplePo_Pl(Request $request)
+    {
+        if ($request->has('ids')) {
+            Purchase_Order::whereIn('id', $request->input('ids'))->delete();
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
+
+    // Hapus Multiple CheckBox
+    public function hapusMultipleTracking(Request $request)
+    {
+        if ($request->has('ids')) {
+            PurchaseRequest::whereIn('id', $request->input('ids'))->delete();
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
+
+
 
 
     // CONTROLLER KEUANGAN

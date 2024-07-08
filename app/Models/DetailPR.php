@@ -34,5 +34,13 @@ class DetailPR extends Model
         'no_nego2',
         'tanggal_nego2',
         'batas_nego2',
+        'penerimaan',
+        'hasil_ok',
+        'hasil_nok',
+        'diterima_eks',
+        'belum_diterima_eks',
+        'diterima_qc',
+        'belum_diterima_qc',
+        'tgl_diterima',
     ];
 }

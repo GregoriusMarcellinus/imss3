@@ -20,6 +20,17 @@ class KodeAsetController extends Controller
         return view('aset_inventaris.kode_aset.index', compact('items'));
     }
 
+
+    public function hapusMultipleAset(Request $request)
+    {
+        if ($request->has('ids')) {
+            KodeAset::whereIn('id', $request->input('ids'))->delete();
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
+
     /**
      * Show the form for creating a new resource.
      *

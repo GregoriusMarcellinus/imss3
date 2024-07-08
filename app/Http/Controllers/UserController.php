@@ -89,6 +89,7 @@ class UserController extends Controller
         
         return redirect()->back();
     }
+    
 
     public function user_delete(Request $req){
         if($req->delete_role == 0){

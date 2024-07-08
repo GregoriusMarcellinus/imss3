@@ -8,9 +8,9 @@
         }
 
         body {
-            margin-top: 6cm;
-            margin-left: 0.25cm;
-            margin-right: 0.25cm;
+            margin-top: 5.5cm;
+            margin-left: 0.5cm;
+            margin-right: 0.5cm;
             margin-bottom: 0.5cm;
         }
 
@@ -90,11 +90,12 @@
 
         header {
             position: fixed;
-            top: 0.1cm;
+            top: 0.3cm;
             left: 0.5cm;
             right: 0.5cm;
             /* height: 5.5cm; */
             /* margin-bottom: 400px; */
+            border: 1px solid black;
         }
 
         .table {
@@ -113,6 +114,11 @@
         .table2 tr {
             border: 1px solid black;
             /* padding: 5px; */
+        }
+
+        body {
+            border: 1px solid black;
+            padding: 15px;
         }
     </style>
 
@@ -142,11 +148,22 @@
 
                     <td align="center">
                         <br><br>
-                        <strong>Nomor* : <span>{{ $pr->no_pr }}</span></strong><br>
-                        <strong>Tanggal* : <span>{{ $pr->tgl_pr }}</span></strong><br>
+                        <strong>&nbsp;&nbsp;&nbsp;Nomor* : <span>{{ $pr->no_pr }}</span></strong><br>
+                        <strong>Tanggal* :
+                            {{-- <strong>Tanggal* : <span>{{ $pr->tgl_pr }}</span></strong><br> --}}
+                            <span>
+                                @if ($pr['tgl_pr'])
+                                    <?php
+                                    $date = new DateTime($pr['tgl_pr']);
+                                    echo $date->format('d F Y');
+                                    ?>
+                                @else
+                                    -
+                                @endif
+                            </span></strong><br>
                     </td>
 
-                    <td align="left" style="width: 35%;">
+                    <td align="right" style="width: 35%;">
                         <br><br>
                         <strong>Proyek : <span>{{ $pr->nama_proyek }}</span></strong><br>
                     </td>
@@ -174,20 +191,56 @@
         </thead>
         <tbody>
             @forelse ($pr->purchases as $item)
-                <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $item->kode_material }}</td>
-                    <td style="text-align: left">{{ $item->uraian }}</td>
-                    <td style="word-wrap: break-word;text-align: left">{{ $item->spek }}</td>
-                    <td>{{ $item->qty }}</td>
-                    <td>{{ $item->satuan }}</td>
-                    <td>{{ $item->waktu }}</td>
-                    <td style="text-align: left">{{ $item->keterangan }}</td>
-                </tr>
-            @empty
-                <tr>
-                    <td colspan="8" class="text-center" style="text-align: center">Tidak ada data</td>
-                </tr>
+                @if ($loop->index % 8 == 0 && $loop->index != 0)
+        </tbody>
+    </table>
+    <div class="page_break"></div>
+    <table class="table" style="width: 100%">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>Kode Material</th>
+                <th>Uraian Barang/Jasa</th>
+                <th>Spesifikasi</th>
+                <th>Qty</th>
+                <th>Sat</th>
+                <th>Waktu <br> Penyelesaiaan</th>
+                <th>Keterangan</th>
+            </tr>
+        </thead>
+        <tbody>
+            @endif
+            <tr>
+                <td>{{ $loop->iteration }}</td>
+                <td>{{ $item->kode_material }}</td>
+                <td style="word-wrap: break-word; overflow: hidden; text-overflow: ellipsis; text-align: left;">
+                    {{ $item->uraian }}</td>
+                {{-- <td style="word-wrap: break-word;text-align: left">{{ $item->spek }}</td> --}}
+                <td
+                    style="word-wrap: break-word; max-width: 200px; overflow: hidden; text-overflow: ellipsis; text-align: left;">
+                    {{ $item->spek }}
+                </td>
+                <td>{{ $item->qty }}</td>
+                <td>{{ $item->satuan }}</td>
+                {{-- <td>{{ $item->waktu }}</td> --}}
+                <td>
+                    @if ($item['waktu'])
+                        <?php
+                        $date = new DateTime($item['waktu']);
+                        echo $date->format('d F Y');
+                        ?>
+                    @else
+                        -
+                    @endif
+                </td>
+                <td
+                    style="word-wrap: break-word; max-width: 200px; overflow: hidden; text-overflow: ellipsis; text-align: left;">
+                    {{ $item->keterangan }}</td>
+            </tr>
+        @empty
+            <tr>
+                <td colspan="8" class="text-center" style="text-align: center">Tidak ada data</td>
+            </tr>
             @endforelse
         </tbody>
     </table>
@@ -199,18 +252,18 @@
                     <td align="center" style="width: 25%;">
                         Menyetujui,<br>
                         Kadiv. {{ $pr->role }}
-                        <br><br><br><br>
+                        <br><br><br><br><br>
                         <strong>{{ $pr->kadiv }}</strong><br>
                     </td>
                     <td align="center" style="width: 25%;">
                         Diperiksa Oleh<br>
-                        Kadep. Rendal {{ $pr->role }}
+                        Kadep. Rendal {{ $pr->role }} <br>
                         <br><br><br><br><br>
                     </td>
                     <td align="center" style="width: 25%;">
                         Dibuat Oleh,<br>
                         Rendal {{ $pr->role }}
-                        <br><br><br><br>
+                        <br><br><br><br><br>
                         <strong>{{ $pr->pic }}</strong><br>
                     </td>
                 </tr>

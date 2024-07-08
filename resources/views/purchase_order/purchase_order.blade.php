@@ -43,9 +43,35 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
+
+                        {{-- Filter by Nomor Po dan Tanggal --}}
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="filter-po-no">Filter Nomor PO</label>
+                                    <input type="text" class="form-control" id="filter-po-no"
+                                        placeholder="Masukkan Nomor PO">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="filter-po-date">Filter Tanggal PO</label>
+                                    <input type="date" class="form-control" id="filter-po-date">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <button class="btn btn-secondary mt-4" id="clear-filter">Clear Filter</button>
+                            </div>
+                        </div>
+                        {{-- End Filter by Nomor Po dan Tanggal --}}
+
+
+
+
                         <table id="table" class="table table-sm table-bordered table-hover table-striped">
                             <thead>
                                 <tr class="text-center">
+                                    <th><input type="checkbox" id="select-all"></th>
                                     <th>No.</th>
                                     <th>{{ __('No PO') }}</th>
                                     {{-- <th>{{ __('No PR') }}</th> --}}
@@ -86,6 +112,8 @@
                                             ];
                                         @endphp
                                         <tr>
+                                            <td class="text-center"><input type="checkbox" name="hapus[]"
+                                                    value="{{ $d->id }}"></td>
                                             <td class="text-center">{{ $data['no'] }}</td>
                                             <td>{{ $data['no_po'] }}</td>
                                             {{-- <td>{{ $data['pr_no'] }}</td> --}}
@@ -120,6 +148,8 @@
                                 @endif
                             </tbody>
                         </table>
+                        <button type="button" class="btn btn-danger" id="delete-selected"
+                            data-token="{{ csrf_token() }}">Hapus yang dipilih</button>
                     </div>
                 </div>
             </div>
@@ -143,10 +173,18 @@
                     <form role="form" id="save" action="{{ route('purchase_order.store') }}" method="post">
                         @csrf
                         <input type="hidden" id="save_id" name="id">
+                        <input type="hidden" id="pr_id" name="pr_id">
                         <div class="form-group row">
                             <label for="no_po" class="col-sm-4 col-form-label">{{ __('Nomor PO') }} </label>
                             <div class="col-sm-8">
                                 <input type="text" class="form-control" id="no_po" name="no_po">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="nomor_pr" class="col-sm-4 col-form-label">{{ __('Nomor PR') }} </label>
+                            <div class="col-sm-8">
+                                <select class="form-control" name="nomor_pr" id="nomor_pr">
+                                </select>
                             </div>
                         </div>
                         <div class="form-group row">
@@ -284,6 +322,11 @@
                                         'cetak-po').submit();">{{ __('Cetak') }}</button>
                                 <table class="align-top w-100">
                                     <tr>
+                                        <td style="width: 8%;"><b>ID PR</b></td>
+                                        <td style="width:2%">:</td>
+                                        <td style="width: 55%"><span id="pr_id2"></span></td>
+                                    </tr>
+                                    <tr>
                                         <td style="width: 8%;"><b>No Surat</b></td>
                                         <td style="width:2%">:</td>
                                         <td style="width: 55%"><span id="po_no"></span></td>
@@ -314,8 +357,8 @@
                                     </tr>
                                     <tr>
                                         <td colspan="3">
-                                            <button id="button-tambah-detail" type="button" class="btn btn-info"
-                                                onclick="showAddItem()">{{ __('Tambah Item Detail') }}</button>
+                                            <button id="button-tambah-detail" type="button"
+                                                class="btn btn-info">{{ __('Tambah Item Detail') }}</button>
                                         </td>
                                     </tr>
                                 </table>
@@ -363,16 +406,16 @@
                                         <table class="table table-bordered">
                                             <thead>
                                                 <tr>
+                                                    <th>Pilih</th>
                                                     <th>No</th>
                                                     <th>Deskripsi</th>
                                                     <th>Spesifikasi</th>
                                                     <th>QTY</th>
                                                     <th>Sat</th>
-                                                    <th>Proyek</th>
-                                                    <th>No SPPH</th>
                                                     <th>No PR</th>
+                                                    <th>No SPPH</th>
                                                     <th>No PO</th>
-                                                    <th>Pilih</th>
+                                                    <th>Proyek</th>
                                                 </tr>
                                             </thead>
                                             <tbody id='detail-material'>
@@ -522,6 +565,126 @@
             $('#loader').hide();
         });
 
+
+        $('#select-all').change(function() {
+            var checkboxes = $(this).closest('table').find(':checkbox');
+            checkboxes.prop('checked', $(this).is(':checked'));
+        });
+
+        // Function to handle delete selected items
+        $('#delete-selected').click(function() {
+            var ids = [];
+            $('input[name="hapus[]"]:checked').each(function() {
+                ids.push($(this).val());
+            });
+
+            if (ids.length > 0) {
+                var token = $(this).data('token');
+                $.ajax({
+                    url: 'po-imss/hapus-multiple',
+                    type: 'POST',
+                    data: {
+                        _token: token,
+                        ids: ids
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Menghapus status checked dari semua checkbox
+                            $('input[name="hapus[]"]').prop('checked', false);
+                            $('#select-all').prop('checked', false);
+                            // Memuat ulang halaman setelah berhasil menghapus data
+                            location.reload();
+                            alert('Data berhasil dihapus');
+                        } else {
+                            alert('Gagal menghapus data');
+                        }
+                    },
+                    error: function(xhr) {
+                        alert('Terjadi kesalahan saat menghapus data');
+                    }
+                });
+            } else {
+                alert('Pilih setidaknya satu item untuk dihapus');
+            }
+        });
+
+
+        //Filter by Nomor dan tgl PO
+        $(document).ready(function() {
+            $('#clear-filter').on('click', function() {
+                $('#filter-po-no, #filter-po-date').val('');
+                filterTable();
+            });
+
+            $('#filter-po-no, #filter-po-date').on('keyup change', function() {
+                filterTable();
+            });
+
+            function filterTable() {
+                var filterNoPO = $('#filter-po-no').val().toUpperCase();
+                var filterDatePO = $('#filter-po-date').val();
+
+                $('table tbody tr').each(function() {
+                    var noPO = $(this).find('td:nth-child(3)').text().toUpperCase();
+                    var datePO = $(this).find('td:nth-child(6)').text();
+                    var id = $(this).find('td:nth-child(1)')
+                        .text(); // Ubah indeks kolom ke indeks ID PO jika perlu
+
+                    // Ubah string tanggal ke objek Date untuk perbandingan
+                    var dateParts = datePO.split("/");
+                    var poDate = new Date(dateParts[2], dateParts[1] - 1, dateParts[
+                        0]); // Format: tahun, bulan, tanggal
+
+                    // Ubah string filterDatePO ke objek Date
+                    var filterDateParts = filterDatePO.split("-");
+                    var filterPODate = new Date(filterDateParts[0], filterDateParts[1] - 1, filterDateParts[
+                        2]); // Format: tahun, bulan, tanggal
+
+                    if ((noPO.indexOf(filterNoPO) > -1 || filterNoPO === '') &&
+                        (poDate.getTime() === filterPODate.getTime() || filterDatePO === '')) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            }
+            $("#nomor_pr").select2({
+                placeholder: 'Pilih Tempat',
+                width: '100%',
+                data: [{
+                    id: 'all',
+                    text: 'Semua'
+                }],
+                ajax: {
+                    url: "{{ route('nopr.index') }}",
+                    processResults: function({
+                        data
+                    }) {
+                        // Menggabungkan opsi "Semua" dengan data dari database
+                        let results = $.map(data, function(item) {
+                            return {
+                                id: item.no_pr,
+                                ids: item.id,
+                                text: item.no_pr,
+                            }
+                        });
+                        return {
+                            results: results
+                        }
+                    }
+                }
+            })
+            $('#nomor_pr').on('select2:select', function(e) {
+                var selectedData = e.params.data;
+                $("#pr_id").val(selectedData.ids);
+                // alert($("#id_pr").val());
+            });
+        });
+        //End Filter by Nomor dan tgl PO
+
+
+
+
         function resetForm() {
             $('#save').trigger("reset");
             //remove the selected select option all
@@ -622,12 +785,17 @@
             $('modal-title').text("Detail PO");
             $('#button-save').text("Simpan");
             resetForm();
+            // $('#pr_id2').text(data.pr_id);
+            $('#pr_id2').text(data.pr_no);
+            $('#button-tambah-detail').val(data.pr_id);
+            $('#button-tambah-detail').attr('onclick', `showAddItem(${data.pr_id}); getPODetail(${data.pr_id});`);
             $('#po_no').text(data.no_po);
             $('#id_proyek').text(data.proyek_name);
             $('#id_vendor').text(data.vendor_name);
             $('#po_tanggal').text(data.tgpo);
             $('#po_batas').text(data.btpo);
             $('#tabel-po').empty();
+            console.log(data);
 
             $.ajax({
                 url: "{{ url('products/purchase_order_detail') }}" + "/" + data.id,
@@ -663,6 +831,7 @@
                     } else {
                         $.each(data?.po?.details, function(index, value) {
                             var id = value.id_detail_po;
+                            var id_detail_pr = value.id
                             var kode_material = value.kode_material;
                             var deskripsi = value.uraian;
                             var batas = value.batas ?? '-';
@@ -687,6 +856,7 @@
                                 satuan,
                                 harga_per_unit,
                                 mata_uang,
+                                id_detail_pr,
                             })
                             var html = '<tr>' +
                                 '<td>' + no + '</td>' +
@@ -711,7 +881,8 @@
                                 '</button>' +
                                 '<button title="hapus" id="delete_po_save" type="button" class="btn btn-danger btn-xs" data-id="' +
                                 id +
-                                '" data-idpo="' + id_po + '" ><i class="fas fa-trash"></i>' +
+                                '" data-idpo="' + id_po + '" data-id_detail_pr="' + id_detail_pr +
+                                '" ><i class="fas fa-trash"></i>' +
                                 '</button>' +
                                 '</tr>';
                             $('#tabel-po').append(html);
@@ -788,6 +959,7 @@
                     } else {
                         $.each(data?.po?.details, function(index, value) {
                             var id = value.id_detail_po;
+                            var id_detail_pr = value.id
                             var kode_material = value.kode_material;
                             var deskripsi = value.uraian;
                             var batas = value.batas ?? '-';
@@ -812,6 +984,7 @@
                                 satuan,
                                 harga_per_unit,
                                 mata_uang,
+                                id_detail_pr,
                             })
                             var html = '<tr>' +
                                 '<td>' + no + '</td>' +
@@ -835,10 +1008,12 @@
                                 '<td>' + total + '</td>' +
                                 '<td><button title="simpan" id="edit_po_save" type="button" class="btn btn-success btn-xs" data-id="' +
                                 id + '" data-idpo="' + id_po +
-                                '" ><i class="fas fa-save"></i>' + '</button>'+
-                            '<button title="hapus" id="delete_po_save" type="button" class="btn btn-danger btn-xs" data-id="' +
-                            id +
-                                '" data-idpo="' + id_po + '" ><i class="fas fa-trash"></i>' +
+                                '" ><i class="fas fa-save"></i>' +
+                                '</button>' +
+                                '<button title="hapus" id="delete_po_save" type="button" class="btn btn-danger btn-xs" data-id="' +
+                                id +
+                                '" data-idpo="' + id_po + '" data-id_detail_pr="' +
+                                id_detail_pr + '" ><i class="fas fa-trash"></i>' +
                                 '</button>' +
                                 '</tr>';
                             $('#tabel-po').append(html);
@@ -859,6 +1034,7 @@
             var id = $(this).data('id');
             var no_po = $(this).data('no_po');
             var id_po = $(this).data('idpo');
+            var id_detail_pr = $(this).data('id_detail_pr');
             //get the batas{id} input
             var batas = $('#batas' + id).val();
             var harga_per_unit = $('#harga_per_unit' + id).val();
@@ -870,7 +1046,8 @@
                 batas,
                 harga_per_unit,
                 mata_uang,
-                vat
+                vat,
+                id_detail_pr
             };
 
             console.log(form);
@@ -886,6 +1063,7 @@
                     harga_per_unit,
                     mata_uang,
                     vat,
+                    id_detail_pr,
                     _token: '{{ csrf_token() }}'
                 },
                 dataType: "json",
@@ -907,6 +1085,11 @@
                     // $('#id_po').val(data.po.id);
                     $('#button-cetak-po').html('<i class="fas fa-print"></i> Cetak');
                     $('#button-cetak-po').attr('disabled', false);
+                    $('#detail-po').find('#container-product').addClass('d-none');
+                    $('#detail-po').find('#container-product').removeClass('col-5');
+                    $('#detail-po').find('#container-form').addClass('col-12');
+                    $('#detail-po').find('#container-form').removeClass('col-7');
+                    $('#button-tambah-detail').text('Tambah Item Detail');
                     var no = 1;
                     // var id_po = data.po.id;
 
@@ -914,9 +1097,9 @@
                         $('#tabel-po').append(
                             '<tr><td colspan="11" class="text-center">Tidak ada data</td></tr>');
                     } else {
-                        $.each(data?.po?.details, function(index,
-                            value) {
+                        $.each(data?.po?.details, function(index, value) {
                             var id = value.id_detail_po;
+                            var id_detail_pr = value.id
                             var kode_material = value.kode_material;
                             var deskripsi = value.uraian;
                             var batas = value.batas ?? '-';
@@ -941,6 +1124,7 @@
                                 satuan,
                                 harga_per_unit,
                                 mata_uang,
+                                id_detail_pr,
                             })
                             var html = '<tr>' +
                                 '<td>' + no + '</td>' +
@@ -950,23 +1134,27 @@
                                 '" class="form-control" id="batas' + id + '" name="batas' + id +
                                 '"></td>' +
                                 '<td>' + qty + '</td>' +
-                                '<td>' + satuan + '</td>' + '<td><input type="text" value="' +
-                                harga_per_unit +
+                                '<td>' + satuan + '</td>' +
+                                '<td><input type="text" value="' + harga_per_unit +
                                 '" class="form-control" id="harga_per_unit' + id +
                                 '" name="harga_per_unit' + id + '"></td>' +
                                 '<td><input type="text" value="' + mata_uang +
                                 '" class="form-control" id="mata_uang' + id +
-                                '" name="mata_uang' + id + '"></td>' +
+                                '" name="mata_uang' + id +
+                                '"></td>' +
                                 '<td><input type="text" value="' + vat +
-                                '" class="form-control" id="vat' + id +
-                                '" name="vat' + id + '"></td>' + '<td>' + total + '</td>' +
+                                '" class="form-control" id="vat' + id + '" name="vat' + id +
+                                '"></td>' +
+                                '<td>' + total + '</td>' +
                                 '<td><button title="simpan" id="edit_po_save" type="button" class="btn btn-success btn-xs" data-id="' +
                                 id + '" data-idpo="' + id_po +
-                                '" ><i class="fas fa-save"></i>' + '</button>' +
+                                '" ><i class="fas fa-save"></i>' +
+                                '</button>' +
                                 '<button title="hapus" id="delete_po_save" type="button" class="btn btn-danger btn-xs" data-id="' +
                                 id +
-                                '" data-idpo="' + id_po + '" ><i class="fas fa-trash"></i>' +
-                                '</button>' + '</td>' +
+                                '" data-idpo="' + id_po + '" data-id_detail_pr="' +
+                                id_detail_pr + '" ><i class="fas fa-trash"></i>' +
+                                '</button>' +
                                 '</tr>';
                             $('#tabel-po').append(html);
                             no++;
@@ -987,7 +1175,7 @@
             $('#button-tambah-detail').text('Tambah Item Detail');
         });
 
-        function showAddItem() {
+        function showAddItem(pr_id) {
             //detect #detail-po where id container-product has class d-none
             if ($('#detail-po').find('#container-product').hasClass('d-none')) {
                 $('#detail-po').find('#container-product').removeClass('d-none');
@@ -1004,15 +1192,84 @@
                 $('#proyek_name').val("");
             }
 
-            getPODetail();
+            // getPODetail();
         }
 
-        function getPODetail() {
+        // function getPODetail() {
 
+        //     loader();
+        //     $('#button-check').prop("disabled", true);
+        //     $.ajax({
+        //         url: "{{ url('products/products_pr') }}",
+        //         type: "GET",
+        //         data: {
+        //             "format": "json"
+        //         },
+        //         dataType: "json",
+        //         beforeSend: function() {
+        //             $('#loader').show();
+        //             $('#form').hide();
+        //         },
+        //         success: function(data) {
+        //             loader(0);
+        //             $('#form').show();
+        //             //append to #detail-material
+        //             $('#detail-material').empty();
+        //             $.each(data.products, function(key, value) {
+        //                 console.table('a', value)
+        //                 var no_spph
+        //                 if (!value.id_spph) {
+        //                     no_spph = '-'
+        //                 } else {
+        //                     no_spph = value.nomor_spph
+        //                 }
+
+        //                 var no_pr
+        //                 if (!value.id_pr) {
+        //                     no_pr = '-'
+        //                 } else {
+        //                     no_pr = value.pr_no
+        //                 }
+
+        //                 var no_po
+        //                 if (!value.id_po) {
+        //                     no_po = '-'
+        //                 } else {
+        //                     no_po = value.po_no
+        //                 }
+
+        //                 var checkbox
+        //                 if (value.id_spph && !value.id_po) {
+        //                     checkbox = '<input type="checkbox" id="addToDetails" value="' + value.id +
+        //                         '" onclick="addToDetailsJS(' + value.id + ')" >'
+        //                 } else {
+        //                     checkbox = '<input type="checkbox" id="addToDetails" value="' + value.id +
+        //                         '" onclick="addToDetailsJS(' + value.id + ')" disabled>'
+        //                 }
+
+
+        //                 $('#detail-material').append(
+        //                     '<tr><td>' + checkbox + '</td><td>' + (key + 1) + '</td><td>' + value.uraian +
+        //                     '</td><td>' + value.spek + '</td><td>' + value.qty + '</td><td>' + value
+        //                     .satuan + '</td><td>' + value.nama_proyek + '</td><td>' + no_spph +
+        //                     '</td><td>' + no_pr + '</td><td>' +
+        //                     no_po + '</td></tr>'
+        //                 );
+        //             });
+        //         },
+        //         error: function() {
+        //             $('#pcode').prop("disabled", false);
+        //             $('#button-check').prop("disabled", false);
+        //         }
+        //     });
+        // }
+        function getPODetail(pr_id) {
+            // alert(pr_id);
             loader();
+
             $('#button-check').prop("disabled", true);
             $.ajax({
-                url: "{{ url('products/products_pr') }}",
+                url: "{{ url('products/products_pr/') }}/" + pr_id,
                 type: "GET",
                 data: {
                     "format": "json"
@@ -1028,7 +1285,7 @@
                     //append to #detail-material
                     $('#detail-material').empty();
                     $.each(data.products, function(key, value) {
-                        console.table('a', value)
+                        console.log(value);
                         var no_spph
                         if (!value.id_spph) {
                             no_spph = '-'
@@ -1037,35 +1294,36 @@
                         }
 
                         var no_pr
-                        if (!value.id_pr) {
+                        if (!value.pr_no) {
                             no_pr = '-'
                         } else {
                             no_pr = value.pr_no
                         }
-
                         var no_po
-                        if (!value.id_po) {
+                        if (!value.p_no) {
                             no_po = '-'
                         } else {
                             no_po = value.po_no
                         }
 
-                        var checkbox
-                        if (value.id_spph && !value.id_po) {
+                        var checkbox;
+                        if (!value.id_po) {
                             checkbox = '<input type="checkbox" id="addToDetails" value="' + value.id +
-                                '" onclick="addToDetailsJS(' + value.id + ')" >'
+                                '" onclick="addToDetailsJS(' + value.id + ')">'
                         } else {
                             checkbox = '<input type="checkbox" id="addToDetails" value="' + value.id +
                                 '" onclick="addToDetailsJS(' + value.id + ')" disabled>'
                         }
 
-
                         $('#detail-material').append(
-                            '<tr><td>' + (key + 1) + '</td><td>' + value.uraian +
+                            '<tr><td>' + checkbox + '</td><td>' + (key + 1) + '</td><td>' + value
+                            .uraian +
                             '</td><td>' + value.spek + '</td><td>' + value.qty + '</td><td>' + value
-                            .satuan + '</td><td>' + value.nama_proyek + '</td><td>' + no_spph +
-                            '</td><td>' + no_pr + '</td><td>' +
-                            no_po + '</td><td>' + checkbox + '</td></tr>'
+                            .satuan + '</td><td>' + no_pr + '</td><td>' + no_spph + '</td><td>' +
+                            no_po +
+                            '</td><td>' +
+                            value.nama_proyek +
+                            '</td></tr>'
                         );
                     });
                 },
@@ -1076,7 +1334,7 @@
             });
         }
 
-        let selected = []
+        var selected = []
 
         function addToDetailsJS(id) {
             if (selected.includes(id)) {
@@ -1102,6 +1360,8 @@
                     $('#form').hide();
                 },
                 success: function(data) {
+                    var pr_id = data.po.pr_id;
+                    getPODetail(pr_id);
                     console.log(data);
                     $('#no_po').text(data.po.no_po);
                     $('#id_proyek').text(data.po.nama_proyek);
@@ -1114,6 +1374,7 @@
                     $('#tabel-po').empty();
                     var no = 1;
                     var id_po = data.po.id_po;
+                    selected = [];
 
                     if (data?.po?.details?.length == 0) {
                         $('#tabel-po').append(
@@ -1121,6 +1382,7 @@
                     } else {
                         $.each(data?.po?.details, function(index, value) {
                             var id = value.id_detail_po;
+                            var id_detail_pr = value.id
                             var kode_material = value.kode_material;
                             var deskripsi = value.uraian;
                             var batas = value.batas ?? '-';
@@ -1145,6 +1407,7 @@
                                 satuan,
                                 harga_per_unit,
                                 mata_uang,
+                                id_detail_pr,
                             })
                             var html = '<tr>' +
                                 '<td>' + no + '</td>' +
@@ -1169,8 +1432,9 @@
                                 '</button>' +
                                 '<button title="hapus" id="delete_po_save" type="button" class="btn btn-danger btn-xs" data-id="' +
                                 id +
-                                '" data-idpo="' + id_po + '" ><i class="fas fa-trash"></i>' +
-                                '</button>' + '</td>' +
+                                '" data-idpo="' + id_po + '" data-id_detail_pr="' + id_detail_pr +
+                                '" ><i class="fas fa-trash"></i>' +
+                                '</button>' +
                                 '</tr>';
                             $('#tabel-po').append(html);
                             no++;
@@ -1182,7 +1446,7 @@
                     // }
                     $('#loader').hide();
                     $('#form').show();
-                    getPODetail();
+                    // getPODetail();
                 },
                 error: function() {
                     $('#pcode').prop("disabled", false);

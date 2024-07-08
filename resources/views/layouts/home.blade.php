@@ -29,7 +29,8 @@
             style="margin-left: 0;background-color: firebrick">
             <ul class="navbar-nav d-flex justify-content-between w-100 align-items-center">
                 <li class="nav-item d-none d-sm-inline-block">
-                    <span class="nav-link">Selamat Datang di Software IMSS</span>
+                    <img src="{{ asset('img/IMSS.jpg') }}" class="d-block w-100" height="55"
+                                    alt="" style="object-fit: contain">
                 </li>
                 <div>
                     <li class="nav-item d-none d-sm-inline-block">

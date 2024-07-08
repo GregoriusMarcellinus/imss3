@@ -46,41 +46,53 @@ class HomeController extends Controller
                 // 'route' => 'apps/spph',
                 'route' => 'div/logistik',
                 'bgcolor' => 'sagegreen',
-                'icon' => 'box'
-            ],
-            [
-                'name' => 'Gudang',
-                'route' => 'div/gudang',
-                'bgcolor' => 'blue',
-                'icon' => 'warehouse'
+                'icon' => 'box',
+                'img'=> asset('img/logistik.png')
+                
             ],
             [
                 'name' => 'Wilayah 1',
                 // 'route' => 'apps/purchase_request',
                 'route' => 'div/wilayah1',
                 'bgcolor' => 'red',
-                'icon' => 'map-marker-alt'
+                'icon' => 'map-marker-alt',
+                'img'=> asset('img/wilayah1.png')
             ],
+
             [
                 'name' => 'Wilayah 2',
                 // 'route' => 'apps/purchase_request',
-                'route' => 'div/wilayah1',
+                'route' => 'div/wilayah2',
                 'bgcolor' => 'goldenrod',
-                'icon' => 'map'
+                'icon' => 'map',
+                'img'=> asset('img/wilayah2.png')
             ],
+
+
+            [
+                'name' => 'Gudang',
+                'route' => 'div/gudang',
+                'bgcolor' => 'blue',
+                'icon' => 'warehouse',
+                'img'=> asset('img/warehouse.png')
+            ],
+            
+            
             [
                 'name' => 'Engineer',
                 // 'route' => 'apps/purchase_request',
                 'route' => 'div/eng',
                 'bgcolor' => 'violet',
-                'icon' => 'wrench'
+                'icon' => 'wrench',
+                'img'=> asset('img/eng.png')
             ],
+            
             [
-                'name' => 'Proyek KA',
-                // 'route' => 'apps/purchase_request',
-                'route' => 'div/proyek',
-                'bgcolor' => 'black',
-                'icon' => 'train'
+                'name' => 'Surat Keluar',
+                'route' => 'apps/surat-keluar',
+                'bgcolor' => 'green',
+                'icon' => 'envelope',
+                'img'=> asset('img/suratkeluar.png')
             ],
         ];
 
@@ -123,7 +135,8 @@ class HomeController extends Controller
                     'name' => 'Tracking Purchase Request',
                     'route' => 'apps/purchase_request',
                     'bgcolor' => 'red',
-                    'icon' => 'route'
+                    'icon' => 'route',
+                    'font-size' => '1px'
                 ],
                 [
                     'name' => 'Purchase Order',

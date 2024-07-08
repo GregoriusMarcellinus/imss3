@@ -7,10 +7,21 @@
     <link rel="stylesheet" href="/plugins/daterangepicker/daterangepicker.css">
     <link rel="stylesheet" href="/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
 @endsection --}}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.7.2/font/bootstrap-icons.css" rel="stylesheet">
 @section('content')
-    <div class="content-header">
+    {{-- <div class="content-header">
         <div class="container-fluid">
             <div class="row mb-2">
+            </div>
+        </div>
+    </div> --}}
+    <div class="content-header">
+        <div class="container-fluid">
+            <div class="row mb-2 align-items-center">
+                <div class="col-sm-6 d-flex align-items-center">
+                    <i class="bi bi-person-circle" style="font-size: 2rem;"></i>
+                    <h1 class="ml-2">Hi, {{ Auth::user()->name }}</h1>
+                </div>
             </div>
         </div>
     </div>
@@ -33,176 +44,310 @@
             </div>
             <hr class="mb-4" />
             <div class="row">
+
+
+
+
+
+
+                {{-- Menu Log & Wilayah --}}
+                @if (Auth::user()->role == 0 ||
+                        Auth::user()->role == 1 ||
+                        Auth::user()->role == 2 ||
+                        Auth::user()->role == 3 ||
+                        Auth::user()->role == 7 ||
+                        Auth::user()->role == 8 ||
+                        Auth::user()->role == 9 ||
+                        Auth::user()->role == 10 ||
+                        Auth::user()->role == 11)
+                    <div class="container">
+                        {{-- Proses Bisnis Menu --}}
+                        <div class="menu-item">
+                            <a href="#" id="bisnis-menu-toggle" class="small-box bg-danger">
+                                <div class="inner">
+                                    <p>Menu</p>
+                                    <h3>Proses Bisnis</h3>
+                                </div>
+                                <div class="icon">
+                                    <i class="fas fa-business-time"></i>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div id="bisnis-submenu" style="display: none;">
+                            <div class="row">
+
+                                {{-- Purchase Request --}}
+                                @if (Auth::user()->role == 0 ||
+                                        Auth::user()->role == 1 ||
+                                        Auth::user()->role == 2 ||
+                                        Auth::user()->role == 3 ||
+                                        Auth::user()->role == 7 ||
+                                        Auth::user()->role == 8 ||
+                                        Auth::user()->role == 9)
+                                    <div class="col-lg-3 col-6">
+                                        <a href="{{ route('purchase_request.index') }}">
+                                            <div class="small-box bg-danger" style="background-color: coral">
+                                                <div class="inner">
+                                                    <p>Purchase</p>
+                                                    <h3>Request</h3>
+                                                </div>
+                                                <div class="icon">
+                                                    <i class="fas fa-cart-arrow-down"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                @endif
+
+                                {{-- SPPH --}}
+                                @if (Auth::user()->role == 0 || Auth::user()->role == 1 || Auth::user()->role == 4 || Auth::user()->role == 7)
+                                    <div class="col-lg-3 col-6">
+                                        <a href="{{ route('spph.index') }}">
+                                            <div class="small-box bg-info">
+                                                <div class="inner" style="background-color: rgb(231, 48, 24);">
+                                                    <p>Surat Perminataan Penawaran</p>
+                                                    <h3>Harga</h3>
+                                                </div>
+                                                <div class="icon">
+                                                    <i class="fas fa-mail-bulk"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                @endif
+
+                                {{-- Negosiasi --}}
+                                @if (Auth::user()->role == 0 || Auth::user()->role == 1 || Auth::user()->role == 4 || Auth::user()->role == 7)
+                                    <div class="col-lg-3 col-6">
+                                        <a href="{{ route('nego.index') }}">
+                                            <div class="small-box bg-info">
+                                                <div class="inner" style="background-color: rgb(231, 48, 24);">
+                                                    <p>Menu</p>
+                                                    <h3>Negosiasi</h3>
+                                                </div>
+                                                <div class="icon">
+                                                    <i class="fas fa-mail-bulk"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                @endif
+
+                                {{-- Purchase Order --}}
+                                @if (Auth::user()->role == 0 || Auth::user()->role == 1 || Auth::user()->role == 7)
+                                    <div class="col-lg-3 col-6">
+                                        <a href="{{ route('purchase_order.index') }}">
+                                            <div class="small-box bg-primary">
+                                                <div class="inner">
+                                                    <p>Purchase</p>
+                                                    <h3>Order</h3>
+                                                </div>
+                                                <div class="icon">
+                                                    <i class="fas fa-hand-holding-usd"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                @endif
+
+                                {{-- @if (Auth::user()->role == 0 || Auth::user()->role == 1 || Auth::user()->role == 7)
+                                    <div class="col-lg-3 col-6">
+                                        <a href="{{ route('product.showPOPL') }}">
+                                            <div class="small-box bg-primary">
+                                                <div class="inner">
+                                                    <p>Purchase</p>
+                                                    <h3>Order PL</h3>
+                                                </div>
+                                                <div class="icon">
+                                                    <i class="fas fa-hand-holding-usd"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                @endif --}}
+
+
+                                @if (Auth::user()->role == 0 || Auth::user()->role == 1 || Auth::user()->role == 4 || Auth::user()->role == 7)
+                                    <div class="col-lg-3 col-6">
+                                        <a href="{{ route('sjn') }}">
+                                            <div class="small-box bg-info">
+                                                <div class="inner" style="background-color: rgb(186, 226, 43);">
+                                                    <p>Surat</p>
+                                                    <h3>Jalan</h3>
+                                                </div>
+                                                <div class="icon">
+                                                    <i class="fas fa-envelope"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                @endif
+
+                                {{-- Purchase Request Tracking Log--}}
+                                @if (Auth::user()->role == 0 || Auth::user()->role == 1 || Auth::user()->role == 7)
+                                    <div class="col-lg-3 col-6">
+                                        <a href="{{ route('product.tracking') }}">
+                                            <div class="small-box bg-primary">
+                                                <div class="inner">
+                                                    <p>Purchase Request</p>
+                                                    <h3>Tracking Proses</h3>
+                                                </div>
+                                                <div class="icon">
+                                                    <i class="fas fa-route"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                @endif
+
+                                {{-- Purchase Request Tracking Wilayah --}}
+                                @if (Auth::user()->role == 2 || Auth::user()->role == 3 || Auth::user()->role == 8 || Auth::user()->role == 9)
+                                    <div class="col-lg-3 col-6">
+                                        <a href="{{ route('product.trackingwil') }}">
+                                            <div class="small-box bg-primary" style="background-color: #D988B9">
+                                                <div class="inner">
+                                                    <p>Purchase Request</p>
+                                                    <h3>Tracking</h3>
+                                                </div>
+                                                <div class="icon">
+                                                    <i class="fas fa-route"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                @endif
+                                {{-- menu Eks dan QC --}}
+                                @if (Auth::user()->role == 0 || Auth::user()->role == 10 || Auth::user()->role == 7)
+                                    <div class="col-lg-3 col-6">
+                                        <a href="{{ route('penerimaan_barang') }}">
+                                            <div class="small-box bg-primary">
+                                                <div class="inner" style="background-color: #c8cd21">
+                                                    <p>Penerimaan</p>
+                                                    <h3>Barang</h3>
+                                                </div>
+                                                <div class="icon">
+                                                    <i class="fas fa-truck-loading"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                @endif
+
+                                @if (Auth::user()->role == 0 || Auth::user()->role == 11 || Auth::user()->role == 7)
+                                    <div class="col-lg-3 col-6">
+                                        <a href="{{ route('lppb') }}">
+                                            <div class="small-box bg-primary">
+                                                <div class="inner" style="background-color: #c45421">
+                                                    <p>Laporan</p>
+                                                    <h3>LPPB</h3>
+                                                </div>
+                                                <div class="icon">
+                                                    <i class="fas fa-file-alt"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                @endif
+                                {{-- menu Eks dan QC --}}
+                            </div>
+                        </div>
+                        {{-- End Bisnis Menu --}}
+                    </div>
+                @endif
+                {{-- End Menu Log & Wilayah --}}
+
+
+                {{-- ** Menu Warehouse ** --}}
                 @if (Auth::user()->role == 0 || Auth::user()->role == 4)
-                    <div class="col-lg-3 col-6">
-                        <a href="#" data-toggle="modal" data-target="#stock-form" onclick="stockForm(1)">
-                            <div class="small-box bg-success">
-                                <div class="inner" style="background-color: goldenrod;">
-                                    <p>Stock</p>
-                                    <h3>In</h3>
+                    <div class="container">
+                        {{-- Proses Bisnis Menu --}}
+                        <div class="menu-item">
+                            <a href="#" id="warehouse-menu-toggle" class="small-box bg-dark">
+                                <div class="inner">
+                                    <p>Menu</p>
+                                    <h3>Warehouse</h3>
                                 </div>
                                 <div class="icon">
                                     <i class="fas fa-box"></i>
                                 </div>
+                            </a>
+                        </div>
+
+                        <div id="warehouse-submenu" style="display: none;">
+                            <div class="row">
+
+                                {{-- Warehouse --}}
+                                @if (Auth::user()->role == 0 || Auth::user()->role == 4)
+                                    <div class="col-lg-3 col-6">
+                                        <a href="#" data-toggle="modal" data-target="#stock-form"
+                                            onclick="stockForm(1)">
+                                            <div class="small-box bg-success">
+                                                <div class="inner" style="background-color: goldenrod;">
+                                                    <p>Stock</p>
+                                                    <h3>In</h3>
+                                                </div>
+                                                <div class="icon">
+                                                    <i class="fas fa-box"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col-lg-3 col-6">
+                                        <a href="#" data-toggle="modal" data-target="#stock-form"
+                                            onclick="stockForm(0)">
+                                            <div class="small-box bg-info">
+                                                <div class="inner" style="background-color: blueviolet;">
+                                                    <p>Stock</p>
+                                                    <h3>Out</h3>
+                                                </div>
+                                                <div class="icon">
+                                                    <i class="fas fa-box-open"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col-lg-3 col-6">
+                                        <a href="#" data-toggle="modal" data-target="#stock-form"
+                                            onclick="stockForm(2)">
+                                            <div class="small-box bg-info">
+                                                <div class="inner" style="background-color: cadetblue;">
+                                                    <p>Product</p>
+                                                    <h3>Retur</h3>
+                                                </div>
+                                                <div class="icon">
+                                                    <i class="fas fa-undo"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                    <div class="col-lg-3 col-6">
+                                        <a href="{{ route('products.stock.history') }}">
+                                            <div class="small-box bg-primary">
+                                                <div class="inner">
+                                                    <p>Stock</p>
+                                                    <h3>History</h3>
+                                                </div>
+                                                <div class="icon">
+                                                    <i class="fas fa-history"></i>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                @endif
+                                {{-- End warehouse --}}
                             </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-3 col-6">
-                        <a href="#" data-toggle="modal" data-target="#stock-form" onclick="stockForm(0)">
-                            <div class="small-box bg-info">
-                                <div class="inner" style="background-color: blueviolet;">
-                                    <p>Stock</p>
-                                    <h3>Out</h3>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-box-open"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-3 col-6">
-                        <a href="#" data-toggle="modal" data-target="#stock-form" onclick="stockForm(2)">
-                            <div class="small-box bg-info">
-                                <div class="inner" style="background-color: cadetblue;">
-                                    <p>Product</p>
-                                    <h3>Retur</h3>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-undo"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-3 col-6">
-                        <a href="{{ route('products.stock.history') }}">
-                            <div class="small-box bg-primary">
-                                <div class="inner">
-                                    <p>Stock</p>
-                                    <h3>History</h3>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-history"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
+                            {{-- End Bisnis Menu --}}
+                        </div>
+                        {{-- ** End Menu Warehouse ** --}}
                 @endif
-                @if (Auth::user()->role == 0 || Auth::user()->role == 1)
-                    <div class="col-lg-3 col-6">
-                        <a href="{{ route('sjn') }}">
-                            <div class="small-box bg-info">
-                                <div class="inner" style="background-color: rgb(186, 226, 43);">
-                                    <p>Surat</p>
-                                    <h3>Jalan</h3>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-envelope"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-3 col-6">
-                        <a href="{{ route('spph.index') }}">
-                            <div class="small-box bg-info">
-                                <div class="inner" style="background-color: rgb(231, 48, 24);">
-                                    <p>Surat Perminataan Penawaran</p>
-                                    <h3>Harga</h3>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-mail-bulk"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                @endif
-                @if (Auth::user()->role == 0 || Auth::user()->role == 1 || Auth::user()->role == 5)
-                    <div class="col-lg-3 col-6">
-                        <a href="{{ route('purchase_order.index') }}">
-                            <div class="small-box bg-primary">
-                                <div class="inner">
-                                    <p>Purchase</p>
-                                    <h3>Order</h3>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-hand-holding-usd"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-3 col-6">
-                        <a href="{{ route('product.showPOPL') }}">
-                            <div class="small-box bg-danger">
-                                <div class="inner">
-                                    <p>Pembelian Langsung</p>
-                                    <h3>Purchase Order</h3>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-exclamation"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                @endif
-                @if (Auth::user()->role == 0 || Auth::user()->role == 1 || Auth::user()->role == 2 || Auth::user()->role == 3)
-                    <div class="col-lg-3 col-6">
-                        <a href="{{ route('purchase_request.index') }}">
-                            <div class="small-box bg-primary">
-                                <div class="inner" style="background-color: coral">
-                                    <p>Purchase</p>
-                                    <h3>Request</h3>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-cart-arrow-down"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                @endif
-                @if (Auth::user()->role == 0 || Auth::user()->role == 1)
-                    <div class="col-lg-3 col-6">
-                        <a href="{{ route('product.tracking') }}">
-                            <div class="small-box bg-primary">
-                                <div class="inner">
-                                    <p>Purchase Request</p>
-                                    <h3>Tracking</h3>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-route"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                @endif
-                @if (Auth::user()->role == 2 || Auth::user()->role == 3)
-                    <div class="col-lg-3 col-6">
-                        <a href="{{ route('product.trackingwil') }}">
-                            <div class="small-box bg-primary">
-                                <div class="inner" style="background-color: #D988B9">
-                                    <p>Purchase Request</p>
-                                    <h3>Tracking Wilayah</h3>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-route"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                @endif
-                @if (Auth::user()->role == 6)
-                    <div class="col-lg-3 col-6">
-                        <a href="{{ route('eng.purchase_request') }}">
-                            <div class="small-box bg-primary">
-                                <div class="inner" style="background-color: #D988B9">
-                                    <p>Edit</p>
-                                    <h3>Purchase Request</h3>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-route"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                @endif
+
+
+
+
+
+
+
                 {{-- @if (Auth::user()->role == 0 || Auth::user()->role == 5)
                     <div class="col-lg-3 col-6">
                         <a href="{{ route('product.approvedPO') }}">
@@ -231,242 +376,130 @@
                             </div>
                         </a>
                     </div>
-                @endif --}}
+                    @endif --}}
 
-                @if (Auth::user()->role == 0 || Auth::user()->role == 6)
-                    <div class="col-lg-3 col-6">
-                        <a href="{{ route('product.drawing.schematic') }}">
-                            <div class="small-box bg-primary">
-                                {{-- <div class="inner" style="background-color: #c8cd21"> --}}
-                                <div class="inner" style="background-color: #607274">
-                                    <p>Drawing</p>
-                                    <h3>Schematic</h3>
+                {{-- Menu Eng --}}
+                {{-- @if (Auth::user()->role == 0 || Auth::user()->role == 5)
+                        <div class="col-lg-3 col-6">
+                            <a href="{{ route('product.drawing.schematic') }}">
+                                <div class="small-box bg-primary">
+                                    <div class="inner" style="background-color: #607274">
+                                        <p>Drawing</p>
+                                        <h3>Schematic</h3>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fas fa-drafting-compass"></i>
+                                    </div>
                                 </div>
-                                <div class="icon">
-                                    <i class="fas fa-drafting-compass"></i>
+                            </a>
+                        </div>
+                        <div class="col-lg-3 col-6">
+                            <a href="{{ route('product.justifikasi') }}">
+                                <div class="small-box bg-primary">
+                                    <div class="inner" style="background-color: #607274">
+                                        <p>Menu</p>
+                                        <h3>Justifikasi</h3>
+                                    </div>
+                                    <div class="icon">
+                                        <i class="fas fa-folder-open"></i>
+                                    </div>
                                 </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-3 col-6">
-                        <a href="{{ route('product.justifikasi') }}">
-                            <div class="small-box bg-primary">
-                                {{-- <div class="inner" style="background-color: #afc124"> --}}
-                                <div class="inner" style="background-color: #607274">
-                                    <p>Menu</p>
-                                    <h3>Justifikasi</h3>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-folder-open"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-3 col-6">
-                        <a href="{{ route('bom.index') }}">
-                            <div class="small-box bg-primary">
-                                {{-- <div class="inner" style="background-color: #afc124"> --}}
-                                <div class="inner" style="background-color: #607274">
-                                    <p>Menu</p>
-                                    <h3>Bill Of Material</h3>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-folder-open"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    {{-- <div class="col-lg-3 col-6">
-                        <a href="{{ route('product.justifikasi') }}">
-                            <div class="small-box bg-primary">
+                            </a>
+                        </div>
+                    @endif --}}
+                {{-- End Menu Eng --}}
 
-                                <div class="inner" style="background-color: #607274">
-                                    <p>Function</p>
-                                    <h3>Control</h3>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-gamepad"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div> --}}
-                @endif
-
-                @if (Auth::user()->role == 0 || Auth::user()->role == 7)
-                    {{-- <div class="col-lg-3 col-6">
-                        <a href="{{ route('product.drawing.schematic') }}">
-                            <div class="small-box bg-primary">
-                                <div class="inner" style="background-color: #607274">
-                                    <p>Data</p>
-                                    <h3>Karyawan</h3>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-restroom"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div> --}}
-                    <div class="col-lg-3 col-6">
-                        <a href="{{ route('kode_aset.index') }}">
-                            <div class="small-box bg-primary">
-                                {{-- <div class="inner" style="background-color: #afc124"> --}}
-                                <div class="inner" style="background-color: #607274">
-                                    <p>Manajemen</p>
-                                    <h3>Kode Aset</h3>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-folder-open"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-3 col-6">
-                        <a href="{{ route('aset.index', ['type' => 1]) }}">
-                            <div class="small-box bg-primary">
-                                {{-- <div class="inner" style="background-color: #afc124"> --}}
-                                <div class="inner" style="background-color: #607274">
-                                    <p>Manajemen</p>
-                                    <h3>Aset</h3>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-folder-open"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-3 col-6">
-                        <a href="{{ route('aset.index', ['type' => 2]) }}">
-                            <div class="small-box bg-primary">
-                                {{-- <div class="inner" style="background-color: #afc124"> --}}
-                                <div class="inner" style="background-color: #607274">
-                                    <p>Manajemen</p>
-                                    <h3>Inventaris</h3>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-folder-open"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-3 col-6">
-                        <a href="{{ route('penghapusan_aset.index') }}">
-                            <div class="small-box bg-primary">
-                                {{-- <div class="inner" style="background-color: #afc124"> --}}
-                                <div class="inner" style="background-color: #607274">
-                                    <p>History</p>
-                                    <h3>Penghapusan</h3>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-folder-open"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-3 col-6">
-                        <a href="{{ route('karyawan.index') }}">
-                            <div class="small-box bg-primary">
-                                {{-- <div class="inner" style="background-color: #afc124"> --}}
-                                <div class="inner" style="background-color: #8709db">
-                                    <p>Data</p>
-                                    <h3>Karyawan</h3>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-folder-open"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-3 col-6">
-                        <a href="{{ route('proyek.index') }}">
-                            <div class="small-box bg-primary">
-                                {{-- <div class="inner" style="background-color: #afc124"> --}}
-                                <div class="inner" style="background-color: #ff0000">
-                                    <p>Proyek</p>
-                                    <h3>Kereta Api</h3>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-train"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-3 col-6">
-                        <a href="{{ route('trainset.index') }}">
-                            <div class="small-box bg-primary">
-                                {{-- <div class="inner" style="background-color: #afc124"> --}}
-                                <div class="inner" style="background-color: #9d0769">
-                                    <p>Master Data</p>
-                                    <h3>Trainset</h3>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-train"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-3 col-6">
-                        <a href="{{ route('service.index') }}">
-                            <div class="small-box bg-primary">
-                                {{-- <div class="inner" style="background-color: #afc124"> --}}
-                                <div class="inner" style="background-color: #08faf6">
-                                    <p>Service</p>
-                                    <h3>Record</h3>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-train"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col-lg-3 col-6">
-                        <a href="{{ route('jadwal.index') }}">
-                            <div class="small-box bg-primary">
-                                {{-- <div class="inner" style="background-color: #afc124"> --}}
-                                <div class="inner" style="background-color: #08faf6">
-                                    <p>Master Data</p>
-                                    <h3>Jadwal Perawatan</h3>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-train"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                @endif
-
-                @if (Auth::user()->role == 0 || Auth::user()->role == 8)
-                    <div class="col-lg-3 col-6">
-                        <a href="{{ route('penerimaan_barang') }}">
-                            <div class="small-box bg-primary">
-                                <div class="inner" style="background-color: #c8cd21">
-                                    <p>Penerimaan</p>
-                                    <h3>Barang</h3>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-truck-loading"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                @endif
-
-                @if (Auth::user()->role == 0 || Auth::user()->role == 9)
-                    <div class="col-lg-3 col-6">
-                        <a href="{{ route('lppb') }}">
-                            <div class="small-box bg-primary">
-                                <div class="inner" style="background-color: #c45421">
-                                    <p>Laporan</p>
-                                    <h3>LPPB</h3>
-                                </div>
-                                <div class="icon">
-                                    <i class="fas fa-file-alt"></i>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                @endif
             </div>
+
+
+
+            {{-- ** Menu SDM ** --}}
+            @if (Auth::user()->role == 0 || Auth::user()->role == 6)
+                <div class="container">
+                    {{-- SDM Menu --}}
+                    <div class="menu-item">
+                        <a href="#" id="sdm-menu-toggle" class="small-box bg-secondary">
+                            <div class="inner">
+                                <p>Menu</p>
+                                <h3>SDM & Umum</h3>
+                            </div>
+                            <div class="icon">
+                                <i class="fas fa-user-circle"></i>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div id="sdm-submenu" style="display: none;">
+                        <div class="row">
+
+                            {{-- Menu SDM --}}
+                            @if (Auth::user()->role == 0 || Auth::user()->role == 6)
+                                <div class="col-lg-3 col-6">
+                                    <a href="{{ route('kode_aset.index') }}">
+                                        <div class="small-box bg-primary">
+                                            {{-- <div class="inner" style="background-color: #afc124"> --}}
+                                            <div class="inner" style="background-color: #607274">
+                                                <p>Manajemen</p>
+                                                <h3>Kode Aset</h3>
+                                            </div>
+                                            <div class="icon">
+                                                <i class="fas fa-folder-open"></i>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-lg-3 col-6">
+                                    <a href="{{ route('aset.index', ['type' => 1]) }}">
+                                        <div class="small-box bg-primary">
+                                            {{-- <div class="inner" style="background-color: #afc124"> --}}
+                                            <div class="inner" style="background-color: #607274">
+                                                <p>Manajemen</p>
+                                                <h3>Aset</h3>
+                                            </div>
+                                            <div class="icon">
+                                                <i class="fas fa-folder-open"></i>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-lg-3 col-6">
+                                    <a href="{{ route('aset.index', ['type' => 2]) }}">
+                                        <div class="small-box bg-primary">
+                                            {{-- <div class="inner" style="background-color: #afc124"> --}}
+                                            <div class="inner" style="background-color: #607274">
+                                                <p>Manajemen</p>
+                                                <h3>Inventaris</h3>
+                                            </div>
+                                            <div class="icon">
+                                                <i class="fas fa-folder-open"></i>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                                <div class="col-lg-3 col-6">
+                                    <a href="{{ route('karyawan.index') }}">
+                                        <div class="small-box bg-primary">
+                                            {{-- <div class="inner" style="background-color: #afc124"> --}}
+                                            <div class="inner" style="background-color: #8709db">
+                                                <p>Data</p>
+                                                <h3>Karyawan</h3>
+                                            </div>
+                                            <div class="icon">
+                                                <i class="fas fa-folder-open"></i>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            @endif
+                            {{-- End Menu SDM --}}
+                        </div>
+                    </div>
+                    {{-- End Bisnis Menu --}}
+                </div>
+                {{-- End SDM --}}
         </div>
+        {{-- ** End Menu SDM ** --}}
+        @endif
 
         {{-- modal --}}
         <div class="modal fade" id="stock-form">
@@ -685,6 +718,30 @@
     <script src="/plugins/inputmask/min/jquery.inputmask.bundle.min.js"></script>
     <script src="/plugins/daterangepicker/daterangepicker.js"></script>
     <script src="/plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script> --}}
+    <script>
+        $(document).ready(function() {
+            $('#bisnis-menu-toggle').click(function(e) {
+                e.preventDefault();
+                $('#bisnis-submenu').toggle();
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#warehouse-menu-toggle').click(function(e) {
+                e.preventDefault();
+                $('#warehouse-submenu').toggle();
+            });
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('#sdm-menu-toggle').click(function(e) {
+                e.preventDefault();
+                $('#sdm-submenu').toggle();
+            });
+        });
+    </script>
     <script>
         $(function() {
             $('#form').hide();

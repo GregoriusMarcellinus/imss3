@@ -38,12 +38,19 @@ Route::get('unauthorized', [App\Http\Controllers\HomeController::class, 'unautho
 Route::get('surat-keluar', [App\Http\Controllers\SuratKeluarController::class, 'index'])->name('surat_keluar.index');
 Route::post('surat-keluar', [App\Http\Controllers\SuratKeluarController::class, 'create'])->name('surat_keluar.save');
 Route::delete('surat-keluar', [App\Http\Controllers\SuratKeluarController::class, 'delete'])->name('surat_keluar.delete');
+Route::post('suratkeluar-imss/hapus-multiple', [App\Http\Controllers\SuratKeluarController::class, 'hapusMultipleSuratKeluar'])->name('hapus-multiple');
+
+
 Route::get('kode-aset', [App\Http\Controllers\KodeAsetController::class, 'index'])->name('kode_aset.index');
 Route::post('kode-aset', [App\Http\Controllers\KodeAsetController::class, 'create'])->name('kode_aset.save');
 Route::delete('kode-aset', [App\Http\Controllers\KodeAsetController::class, 'destroy'])->name('kode_aset.delete');
+Route::post('kodeaset-warehouse-imss/hapus-multiple', [App\Http\Controllers\KodeAsetController::class, 'hapusMultipleAset'])->name('hapus-multiple');
+
+
 Route::get('aset', [App\Http\Controllers\AsetController::class, 'index'])->name('aset.index');
 Route::post('aset', [App\Http\Controllers\AsetController::class, 'store'])->name('aset.save');
 Route::delete('aset', [App\Http\Controllers\AsetController::class, 'destroy'])->name('aset.delete');
+Route::post('warehouse-imss/hapus-multiple', [App\Http\Controllers\AsetController::class, 'hapusMultiple'])->name('hapus-multiple');
 Route::get('penghapusan-aset', [App\Http\Controllers\PenghapusanAsetController::class, 'index'])->name('penghapusan_aset.index');
 
 Route::prefix('products')->group(function () {
@@ -89,10 +96,12 @@ Route::prefix('products')->group(function () {
     Route::get('detail_sjn/{id}', [App\Http\Controllers\SjnController::class, 'getDetailSjn'])->name('detail_sjn');
     Route::get('cetak_sjn', [App\Http\Controllers\SjnController::class, 'cetakSjn'])->name('cetak_sjn');
     Route::post('update_detail_sjn', [App\Http\Controllers\SjnController::class, 'updateDetailSjn'])->name('detail_sjn.update');
+    Route::post('sjn-imss/hapus-multiple', [App\Http\Controllers\SjnController::class, 'hapusMultipleSjn'])->name('hapus-multiple');
 
     //vendor
     Route::resource('vendor', App\Http\Controllers\VendorController::class)->except(['destroy']);
     Route::delete('vendor', [App\Http\Controllers\VendorController::class, 'destroy'])->name('vendor.destroy');
+    Route::post('vendor-imss/hapus-multiple', [App\Http\Controllers\VendorController::class, 'hapusMultipleVendor'])->name('hapus-multiple');
 
     //purchase order
     Route::resource('purchase_order', App\Http\Controllers\PurchaseOrderController::class)->except(['destroy']);
@@ -107,6 +116,8 @@ Route::prefix('products')->group(function () {
     Route::get('approvedPO', [App\Http\Controllers\PurchaseOrderController::class, 'aprrovedPO'])->name('product.approvedPO');
     Route::get('aprrovedPO_PL', [App\Http\Controllers\PurchaseOrderController::class, 'aprrovedPO_PL'])->name('product.aprrovedPO_PL');
     Route::post('storePOPL', [App\Http\Controllers\PurchaseOrderController::class, 'storePOPL'])->name('product.storePOPL');
+    Route::post('po-imss/hapus-multiple', [App\Http\Controllers\PurchaseOrderController::class, 'hapusMultiplePo'])->name('hapus-multiple');
+    Route::post('tracking-imss/hapus-multiple', [App\Http\Controllers\PurchaseOrderController::class, 'hapusMultipleTracking'])->name('hapus-multiple');
 
 
     Route::get('test_pr', [App\Http\Controllers\PurchaseOrderController::class, 'test_pr'])->name('test_pr');
@@ -125,8 +136,16 @@ Route::prefix('products')->group(function () {
     Route::resource('purchase_request', App\Http\Controllers\PurchaseRequestController::class)->except(['destroy']);
     Route::get('cetak_pr', [App\Http\Controllers\PurchaseRequestController::class, 'cetakPr'])->name('cetak_pr');
     Route::delete('purchase_request', [App\Http\Controllers\PurchaseRequestController::class, 'destroy'])->name('purchase_request.destroy');
+    Route::post('detail_purchase_request/{id}/delete', [PurchaseRequestController::class, 'hapusDetail'])->name('detail_purchase_request.delete');
+    Route::post('pr-imss/hapus-multiple', [App\Http\Controllers\PurchaseRequestController::class, 'hapusMultiplePr'])->name('hapus-multiple');
     Route::get('purchase_request_detail/{id}', [App\Http\Controllers\PurchaseRequestController::class, 'getDetailPr'])->name('purchase_request_detail');
+    Route::get('penerimaan_barang_detail/{id}', [App\Http\Controllers\PurchaseRequestController::class, 'getDetailBarang'])->name('penerimaan_barang_detail');
     Route::post('update_purchase_request_detail', [App\Http\Controllers\PurchaseRequestController::class, 'updateDetailPr'])->name('purchase_request_detail.update');
+    Route::post('purchase_request/update_detail', [App\Http\Controllers\PurchaseRequestController::class, 'editDetail'])->name('detail.update');//nambah baru
+    Route::delete('pr-imss/delete_detail', [App\Http\Controllers\PurchaseRequestController::class, 'deleteDetail'])->name('purchase_request.delete_detail');
+    Route::post('lppb/editlppb', [App\Http\Controllers\PurchaseRequestController::class, 'editlppb'])->name('lppb.update');//nambah baru
+    Route::post('lppb/editpenerimaan', [App\Http\Controllers\PurchaseRequestController::class, 'editpenerimaan'])->name('lppb.update');//nambah baru
+
 
     //history
     Route::get('/history', [HistoryController::class, 'index']);
@@ -139,6 +158,7 @@ Route::prefix('products')->group(function () {
     Route::get("purchase_order_pl", [App\Http\Controllers\PurchaseOrderController::class, 'getDetailPoPL'])->name('purchase_order_pl');
     // Route::post("purchase_order_pl", [App\Http\Controllers\PurchaseOrderController::class, 'storeDetailPoPL'])->name('purchase_order_pl.store');
     Route::delete('delete_po_pl', [App\Http\Controllers\PurchaseOrderController::class, 'destroyPoPL'])->name('purchase_order_pl.destroy');
+    Route::post('po-pl-imss/hapus-multiple', [App\Http\Controllers\PurchaseOrderController::class, 'hapusMultiplePo_Pl'])->name('hapus-multiple');
 
     //kode material
     Route::resource('kode_material', App\Http\Controllers\KodeMaterialController::class)->except(['destroy']);
@@ -149,8 +169,29 @@ Route::prefix('products')->group(function () {
     Route::delete('spph', [App\Http\Controllers\SpphController::class, 'destroy'])->name('spph.destroy');
     Route::get('spph_detail/{id}', [App\Http\Controllers\SpphController::class, 'getDetailSpph'])->name('spph_detail');
     Route::post('update_spph_detail', [App\Http\Controllers\SpphController::class, 'updateDetailSpph'])->name('spph_detail.update');
-    Route::get('products_pr', [App\Http\Controllers\SpphController::class, 'getProductPR'])->name('products_pr');
+    Route::get('products_pr/{id_pr}', [App\Http\Controllers\SpphController::class, 'getProductPR'])->name('products_pr');
+    // Route::get('products_pr', [App\Http\Controllers\SpphController::class, 'getProductPR'])->name('products_pr');
     Route::post('tambah_spph_detail', [App\Http\Controllers\SpphController::class, 'tambahSpphDetail'])->name('tambah_spph_detail');
+    Route::post('spph-imss/hapus-multiple', [App\Http\Controllers\SpphController::class, 'hapusMultipleSpph'])->name('hapus-multiple');
+    Route::get('selectnopr', [App\Http\Controllers\SpphController::class, 'nopr'])->name('nopr.index');
+    
+    
+
+
+    //NEGOSIASI
+    //resource digunakan untuk memanggil semuanya yg ada di controller kecuali destroy. contoh : nego.store
+    Route::resource('nego', App\Http\Controllers\NegoController::class)->except(['destroy']);
+    //End Resource
+    Route::delete('nego', [App\Http\Controllers\NegoController::class, 'destroy'])->name('nego.destroy');
+    Route::get('nego', [App\Http\Controllers\NegoController::class, 'index'])->name('nego.index');
+    Route::get('nego_detail/{id}', [App\Http\Controllers\NegoController::class, 'getDetailNego'])->name('nego_detail');
+    Route::post('update_nego_detail', [App\Http\Controllers\NegoController::class, 'updateDetailNego'])->name('nego_detail.update');
+    Route::get('products_pr/{id_pr}', [App\Http\Controllers\NegoController::class, 'getProductPR'])->name('products_pr');
+    Route::post('tambah_nego_detail', [App\Http\Controllers\NegoController::class, 'tambahNegoDetail'])->name('tambah_nego_detail');
+    Route::post('nego-imss/hapus-multiple', [App\Http\Controllers\NegoController::class, 'hapusMultipleNego'])->name('hapus-multiple');
+    Route::get('selectnopr', [App\Http\Controllers\NegoController::class, 'nopr'])->name('nopr.index');
+    Route::get('nego_print', [App\Http\Controllers\NegoController::class, 'negoPrint'])->name('nego.print');
+    
 
     //logistik
     Route::get('logistik', [App\Http\Controllers\LogistikController::class, 'index'])->name('products.logistik');
@@ -205,6 +246,8 @@ Route::put('edit-registrasi-barang', [App\Http\Controllers\PurchaseRequestContro
 
 Route::get('lppb', [App\Http\Controllers\PurchaseRequestController::class, 'lppb'])->name('lppb');
 Route::post('save-lppb', [App\Http\Controllers\PurchaseRequestController::class, 'tambah_lppb'])->name('lppb.save');
+Route::put('edit-nomor-lppb', [App\Http\Controllers\PurchaseRequestController::class, 'edit_nomor_lppb'])->name('nomor_lppb.edit');
+Route::get('cetak_lppb', [App\Http\Controllers\PurchaseRequestController::class, 'cetakLPPB'])->name('cetak_lppb');
 Route::get('lppb_print', function () {
     return view('lppb.print');
 })->name('lppb.print');
@@ -214,6 +257,7 @@ Route::get('karyawan_export', [App\Http\Controllers\KaryawanController::class, '
 Route::get('karyawan', [App\Http\Controllers\KaryawanController::class, 'index'])->name('karyawan.index');
 Route::post('karyawan', [App\Http\Controllers\KaryawanController::class, 'store'])->name('karyawan.store');
 Route::delete('karyawan', [App\Http\Controllers\KaryawanController::class, 'destroy'])->name('karyawan.destroy');
+Route::post('karyawan-warehouse-imss/hapus-multiple', [App\Http\Controllers\KaryawanController::class, 'hapusMultipleKaryawan'])->name('hapus-multiple');
 
 Route::get('proyek', [App\Http\Controllers\ProyekController::class, 'index'])->name('proyek.index');
 Route::post('proyek', [App\Http\Controllers\ProyekController::class, 'store'])->name('proyek.store');
@@ -224,15 +268,22 @@ Route::get('service', [App\Http\Controllers\ServiceController::class, 'index'])-
 Route::post('service', [App\Http\Controllers\ServiceController::class, 'store'])->name('service.store');
 Route::delete('service', [App\Http\Controllers\ServiceController::class, 'destroy'])->name('service.destroy');
 Route::put('service', [App\Http\Controllers\ServiceController::class, 'update'])->name('service.update');
-Route::get('service_detail', [App\Http\Controllers\ServiceController::class, 'getDetailService'])->name('service_detail');
+Route::get('service_detail/{id}', [App\Http\Controllers\ServiceController::class, 'getDetailService'])->name('service_detail');
+// Route::get('service_detail', [App\Http\Controllers\ServiceController::class, 'getDetailService'])->name('service_detail');
 Route::post('update_service_detail', [App\Http\Controllers\ServiceController::class, 'updateDetailService'])->name('service_detail.update');
 Route::post('detail_service_save', [App\Http\Controllers\ServiceController::class, 'detailServiceSave'])->name('detail_service_save');
+Route::delete('/service_delete/{id}', [App\Http\Controllers\ServiceController::class, 'delete'])->name('service_delete');
 
 Route::get('jadwal', [App\Http\Controllers\JadwalController::class, 'index'])->name('jadwal.index');
 Route::post('jadwal', [App\Http\Controllers\JadwalController::class, 'store'])->name('jadwal.store');
 Route::delete('jadwal', [App\Http\Controllers\JadwalController::class, 'destroy'])->name('jadwal.destroy');
 Route::put('jadwal', [App\Http\Controllers\JadwalController::class, 'update'])->name('jadwal.update');
 
+Route::get('gangguan', [App\Http\Controllers\GangguanController::class, 'index'])->name('gangguan.index');
+Route::post('gangguan', [App\Http\Controllers\GangguanController::class, 'store'])->name('gangguan.store');
+Route::delete('gangguan', [App\Http\Controllers\GangguanController::class, 'destroy'])->name('gangguan.destroy');
+Route::put('gangguan', [App\Http\Controllers\GangguanController::class, 'update'])->name('gangguan.update');
+Route::get('gangguan_detail/{id}', [App\Http\Controllers\GangguanController::class, 'getDetailGangguan'])->name('gangguan_detail');
 
 
 Route::get('trainset', [App\Http\Controllers\TrainsetController::class, 'index'])->name('trainset.index');

@@ -15,7 +15,7 @@
             <div class="card">
                 <div class="card-header">
                     @auth
-                        @if (Auth::user()->role == 0 || Auth::user()->role == 7)
+                        @if (Auth::user()->role == 0 || Auth::user()->role == 6)
                             <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-kode-aset"
                                 onclick="addKodeAset()"><i class="fas fa-plus"></i> Add New Kode Aset</button>
                         @endif
@@ -37,6 +37,7 @@
                     <table id="table" class="table table-sm table-bordered table-hover table-striped">
                         <thead>
                             <tr class="text-center">
+                                <th><input type="checkbox" id="select-all"></th>
                                 <th>No.</th>
                                 <th>{{ __('Kode') }}</th>
                                 <th>{{ __('Keterangan') }}</th>
@@ -49,11 +50,13 @@
                                     $data = $d->toArray();
                                 @endphp
                                 <tr>
+                                    <td class="text-center"><input type="checkbox" name="hapus[]"
+                                            value="{{ $d->id }}"></td>
                                     <td>{{ $key + 1 }}</td>
                                     <td>{{ $d->kode }}</td>
                                     <td>{{ $d->keterangan }}</td>
                                     <td class="text-center">
-                                        @if (Auth::user()->role == 0 || Auth::user()->role == 7)
+                                        @if (Auth::user()->role == 0 || Auth::user()->role == 6)
                                             <button title="Edit Shelf" type="button" class="btn btn-success btn-xs"
                                                 data-toggle="modal" data-target="#add-kode-aset"
                                                 onclick="editKodeAset({{ json_encode($data) }})"><i
@@ -72,6 +75,8 @@
                             @endforelse
                         </tbody>
                     </table>
+                    <button type="button" class="btn btn-danger" id="delete-selected"
+                        data-token="{{ csrf_token() }}">Hapus yang dipilih</button>
                 </div>
             </div>
             <div>
@@ -80,7 +85,7 @@
         </div>
         @auth
 
-            @if (Auth::user()->role == 0 || Auth::user()->role == 7)
+            @if (Auth::user()->role == 0 || Auth::user()->role == 6)
                 <div class="modal fade" id="add-kode-aset">
                     <div class="modal-dialog">
                         <div class="modal-content">
@@ -159,6 +164,49 @@
         //         "mask": "999/EDP-FJ/99/9999",
         //     });
         // });
+
+        $('#select-all').change(function() {
+            var checkboxes = $(this).closest('table').find(':checkbox');
+            checkboxes.prop('checked', $(this).is(':checked'));
+        });
+
+        // Function to handle delete selected items
+        $('#delete-selected').click(function() {
+            var ids = [];
+            $('input[name="hapus[]"]:checked').each(function() {
+                ids.push($(this).val());
+            });
+
+            if (ids.length > 0) {
+                var token = $(this).data('token');
+                $.ajax({
+                    url: 'kodeaset-warehouse-imss/hapus-multiple',
+                    type: 'POST',
+                    data: {
+                        _token: token,
+                        ids: ids
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Menghapus status checked dari semua checkbox
+                            $('input[name="hapus[]"]').prop('checked', false);
+                            $('#select-all').prop('checked', false);
+                            // Memuat ulang halaman setelah berhasil menghapus data
+                            location.reload();
+                            alert('Data berhasil dihapus');
+                        } else {
+                            alert('Gagal menghapus data');
+                        }
+                    },
+                    error: function(xhr) {
+                        alert('Terjadi kesalahan saat menghapus data');
+                    }
+                });
+            } else {
+                alert('Pilih setidaknya satu item untuk dihapus');
+            }
+        });
+
 
         function resetForm() {
             $('#save').trigger("reset");

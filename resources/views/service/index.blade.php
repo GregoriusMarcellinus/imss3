@@ -77,8 +77,6 @@
                                         <td>{{ $d->perawatan }}</td>
                                         <td>{{ $d->perawatan_mulai }}</td>
                                         <td>{{ $d->perawatan_selesai }}</td>
-                                        {{-- <td>{{ $d->komponen_diganti }}</td> --}}
-                                        {{-- <td>{{ $d->tanggal_komponen }}</td> --}}
                                         <td>{{ $d->pic }}</td>
                                         <td>{{ $d->keterangan }}</td>
                                         {{-- <td><img src="{{ asset('/storage/photo/' . $d->file) }}" alt=""
@@ -158,8 +156,7 @@
                                         </tr>
                                         <tr>
                                             <td colspan="3">
-                                                <button id="button-tambah-produk" type="button"
-                                                    class="btn btn-info mb-3"
+                                                <button id="button-tambah-produk" type="button" class="btn btn-info mb-3"
                                                     onclick="showAddProduct()">{{ __('Tambah Item Detail') }}</button>
                                             </td>
                                         </tr>
@@ -171,10 +168,12 @@
                                                 <th>{{ __('Kode Material') }}</th>
                                                 <th>{{ __('Nama Barang') }}</th>
                                                 <th>{{ __('Spesifikasi') }}</th>
+                                                <th>{{ __('Aksi') }}</th>
                                                 {{-- <th>{{ __('QTY') }}</th>
                                                 <th>{{ __('SAT') }}</th>
                                                 <th>{{ __('Keterangan') }}</th> --}}
-                                                
+
+
                                             </thead>
                                             <tbody id="table-pr">
                                             </tbody>
@@ -248,47 +247,6 @@
                                                         <input type="text" class="form-control" id="spesifikasi">
                                                     </div>
                                                 </div>
-                                                {{-- <div class="form-group row">
-                                                    <label for="spek"
-                                                        class="col-sm-4 col-form-label">{{ __('Spesifikasi') }}</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control" id="spek">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label for="no_nota"
-                                                        class="col-sm-4 col-form-label">{{ __('QTY') }}</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control" id="stock"
-                                                            name="stock">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label for="satuan"
-                                                        class="col-sm-4 col-form-label">{{ __('Satuan') }}</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control" id="satuan"
-                                                            name="satuan">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label for="waktu"
-                                                        class="col-sm-4 col-form-label">{{ __('Waktu Penyelesaian') }}</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="date" class="form-control" id="waktu"
-                                                            name="waktu">
-                                                    </div>
-                                                </div>
-                                                <div class="form-group row">
-                                                    <label for="keterangan"
-                                                        class="col-sm-4 col-form-label">{{ __('Keterangan') }}</label>
-                                                    <div class="col-sm-8">
-                                                        <input type="text" class="form-control" id="keterangan"
-                                                            name="keterangan">
-                                                    </div>
-                                                </div> --}}
-
-                                                
 
                                             </form>
                                             <button id="button-update-pr" type="button" class="btn btn-primary w-100"
@@ -340,7 +298,8 @@
                                             <select class="form-control" name="nama_tempat" id="nama_tempat">
                                                 <option value="">Pilih Tempat</option>
                                                 @foreach ($tempats as $tempat)
-                                                    <option value="{{ $tempat->nama_tempat }}">{{ $tempat->nama_tempat }}</option>
+                                                    <option value="{{ $tempat->nama_tempat }}">{{ $tempat->nama_tempat }}
+                                                    </option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -351,7 +310,7 @@
                                             <input type="text" class="form-control" id="lokasi" name="lokasi">
                                         </div>
                                     </div>
-                                    
+
                                     <div class="form-group row">
                                         <label for="nama_proyek"
                                             class="col-sm-4 col-form-label">{{ __('Nama Proyek') }}</label>
@@ -359,7 +318,8 @@
                                             <select class="form-control" name="nama_proyek" id="nama_proyek">
                                                 <option value="">Pilih Proyek</option>
                                                 @foreach ($tempats as $tempat)
-                                                    <option value="{{ $tempat->nama_proyek }}">{{ $tempat->nama_proyek }}</option>
+                                                    <option value="{{ $tempat->nama_proyek }}">{{ $tempat->nama_proyek }}
+                                                    </option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -382,7 +342,8 @@
                                             <select class="form-control" name="perawatan" id="perawatan">
                                                 <option value="">Pilih Perawatan</option>
                                                 @foreach ($proyeks as $proyek)
-                                                    <option value="{{ $proyek->kode_perawatan }}">{{ $proyek->kode_perawatan }}</option>
+                                                    <option value="{{ $proyek->kode_perawatan }}">
+                                                        {{ $proyek->kode_perawatan }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
@@ -405,23 +366,6 @@
                                         </div>
                                     </div>
 
-                                    {{-- <div class="form-group row">
-                                        <label for="komponen_diganti"
-                                            class="col-sm-4 col-form-label">{{ __('Komponen Yang diganti') }}</label>
-                                        <div class="col-sm-8">
-                                            <input type="text" class="form-control" id="komponen_diganti"
-                                                name="komponen_diganti">
-                                        </div>
-                                    </div> --}}
-
-                                    {{-- <div class="form-group row">
-                                        <label for="tanggal_komponen"
-                                            class="col-sm-4 col-form-label">{{ __('Tanggal Komponen') }}</label>
-                                        <div class="col-sm-8">
-                                            <input type="date" class="form-control" id="tanggal_komponen"
-                                                name="tanggal_komponen">
-                                        </div>
-                                    </div> --}}
 
                                     <div class="form-group row">
                                         <label for="pic" class="col-sm-4 col-form-label">{{ __('PIC') }}</label>
@@ -492,43 +436,45 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal fade" id="import-karyawan">
+
+                {{-- detail delete --}}
+                {{-- <div class="modal fade" id="delete-service">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h4 class="modal-title">Import Karyawan (Excel)</h4>
+                                <h4 id="modal-title" class="modal-title">{{ __('Delete Detail') }}</h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <form role="form" enctype="multipart/form-data" id="import"
-                                    action="{{ route('karyawan.import') }}" method="post">
+                                <form role="form" id="delete" action="{{ route('service.delete') }}" method="post">
                                     @csrf
-                                    <div class="form-group">
-                                        <div class="">
-                                            <input type="file" class="" id="file" name="file">
-                                            {{-- <label class="" for="file">Choose file</label> --}}
-                                        </div>
-                                    </div>
+                                    @method('delete')
+                                    <input type="hidden" id="delete_id" name="delete_id">
                                 </form>
+                                <div>
+                                    <p>Anda yakin ingin menghapus service <span id="delete_name"
+                                            class="font-weight-bold"></span>?</p>
+                                </div>
                             </div>
                             <div class="modal-footer justify-content-between">
                                 <button type="button" class="btn btn-default"
                                     data-dismiss="modal">{{ __('Batal') }}</button>
-                                {{-- <button type="button" class="btn btn-default"
-                                    id="download-template">{{ __('Download Template') }}</button> --}}
-                                <button type="button" class="btn btn-primary"
-                                    onclick="$('#import').submit();">{{ __('Import') }}</button>
+                                <button id="button-save" type="button" class="btn btn-danger"
+                                    onclick="$('#delete').submit();">{{ __('Ya, hapus') }}</button>
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> --}}
+
+                {{-- end detail delete --}}
             @endif
         @endauth
     </section>
 @endsection
 @section('custom-js')
+
 
     {{-- menghitung umur, pensiun , dan mpp --}}
     <script>
@@ -617,6 +563,14 @@
 
         }
 
+        $('#detail-pr').on('hidden.bs.modal', function() {
+            $('#container-product').addClass('d-none');
+            $('#container-product').removeClass('col-5');
+            $('#container-form').addClass('col-12');
+            $('#container-form').removeClass('col-7');
+            $('#button-tambah-detail').text('Tambah Item Detail');
+        });
+
         function showAddProduct() {
             if ($('#detail-pr').find('#container-product').hasClass('d-none')) {
                 $('#detail-pr').find('#container-product').removeClass('d-none');
@@ -629,35 +583,48 @@
                 $('#detail-pr').find('#container-product').addClass('d-none');
                 $('#detail-pr').find('#container-form').addClass('col-12');
                 $('#detail-pr').find('#container-form').removeClass('col-7');
-                $('#button-tambah-produk').text('Tambah Item Detail');
+                $('#button-tambah-produk').text('Tambah Komponen Diganti');
                 clearForm();
             }
         }
 
-        function clearForm() {
-            $('#kode_material').val("");
-            $('#nama_barang').val("");
-            $('#spesifikasi').val("");
+
+        function emptyTableProducts() {
+            $('#table-pr').empty();
+            $('#nama_tempat').text("");
+            $('#lokasi').text("");
+            $('nama_proyek').text("");
+            $('#kode_material').text("");
+            $('#nama_barang').text("");
+            $('#spesifikasi').text("");
         }
 
-        
+
+
+        function loader(status = 1) {
+            if (status == 1) {
+                $('#loader').show();
+            } else {
+                $('#loader').hide();
+            }
+        }
+
+
+
+
         function PRupdate() {
             const id = $('#pr_id').val()
 
-            var inputFile = $("#lampiran")[0].files[0];
+            // var inputFile = $("#lampiran")[0].files[0];
             var formData = new FormData();
-            formData.append('lampiran', inputFile);
+            // formData.append('lampiran', inputFile);
             formData.append('_token', '{{ csrf_token() }}');
             formData.append('id_service', id);
             // formData.append('id_proyek', $('#proyek_id_val').val());
             formData.append('kode_material', $('#kode_material').val());
             formData.append('nama_barang', $('#nama_barang').val());
             formData.append('spesifikasi', $('#spesifikasi').val());
-            // formData.append('stock', $('#stock').val());
-            // formData.append('spek', $('#spek').val());
-            // formData.append('satuan', $('#satuan').val());
-            // formData.append('waktu', $('#waktu').val());
-            // formData.append('keterangan', $('#keterangan').val());
+
 
             // if ($('#waktu').val() == null || $('#waktu').val() == "") {
             //     toastr.error("Waktu Penyelesaian belum diisi!");
@@ -724,40 +691,7 @@
                                 lampiran = '<a href="' + urlLampiran + '/' + value.lampiran +
                                     '"><i class="fa fa-eye"></i> Lihat</a>';
                             }
-                            //0 = Lakukan SPPH, 1 = Lakukan PO, 2 = Completed, 3 = Negosiasi, 4 = Justifikasi
-                            // if (value.status == 0 || !value.status) {
-                            //     status = 'Lakukan SPPH';
-                            // } else if (value.status == 1) {
-                            //     status = 'Lakukan PO';
-                            // } else if (value.status == 2) {
-                            //     status = 'COMPLETED';
-                            // } else if (value.status == 3) {
-                            //     status = 'NEGOSIASI';
-                            // } else if (value.status == 4) {
-                            //     status = 'JUSTIFIKASI';
-                            // }
 
-                            // if (!value.id_spph) {
-                            //     status = 'Lakukan SPPH';
-                            // } else if (value.id_spph && !value.no_sph) {
-                            //     status = 'Lakukan SPH';
-                            // } else if (value.id_spph && value.no_sph && !value.no_just) {
-                            //     status = 'Lakukan Justifikasi';
-                            // } else if (value.id_spph && value.no_sph && value.no_just && !value.id_po) {
-                            //     status = 'Lakukan Nego/PO';
-                            // } else if (value.id_spph && value.no_sph && value
-                            //     .id_po) {
-                            //     status = 'COMPLETED';
-                            // }
-
-                            // if (!value.id_spph && !value.nomor_spph) {
-                            //     status = 'Lakukan SPPH';
-                            // } else if (value.id_spph && value.nomor_spph && !value.id_po) {
-                            //     status = 'PROSES PO';
-                            // } else if (value.id_spph && value.nomor_spph && value
-                            //     .id_po && value.no_po) {
-                            //     status = 'COMPLETED';
-                            // }
 
 
                             $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
@@ -780,17 +714,33 @@
             });
         }
 
+        function clearForm() {
+            $('#kode_material').val("");
+            $('#nama_barang').val("");
+            $('#spesifikasi').val("");
+        }
+
+        $('#detail-pr').on('show.bs.modal', function(event) {
+            var button = $(event.relatedTarget);
+            var data = button.data('detail');
+            console.log(data);
+            lihatPR(data);
+        });
+
         function lihatPR(data) {
             emptyTableProducts();
             clearForm()
-            $('#modal-title').text("Detail Request");
+            $('#modal-title').text("Detail Penggantian Komponen");
             $('#button-save').text("Cetak");
             resetForm();
-            $('#button-tambah-produk').text('Tambah Item Detail');
+            $('#button-tambah-produk').text('Tambah Komponen Diganti');
             $('#id').val(data.id);
             $('#nama_tempat').text(data.nama_tempat);
             $('#nama_proyek').text(data.nama_proyek);
             $('#lokasi').text(data.lokasi);
+            $('#kode_material').text(data.kode_material);
+            $('#nama_barang').text(data.nama_barang);
+            $('#spesifikasi').text(data.spesifikasi);
             // $('#proyek_id_val').val(data.proyek_id);
             $('#pr_id').val(data.id);
             $('#table-pr').empty();
@@ -808,15 +758,17 @@
                 dataType: "json",
                 beforeSend: function() {
                     $('#table-pr').append('<tr><td colspan="15" class="text-center">Loading...</td></tr>');
-                    $('#button-cetak-pr').html('<i class="fas fa-spinner fa-spin"></i> Loading...');
-                    $('#button-cetak-pr').attr('disabled', true);
+                    //     $('#button-cetak-pr').html('<i class="fas fa-spinner fa-spin"></i> Loading...');
+                    //     $('#button-cetak-pr').attr('disabled', true);
                 },
                 success: function(data) {
                     console.log(data);
-                    $('#id').val(data.pr.id);
+                    $('#id').val(data.service.id);
                     $('#nama_tempat').text(data.service.nama_tempat);
                     $('#lokasi').text(data.service.lokasi);
-                    $('#nama_proyek').text(data.service.nama_proyek);
+                    $('#kode_material').text(data.service.kode_material);
+                    $('#nama_barang').text(data.service.nama_barang);
+                    $('#spesifikasi').text(data.service.spesifikasi);
                     $('#button-cetak-pr').html('<i class="fas fa-print"></i> Cetak');
                     $('#button-cetak-pr').attr('disabled', false);
                     var no = 1;
@@ -828,70 +780,21 @@
                     } else {
                         $('#table-pr').empty();
                         $.each(data.service.details, function(key, value) {
-                            var status, spph, po;
-                            var urlLampiran = "{{ asset('lampiran') }}";
-                            if (!value.id_spph) {
-                                spph = '-';
-                            } else {
-                                spph = value.nomor_spph
-                            }
 
-                            if (!value.id_po) {
-                                po = '-';
-                            } else {
-                                po = value.no_po
-                            }
-
-                            var lampiran = null;
-                            if (value.lampiran == null) {
-                                lampiran = '-';
-                            } else {
-                                lampiran = '<a href="' + urlLampiran + '/' + value.lampiran +
-                                    '"><i class="fa fa-eye"></i> Lihat</a>';
-                            }
-
-                            //0 = Lakukan SPPH, 1 = Lakukan PO, 2 = Completed
-                            // if (value.status == 0 || !value.status) {
-                            //     status = 'Lakukan SPPH';
-                            // } else if (value.status == 1) {
-                            //     status = 'Lakukan PO';
-                            // } else if (value.status == 2) {
-                            //     status = 'COMPLETED';
-                            // } else if (value.status == 3) {
-                            //     status = 'NEGOSIASI';
-                            // } else if (value.status == 4) {
-                            //     status = 'JUSTIFIKASI';
-                            // }
-                            // if (!value.id_spph) {
-                            //     status = 'Lakukan SPPH';
-                            // } else if (value.id_spph && !value.no_sph) {
-                            //     status = 'Lakukan SPH';
-                            // } else if (value.id_spph && value.no_sph && !value.no_just) {
-                            //     status = 'Lakukan Justifikasi';
-                            // } else if (value.id_spph && value.no_sph && value.no_just && !value.id_po) {
-                            //     status = 'Lakukan Nego/PO';
-                            // } else if (value.id_spph && value.no_sph && value
-                            //     .id_po) {
-                            //     status = 'COMPLETED';
-                            // }
-
-                            if (!value.id_spph && !value.nomor_spph) {
-                                status = 'Lakukan SPPH';
-                            } else if (value.id_spph && value.nomor_spph && !value.id_po) {
-                                status = 'PROSES PO';
-                            } else if (value.id_spph && value.nomor_spph && value
-                                .id_po && value.no_po) {
-                                status = 'COMPLETED';
-                            }
 
                             $('#table-pr').append('<tr><td>' + (key + 1) + '</td><td>' + value
-                                .kode_material + '</td><td>' + value.uraian + '</td><td>' +
+                                .kode_material + '</td><td>' + value.nama_barang + '</td><td>' +
                                 value
-                                .spek + '</td><td>' + value.qty + '</td><td>' + value
-                                .satuan + '</td><td>' + value.waktu + '</td><td>' +
-                                lampiran + '</td><td>' + value.keterangan + '</td><td><b>' +
-                                status +
-                                '</b></td></tr>'
+                                .spesifikasi +
+                                '</td><td><button title="hapus" id="delete_service_save" type="button" class="btn btn-danger btn-xs" data-id="' +
+                                value.id + '"><i class="fas fa-trash"></i></button></td><td>' +
+                                // '</td><td>' + value.qty + '</td><td>' + value
+                                // .satuan + '</td><td>' + value.waktu + '</td><td>' +
+                                // lampiran + '</td><td>' + value.keterangan + '</td><td><b>' +
+                                // status +
+                                '</b><td></tr>'
+
+
 
                                 // + <td>' + spph +
                                 // '</td><td>' + po + '</td><td>' + status + '</td> +
@@ -905,20 +808,67 @@
             });
         }
 
-        
+        // $(document).on('click', '#delete_service_save',function(){
+        //     var id = $(this).data('id');
+        //     $('#delete_id').val(id);
+        //     $('#delete-service').modal('show');
+        //     // var kode_material = $('#kode_material' + id).text();
+        //     // $('#delete_code').text(kode_material);
+
+        // });
+
+
+        $('#table-pr').on('click', '#delete_service_save', function() {
+            var serviceId = $(this).data('id');
+            deleteService(serviceId);
+        });
+
+        function deleteService(serviceId) {
+            if (confirm("Anda yakin ingin menghapus produk ini?")) {
+                $.ajax({
+                    url: "{{ url('service_delete') }}",
+                    type: "DELETE",
+                    data: {
+                        id: serviceId
+                    },
+                    success: function(response) {
+                        // Handle success response, misalnya refresh halaman atau tampilkan pesan sukses
+                        // Contoh:
+                        alert('Produk berhasil dihapus');
+                        // Kemudian lakukan refresh data atau operasi lain yang sesuai
+                        // Misalnya: lihatPR(data);
+                    },
+                    error: function(xhr, status, error) {
+                        // Handle error response, misalnya tampilkan pesan error
+                        // Contoh:
+                        alert('Terjadi kesalahan saat menghapus produk');
+                    }
+                });
+            }
+        }
+
+        function bindRowActionEvents() {
+            $('#delete_service_save').click(function() {
+                var id = $(this).data('row-id');
+                deleteRow(id);
+
+            });
+        }
+
+
         function detailPR(data) {
             $('#modal-title').text("Edit Request");
             $('#button-save').text("Simpan");
             resetForm();
             $('#save_id').val(data.id);
             $('#nama_tempat').val(data.nama_tempat);
-            $('#nama_barang').val(data.nama_barang);
-            $('#spesifikasi').val(data.spesifikasi);
+            $('#lokasi').val(data.lokasi);
+            $('#nama_proyek').val(data.nama_proyek);
             // $('#dasar_pr').val(data.dasar_pr);
             // alert(proyek_id)
         }
 
-        
+
 
         function deleteproyek(data) {
             $('#delete_id').val(data.id);

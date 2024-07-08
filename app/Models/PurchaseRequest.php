@@ -14,6 +14,12 @@ class PurchaseRequest extends Model
         'no_pr',
         'tgl_pr',
         'dasar_pr',
-        'id_user'
+        'id_user',
+        'nomor_lppb',
+        'tanggal_lppb'
     ];
+    public function detailPr()
+    {
+        return $this->hasMany(DetailPr::class, 'id_pr', 'id');
+    }
 }

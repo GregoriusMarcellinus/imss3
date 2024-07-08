@@ -43,9 +43,32 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
+
+                        {{-- Filter by Nomor Po dan Tanggal --}}
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="filter-po-no">Filter Nomor PO</label>
+                                    <input type="text" class="form-control" id="filter-po-no"
+                                        placeholder="Masukkan Nomor PO">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="filter-po-date">Filter Tanggal PO</label>
+                                    <input type="date" class="form-control" id="filter-po-date">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <button class="btn btn-secondary mt-4" id="clear-filter">Clear Filter</button>
+                            </div>
+                        </div>
+                        {{-- End Filter by Nomor Po dan Tanggal --}}
+
                         <table id="table" class="table table-sm table-bordered table-hover table-striped">
                             <thead>
                                 <tr class="text-center">
+                                    <th><input type="checkbox" id="select-all"></th>
                                     <th>No.</th>
                                     <th>{{ __('No PO') }}</th>
                                     {{-- <th>{{ __('No PR') }}</th> --}}
@@ -87,6 +110,8 @@
                                             ];
                                         @endphp
                                         <tr>
+                                            <td class="text-center"><input type="checkbox" name="hapus[]"
+                                                value="{{ $d->id }}"></td>
                                             <td class="text-center">{{ $data['no'] }}</td>
                                             <td>{{ $data['no_po'] }}</td>
                                             {{-- <td>{{ $data['pr_no'] }}</td> --}}
@@ -122,6 +147,8 @@
                                 @endif
                             </tbody>
                         </table>
+                        <button type="button" class="btn btn-danger" id="delete-selected"
+                            data-token="{{ csrf_token() }}">Hapus yang dipilih</button>
                     </div>
                 </div>
             </div>
@@ -364,16 +391,16 @@
                                         <table class="table table-bordered">
                                             <thead>
                                                 <tr>
+                                                    <th>Pilih</th>
                                                     <th>No</th>
                                                     <th>Deskripsi</th>
                                                     <th>Spesifikasi</th>
                                                     <th>QTY</th>
                                                     <th>Sat</th>
-                                                    <th>Proyek</th>
-                                                    {{-- <th>No SPPH</th> --}}
                                                     <th>No PR</th>
+                                                    <th>No SPPH</th>
                                                     <th>No PO</th>
-                                                    <th>Pilih</th>
+                                                    <th>Proyek</th>
                                                 </tr>
                                             </thead>
                                             <tbody id='detail-material'>
@@ -546,6 +573,49 @@
         }
 
 
+        //Filter by Nomor dan tgl POPL
+        $(document).ready(function() {
+            $('#clear-filter').on('click', function() {
+                $('#filter-po-no, #filter-po-date').val('');
+                filterTable();
+            });
+
+            $('#filter-po-no, #filter-po-date').on('keyup change', function() {
+                filterTable();
+            });
+
+            function filterTable() {
+                var filterNoPO = $('#filter-po-no').val().toUpperCase();
+                var filterDatePO = $('#filter-po-date').val();
+
+                $('table tbody tr').each(function() {
+                    var noPO = $(this).find('td:nth-child(3)').text().toUpperCase();
+                    var datePO = $(this).find('td:nth-child(5)').text();
+                    var id = $(this).find('td:nth-child(1)')
+                .text(); // Ubah indeks kolom ke indeks ID PO jika perlu
+
+                    // Ubah string tanggal ke objek Date untuk perbandingan
+                    var dateParts = datePO.split("/");
+                    var poDate = new Date(dateParts[2], dateParts[1] - 1, dateParts[
+                    0]); // Format: tahun, bulan, tanggal
+
+                    // Ubah string filterDatePO ke objek Date
+                    var filterDateParts = filterDatePO.split("-");
+                    var filterPODate = new Date(filterDateParts[0], filterDateParts[1] - 1, filterDateParts[
+                        2]); // Format: tahun, bulan, tanggal
+
+                    if ((noPO.indexOf(filterNoPO) > -1 || filterNoPO === '') &&
+                        (poDate.getTime() === filterPODate.getTime() || filterDatePO === '')) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            }
+        });
+        //End Filter by Nomor dan tgl PO
+
+
         function loader(status = 1) {
             if (status == 1) {
                 $('#loader').show();
@@ -553,6 +623,48 @@
                 $('#loader').hide();
             }
         }
+
+        $('#select-all').change(function() {
+            var checkboxes = $(this).closest('table').find(':checkbox');
+            checkboxes.prop('checked', $(this).is(':checked'));
+        });
+
+        // Function to handle delete selected items
+        $('#delete-selected').click(function() {
+            var ids = [];
+            $('input[name="hapus[]"]:checked').each(function() {
+                ids.push($(this).val());
+            });
+
+            if (ids.length > 0) {
+                var token = $(this).data('token');
+                $.ajax({
+                    url: 'po-pl-imss/hapus-multiple',
+                    type: 'POST',
+                    data: {
+                        _token: token,
+                        ids: ids
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Menghapus status checked dari semua checkbox
+                            $('input[name="hapus[]"]').prop('checked', false);
+                            $('#select-all').prop('checked', false);
+                            // Memuat ulang halaman setelah berhasil menghapus data
+                            location.reload();
+                            alert('Data berhasil dihapus');
+                        } else {
+                            alert('Gagal menghapus data');
+                        }
+                    },
+                    error: function(xhr) {
+                        alert('Terjadi kesalahan saat menghapus data');
+                    }
+                });
+            } else {
+                alert('Pilih setidaknya satu item untuk dihapus');
+            }
+        });
 
         function emptyTablePo() {
             $('#tabel-po').empty();
@@ -1009,12 +1121,13 @@
             getPODetail();
         }
 
-        function getPODetail() {
-
+        function getPODetail(pr_id) {
+            // alert(pr_id);
             loader();
+
             $('#button-check').prop("disabled", true);
             $.ajax({
-                url: "{{ url('products/products_pr') }}",
+                url: "{{ url('products/products_pr/') }}/" + pr_id,
                 type: "GET",
                 data: {
                     "format": "json"
@@ -1030,7 +1143,7 @@
                     //append to #detail-material
                     $('#detail-material').empty();
                     $.each(data.products, function(key, value) {
-                        console.table('a', value)
+                        console.log(value);
                         var no_spph
                         if (!value.id_spph) {
                             no_spph = '-'
@@ -1039,35 +1152,36 @@
                         }
 
                         var no_pr
-                        if (!value.id_pr) {
+                        if (!value.pr_no) {
                             no_pr = '-'
                         } else {
                             no_pr = value.pr_no
                         }
-
                         var no_po
-                        if (!value.id_po) {
+                        if (!value.p_no) {
                             no_po = '-'
                         } else {
                             no_po = value.po_no
                         }
 
-                        var checkbox
+                        var checkbox;
                         if (!value.id_po) {
                             checkbox = '<input type="checkbox" id="addToDetails" value="' + value.id +
-                                '" onclick="addToDetailsJS(' + value.id + ')" >'
+                                '" onclick="addToDetailsJS(' + value.id + ')">'
                         } else {
                             checkbox = '<input type="checkbox" id="addToDetails" value="' + value.id +
                                 '" onclick="addToDetailsJS(' + value.id + ')" disabled>'
                         }
 
-
                         $('#detail-material').append(
-                            '<tr><td>' + (key + 1) + '</td><td>' + value.uraian +
+                            '<tr><td>' + checkbox + '</td><td>' + (key + 1) + '</td><td>' + value
+                            .uraian +
                             '</td><td>' + value.spek + '</td><td>' + value.qty + '</td><td>' + value
-                            .satuan + '</td><td>' + value.nama_proyek + '</td><td>' + no_pr +
+                            .satuan + '</td><td>' + no_pr + '</td><td>' + no_spph + '</td><td>' +
+                            no_po +
                             '</td><td>' +
-                            no_po + '</td><td>' + checkbox + '</td></tr>'
+                            value.nama_proyek +
+                            '</td></tr>'
                         );
                     });
                 },

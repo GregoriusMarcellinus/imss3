@@ -37,9 +37,33 @@
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
+
+                        {{-- Filter by Nomor Po dan Tanggal --}}
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="filter-sjn-no">Filter Nomor SJN</label>
+                                    <input type="text" class="form-control" id="filter-sjn-no"
+                                        placeholder="Masukkan Nomor sjn">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="filter-sjn-date">Filter Tanggal SJN</label>
+                                    <input type="date" class="form-control" id="filter-sjn-date">
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <button class="btn btn-secondary mt-4" id="clear-filter">Clear Filter</button>
+                            </div>
+                        </div>
+                        {{-- End Filter by Nomor Po dan Tanggal --}}
+
+
                         <table id="table" class="table table-sm table-bordered table-hover table-striped">
                             <thead>
                                 <tr class="text-center">
+                                    <th><input type="checkbox" id="select-all"></th>
                                     <th>No.</th>
                                     <th>{{ __('Nomor SJN') }}</th>
                                     <th>{{ __('Nama Pengirim') }}</th>
@@ -61,6 +85,8 @@
                                         @endphp
 
                                         <tr>
+                                            <td class="text-center"><input type="checkbox" name="hapus[]"
+                                                value="{{ $d->sjn_id }}"></td>
                                             <td class="text-center">{{ $data['no'] }}</td>
                                             <td class="text-center">{{ $data['no_sjn'] }}</td>
                                             <td class="text-center">{{ $data['nama_pengirim'] }}</td>
@@ -75,7 +101,7 @@
                                                     data-target="#detail-sjn" class="btn-lihat btn btn-info btn-xs"
                                                     data-detail="{{ json_encode($data) }}"><i
                                                         class="fas fa-list"></i></button>
-                                                @if (Auth::user()->role == 0 || Auth::user()->role == 1)
+                                                @if (Auth::user()->role == 0 || Auth::user()->role == 1 || Auth::user()->role == 4)
                                                     <button title="Hapus Produk" type="button"
                                                         class="btn btn-danger btn-xs" data-toggle="modal"
                                                         data-target="#delete-sjn"
@@ -92,6 +118,8 @@
                                 @endif
                             </tbody>
                         </table>
+                        <button type="button" class="btn btn-danger" id="delete-selected"
+                            data-token="{{ csrf_token() }}">Hapus yang dipilih</button>
                     </div>
                 </div>
             </div>
@@ -331,6 +359,93 @@
             $('#button-save').text("Tambahkan");
             resetForm();
         }
+
+
+        //Filter by Nomor dan tgl SJN
+        $(document).ready(function() {
+            $('#clear-filter').on('click', function() {
+                $('#filter-sjn-no, #filter-sjn-date').val('');
+                filterTable();
+            });
+
+            $('#filter-sjn-no, #filter-sjn-date').on('keyup change', function() {
+                filterTable();
+            });
+
+            function filterTable() {
+                var filterNoSJN = $('#filter-sjn-no').val().toUpperCase();
+                var filterDateSJN = $('#filter-sjn-date').val();
+
+                $('table tbody tr').each(function() {
+                    var noSJN = $(this).find('td:nth-child(3)').text().toUpperCase();
+                    var dateSJN = $(this).find('td:nth-child(5)').text();
+                    var id = $(this).find('td:nth-child(1)')
+                .text(); // Ubah indeks kolom ke indeks ID PO jika perlu
+
+                    // Ubah string tanggal ke objek Date untuk perbandingan
+                    var dateParts = dateSJN.split("/");
+                    var sjnDate = new Date(dateParts[2], dateParts[1] - 1, dateParts[
+                    0]); // Format: tahun, bulan, tanggal
+
+                    // Ubah string filterDatePO ke objek Date
+                    var filterDateParts = filterDateSJN.split("-");
+                    var filterSJNDate = new Date(filterDateParts[0], filterDateParts[1] - 1, filterDateParts[
+                        2]); // Format: tahun, bulan, tanggal
+
+                    if ((noSJN.indexOf(filterNoSJN) > -1 || filterNoSJN === '') &&
+                        (sjnDate.getTime() === filterSJNDate.getTime() || filterDateSJN === '')) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            }
+        });
+        //End Filter by Nomor dan tgl SJN
+
+       
+        $('#select-all').change(function() {
+            var checkboxes = $(this).closest('table').find(':checkbox');
+            checkboxes.prop('checked', $(this).is(':checked'));
+        });
+
+        // Function to handle delete selected items
+        $('#delete-selected').click(function() {
+            var ids = [];
+            $('input[name="hapus[]"]:checked').each(function() {
+                ids.push($(this).val());
+            });
+
+            if (ids.length > 0) {
+                var token = $(this).data('token');
+                $.ajax({
+                    url: 'sjn-imss/hapus-multiple',
+                    type: 'POST',
+                    data: {
+                        _token: token,
+                        ids: ids
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Menghapus status checked dari semua checkbox
+                            $('input[name="hapus[]"]').prop('checked', false);
+                            $('#select-all').prop('checked', false);
+                            // Memuat ulang halaman setelah berhasil menghapus data
+                            location.reload();
+                            alert('Data berhasil dihapus');
+                        } else {
+                            alert('Gagal menghapus data');
+                        }
+                    },
+                    error: function(xhr) {
+                        alert('Terjadi kesalahan saat menghapus data');
+                    }
+                });
+            } else {
+                alert('Pilih setidaknya satu item untuk dihapus');
+            }
+        });
+
 
         function showAddProduct() {
             //if .modal-dialog in #detail-sjn has class modal-lg, change to modal-xl, otherwise change to modal-lg

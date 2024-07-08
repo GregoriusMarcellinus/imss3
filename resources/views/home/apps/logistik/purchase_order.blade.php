@@ -26,8 +26,8 @@
         <div class="container">
             <div class="card">
                 <div class="card-header">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-po"
-                        onclick="addPo()"><i class="fas fa-plus"></i> Add New PO</button>
+                    {{-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-po"
+                        onclick="addPo()"><i class="fas fa-plus"></i> Add New PO</button> --}}
                     <div class="card-tools">
                         <form>
                             {{-- <div class="input-group input-group">
@@ -94,22 +94,23 @@
                                             <td class="text-center">{{ $data['tgpo'] }}</td>
                                             <td class="text-center">{{ $data['btpo'] }}</td>
                                             <td class="text-center">
-                                                <button title="Edit PO" type="button" class="btn btn-success btn-xs"
+                                                {{-- button dikomen agar cuma bisa lihat saja --}}
+                                                {{-- <button title="Edit PO" type="button" class="btn btn-success btn-xs"
                                                     data-toggle="modal" data-target="#add-po"
                                                     onclick="editPo({{ json_encode($data) }})"><i
-                                                        class="fas fa-edit"></i></button>
+                                                        class="fas fa-edit"></i></button> --}}
 
-                                                <button title="Lihat Detail" type="button" data-toggle="modal"
+                                                {{-- <button title="Lihat Detail" type="button" data-toggle="modal"
                                                     data-target="#detail-po" class="btn-lihat btn btn-info btn-xs"
                                                     data-detail="{{ json_encode($data) }}"><i
-                                                        class="fas fa-list"></i></button>
+                                                        class="fas fa-list"></i></button> --}}
 
-                                                @if ((Auth::user() && Auth::user()->role == 0) || Auth::user()->role == 1)
+                                                {{-- @if ((Auth::user() && Auth::user()->role == 0) || Auth::user()->role == 1)
                                                     <button title="Hapus PO" type="button" class="btn btn-danger btn-xs"
                                                         data-toggle="modal" data-target="#delete-po"
                                                         onclick="deletePo({{ json_encode($data) }})"><i
                                                             class="fas fa-trash"></i></button>
-                                                @endif
+                                                @endif --}}
                                             </td>
                                         </tr>
                                     @endforeach

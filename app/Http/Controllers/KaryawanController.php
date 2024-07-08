@@ -317,4 +317,14 @@ class KaryawanController extends Controller
         $nama_file = rand() . '.xlsx';
         return Excel::download(new KaryawanExport, $nama_file);
     }
+
+    public function hapusMultipleKaryawan(Request $request)
+    {
+        if ($request->has('ids')) {
+            Karyawan::whereIn('id', $request->input('ids'))->delete();
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
 }

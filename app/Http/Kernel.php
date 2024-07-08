@@ -67,5 +67,8 @@ class Kernel extends HttpKernel
         'logistikAuth' => \App\Http\Middleware\LogistikAuth::class,
         'gudangAuth' => \App\Http\Middleware\GudangAuth::class,
         'wilayahAuth' => \App\Http\Middleware\WilayahAuth::class,
+        'ensureLoggedIn' => \App\Http\Middleware\EnsureUserIsLoggedIn::class,
     ];
+
+    
 }

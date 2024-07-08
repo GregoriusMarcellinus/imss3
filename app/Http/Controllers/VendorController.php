@@ -119,4 +119,16 @@ class VendorController extends Controller
             return redirect()->route('vendor.index')->with('error', 'Data gagal dihapus');
         }
     }
+
+     // Hapus Multiple CheckBox
+     public function hapusMultipleVendor(Request $request)
+     {
+         if ($request->has('ids')) {
+             Vendor::whereIn('id', $request->input('ids'))->delete();
+             return response()->json(['success' => true]);
+         } else {
+             return response()->json(['success' => false]);
+         }
+     }
+
 }

@@ -36,6 +36,7 @@
                         <table id="table" class="table table-sm table-bordered table-hover table-striped">
                             <thead>
                                 <tr class="text-center">
+                                    <th><input type="checkbox" id="select-all"></th>
                                     <th>No.</th>
                                     <th>{{ __('Nama Vendor') }}</th>
                                     <th>{{ __('Alamat Vendor') }}</th>
@@ -60,6 +61,8 @@
                                             ];
                                         @endphp
                                         <tr>
+                                            <td class="text-center"><input type="checkbox" name="hapus[]"
+                                                value="{{ $d->id }}"></td>
                                             <td class="text-center">{{ $data['no'] }}</td>
                                             <td class="text-center">{{ $data['nama'] }}</td>
                                             <td class="text-center">{{ $data['alamat'] }}</td>
@@ -89,6 +92,8 @@
                                 @endif
                             </tbody>
                         </table>
+                        <button type="button" class="btn btn-danger" id="delete-selected"
+                            data-token="{{ csrf_token() }}">Hapus yang dipilih</button>
                     </div>
                 </div>
             </div>
@@ -200,6 +205,49 @@
 
         $('#sort').on('change', function() {
             $("#sorting").submit();
+        });
+
+        //Fungsi Select All Delete
+        $('#select-all').change(function() {
+            var checkboxes = $(this).closest('table').find(':checkbox');
+            checkboxes.prop('checked', $(this).is(':checked'));
+        });
+
+        // Function to handle delete selected items
+        $('#delete-selected').click(function() {
+            var ids = [];
+            $('input[name="hapus[]"]:checked').each(function() {
+                ids.push($(this).val());
+            });
+
+            if (ids.length > 0) {
+                var token = $(this).data('token');
+                $.ajax({
+                    url: 'vendor-imss/hapus-multiple',
+                    type: 'POST',
+                    data: {
+                        _token: token,
+                        ids: ids
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Menghapus status checked dari semua checkbox
+                            $('input[name="hapus[]"]').prop('checked', false);
+                            $('#select-all').prop('checked', false);
+                            // Memuat ulang halaman setelah berhasil menghapus data
+                            location.reload();
+                            alert('Data berhasil dihapus');
+                        } else {
+                            alert('Gagal menghapus data');
+                        }
+                    },
+                    error: function(xhr) {
+                        alert('Terjadi kesalahan saat menghapus data');
+                    }
+                });
+            } else {
+                alert('Pilih setidaknya satu item untuk dihapus');
+            }
         });
 
 

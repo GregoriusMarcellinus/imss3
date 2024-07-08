@@ -34,10 +34,13 @@ class ServiceController extends Controller
         // $proyeks = DB::table('jadwal')->get();
         // $tempats = DB::table('proyek')->get();
 
+
         $proyeks = Jadwal::all();
         $tempats = Proyek::all();
 
-        return view('service.index', compact('items','proyeks','tempats'));
+        $details = Detailservice::where('id_service', $request->id)->get();
+
+        return view('service.index', compact('items', 'proyeks', 'tempats', 'details'));
     }
 
     /**
@@ -72,19 +75,19 @@ class ServiceController extends Controller
             'tanggal_komponen' => 'nullable',
             'pic' => 'nullable',
             'keterangan' => 'nullable',
-            
+
 
 
         ], [
             'nama_tempat.required' => 'Nama Tempat harus diisi',
             'lokasi.required' => 'Lokasi Masuk harus diisi',
-            
-            
+
+
 
 
         ]);
 
-       
+
         $data = [
             'nama_tempat' => $request->nama_tempat,
             'lokasi' => $request->lokasi,
@@ -179,46 +182,17 @@ class ServiceController extends Controller
      */
 
 
-     public function getDetailService(Request $request)
+    public function getDetailService(Request $request)
     {
         $id = $request->id;
-        $service = Service::select('service.*', 'proyek.nama_proyek as nama_proyek')
-            ->leftjoin('proyek', 'proyek.id', '=', 'service.proyek')
-            ->where('service.id', $id)
-            ->first();
+        $service = Service::where('id', $id)->first();
+
         $service->details = Detailservice::where('id_service', $id)->get();
         // $pr->details = DetailPR::where('id_pr', $id)->leftJoin('kode_material', 'kode_material.id', '=', 'detail_pr.kode_material_id')->get();
         $service->details = $service->details->map(function ($item) {
-            // $item->nomor = $item->nomor ? $item->nomor : '';
             $item->kode_material = $item->kode_material ? $item->kode_material : '';
             $item->nama_barang = $item->nama_barang ? $item->nama_barang : '';
             $item->spesifikasi = $item->spesifikasi ? $item->spesifikasi : '';
-            // $item->trainset = $item->trainset ? $item->trainset : '';
-            // $item->car = $item->car ? $item->car : '';
-            // $item->perawatan = $item->perawatan ? $item->perawatan : '';
-            // $item->perawatan_mulai = $item->perawatan_mulai ? $item->perawatan_mulai : '';
-            // $item->perawatan_selesai = $item->perawatan_selesai ? $item->perawatan_selesai : '';            
-            // $item->komponen_diganti = $item->komponen_diganti ? $item->komponen_diganti : '';
-            // $item->tanggal_komponen = $item->tanggal_komponen ? $item->tanggal_komponen : '';
-            // $item->pic = $item->pic ? $item->pic : '';
-            // $item->keterangan = $item->keterangan ? $item->keterangan : '';
-            
-            $targetDate = Carbon::parse($item->waktu);
-            $currentDate = Carbon::now();
-            $diff = $currentDate->diff($targetDate);
-            $remainingDays = $diff->days;
-
-            $referenceDate = Carbon::parse($item->waktu); // Change this to your desired reference date
-
-            if ($currentDate->lessThan($referenceDate)) {
-                // If the current date is before the reference date
-                $item->countdown = "$remainingDays  Hari Sebelum Waktu Penyelesaian";
-                $item->backgroundcolor = "#FF0000"; // Red background
-            } elseif ($currentDate->greaterThanOrEqualTo($referenceDate)) {
-                // If the current date is on or after the reference date
-                $item->countdown = "$remainingDays Hari Setelah Waktu Penyelesaian";
-                $item->backgroundcolor = "#008000"; // Green background
-            }
             return $item;
         });
         return response()->json([
@@ -226,33 +200,37 @@ class ServiceController extends Controller
         ]);
     }
 
+    public function delete($id) {
+        try {
+            $service = Detailservice::findOrFail($id);
+            $service->delete();
+            return response()->json(['message' => 'Produk berhasil dihapus'], 200);
+        } catch (\Exception $e) {
+            return response()->json(['message' => 'Gagal menghapus produk'], 500);
+        }
+    }
+
+   
     public function updateDetailService(Request $request)
     {
-        if (!$request->stock) {
-            return response()->json([
-                'success' => false,
-                'message' => 'QTY tidak boleh kosong'
-            ]);
-        }
-        $request->validate([
-            'lampiran' => 'nullable|file|mimes:pdf|max:500',
-        ]);
+        // if (!$request->stock) {
+        //     return response()->json([
+        //         'success' => false,
+        //         'message' => 'QTY tidak boleh kosong'
+        //     ]);
+        // }
+        // $request->validate([
+        //     'lampiran' => 'nullable|file|mimes:pdf|max:500',
+        // ]);
 
-        
+
 
         $insert = Detailservice::create([
             'id_service' => $request->id_service,
             'kode_material' => $request->kode_material,
             'nama_barang' => $request->nama_barang,
             'spesifikasi' => $request->spesifikasi,
-            // 'kode_material' => $request->kode_material,
-            // 'uraian' => $request->uraian,
-            // 'spek' => $request->spek,
-            // 'satuan' => $request->satuan,
-            // 'qty' => $request->stock,
-            // 'waktu' => $request->waktu,
-            // 'keterangan' => $request->keterangan,
-            // 'lampiran' => $fileName,
+
         ]);
 
         if (!$insert) {

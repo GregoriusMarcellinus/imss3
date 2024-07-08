@@ -16,7 +16,8 @@
     <link rel="stylesheet" href="{{ asset('plugins/select2/css/select2.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css') }}">
     <link rel="stylesheet" href="{{ asset('plugins/daterangepicker/daterangepicker.css') }}">
-    <link rel="stylesheet" href="{{ asset('plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
+    <link rel="stylesheet"
+        href="{{ asset('plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css') }}">
     @hasSection('custom-css')
         @yield('custom-css')
     @endif
@@ -47,7 +48,8 @@
                             style="left: inherit; right: 0px;">
                             <span class="dropdown-item dropdown-header">Warehouse</span>
                             @foreach ($warehouse as $w)
-                                <a href="{{ route('warehouse') }}/change/{{ $w->warehouse_id }}" class="dropdown-item">
+                                <a href="{{ route('warehouse') }}/change/{{ $w->warehouse_id }}"
+                                    class="dropdown-item">
                                     {{ $w->warehouse_name }}
                                 </a>
                             @endforeach
@@ -57,8 +59,9 @@
             @endif
         </nav>
         <aside class="main-sidebar sidebar-dark-primary elevation-4" style="background-color: maroon;">
-            <a href="/" class="brand-link text-center" style="background-color: black;">
-                <span>PT.IMSS</span>
+            <a href="/" class="brand-link text-center" style="background-color: rgb(255, 253, 253);">
+                <img src="{{ asset('img/imss-remove.png') }}" class="d-block w-100" height="30" alt=""
+                    style="object-fit: contain">
                 <!--  <span class="brand-text font-weight-bold">{{ config('app.name', 'Warehouse') }}</span> -->
             </a>
 
@@ -90,7 +93,9 @@
                                     </a>
                                 </li>
                             @endif
-                            @if (Auth::user()->role == 0 || Auth::user()->role == 1 || Auth::user()->role == 4)
+
+                            {{-- Menu Sidebar Vendor --}}
+                            @if (Auth::user()->role == 0 || Auth::user()->role == 1 || Auth::user()->role == 4 || Auth::user()->role == 7)
                                 <li class="nav-item">
                                     <a class="nav-link {{ Route::current()->getName() == 'vendor.index' ? 'active' : '' }}"
                                         href="{{ route('vendor.index') }}">
@@ -99,6 +104,9 @@
                                     </a>
                                 </li>
                             @endif
+                            {{--End Menu Sidebar Vendor --}}
+
+                            {{-- Menu Sidebar Warehouse --}}
                             @if (Auth::user()->role == 0 || Auth::user()->role == 4)
                                 <li class="nav-header">Product</li>
                                 <li class="nav-item">
@@ -123,7 +131,10 @@
                                     </a>
                                 </li>
                             @endif
-                            @if (Auth::user()->role == 0 || Auth::user()->role == 2 || Auth::user()->role == 3 || Auth::user()->role == 4)
+                            {{-- End Menu Sidebar Warehouse --}}
+
+                            {{-- Menu Sidebar Keproyekan --}}
+                            @if (Auth::user()->role == 0 || Auth::user()->role == 8 || Auth::user()->role == 9)
                                 <li class="nav-item">
                                     <a class="nav-link {{ Route::current()->getName() == 'keproyekan.index' ? 'active' : '' }}"
                                         href="{{ route('keproyekan.index') }}">
@@ -131,6 +142,20 @@
                                         <p class="text">{{ __('Keproyekan') }}</p>
                                     </a>
                                 </li>
+                            @endif
+                            {{-- End Menu Sidebar Keproyekan --}}
+                            
+                            {{-- Menu Sidebar Kode Material --}}
+                            @if (Auth::user()->role == 0 ||
+                                    Auth::user()->role == 1 ||
+                                    Auth::user()->role == 2 ||
+                                    Auth::user()->role == 3 ||
+                                    Auth::user()->role == 4 ||
+                                    Auth::user()->role == 7 ||
+                                    Auth::user()->role == 8 ||
+                                    Auth::user()->role == 9 ||
+                                    Auth::user()->role == 10 ||
+                                    Auth::user()->role == 11)
                                 <li class="nav-item">
                                     <a class="nav-link {{ Route::current()->getName() == 'kode_material.index' ? 'active' : '' }}"
                                         href="{{ url('products/kode_material') }}">
@@ -139,6 +164,9 @@
                                     </a>
                                 </li>
                             @endif
+                            {{-- End Menu Sidebar Kode Material --}}
+
+
                             {{-- @if (Auth::user()->role == 0)
                                 <li class="nav-item">
                                     <a class="nav-link {{ Route::current()->getName() == 'keproyekan.index' ? 'active' : '' }}"
@@ -213,7 +241,7 @@
 
         <footer class="main-footer">
             <b>PT</b> {{ config('app.version') }}
-            <img src="{{ asset('img/garis.jpg')}}" style="width: 100%;" />
+            <img src="{{ asset('img/garis.jpg') }}" style="width: 100%;" />
         </footer>
 
         <aside class="control-sidebar control-sidebar-dark">

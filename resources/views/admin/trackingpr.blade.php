@@ -32,10 +32,33 @@
                     </div>
                 </div>
                 <div class="card-body">
+
+                    {{-- Filter by Nomor Po dan Tanggal --}}
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="filter-po-no">Filter Nomor PR</label>
+                                <input type="text" class="form-control" id="filter-po-no"
+                                    placeholder="Masukkan Nomor PO">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-group">
+                                <label for="filter-po-date">Filter Tanggal PR</label>
+                                <input type="date" class="form-control" id="filter-po-date">
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <button class="btn btn-secondary mt-4" id="clear-filter">Clear Filter</button>
+                        </div>
+                    </div>
+                    {{-- End Filter by Nomor Po dan Tanggal --}}
+
                     <div class="table-responsive">
                         <table id="table" class="table table-sm table-bordered table-hover table-striped">
                             <thead>
                                 <tr class="text-center">
+                                    <th><input type="checkbox" id="select-all"></th>
                                     <th>No.</th>
                                     <th>{{ __('Nomor PR') }}</th>
                                     <th>{{ __('Proyek') }}</th>
@@ -61,6 +84,8 @@
                                         @endphp
 
                                         <tr>
+                                            <td class="text-center"><input type="checkbox" name="hapus[]"
+                                                value="{{ $d->id }}"></td>
                                             <td class="text-center">{{ $data['no'] }}</td>
                                             <td class="text-center">{{ $data['no_pr'] }}</td>
                                             <td class="text-center">{{ $data['proyek'] }}</td>
@@ -95,6 +120,8 @@
                                 @endif
                             </tbody>
                         </table>
+                        <button type="button" class="btn btn-danger" id="delete-selected"
+                            data-token="{{ csrf_token() }}">Hapus yang dipilih</button>
                     </div>
                 </div>
             </div>
@@ -447,6 +474,93 @@
             resetForm();
         }
 
+        
+        //checkbox
+        $('#select-all').change(function() {
+            var checkboxes = $(this).closest('table').find(':checkbox');
+            checkboxes.prop('checked', $(this).is(':checked'));
+        });
+
+        // Function to handle delete selected items
+        $('#delete-selected').click(function() {
+            var ids = [];
+            $('input[name="hapus[]"]:checked').each(function() {
+                ids.push($(this).val());
+            });
+
+            if (ids.length > 0) {
+                var token = $(this).data('token');
+                $.ajax({
+                    url: 'tracking-imss/hapus-multiple',
+                    type: 'POST',
+                    data: {
+                        _token: token,
+                        ids: ids
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Menghapus status checked dari semua checkbox
+                            $('input[name="hapus[]"]').prop('checked', false);
+                            $('#select-all').prop('checked', false);
+                            // Memuat ulang halaman setelah berhasil menghapus data
+                            location.reload();
+                            alert('Data berhasil dihapus');
+                        } else {
+                            alert('Gagal menghapus data');
+                        }
+                    },
+                    error: function(xhr) {
+                        alert('Terjadi kesalahan saat menghapus data');
+                    }
+                });
+            } else {
+                alert('Pilih setidaknya satu item untuk dihapus');
+            }
+        });
+
+
+        //Filter by Nomor dan tgl PO
+        $(document).ready(function() {
+            $('#clear-filter').on('click', function() {
+                $('#filter-po-no, #filter-po-date').val('');
+                filterTable();
+            });
+
+            $('#filter-po-no, #filter-po-date').on('keyup change', function() {
+                filterTable();
+            });
+
+            function filterTable() {
+                var filterNoPO = $('#filter-po-no').val().toUpperCase();
+                var filterDatePO = $('#filter-po-date').val();
+
+                $('table tbody tr').each(function() {
+                    var noPO = $(this).find('td:nth-child(3)').text().toUpperCase();
+                    var datePO = $(this).find('td:nth-child(5)').text();
+                    var id = $(this).find('td:nth-child(1)')
+                .text(); // Ubah indeks kolom ke indeks ID PO jika perlu
+
+                    // Ubah string tanggal ke objek Date untuk perbandingan
+                    var dateParts = datePO.split("/");
+                    var poDate = new Date(dateParts[2], dateParts[1] - 1, dateParts[
+                    0]); // Format: tahun, bulan, tanggal
+
+                    // Ubah string filterDatePO ke objek Date
+                    var filterDateParts = filterDatePO.split("-");
+                    var filterPODate = new Date(filterDateParts[0], filterDateParts[1] - 1, filterDateParts[
+                        2]); // Format: tahun, bulan, tanggal
+
+                    if ((noPO.indexOf(filterNoPO) > -1 || filterNoPO === '') &&
+                        (poDate.getTime() === filterPODate.getTime() || filterDatePO === '')) {
+                        $(this).show();
+                    } else {
+                        $(this).hide();
+                    }
+                });
+            }
+        });
+        //End Filter by Nomor dan tgl PO
+
         function showAddProduct() {
             if ($('#detail-pr').find('#container-product').hasClass('d-none')) {
                 $('#detail-pr').find('#container-product').removeClass('d-none');
@@ -765,7 +879,12 @@
                             //         .prop('disabled', true);
                             // }
 
-                            const ekspedisi = value.ekspedisi ? value.ekspedisi : '-';
+                            const diterima_qc = value.diterima_qc ? value.diterima_qc : '-';
+                            const belum_diterima_qc = value.belum_diterima_qc ? value.belum_diterima_qc : '-';
+                            const diterima_eks = value.diterima_eks ? value.diterima_eks : '-';
+                            const belum_diterima_eks = value.belum_diterima_eks ? value.belum_diterima_eks : '-';
+                            const ok = value.hasil_ok ? value.hasil_ok : '-';
+                            const nok = value.hasil_nok ? value.hasil_nok : '-';
 
                             const qc = value?.qc
 
@@ -826,8 +945,8 @@
                                 '">' +
                                 '</td><td>' + po + '</td><td><b>' + status + '</b><br><br><b>' +
                                 msg + date + '</b>' + '</b></td>' +
-                                '<td style="min-width:200px">' + ekspedisi + '</td>' +
-                                '<td style="min-width:200px">' + content + '</td>' +
+                                '<td style="min-width:200px">' + '<b>Sudah Diterima : &nbsp;' + diterima_eks + '</b><br>' + '<b>Belum Diterima : &nbsp;' + belum_diterima_eks + '</b></td>' +
+                                '<td style="min-width:200px">' + '<b>Sudah Diterima : &nbsp;' + diterima_qc + '</b><br>' + '<b>Belum Diterima : &nbsp;' + belum_diterima_qc + '<br><b>OK : &nbsp;' + ok + '<br><b>NOK : &nbsp;' + nok + '</b></td>' + '</td>' + 
                                 '<td><button id="edit_pr_save" data-id="' + id +
                                 '" type="button" class="btn btn-success btn-xs"' +
                                 '><i class="fas fa-save"></i></button>' + '</td>' + '</tr>'

@@ -24,8 +24,8 @@
         <div class="container">
             <div class="card">
                 <div class="card-header">
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-SPPH"
-                        onclick="addSPPH()"><i class="fas fa-plus"></i> Add New SPPH</button>
+                    {{-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#add-SPPH"
+                        onclick="addSPPH()"><i class="fas fa-plus"></i> Add New SPPH</button> --}}
                     <!-- <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#import-product" onclick="importProduct()"><i class="fas fa-file-excel"></i> Import Product (Excel)</button> -->
                     <!-- <button type="button" class="btn btn-primary" onclick="download('xls')"><i class="fas fa-file-excel"></i> Export Product (XLS)</button> -->
                     {{-- <div class="card-tools">
@@ -94,21 +94,21 @@
                                             <td class="text-center">{{ $data['vendor'] }}</td>
                                             {{-- <td class="text-center">{{ $data['penerima'] }}</td> --}}
                                             <td class="text-center">
-                                                <button title="Edit SPPH" type="button" class="btn btn-success btn-xs"
+                                                {{-- <button title="Edit SPPH" type="button" class="btn btn-success btn-xs"
                                                     data-toggle="modal" data-target="#add-SPPH"
                                                     onclick="editSPPH({{ json_encode($data) }})"><i
-                                                        class="fas fa-edit"></i></button>
+                                                        class="fas fa-edit"></i></button> --}}
 
                                                 <button title="Lihat Detail" type="button" data-toggle="modal"
                                                     data-target="#detail-spph" class="btn-lihat btn btn-info btn-xs"
                                                     data-detail="{{ json_encode($data) }}"><i
                                                         class="fas fa-list"></i></button>
-                                                @if (Auth::user()->role == 0 || Auth::user()->role == 1)
+                                                {{-- @if (Auth::user()->role == 0 || Auth::user()->role == 1)
                                                     <button title="Hapus SPPH" type="button" class="btn btn-danger btn-xs"
                                                         data-toggle="modal" data-target="#delete-spph"
                                                         onclick="deletespph({{ json_encode($data) }})"><i
                                                             class="fas fa-trash"></i></button>
-                                                @endif
+                                                @endif --}}
                                             </td>
                                         </tr>
                                     @endforeach
@@ -266,11 +266,11 @@
                                             <td><b>Produk</b></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="3">
+                                            {{-- <td colspan="3">
                                                 <button id="button-tambah-produk" type="button"
                                                     class="btn btn-info mb-3"
                                                     onclick="showAddProduct()">{{ __('Tambah Produk') }}</button>
-                                            </td>
+                                            </td> --}}
                                         </tr>
                                     </table>
                                     <div class="table-responsive">

@@ -177,8 +177,12 @@
                         @forelse ($spph->details as $item)
                             <tr>
                                 <td style="text-align: center">{{ $loop->iteration }}</td>
-                                <td>{{ $item->uraian }}</td>
-                                <td style="word-wrap: break-word">{{ $item->spek }}</td>
+                                <td
+                                    style="word-wrap: break-word; overflow: hidden; text-overflow: ellipsis; text-align: left;">
+                                    {{ $item->uraian }}</td>
+                                <td
+                                    style="word-wrap: break-word; max-width: 200px; overflow: hidden; text-overflow: ellipsis; text-align: left;">
+                                    {{ $item->spek }}</td>
                                 <td style="text-align: center">{{ $item->qty }}</td>
                                 <td style="text-align: center">{{ $item->satuan }}</td>
                             </tr>
@@ -236,8 +240,8 @@
                         <td style="height: 70px"></td>
                     </tr>
                     <tr>
-                        <td class="text-center" style="text-align: center"><b style="text-decoration: underline; ">(RUDI
-                                HARIYANTO)</b>
+                        <td class="text-center" style="text-align: center"><b style="text-decoration: underline; ">(RUDY
+                                SUSANTO)</b>
                         </td>
                     </tr>
                 </table>
@@ -249,6 +253,34 @@
         @endforeach
 
     </div>
+
+
+    {{-- lampiran print preview --}}
+
+    {{-- <script>
+        var urlLampiran = "{{ asset('lampiran') }}";
+        var lampiran = "{{ asset('lampiran') }}";
+        // if (value.lampiran == null) {
+        //     lampiran = '-';
+        // } else {
+        //     lampiran = '{{ $spph->lampiran }}';
+        // }
+
+
+        document.addEventListener("DOMContentLoaded", function() {
+            var h2Element = document.getElementById('details-link');
+            if (lampiran !== '-') {
+                h2Element.href = lampiran;
+            } else {
+                h2Element.removeAttribute('href');
+            }
+        });
+    </script> --}}
+
+
+
+
+   
     {{-- <script type="text/php">
         if ( isset($pdf) ) {
             $font = Font_Metrics::get_font("helvetica", "bold");

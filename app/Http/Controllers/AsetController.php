@@ -140,6 +140,16 @@ class AsetController extends Controller
         //
     }
 
+    public function hapusMultiple(Request $request)
+    {
+        if ($request->has('ids')) {
+            Aset::whereIn('id', $request->input('ids'))->delete();
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
+
     public function import(Request $request)
     {
 

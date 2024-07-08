@@ -175,6 +175,17 @@ class SjnController extends Controller
         //
     }
 
+    public function hapusMultipleSjn(Request $request)
+    {
+        if ($request->has('ids')) {
+            DB::table('sjn')->where('sjn_id', $request->input('ids'))->delete();
+            // Detail_sjn::whereIn('sjn_id', $request->input('ids'))->delete();
+            return response()->json(['success' => true]);
+        } else {
+            return response()->json(['success' => false]);
+        }
+    }
+
     /**
      * Update the specified resource in storage.
      *

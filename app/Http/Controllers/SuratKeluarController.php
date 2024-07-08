@@ -59,6 +59,17 @@ class SuratKeluarController extends Controller
         }
     }
 
+     // Hapus Multiple CheckBox
+     public function hapusMultipleSuratKeluar(Request $request)
+     {
+         if ($request->has('ids')) {
+             SuratKeluar::whereIn('id', $request->input('ids'))->delete();
+             return response()->json(['success' => true]);
+         } else {
+             return response()->json(['success' => false]);
+         }
+     }
+
     public function generateNomorSurat($type, $tanggal)
     {
         //get count surat
@@ -104,7 +115,7 @@ class SuratKeluarController extends Controller
 
             //check by date and type
             $count_check = SuratKeluar::whereDate('created_at', $tanggal)
-                ->where('type', $this->type)
+                ->where('type', $this->$type)
                 ->latest()->first();
 
             if ($count_check) {
